@@ -15,37 +15,37 @@
 
 ## Daily Report 링크
 
-> https://docs.google.com/spreadsheets/d/1iiQpPAQpZT1S8zdqiECrYfTQu0Vxf6EsAT6ODF53S9g/edit?gid=0#gid=0
+> https://docs.google.com/spreadsheets/d/1iiQpPAQpZT1S8zdqiECrYfTQu0Vxf6EsAT6ODF53S9g/edit?usp=sharing
 
 ---
 
 ## 게임 한 줄 소개
 
-
-
----
-
-## 게임 목표 / 승리 조건
-
+**탑뷰 로그라이크 게임입니다.**
 
 ---
 
-## 주요 게임 오브젝트
+## 참고한 게임 목록
 
-
----
-
-## 게임 UI/UX 구성
-
+- 아이작의 번제
+- 세피리아
 
 ---
 
-## 게임 흐름
+## 핵심 플레이 루프
 
+1. 적을 처치해서 경험치를 획득.
+2. 경험치를 통해 아이템을 획득.
+3. 아이템을 모아 빌드를 만들어 보스를 처치.
 
 ---
 
-## 플레이어 행동 / 선택 / 영향
+## 타겟 유저층
 
+- 로그라이크를 선호하는 유저
+
+---
+
+## Asset 출처
 
 
