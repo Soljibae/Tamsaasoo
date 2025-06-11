@@ -10,12 +10,16 @@ namespace Utils
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
 	//사각형 그리기 함수
-	//void DrawObject(Actor& object);
+	void DrawObject(InGame::Actor& object);
 
 	//애니메이션 함수
 
 	//충돌 판정(circle to circle)
-	bool CheckCollision();
+	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
 
 	//카메라 이동 함수
+
+	//네모 박스 안에 마우스가 들어왔는지?
+
+	//원 안에 마우스가 들어왔는지?
 }

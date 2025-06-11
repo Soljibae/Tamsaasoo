@@ -26,3 +26,44 @@ void DestroyMesh(AEGfxVertexList* Mesh)
 	if(Mesh)
 		AEGfxMeshFree(Mesh);
 }
+
+void DrawObject(InGame::Actor& object)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(object.Texture, 0, 0); //to do 애니메이션을 위한 오프셋이 필요함
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.size.x, object.size.y);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, object.position.x, object.position.y);
+	AEMtx33 transform;
+
+	AEMtx33Concat(&transform, &tran, &scale);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
+}
+
+bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
+{
+	AEVec2 delta;
+
+	AEVec2Sub(&delta, &object1.position, &object2.position);
+
+	float distSq = delta.x * delta.x + delta.y * delta.y;
+
+	float radiusSum = object1.CollisionRadius + object2.CollisionRadius;
+	float radiusSumSq = radiusSum * radiusSum;
+
+	return distSq <= radiusSumSq;
+}
