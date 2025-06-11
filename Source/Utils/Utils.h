@@ -4,23 +4,23 @@
 
 namespace Utils
 {
-	//¸Þ½Ã »ý¼º ÇÔ¼ö 
+	//ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ 
 	AEGfxVertexList* CreateMesh(int row = 1, int column = 1);
 	
-	//¸Þ½Ã ÇØÁ¦ ÇÔ¼ö
+	//ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
-	//»ç°¢Çü ±×¸®±â ÇÔ¼ö
+	//ï¿½ç°¢ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void DrawObject(InGame::Actor& object);
 
-	//¾Ö´Ï¸ÞÀÌ¼Ç ÇÔ¼ö
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ô¼ï¿½
 
-	//Ãæµ¹ ÆÇÁ¤(circle to circle)
+	//ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½(circle to circle)
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
 
-	//³×¸ð ¹Ú½º ¾È¿¡ ¸¶¿ì½º°¡ µé¾î¿Ô´ÂÁö?
+	//ï¿½×¸ï¿½ ï¿½Ú½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½?
 	bool IsMouseInSquare(float x, float y, float width, float height);
 
-	//¿ø ¾È¿¡ ¸¶¿ì½º°¡ µé¾î¿Ô´ÂÁö?
+	//ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½?
 	bool IsMouseInCircle(float x, float y, float r);
 }

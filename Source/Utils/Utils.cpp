@@ -35,7 +35,7 @@ void Utils::DrawObject(InGame::Actor& object)
 
 	AEGfxSetTransparency(1.0f);
 
-	AEGfxTextureSet(object.Texture, 0, 0); //to do ¾Ö´Ï¸ÞÀÌ¼ÇÀ» À§ÇÑ ¿ÀÇÁ¼ÂÀÌ ÇÊ¿äÇÔ
+	AEGfxTextureSet(object.Texture, 0, 0); //to do ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½
 
 	/*
 	AEVec2 translated_pos;
@@ -48,7 +48,7 @@ void Utils::DrawObject(InGame::Actor& object)
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
 	AEMtx33 transform;
 
-	Ä«¸Þ¶óÀÇ ¸ÅÆ®¸¯½º¸¦ °öÇØ¼­ º¯È¯µÈ ÁÂÇ¥¿¡¼­ ¿ÀºêÁ§Æ®¸¦ ±×¸² -> ½ÇÁ¦ ÁÂÇ¥ ÀÌµ¿ ¾øÀÌ Ä«¸Þ¶ó Àû¿ë
+	Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½×¸ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½
 	*/
 
 	AEMtx33 scale;
