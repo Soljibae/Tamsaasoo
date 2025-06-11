@@ -37,6 +37,20 @@ void Utils::DrawObject(InGame::Actor& object)
 
 	AEGfxTextureSet(object.Texture, 0, 0); //to do 애니메이션을 위한 오프셋이 필요함
 
+	/*
+	AEVec2 translated_pos;
+
+	AEMtx33MultVec(&translated_pos, &camera.translate_matrix, &object.position)
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.size.x, object.size.y);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+	AEMtx33 transform;
+
+	카메라의 매트릭스를 곱해서 변환된 좌표에서 오브젝트를 그림 -> 실제 좌표 이동 없이 카메라 적용
+	*/
+
 	AEMtx33 scale;
 	AEMtx33Scale(&scale, object.size.x, object.size.y);
 	AEMtx33 tran;
