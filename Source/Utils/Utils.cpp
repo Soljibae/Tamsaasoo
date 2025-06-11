@@ -21,13 +21,13 @@ AEGfxVertexList* Utils::CreateMesh(int row, int column)
 	return Mesh;
 }
 
-void DestroyMesh(AEGfxVertexList* Mesh)
+void Utils::DestroyMesh(AEGfxVertexList* Mesh)
 {
 	if(Mesh)
 		AEGfxMeshFree(Mesh);
 }
 
-void DrawObject(InGame::Actor& object)
+void Utils::DrawObject(InGame::Actor& object)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -54,7 +54,7 @@ void DrawObject(InGame::Actor& object)
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
-bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
+bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
 {
 	AEVec2 delta;
 
