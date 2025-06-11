@@ -11,7 +11,7 @@ namespace Utils
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
 	//사각형 그리기 함수
-	void DrawObject(InGame::Actor& object);
+	void DrawObject(InGame::Actor& object, float alpha = 1);
 
 	//애니메이션 함수
 

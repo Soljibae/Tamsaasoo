@@ -60,6 +60,12 @@
     <ClCompile Include="..\Source\Manager\GameManager.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Manager\Intro.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\Camera.cpp">
+      <Filter>소스 파일\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -91,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Manager\GameManager.h">
       <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\Intro.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Utils\Camera.h">
+      <Filter>소스 파일\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

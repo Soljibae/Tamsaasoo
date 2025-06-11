@@ -27,7 +27,7 @@ void Utils::DestroyMesh(AEGfxVertexList* Mesh)
 		AEGfxMeshFree(Mesh);
 }
 
-void Utils::DrawObject(InGame::Actor& object)
+void Utils::DrawObject(InGame::Actor& object, float alpha)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -59,9 +59,9 @@ void Utils::DrawObject(InGame::Actor& object)
 
 	AEMtx33Concat(&transform, &tran, &scale);
 
-	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
 
-	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
 
 	AEGfxSetTransform(transform.m);
 
