@@ -17,9 +17,11 @@ namespace Utils
 	//충돌 판정(circle to circle)
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
 
-	//카메라 이동 함수
-
 	//네모 박스 안에 마우스가 들어왔는지?
+	bool IsMouseInSquare(float x, float y, float width, float height);
 
 	//원 안에 마우스가 들어왔는지?
+	bool IsMouseInCircle(float x, float y, float r);
+
+	//카메라 이동 함수
 }
