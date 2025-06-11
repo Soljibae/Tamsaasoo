@@ -9,10 +9,10 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
+		virtual void FireProjectile() override;
 		void GetMouseDir();
 	protected:
-		f32 MouseDirX = 0.f;
-		f32 MouseDirY = 0.f;
+		AEVec2 MouseDirection;
 	private:
 	};
 }
