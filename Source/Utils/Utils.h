@@ -10,8 +10,8 @@ namespace Utils
 	//ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
-	//ï¿½ç°¢ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
-	void DrawObject(InGame::Actor& object);
+	//»ç°¢Çü ±×¸®±â ÇÔ¼ö
+	void DrawObject(InGame::Actor& object, float alpha = 1);
 
 	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ô¼ï¿½
 

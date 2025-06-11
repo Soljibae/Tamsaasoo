@@ -8,8 +8,8 @@ namespace Utils
 	{
 		AEVec2 position;
 		AEMtx33 translate_matrix;
-		/*AEVec2 deadzoneSize;
-		AEVec2 worldMin, worldMax;*/
+		AEVec2 deadzoneSize;
+		AEVec2 worldMin, worldMax;
 
 		void Init(InGame::Character& player);
 		void Update(InGame::Character& player);
