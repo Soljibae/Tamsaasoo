@@ -2,6 +2,7 @@
 #include "AEEngine.h"
 #include <iostream>
 #include "GlobalVariables.h"
+#include "../Manager/GameManager.h"
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -11,21 +12,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     int gGameRunning = 1;
 
-    // Initialization of your own variables go here
-
     // Using custom window procedure
     AESysInit(hInstance, nCmdShow, global::ScreenWidth, global::ScreenHeight, 1, 60, true, NULL);
 	// Changing the window title
 	AESysSetWindowTitle("HeavenRiser");
 	global::font = AEGfxCreateFont("Assets/liberation-mono.ttf", 72);
+	AEInputShowCursor(1);
 
-	f64 lastTime = AEGetTime(nullptr);
-	while (AESysDoesWindowExist())
+	manager::gm.init();
+	while (gGameRunning)
 	{
-		f64 currentTime = AEGetTime(nullptr);
-		global::DeltaTime = currentTime - lastTime;
-		lastTime = currentTime;
+		manager::gm.update();
+		manager::gm.draw();
+		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+			gGameRunning = 0;
 	}
+	manager::gm.exit();
+
 	AESysExit();
-	return 0;
 }

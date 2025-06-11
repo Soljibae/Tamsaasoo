@@ -1,3 +1,4 @@
+#pragma once
 #include "AEEngine.h"
 #include "../InGame/Actor.h"
 
@@ -22,6 +23,4 @@ namespace Utils
 
 	//원 안에 마우스가 들어왔는지?
 	bool IsMouseInCircle(float x, float y, float r);
-
-	//카메라 이동 함수
 }
