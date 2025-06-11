@@ -28,6 +28,7 @@
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerProjectile.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
+    <ClCompile Include="..\Source\Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Global\GlobalVariables.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
     <ClInclude Include="..\Source\InGame\PlayerProjectile.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
+    <ClInclude Include="..\Source\Utils\Utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
