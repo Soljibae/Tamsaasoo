@@ -19,8 +19,13 @@
     <Filter Include="소스 파일\InGame">
       <UniqueIdentifier>{9faa83a1-5956-47a0-9194-e27fefbf57bb}</UniqueIdentifier>
     </Filter>
+<<<<<<< Updated upstream
     <Filter Include="소스 파일\Utils">
       <UniqueIdentifier>{72cb4bb2-73a9-40b2-bdaf-2bc5ba1b1da4}</UniqueIdentifier>
+=======
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{d12c539d-ec16-4f24-92e7-14f1021a8961}</UniqueIdentifier>
+>>>>>>> Stashed changes
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,8 +56,13 @@
     <ClCompile Include="..\Source\Global\GlobalVariables.cpp">
       <Filter>소스 파일\Global</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="..\Source\Utils\Utils.cpp">
       <Filter>소스 파일\Utils</Filter>
+=======
+    <ClCompile Include="..\Source\Manager\GameManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+>>>>>>> Stashed changes
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,8 +90,13 @@
     <ClInclude Include="..\Source\Global\GlobalVariables.h">
       <Filter>소스 파일\Global</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="..\Source\Utils\Utils.h">
       <Filter>소스 파일\Utils</Filter>
+=======
+    <ClInclude Include="..\Source\Manager\GameManager.h">
+      <Filter>소스 파일\Manager</Filter>
+>>>>>>> Stashed changes
     </ClInclude>
   </ItemGroup>
 </Project>

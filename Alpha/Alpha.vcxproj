@@ -28,8 +28,12 @@
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerProjectile.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
+<<<<<<< Updated upstream
     <ClCompile Include="..\Source\Utils\Camera.cpp" />
     <ClCompile Include="..\Source\Utils\Utils.cpp" />
+=======
+    <ClCompile Include="..\Source\Manager\GameManager.cpp" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Global\GlobalVariables.h" />
@@ -40,8 +44,12 @@
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
     <ClInclude Include="..\Source\InGame\PlayerProjectile.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
+<<<<<<< Updated upstream
     <ClInclude Include="..\Source\Utils\Camera.h" />
     <ClInclude Include="..\Source\Utils\Utils.h" />
+=======
+    <ClInclude Include="..\Source\Manager\GameManager.h" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
