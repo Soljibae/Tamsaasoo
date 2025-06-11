@@ -2,15 +2,28 @@
 namespace manager
 {
 	GameManager gm;
+
 	void GameManager::init()
 	{
-		gm.gs = temp;
+		gm.gs = GameState::Intro;
+
 	}
+
+	// Pointer to Mesh. All our sprites use the same mesh, so we can just have one.
+	AEGfxTexture* pTex = AEGfxTextureLoad("Assets/DigiPen_WHITE.png");
 	void GameManager::update()
 	{
+		switch (gs)
+		{
+		case GameState::Intro:
+			break;
+		case GameState::MainMenu:
+			break;
+		}
+
 		// Informing the system about the loop's start
 		AESysFrameStart();
-		std::cout << gm.gs;
+
 		// Your own rendering logic goes here
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -30,11 +43,20 @@ namespace manager
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetTransparency(1.0f);
 
+		// Set the texture to pTex
+		AEGfxTextureSet(pTex, 0, 0);
+		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
 		// Informing the system about the loop's end
 		AESysFrameEnd();
 	}
+
 	void GameManager::draw()
 	{
 
+	}
+	
+	void GameManager::exit()
+	{
+		AEGfxTextureUnload(pTex);
 	}
 }

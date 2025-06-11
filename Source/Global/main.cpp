@@ -17,15 +17,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	// Changing the window title
 	AESysSetWindowTitle("Ja Dugaja");
 	global::font = AEGfxCreateFont("Assets/liberation-mono.ttf", 72);
+	AEInputShowCursor(1);
 
+	manager::gm.init();
 	while (gGameRunning)
 	{
-		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
-		manager::gm.init();
 		manager::gm.update();
 		manager::gm.draw();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
+	manager::gm.exit();
+
 	AESysExit();
 }

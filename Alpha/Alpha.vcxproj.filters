@@ -27,6 +27,9 @@
       <UniqueIdentifier>{d12c539d-ec16-4f24-92e7-14f1021a8961}</UniqueIdentifier>
 >>>>>>> Stashed changes
     </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{33781b03-bfe9-4cc2-9080-7d0c808ef2d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Global\main.cpp">
@@ -64,6 +67,9 @@
       <Filter>소스 파일\Manager</Filter>
 >>>>>>> Stashed changes
     </ClCompile>
+    <ClCompile Include="..\Source\Manager\GameManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -97,6 +103,9 @@
     <ClInclude Include="..\Source\Manager\GameManager.h">
       <Filter>소스 파일\Manager</Filter>
 >>>>>>> Stashed changes
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\GameManager.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

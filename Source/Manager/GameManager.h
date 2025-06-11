@@ -2,19 +2,23 @@
 #include "AEEngine.h"
 #include <iostream>
 #include "../Global/GlobalVariables.h"
+#include "Intro.h"
 
 namespace manager
 {
-	enum GameState
+	enum class GameState
 	{
-		temp,
+		Intro,
+		MainMenu,
 	};
+
 	class GameManager
 	{
 	public:
 		void init();
 		void update();
 		void draw();
+		void exit();
 		GameState gs;
 	};
 	extern GameManager gm;
