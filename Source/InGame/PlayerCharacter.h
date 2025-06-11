@@ -9,7 +9,6 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
-		virtual void FireProjectile() override;
 		void GetMouseDir();
 	protected:
 		AEVec2 MouseDirection;

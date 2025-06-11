@@ -5,4 +5,5 @@ namespace global
 	static s32 ScreenHeight = 900;;
 	static s8 font;
 	static f32 DeltaTime;
+	static AEVec2 PlayerLocation;
 }

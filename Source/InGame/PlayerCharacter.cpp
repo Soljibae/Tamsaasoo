@@ -1,11 +1,13 @@
 #include "PlayerCharacter.h"
 #include "../Global/GlobalVariables.h"
+#include "../Utils/Utils.h"
 namespace InGame
 {
 	void PlayerCharacter::Init()
 	{
 		position.x = 0;
 		position.y = 0;
+		Mesh = Utils::CreateMesh();
 	}
 	void PlayerCharacter::Update()
 	{
@@ -13,20 +15,22 @@ namespace InGame
 		{
 			if(AEInputCheckCurr(AEVK_W))
 			{
-				position.y -= MovementSpeed;
+				position.y -= MovementSpeed * global::DeltaTime;
 			}
 			if(AEInputCheckCurr(AEVK_S))
 			{
-				position.y += MovementSpeed;
+				position.y += MovementSpeed * global::DeltaTime;
 			}
 			if(AEInputCheckCurr(AEVK_A))
 			{
-				position.x -= MovementSpeed;
+				position.x -= MovementSpeed * global::DeltaTime;
 			}
 			if(AEInputCheckCurr(AEVK_D))
 			{
-				position.x += MovementSpeed;
+				position.x += MovementSpeed * global::DeltaTime;
 			}
+
+			global::PlayerLocation = position;
 		}
 	}
 	void PlayerCharacter::Draw()
@@ -35,11 +39,7 @@ namespace InGame
 	}
 	void PlayerCharacter::Destroy()
 	{
-		
-	}
-	void PlayerCharacter::FireProjectile()
-	{
-
+		Utils::DestroyMesh(Mesh);
 	}
 	void PlayerCharacter::GetMouseDir()
 	{
