@@ -1,7 +1,7 @@
 #include "PlayerCharacter.h"
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
-#include "../Manager/PlayingState.h"
+#include "../Manager/Playing.h"
 #include <iostream>
 namespace InGame
 {
