@@ -1,18 +1,19 @@
 #include "Intro.h"
 #include "../Global/GlobalVariables.h"
 
-
-f32 Manager::Intro::alpha = 0;
 namespace Manager
 {
+	f32 Intro::alpha = 0;
+
 	void Intro::Init()
 	{
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
-		Intro::Splash.Mesh = Utils::CreateMesh();
-		Intro::Splash.Texture = AEGfxTextureLoad("Assets/DigiPen_WHITE.png");
-		Intro::Splash.position = { 0.f, 0.f };
-		Intro::Splash.size = { 1026, 249 };
+
+		Splash.Mesh = Utils::CreateMesh();
+		Splash.Texture = AEGfxTextureLoad("Assets/DigiPen_WHITE.png");
+		Splash.position = { 0.f, 0.f };
+		Splash.size = { 1026, 249 };
 	}
 	void Intro::Update()
 	{
@@ -20,10 +21,12 @@ namespace Manager
 	}
 	void Intro::Draw()
 	{
-		Utils::DrawObject(Intro::Splash, alpha);
+		Utils::DrawObject(Splash, alpha);
 	}
 	void Intro::Destroy()
 	{
-
+		AEGfxMeshFree(Splash.Mesh);
+		Splash.Mesh = nullptr;
+		AEGfxTextureUnload(Splash.Texture);
 	}
 }

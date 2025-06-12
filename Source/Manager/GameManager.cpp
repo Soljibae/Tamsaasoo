@@ -2,10 +2,13 @@
 namespace Manager
 {
 	GameManager gm;
+
 	void GameManager::Init()
 	{
-		gm.gs = GameState::Intro;
-		intro.Init();
+		currStateREF = new Intro();
+		currStateREF->Init();
+		currState = EGameState::TEMP;
+		nextState = EGameState::INTRO;
 	}
 
 	void GameManager::Update()
@@ -16,19 +19,26 @@ namespace Manager
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-		switch (gs)
+		if (currState != nextState)
 		{
-		case GameState::Intro:
-			intro.Update();
-			break;
-		case GameState::MainMenu:
-			break;
+			currStateREF->Destroy();
+			delete currStateREF;
+			currState = nextState;
+			switch (currState)
+			{
+			case EGameState::INTRO:
+				currStateREF = new Intro;
+				currStateREF->Init();
+				break;
+			}
+			
 		}
+		currStateREF->Update();
 	}
 
 	void GameManager::Draw()
 	{
-		intro.Draw();
+		currStateREF->Draw();
 		// Informing the system about the loop's end
 		AESysFrameEnd();
 	}

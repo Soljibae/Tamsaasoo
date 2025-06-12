@@ -1,18 +1,13 @@
 #pragma once
 #include "AEEngine.h"
 #include <iostream>
-#include "../Global/GlobalVariables.h"
 #include "Intro.h"
+#include "GameState.h"
+#include "../Global/GlobalVariables.h"
 #include "../InGame/Actor.h"
 
 namespace Manager
 {
-	enum class GameState
-	{
-		Intro,
-		MainMenu,
-	};
-
 	class GameManager
 	{
 	public:
@@ -20,8 +15,9 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
-		GameState gs;
-		Intro intro;
+		AGameState* currStateREF;
+		EGameState currState;
+		EGameState nextState;
 	};
 	extern GameManager gm;
 }

@@ -2,9 +2,11 @@
 #include "../Utils/Utils.h"
 #include "../InGame/Actor.h"
 #include <iostream>
+#include "GameState.h"
+
 namespace Manager
 {
-	class Intro : public InGame::Actor
+	class Intro : public InGame::Actor, public AGameState
 	{
 	public:
 		virtual void Init() override;
