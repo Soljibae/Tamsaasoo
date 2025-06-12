@@ -1,6 +1,7 @@
 #include "PlayerCharacter.h"
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
+#include "../Manager/Playing.h"
 #include <iostream>
 namespace InGame
 {
@@ -10,7 +11,7 @@ namespace InGame
 		position.y = 0;
 		size.x = 100;
 		size.y = 100;
-		MovementSpeed = 30;
+		MovementSpeed = 300;
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad("Assets/idle_right_down.png");
 		HoldingGun = new Gun();
@@ -67,11 +68,9 @@ namespace InGame
 		MP.x = static_cast<float>(MX) - AEGfxGetWindowWidth() / 2.0f;
 		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(MY);
 		
-		AEMtx33 translate_matrix = { {
-					{ 1.f, 0.f, position.x, },
-					{ 0.f, 1.f, position.y },
-					{ 0.f, 0.f, 1.f }
-		} };
+		AEMtx33 translate_matrix;
+		AEMtx33Inverse(&translate_matrix, &(Manager::CAM->translate_matrix));
+
 		AEVec2 Result;
 		AEMtx33MultVec(&Result, &translate_matrix, &MP);
 		f32 length = AEVec2Distance(&position, &Result);

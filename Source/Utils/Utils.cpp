@@ -1,5 +1,6 @@
 #include "Utils.h"
 #include "../Global/GlobalVariables.h"
+#include "../Manager/Playing.h"
 
 AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
 {
@@ -38,24 +39,14 @@ void Utils::DrawObject(InGame::Actor& object, f32 alpha)
 
 	AEGfxTextureSet(object.Texture, object.offset.x, object.offset.y);
 
-	/*
 	AEVec2 translated_pos;
 
-	AEMtx33MultVec(&translated_pos, &camera.translate_matrix, &object.position);
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.position);
 
 	AEMtx33 scale;
 	AEMtx33Scale(&scale, object.size.x, object.size.y);
 	AEMtx33 tran;
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
-	AEMtx33 transform;
-
-	//ī�޶� CLASS �����ؾ���
-	*/
-
-	AEMtx33 scale;
-	AEMtx33Scale(&scale, object.size.x, object.size.y);
-	AEMtx33 tran;
-	AEMtx33Trans(&tran, object.position.x, object.position.y);
 	AEMtx33 transform;
 
 	AEMtx33Concat(&transform, &tran, &scale);
