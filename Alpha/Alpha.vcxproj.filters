@@ -35,13 +35,7 @@
     <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\EnemyProjectile.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\PlayerProjectile.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\Projectile.cpp">
@@ -62,14 +56,17 @@
     <ClCompile Include="..\Source\Manager\Intro.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\Gun.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Manager\GameState.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Manager\PlayingState.cpp">
       <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\Background.cpp">
+      <Filter>소스 파일\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\Gun\Gun.cpp">
+      <Filter>소스 파일\InGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,13 +79,7 @@
     <ClInclude Include="..\Source\InGame\EnemyCharacter.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\InGame\EnemyProjectile.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\PlayerProjectile.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\Projectile.h">
@@ -109,9 +100,6 @@
     <ClInclude Include="..\Source\Manager\Intro.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\InGame\Gun.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Manager\Intro.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -120,6 +108,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Manager\PlayingState.h">
       <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Background.h">
+      <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Gun\Gun.h">
+      <Filter>소스 파일\InGame</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include "../InGame/PlayerCharacter.h"
 #include "../InGame/Projectile.h"
 #include "../InGame/EnemyCharacter.h"
+#include "../Utils/Camera.h"
 #include <vector>
 namespace Manager
 {
@@ -20,4 +21,5 @@ namespace Manager
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
 	};
+	extern Utils::Camera* CAM;
 }

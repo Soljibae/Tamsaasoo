@@ -2,12 +2,20 @@
 
 namespace Manager
 {
+	Utils::Camera* CAM = nullptr;
+
 	void Playing::Init()
 	{
 		if (PC == nullptr)
 		{
 			PC = new InGame::PlayerCharacter();
 			PC->Init();
+		}
+
+		if (CAM == nullptr)
+		{
+			CAM = new Utils::Camera();
+			CAM->Init(*PC);
 		}
 	}
 	void Playing::Update()
@@ -25,6 +33,7 @@ namespace Manager
 		{
 			EP->Update();
 		}
+		CAM->Update(*PC);
 	}
 	void Playing::Draw()
 	{
@@ -65,5 +74,6 @@ namespace Manager
 			delete EP;
 		}
 		bSuccess = EPs.empty();
+		delete CAM;
 	}
 }

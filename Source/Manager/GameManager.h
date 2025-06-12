@@ -4,7 +4,6 @@
 #include "../Global/GlobalVariables.h"
 #include "GameState.h"
 #include "../InGame/Actor.h"
-#include "../InGame/Game.h"
 namespace Manager
 {
 	enum class GameState

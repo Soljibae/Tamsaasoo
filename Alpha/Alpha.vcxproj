@@ -22,9 +22,9 @@
     <ClCompile Include="..\Source\Global\GlobalVariables.cpp" />
     <ClCompile Include="..\Source\Global\main.cpp" />
     <ClCompile Include="..\Source\InGame\Actor.cpp" />
+    <ClCompile Include="..\Source\InGame\Background.cpp" />
     <ClCompile Include="..\Source\InGame\Character.cpp" />
     <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp" />
-    <ClCompile Include="..\Source\InGame\Game.cpp" />
     <ClCompile Include="..\Source\InGame\Gun\Gun.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
@@ -38,9 +38,9 @@
   <ItemGroup>
     <ClInclude Include="..\Source\Global\GlobalVariables.h" />
     <ClInclude Include="..\Source\InGame\Actor.h" />
+    <ClInclude Include="..\Source\InGame\Background.h" />
     <ClInclude Include="..\Source\InGame\Character.h" />
     <ClInclude Include="..\Source\InGame\EnemyCharacter.h" />
-    <ClInclude Include="..\Source\InGame\Game.h" />
     <ClInclude Include="..\Source\InGame\Gun\Gun.h" />
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
