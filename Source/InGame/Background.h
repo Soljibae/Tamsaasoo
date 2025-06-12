@@ -2,19 +2,11 @@
 #include "Actor.h"
 namespace InGame
 {
-	enum ProjectileType
+	class Background : public Actor
 	{
-		
-	};
-
-	class Projectile : public Actor
-	{
-	public:
-		void Init(AEVec2 Dir, AEVec2 Pos);
+		virtual void Init() override;
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
-		s32 Damage = 1;
-		
 	};
 }

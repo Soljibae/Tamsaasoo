@@ -1,13 +1,20 @@
 #include "PlayerCharacter.h"
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
+#include <iostream>
 namespace InGame
 {
 	void PlayerCharacter::Init()
 	{
 		position.x = 0;
 		position.y = 0;
+		size.x = 100;
+		size.y = 100;
+		MovementSpeed = 30;
 		Mesh = Utils::CreateMesh();
+		Texture = AEGfxTextureLoad("Assets/idle_right_down.png");
+		HoldingGun = new Gun();
+		HoldingGun->Init();
 	}
 	void PlayerCharacter::Update()
 	{
@@ -15,11 +22,11 @@ namespace InGame
 		{
 			if(AEInputCheckCurr(AEVK_W))
 			{
-				position.y -= MovementSpeed * global::DeltaTime;
+				position.y += MovementSpeed * global::DeltaTime;
 			}
 			if(AEInputCheckCurr(AEVK_S))
 			{
-				position.y += MovementSpeed * global::DeltaTime;
+				position.y -= MovementSpeed * global::DeltaTime;
 			}
 			if(AEInputCheckCurr(AEVK_A))
 			{
@@ -31,11 +38,17 @@ namespace InGame
 			}
 
 			global::PlayerLocation = position;
+			GetMouseDir();
+			if (HoldingGun)
+			{
+				HoldingGun->Update(MouseDirection, position);
+			}
 		}
 	}
 	void PlayerCharacter::Draw()
 	{
-		
+		Utils::DrawObject(*this);
+		HoldingGun->Draw();
 	}
 	void PlayerCharacter::Destroy()
 	{
@@ -50,8 +63,21 @@ namespace InGame
 		global::ScreenWidth;
 		global::ScreenHeight;
 
-		f32 NDCX = (static_cast<f32>(MX) / static_cast<f32>(global::ScreenWidth)) * 2.0f - 1.0f;
-		f32 NDCY = 1.0f - (static_cast<f32>(MY) / static_cast<f32>(global::ScreenHeight)) * 2.0f; // y inverse
+		AEVec2 MP;
+		MP.x = static_cast<float>(MX) - AEGfxGetWindowWidth() / 2.0f;
+		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(MY);
 		
+		AEMtx33 translate_matrix = { {
+					{ 1.f, 0.f, position.x, },
+					{ 0.f, 1.f, position.y },
+					{ 0.f, 0.f, 1.f }
+		} };
+		AEVec2 Result;
+		AEMtx33MultVec(&Result, &translate_matrix, &MP);
+		f32 length = AEVec2Distance(&position, &Result);
+		f32 dx = Result.x - position.x;
+		f32 dy = Result.y - position.y;
+		MouseDirection.x = dx / length;
+		MouseDirection.y = dy / length;
 	}
 }

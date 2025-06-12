@@ -1,14 +1,15 @@
 #include "GameManager.h"
+#include "Intro.h"
+#include "PlayingState.h"
 namespace Manager
 {
 	GameManager gm;
-
 	void GameManager::Init()
 	{
 		currStateREF = new Intro();
 		currStateREF->Init();
 		currState = EGameState::TEMP;
-		nextState = EGameState::INTRO;
+		nextState = EGameState::PLAYING;
 		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
 		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 	}
@@ -30,6 +31,12 @@ namespace Manager
 			{
 			case EGameState::INTRO:
 				currStateREF = new Intro;
+				currStateREF->Init();
+				break;
+			case EGameState::MAINMENU:
+				break;
+			case EGameState::PLAYING:
+				currStateREF = new Playing;
 				currStateREF->Init();
 				break;
 			}
