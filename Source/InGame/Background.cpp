@@ -4,11 +4,27 @@
 
 namespace InGame
 {
-	class Background : public Actor
+	void Background::Init()
 	{
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void Draw() override;
-		virtual void Destroy() override;
-	};
+		AEVec2Set(&size, static_cast<f32>(global::ScreenWidth) * 2.f, static_cast<f32>(global::ScreenHeight) * 2.f); //to do
+		AEVec2Set(&position, 0.f, 0.f);
+		Mesh = Utils::CreateMesh();
+		//Texture = AEGfxTextureLoad(""); to do add map texture
+	}
+
+	void Background::Update()
+	{
+		//to do Update texture when switching stages.
+	}
+
+	void Background::Draw()
+	{
+		Utils::DrawObject(*this);
+	}
+
+	void Background::Destroy()
+	{
+		Utils::DestroyMesh(Mesh);
+		AEGfxTextureUnload(Texture);
+	}
 }
