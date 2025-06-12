@@ -19,5 +19,9 @@ namespace Manager
 		std::vector<InGame::Projectile*> PPs;
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
+
+		f32 WaveTimer;
+		u8 SpawnCount;
+		void SpawnWave();
 	};
 }
