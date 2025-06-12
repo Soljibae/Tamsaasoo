@@ -5,6 +5,7 @@ namespace InGame
 	void InGame::EnemyCharacter::Init()
 	{
 		Mesh = Utils::CreateMesh();
+		Texture = AEGfxTextureLoad("Assets/TestBlankRed.png");
 	}
 
 	void InGame::EnemyCharacter::Update()

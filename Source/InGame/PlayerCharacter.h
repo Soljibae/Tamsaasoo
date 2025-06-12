@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "Gun/Gun.h"
 namespace InGame
 {
 	class PlayerCharacter : public Character
@@ -12,6 +13,7 @@ namespace InGame
 		void GetMouseDir();
 	protected:
 		AEVec2 MouseDirection;
+		Gun* HoldingGun = nullptr;
 	private:
 	};
 }
