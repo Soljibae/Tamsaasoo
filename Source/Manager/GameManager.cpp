@@ -4,6 +4,8 @@ namespace Manager
 	GameManager gm;
 	void GameManager::Init()
 	{
+		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
+		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 		gm.gs = GameState::Intro;
 		intro.Init();
 	}

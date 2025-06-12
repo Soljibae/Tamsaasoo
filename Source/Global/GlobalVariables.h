@@ -7,4 +7,5 @@ namespace global
 	static s8 font;
 	static AEVec2 PlayerLocation;
 	extern f32 DeltaTime;
+	extern AEVec2 worldMin, worldMax;
 }

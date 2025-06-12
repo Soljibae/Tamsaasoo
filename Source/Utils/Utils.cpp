@@ -36,12 +36,12 @@ void Utils::DrawObject(InGame::Actor& object, f32 alpha)
 
 	AEGfxSetTransparency(1.0f);
 
-	AEGfxTextureSet(object.Texture, 0, 0); //to do ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½
+	AEGfxTextureSet(object.Texture, object.offset.x, object.offset.y);
 
 	/*
 	AEVec2 translated_pos;
 
-	AEMtx33MultVec(&translated_pos, &camera.translate_matrix, &object.position)
+	AEMtx33MultVec(&translated_pos, &camera.translate_matrix, &object.position);
 
 	AEMtx33 scale;
 	AEMtx33Scale(&scale, object.size.x, object.size.y);
@@ -49,7 +49,7 @@ void Utils::DrawObject(InGame::Actor& object, f32 alpha)
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
 	AEMtx33 transform;
 
-	Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½×¸ï¿½ -> ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½
+	//Ä«¸Þ¶ó CLASS »ý¼ºÇØ¾ßÇØ
 	*/
 
 	AEMtx33 scale;
@@ -69,12 +69,12 @@ void Utils::DrawObject(InGame::Actor& object, f32 alpha)
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
-void InitOffset(InGame::Actor& object)
+void Utils::InitOffset(InGame::Actor& object)
 {
 	AEVec2Set(&object.offset, 0.f, 1.f - 1.f / object.column);
 }
 
-void UpdateOffset(InGame::Actor& object)
+void Utils::UpdateOffset(InGame::Actor& object)
 {
 	s32 animation_cnt{ 0 }; // actorµéÀÌ animation_count µû·Î °¡Á®¾ßÇÒµí
 	s32 n = object.row * object.column; // actorµéÀÌ max_animation_count µû·Î °¡Á®¾ßÇÒµí
