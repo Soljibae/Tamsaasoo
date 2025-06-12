@@ -12,7 +12,6 @@ namespace Manager
 	{
 		// Informing the system about the loop's start
 		AESysFrameStart();
-		std::cout << static_cast<int>(gm.gs);
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);

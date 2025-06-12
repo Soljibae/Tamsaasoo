@@ -1,6 +1,8 @@
 #include "Intro.h"
 #include "../Global/GlobalVariables.h"
 
+
+f32 Manager::Intro::alpha = 0;
 namespace Manager
 {
 	void Intro::Init()
@@ -14,14 +16,11 @@ namespace Manager
 	}
 	void Intro::Update()
 	{
-		//static f32 alpha = 0.f;
-		//alpha += global::DeltaTime;
-		//if (alpha >= 1.f)
-		//	alpha = 1.f;
+		alpha += global::DeltaTime;
 	}
 	void Intro::Draw()
 	{
-		Utils::DrawObject(Intro::Splash);
+		Utils::DrawObject(Intro::Splash, alpha);
 	}
 	void Intro::Destroy()
 	{
