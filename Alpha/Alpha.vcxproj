@@ -31,7 +31,8 @@
     <ClCompile Include="..\Source\Manager\GameManager.cpp" />
     <ClCompile Include="..\Source\Manager\GameState.cpp" />
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
-    <ClCompile Include="..\Source\Manager\PlayingState.cpp" />
+    <ClCompile Include="..\Source\Manager\MainMenu.cpp" />
+    <ClCompile Include="..\Source\Manager\Playing.cpp" />
     <ClCompile Include="..\Source\Utils\Camera.cpp" />
     <ClCompile Include="..\Source\Utils\Utils.cpp" />
   </ItemGroup>
@@ -47,7 +48,8 @@
     <ClInclude Include="..\Source\Manager\GameManager.h" />
     <ClInclude Include="..\Source\Manager\GameState.h" />
     <ClInclude Include="..\Source\Manager\Intro.h" />
-    <ClInclude Include="..\Source\Manager\PlayingState.h" />
+    <ClInclude Include="..\Source\Manager\MainMenu.h" />
+    <ClInclude Include="..\Source\Manager\Playing.h" />
     <ClInclude Include="..\Source\Utils\Camera.h" />
     <ClInclude Include="..\Source\Utils\Utils.h" />
   </ItemGroup>
