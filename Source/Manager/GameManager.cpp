@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include "Intro.h"
-#include "PlayingState.h"
+#include "Playing.h"
+#include "MainMenu.h"
+
 namespace Manager
 {
 	GameManager gm;
@@ -9,17 +11,15 @@ namespace Manager
 		currStateREF = new Intro();
 		currStateREF->Init();
 		currState = EGameState::TEMP;
-		nextState = EGameState::PLAYING;
+		nextState = EGameState::INTRO;
 		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
 		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 	}
 
 	void GameManager::Update()
 	{
-		// Informing the system about the loop's start
 		AESysFrameStart();
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
-		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 		if (currState != nextState)
@@ -34,6 +34,8 @@ namespace Manager
 				currStateREF->Init();
 				break;
 			case EGameState::MAINMENU:
+				currStateREF = new MainMenu;
+				currStateREF->Init();
 				break;
 			case EGameState::PLAYING:
 				currStateREF = new Playing;
@@ -48,12 +50,21 @@ namespace Manager
 	void GameManager::Draw()
 	{
 		currStateREF->Draw();
-		// Informing the system about the loop's end
 		AESysFrameEnd();
 	}
 	
 	void GameManager::Destroy()
 	{
+		if (currStateREF)
+		{
+			currStateREF->Destroy();
+			delete currStateREF;
+			currStateREF = nullptr;
+		}
+	}
 
+	void GameManager::SetNextGameState(EGameState state)
+	{
+		nextState = state;
 	}
 }

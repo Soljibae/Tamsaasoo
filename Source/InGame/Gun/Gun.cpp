@@ -4,7 +4,7 @@
 #include <iostream>
 #include "../../Manager/GameManager.h"
 #include "../Projectile.h"
-#include "../../Manager/PlayingState.h"
+#include "../../Manager/Playing.h"
 namespace InGame
 {
 	void Gun::Init()
