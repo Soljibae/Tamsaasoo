@@ -19,15 +19,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	global::font = AEGfxCreateFont("Assets/liberation-mono.ttf", 72);
 	AEInputShowCursor(1);
 
-	manager::gm.init();
+	Manager::gm.Init();
 	while (gGameRunning)
 	{
-		manager::gm.update();
-		manager::gm.draw();
+		Manager::gm.Update();
+		Manager::gm.Draw();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
-	manager::gm.exit();
+	Manager::gm.Destroy();
 
 	AESysExit();
 }

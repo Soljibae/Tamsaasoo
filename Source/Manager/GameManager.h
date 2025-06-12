@@ -3,8 +3,9 @@
 #include <iostream>
 #include "../Global/GlobalVariables.h"
 #include "Intro.h"
+#include "../InGame/Actor.h"
 
-namespace manager
+namespace Manager
 {
 	enum class GameState
 	{
@@ -15,11 +16,12 @@ namespace manager
 	class GameManager
 	{
 	public:
-		void init();
-		void update();
-		void draw();
-		void exit();
+		void Init();
+		void Update();
+		void Draw();
+		void Destroy();
 		GameState gs;
+		Intro intro;
 	};
 	extern GameManager gm;
 }

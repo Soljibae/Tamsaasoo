@@ -4,27 +4,27 @@
 
 namespace Utils
 {
-	//¸Ş½Ã »ı¼º ÇÔ¼ö 
+
+	//ë©”ì‹œ ìƒì„± í•¨ìˆ˜ 
 	AEGfxVertexList* CreateMesh(s32 row = 1, s32 column = 1);
 	
-	//¸Ş½Ã ÇØÁ¦ ÇÔ¼ö
+	//å ìŒ¨ì™ì˜™ å ì™ì˜™å ì™ì˜™ å ìŒ‰ì‡½ì˜™
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
-	//»ç°¢Çü ±×¸®±â ÇÔ¼ö
+	//ì‚¬ê°í˜• ê·¸ë¦¬ê¸° í•¨ìˆ˜
 	void DrawObject(InGame::Actor& object, f32 alpha = 1.f);
 
-	//¾Ö´Ï¸ŞÀÌ¼Ç ÇÔ¼ö
+	//ì• ë‹ˆë©”ì´ì…˜ í•¨ìˆ˜
 	void InitOffset(InGame::Actor& object);
 
 	void UpdateOffset(InGame::Actor& object);
 
-	//Ãæµ¹ ÆÇÁ¤(circle to circle)
+	//å ì¸ëŒ å ì™ì˜™å ì™ì˜™(circle to circle)
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
-
-	//³×¸ğ ¹Ú½º ¾È¿¡ ¸¶¿ì½º°¡ µé¾î¿Ô´ÂÁö?
+  
+	//ë„¤ëª¨ ë°•ìŠ¤ ì•ˆì— ë§ˆìš°ìŠ¤ê°€ ë“¤ì–´ì™”ëŠ”ì§€?
 	bool IsMouseInSquare(f32 x, f32 y, f32 width, f32 height);
 
-	//¿ø ¾È¿¡ ¸¶¿ì½º°¡ µé¾î¿Ô´ÂÁö?
+	//ì› ì•ˆì— ë§ˆìš°ìŠ¤ê°€ ë“¤ì–´ì™”ëŠ”ì§€?
 	bool IsMouseInCircle(f32 x, f32 y, f32 r);
-
 }
