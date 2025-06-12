@@ -14,10 +14,7 @@ namespace Utils
 						{ -position.x, -position.y, 1.f }
 			}};
 
-		AEVec2Set(&worldMin, -global::ScreenWidth, -global::ScreenHeight);
-		AEVec2Set(&worldMax, global::ScreenWidth, global::ScreenHeight);
-			
-		AEVec2Set(&deadzoneSize, global::ScreenWidth * 2 - 200, global::ScreenHeight * 2 - 200);
+		AEVec2Set(&deadzoneSize, static_cast<f32>(global::ScreenWidth) * 2.f - 200.f, static_cast<f32>(global::ScreenHeight) * 2.f - 200.f); //to do ÀÓ½Ã°ª
 	}
 
 	void Camera::Update(InGame::Character& player)

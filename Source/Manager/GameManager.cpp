@@ -9,6 +9,8 @@ namespace Manager
 		currStateREF->Init();
 		currState = EGameState::TEMP;
 		nextState = EGameState::INTRO;
+		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
+		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 	}
 
 	void GameManager::Update()

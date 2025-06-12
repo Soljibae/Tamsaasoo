@@ -4,23 +4,20 @@
 
 namespace Utils
 {
-	//�޽� ���� �Լ� 
-	AEGfxVertexList* CreateMesh(int row = 1, int column = 1);
+
+	AEGfxVertexList* CreateMesh(s32 row = 1, s32 column = 1);
 	
-	//�޽� ���� �Լ�
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
-	//�簢�� �׸��� �Լ�
-	void DrawObject(InGame::Actor& object, float alpha = 1);
+	void DrawObject(InGame::Actor& object, f32 alpha = 1.f);
 
-	//�ִϸ��̼� �Լ�
+	void InitOffset(InGame::Actor& object);
 
-	//�浹 ����(circle to circle)
+	void UpdateOffset(InGame::Actor& object);
+
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
+  
+	bool IsMouseInSquare(f32 x, f32 y, f32 width, f32 height);
 
-	//�׸� �ڽ� �ȿ� ���콺�� ���Դ���?
-	bool IsMouseInSquare(float x, float y, float width, float height);
-
-	//�� �ȿ� ���콺�� ���Դ���?
-	bool IsMouseInCircle(float x, float y, float r);
+	bool IsMouseInCircle(f32 x, f32 y, f32 r);
 }
