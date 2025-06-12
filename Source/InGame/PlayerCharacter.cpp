@@ -68,9 +68,9 @@ namespace InGame
 		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(MY);
 		
 		AEMtx33 translate_matrix = { {
-					{ 1.f, 0.f, 0.f },
-					{ 0.f, 1.f, 0.f },
-					{ position.x, position.y, 1.f  }
+					{ 1.f, 0.f, position.x, },
+					{ 0.f, 1.f, position.y },
+					{ 0.f, 0.f, 1.f }
 		} };
 		AEVec2 Result;
 		AEMtx33MultVec(&Result, &translate_matrix, &MP);
