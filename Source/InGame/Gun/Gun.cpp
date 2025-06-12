@@ -4,6 +4,7 @@
 #include <iostream>
 #include "../../Manager/GameManager.h"
 #include "../Projectile.h"
+#include "../../Manager/PlayingState.h"
 namespace InGame
 {
 	void Gun::Init()
@@ -31,7 +32,11 @@ namespace InGame
 		Projectile* PP = new Projectile();
 		PP->Init(Dir,Pos);
 		PP->direction = Dir;
-		Manager::gm.Game.PPs.push_back(PP);
+		if (Manager::gm.currStateREF)
+		{
+			static_cast<Manager::Playing*>(Manager::gm.currStateREF)->PPs.push_back(PP);
+		}
+		
 		std::cout << "ProjectileFired" << std::endl;
 	}
 }

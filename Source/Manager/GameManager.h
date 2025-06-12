@@ -2,7 +2,7 @@
 #include "AEEngine.h"
 #include <iostream>
 #include "../Global/GlobalVariables.h"
-#include "Intro.h"
+#include "GameState.h"
 #include "../InGame/Actor.h"
 #include "../InGame/Game.h"
 namespace Manager
@@ -21,9 +21,9 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
-		GameState gs;
-		Intro intro;
-		InGame::Game Game;
+		AGameState* currStateREF;
+		EGameState currState;
+		EGameState nextState;
 	};
 	extern GameManager gm;
 }

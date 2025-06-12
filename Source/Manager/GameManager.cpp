@@ -1,49 +1,53 @@
 #include "GameManager.h"
+#include "Intro.h"
+#include "PlayingState.h"
 namespace Manager
 {
 	GameManager gm;
 	void GameManager::Init()
 	{
-		gm.gs = GameState::Game;
-		intro.Init();
-		Game.Init();
+		currStateREF = new Intro();
+		currStateREF->Init();
+		currState = EGameState::TEMP;
+		nextState = EGameState::PLAYING;
+		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
+		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 	}
 
 	void GameManager::Update()
 	{
 		// Informing the system about the loop's start
 		AESysFrameStart();
-		//std::cout << static_cast<int>(gm.gs);
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-		switch (gs)
+		if (currState != nextState)
 		{
-		case GameState::Intro:
-			intro.Update();
-			break;
-		case GameState::MainMenu:
-			break;
-		case GameState::Game:
-			Game.Update();
-			break;
+			currStateREF->Destroy();
+			delete currStateREF;
+			currState = nextState;
+			switch (currState)
+			{
+			case EGameState::INTRO:
+				currStateREF = new Intro;
+				currStateREF->Init();
+				break;
+			case EGameState::MAINMENU:
+				break;
+			case EGameState::PLAYING:
+				currStateREF = new Playing;
+				currStateREF->Init();
+				break;
+			}
+			
 		}
+		currStateREF->Update();
 	}
 
 	void GameManager::Draw()
 	{
-		switch (gs)
-		{
-		case GameState::Intro:
-			intro.Draw();
-			break;
-		case GameState::MainMenu:
-			break;
-		case GameState::Game:
-			Game.Draw();
-			break;
-		}
+		currStateREF->Draw();
 		// Informing the system about the loop's end
 		AESysFrameEnd();
 	}
