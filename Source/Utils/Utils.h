@@ -4,23 +4,27 @@
 
 namespace Utils
 {
-	//�޽� ���� �Լ� 
-	AEGfxVertexList* CreateMesh(int row = 1, int column = 1);
+
+	//메시 생성 함수 
+	AEGfxVertexList* CreateMesh(s32 row = 1, s32 column = 1);
 	
-	//�޽� ���� �Լ�
+	//占쌨쏙옙 占쏙옙占쏙옙 占쌉쇽옙
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
-	//�簢�� �׸��� �Լ�
-	void DrawObject(InGame::Actor& object, float alpha = 1);
+	//사각형 그리기 함수
+	void DrawObject(InGame::Actor& object, f32 alpha = 1.f);
 
-	//�ִϸ��̼� �Լ�
+	//애니메이션 함수
+	void InitOffset(InGame::Actor& object);
 
-	//�浹 ����(circle to circle)
+	void UpdateOffset(InGame::Actor& object);
+
+	//占썸돌 占쏙옙占쏙옙(circle to circle)
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
+  
+	//네모 박스 안에 마우스가 들어왔는지?
+	bool IsMouseInSquare(f32 x, f32 y, f32 width, f32 height);
 
-	//�׸� �ڽ� �ȿ� ���콺�� ���Դ���?
-	bool IsMouseInSquare(float x, float y, float width, float height);
-
-	//�� �ȿ� ���콺�� ���Դ���?
-	bool IsMouseInCircle(float x, float y, float r);
+	//원 안에 마우스가 들어왔는지?
+	bool IsMouseInCircle(f32 x, f32 y, f32 r);
 }
