@@ -9,7 +9,6 @@ namespace InGame
 		virtual void Update();
 		virtual void Draw();
 		virtual void Destroy();
-
 		AEGfxVertexList* Mesh = nullptr;
 		AEGfxTexture* Texture = nullptr;
 		AEVec2 size;

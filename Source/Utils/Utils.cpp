@@ -49,7 +49,7 @@ void Utils::DrawObject(InGame::Actor& object, f32 alpha)
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
 	AEMtx33 transform;
 
-	//Ä«¸Þ¶ó CLASS »ý¼ºÇØ¾ßÇØ
+	//Ä«ï¿½Þ¶ï¿½ CLASS ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½
 	*/
 
 	AEMtx33 scale;
@@ -76,8 +76,8 @@ void Utils::InitOffset(InGame::Actor& object)
 
 void Utils::UpdateOffset(InGame::Actor& object)
 {
-	s32 animation_cnt{ 0 }; // actorµéÀÌ animation_count µû·Î °¡Á®¾ßÇÒµí
-	s32 n = object.row * object.column; // actorµéÀÌ max_animation_count µû·Î °¡Á®¾ßÇÒµí
+	s32 animation_cnt{ 0 }; // actorï¿½ï¿½ï¿½ï¿½ animation_count ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½
+	s32 n = object.row * object.column; // actorï¿½ï¿½ï¿½ï¿½ max_animation_count ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½
 
 	object.TimeAcc += global::DeltaTime;
 

@@ -6,9 +6,9 @@ namespace Manager
 	class Playing : public AGameState
 	{
 	public:
-		void Init();
-		void Update();
-		void Draw();
-		void Destroy();
+		void Init() override;
+		void Update() override;
+		void Draw() override;
+		void Destroy() override;
 	};
 }
