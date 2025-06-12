@@ -15,7 +15,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     // Using custom window procedure
     AESysInit(hInstance, nCmdShow, global::ScreenWidth, global::ScreenHeight, 1, 60, true, NULL);
 	// Changing the window title
-	AESysSetWindowTitle("Ja Dugaja");
+	AESysSetWindowTitle("HeavenRiser");
 	global::font = AEGfxCreateFont("Assets/liberation-mono.ttf", 72);
 	AEInputShowCursor(1);
 
