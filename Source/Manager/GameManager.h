@@ -6,13 +6,6 @@
 #include "../InGame/Actor.h"
 namespace Manager
 {
-	enum class GameState
-	{
-		Intro,
-		MainMenu,
-		Game,
-	};
-
 	class GameManager
 	{
 	public:
@@ -20,6 +13,8 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
+		void SetNextGameState(EGameState state);
+
 		AGameState* currStateREF;
 		EGameState currState;
 		EGameState nextState;

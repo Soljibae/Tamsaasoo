@@ -4,6 +4,7 @@
 #include "../InGame/PlayerCharacter.h"
 #include "../InGame/Projectile.h"
 #include "../InGame/EnemyCharacter.h"
+#include "../Utils/Camera.h"
 #include <vector>
 namespace Manager
 {
@@ -24,4 +25,5 @@ namespace Manager
 		u8 SpawnCount;
 		void SpawnWave();
 	};
+	extern Utils::Camera* CAM;
 }

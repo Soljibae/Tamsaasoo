@@ -5,12 +5,20 @@
 
 namespace Manager
 {
+	Utils::Camera* CAM = nullptr;
+
 	void Playing::Init()
 	{
 		if (PC == nullptr)
 		{
 			PC = new InGame::PlayerCharacter();
 			PC->Init();
+		}
+
+		if (CAM == nullptr)
+		{
+			CAM = new Utils::Camera();
+			CAM->Init(*PC);
 		}
 		WaveTimer = 0.;
 		SpawnCount = 0;
@@ -109,6 +117,7 @@ namespace Manager
 			delete EP;
 		}
 		bSuccess = EPs.empty();
+		delete CAM;
 	}
 	void Playing::SpawnWave()
 	{

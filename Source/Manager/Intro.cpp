@@ -1,4 +1,5 @@
 #include "Intro.h"
+#include "GameManager.h"
 #include "../Global/GlobalVariables.h"
 
 namespace Manager
@@ -13,20 +14,38 @@ namespace Manager
 		Splash.Mesh = Utils::CreateMesh();
 		Splash.Texture = AEGfxTextureLoad("Assets/DigiPen_WHITE.png");
 		Splash.position = { 0.f, 0.f };
-		Splash.size = { 1026, 249 };
+		Splash.size = { 741, 180 };
 	}
 	void Intro::Update()
 	{
-		alpha += global::DeltaTime;
+		const int xSizeScale{82}, ySizeScale{20};
+		sceneTime += global::DeltaTime;
+		Splash.size.x += global::DeltaTime * xSizeScale;
+		Splash.size.y += global::DeltaTime * ySizeScale;
+		if (global::KeyInput(AEVK_SPACE) || global::KeyInput(AEVK_LBUTTON) || global::KeyInput(AEVK_ESCAPE))
+		{
+			sceneTime = 50;
+		}
+		if (sceneTime <= halfTime)
+		{
+			alpha += global::DeltaTime;
+		}
+		else
+		{
+			alpha -= global::DeltaTime;
+		}
+		if (sceneTime >= sceneDuration)
+		{
+			gm.SetNextGameState(EGameState::MAINMENU);
+		}
 	}
 	void Intro::Draw()
 	{
-		Utils::DrawObject(Splash, alpha);
+		Utils::DrawObject(Splash, false, alpha);
 	}
 	void Intro::Destroy()
 	{
 		AEGfxMeshFree(Splash.Mesh);
-		Splash.Mesh = nullptr;
 		AEGfxTextureUnload(Splash.Texture);
 	}
 }

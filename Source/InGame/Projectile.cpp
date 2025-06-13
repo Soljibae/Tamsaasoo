@@ -14,8 +14,8 @@ void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
 
 void InGame::Projectile::Update()
 {
-	position.x += direction.x;
-	position.y += direction.y;
+	position.x += direction.x * 30.f;
+	position.y += direction.y * 30.f;
 }
 
 void InGame::Projectile::Draw()

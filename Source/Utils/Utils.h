@@ -9,7 +9,7 @@ namespace Utils
 	
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
-	void DrawObject(InGame::Actor& object, f32 alpha = 1.f);
+	void DrawObject(InGame::Actor& object, bool is_camera_enabled = true, f32 alpha = 1.f);
 
 	void InitOffset(InGame::Actor& object);
 

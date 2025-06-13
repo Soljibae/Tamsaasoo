@@ -13,7 +13,11 @@ namespace Manager
 		void Update() override;
 		void Draw() override;
 		void Destroy() override;
-		Actor Splash;
+	private:
+		InGame::Actor Splash;
 		static f32 alpha;
+		f32 sceneTime{ 0 };
+		f32 sceneDuration{ 4.5f };
+		f32 halfTime{ 2.f };
 	};
 }
