@@ -16,7 +16,7 @@
 
 ## Daily Report 링크
 
-> https://docs.google.com/spreadsheets/d/1iiQpPAQpZT1S8zdqiECrYfTQu0Vxf6EsAT6ODF53S9g/edit?usp=sharing
+> [Daily Report](https://docs.google.com/spreadsheets/d/1iiQpPAQpZT1S8zdqiECrYfTQu0Vxf6EsAT6ODF53S9g/edit?usp=sharing)
 
 ---
 
