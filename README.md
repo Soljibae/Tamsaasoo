@@ -52,7 +52,7 @@
 
 ## 플레이 영상
 
-- [1주차 영상](#https://drive.google.com/file/d/1bHSuhmY9qJ8aNfNPiAnHpkBafLchmZBD/view?usp=sharing)
+- [1주차 영상](https://drive.google.com/file/d/1bHSuhmY9qJ8aNfNPiAnHpkBafLchmZBD/view?usp=sharing)
 
 ---
 
