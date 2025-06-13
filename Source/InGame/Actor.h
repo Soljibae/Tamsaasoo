@@ -20,5 +20,6 @@ namespace InGame
 		f32 FrameTime;
 		f32 TimeAcc = 0.f;
 		AEVec2 offset;
+		bool bIsPandingKill = false;
 	};
 }

@@ -36,14 +36,8 @@ namespace Manager
 		for (InGame::Projectile*& PP : PPs)
 		{
 			PP->Update();
-			if (PP->IsOutOfWorld())
-			{
-				PP->Destroy();
-				delete PP;
-				PP = nullptr;
-			}
+			PP->IsOutOfWorld();
 		}
-		PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			EC->Update();
@@ -51,34 +45,38 @@ namespace Manager
 		for (InGame::Projectile*& EP : EPs)
 		{
 			EP->Update();
-			if (EP->IsOutOfWorld())
-			{
-				EP->Destroy();
-				delete EP;
-				EP = nullptr;
-			}
+			EP->IsOutOfWorld();
 		}
-		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
 		for (InGame::Projectile*& PP : PPs)
 		{
 			bool bIsHit = false;
 			for (InGame::EnemyCharacter*& EC : ECs)
 			{
-				if (Utils::CheckCollision(*PP, *EC))
+				if (PP->bIsPandingKill)
 				{
-					EC->adjustHealth(-PP->Damage);
-					if(EC->Health<1)
-					{
-						EC->Destroy();
-						delete EC;
-						EC = nullptr;
-					}
-					bIsHit = true;
 					break;
 				}
-				
+				else
+				{
+					if (Utils::CheckCollision(*PP, *EC))
+					{
+						EC->adjustHealth(-PP->Damage);
+						PP->OnHit();
+					}
+				}
 			}
-			if (bIsHit)
+		}
+		for (InGame::Projectile*& EP : EPs)
+		{
+			if (Utils::CheckCollision(*EP, *PC))
+			{
+				PC->adjustHealth(-EP->Damage);
+				EP->OnHit();
+			}
+		}
+		for (InGame::Projectile*& PP : PPs)
+		{
+			if (PP->bIsPandingKill)
 			{
 				PP->Destroy();
 				delete PP;
@@ -86,18 +84,27 @@ namespace Manager
 			}
 		}
 		PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
+		for (InGame::EnemyCharacter*& EC : ECs)
+		{
+			if (EC->bIsPandingKill)
+			{
+				EC->Destroy();
+				delete EC;
+				EC = nullptr;
+			}
+		}
 		ECs.erase(std::remove(ECs.begin(), ECs.end(), nullptr), ECs.end());
 		for (InGame::Projectile*& EP : EPs)
 		{
-			if (Utils::CheckCollision(*EP, *PC))
+			if (EP->bIsPandingKill)
 			{
-				PC->adjustHealth(-EP->Damage);
 				EP->Destroy();
 				delete EP;
 				EP = nullptr;
 			}
 		}
 		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
+		
 		CAM->Update(*PC);
 	}
 	void Playing::Draw()

@@ -5,7 +5,7 @@
 void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
 {
 	Mesh = Utils::CreateMesh();
-	Texture = AEGfxTextureLoad("Assets/TestBlankWhite.png");
+	Texture = AEGfxTextureLoad("Assets/TestBlankBlue.png");
 	size.x = 10;
 	size.y = 10;
 	direction = Dir;
@@ -30,14 +30,22 @@ void InGame::Projectile::Destroy()
 	Mesh = nullptr;
 }
 
-bool InGame::Projectile::IsOutOfWorld()
+void InGame::Projectile::IsOutOfWorld()
 {
 	if (position.x > global::worldMax.x ||
 		position.y > global::worldMax.y ||
 		position.x < global::worldMin.x ||
 		position.y < global::worldMin.y)
 	{
-		return true;
+		bIsPandingKill = true;
 	}
-	return false;
+}
+
+void InGame::Projectile::OnHit()
+{
+	HitCount--;
+	if (HitCount < 1)
+	{
+		bIsPandingKill = true;
+	}
 }
