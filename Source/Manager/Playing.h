@@ -22,6 +22,11 @@ namespace Manager
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
+
+
+		f32 WaveTimer;
+		u8 SpawnCount;
+		void SpawnWave();
 	};
 	extern Utils::Camera* CAM;
 }

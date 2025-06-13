@@ -9,6 +9,7 @@ void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
 	size.y = 10;
 	direction = Dir;
 	position = Pos;
+	CollisionRadius = 5;
 }
 
 void InGame::Projectile::Update()

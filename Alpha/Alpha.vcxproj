@@ -33,6 +33,7 @@
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
     <ClCompile Include="..\Source\Manager\MainMenu.cpp" />
     <ClCompile Include="..\Source\Manager\Playing.cpp" />
+    <ClCompile Include="..\Source\Manager\UI.cpp" />
     <ClCompile Include="..\Source\Utils\Camera.cpp" />
     <ClCompile Include="..\Source\Utils\Utils.cpp" />
   </ItemGroup>
@@ -50,6 +51,7 @@
     <ClInclude Include="..\Source\Manager\Intro.h" />
     <ClInclude Include="..\Source\Manager\MainMenu.h" />
     <ClInclude Include="..\Source\Manager\Playing.h" />
+    <ClInclude Include="..\Source\Manager\UI.h" />
     <ClInclude Include="..\Source\Utils\Camera.h" />
     <ClInclude Include="..\Source\Utils\Utils.h" />
   </ItemGroup>

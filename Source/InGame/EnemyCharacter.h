@@ -2,6 +2,11 @@
 #include "Character.h"
 namespace InGame
 {
+	enum EnemyType
+	{
+		Minion,
+	};
+
 	class EnemyCharacter : public Character
 	{
 	public:
