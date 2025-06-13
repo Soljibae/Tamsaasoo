@@ -1,5 +1,6 @@
 #include "MainMenu.h"
-
+#include "../Utils/Utils.h"
+#include "GameManager.h"
 namespace Manager
 {
 	f32 MainMenu::alpha = 1.f;
@@ -19,22 +20,35 @@ namespace Manager
 		Black.position = { 0.f, 0.f };
 		Black.size = { w, h };
 
+		button.Mesh = Utils::CreateMesh();
+		button.Texture = AEGfxTextureLoad("Assets/StartButton.png");
+		button.position = { 0.f, 100.f };
+		button.size = { 300.f, 300.f };
 	}
 	void MainMenu::Update()
 	{
-		if (alpha > 0.f)
+		fadeInTime += global::DeltaTime;
+		if (fadeInTime < fadeInDuration)
 		{
-			alpha -= global::DeltaTime;
+			alpha = 1.0f - (fadeInTime / fadeInDuration);
 		}
 		else
 		{
 			alpha = 0;
+			if (Utils::IsMouseInSquare(button))
+			{
+				if (global::KeyInput(AEVK_LBUTTON))
+				{
+					gm.SetNextGameState(EGameState::PLAYING);
+				}
+
+			}
 		}
 	}
 	void MainMenu::Draw()
 	{
 		Utils::DrawObject(Illust, false);
-
+		Utils::DrawObject(button, false);
 		if (alpha != 0)
 		{
 			Utils::DrawObject(Black, false, alpha);
@@ -43,8 +57,12 @@ namespace Manager
 	void MainMenu::Destroy()
 	{
 		AEGfxMeshFree(Illust.Mesh);
-		AEGfxMeshFree(Black.Mesh);
 		AEGfxTextureUnload(Illust.Texture);
+
+		AEGfxMeshFree(Black.Mesh);
 		AEGfxTextureUnload(Black.Texture);
+
+		AEGfxMeshFree(button.Mesh);
+		AEGfxTextureUnload(button.Texture);
 	}
 }

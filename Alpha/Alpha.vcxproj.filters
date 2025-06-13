@@ -71,6 +71,9 @@
     <ClCompile Include="..\Source\InGame\Gun\Gun.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Manager\UI.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -120,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\InGame\Gun\Gun.h">
       <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\UI.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
