@@ -1,19 +1,14 @@
 #pragma once
-#include "../Utils/Utils.h"
-#include "../InGame/Actor.h"
-#include <iostream>
 #include "GameState.h"
 
 namespace Manager
 {
-	class Intro : public InGame::Actor, public AGameState
+	class MainMenu : public AGameState
 	{
 	public:
 		void Init() override;
 		void Update() override;
 		void Draw() override;
 		void Destroy() override;
-		Actor Splash;
-		static f32 alpha;
 	};
 }

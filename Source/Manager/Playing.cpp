@@ -1,6 +1,8 @@
-#include "PlayingState.h"
+#include "Playing.h"
 #include "../Global/GlobalVariables.h"
+#include "../Utils/Utils.h"
 #include <iostream>
+
 namespace Manager
 {
 	void Playing::Init()
@@ -35,6 +37,38 @@ namespace Manager
 		{
 			EP->Update();
 		}
+
+		for (InGame::Projectile*& PP : PPs)
+		{
+			bool bIsHit = false;
+			for (InGame::EnemyCharacter* EC : ECs)
+			{
+				if (Utils::CheckCollision(*PP, *EC))
+				{
+					EC->Health -= PP->Damage;
+					bIsHit = true;
+				}
+				break;
+			}
+			if (bIsHit)
+			{
+				PP->Destroy();
+				delete PP;
+				PP = nullptr;
+			}
+		}
+		PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
+		for (InGame::Projectile*& EP : EPs)
+		{
+			if (Utils::CheckCollision(*EP, *PC))
+			{
+				PC->Health -= EP->Damage;
+				EP->Destroy();
+				delete EP;
+				EP = nullptr;
+			}
+		}
+		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
 	}
 	void Playing::Draw()
 	{

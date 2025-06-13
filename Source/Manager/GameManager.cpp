@@ -1,6 +1,6 @@
 #include "GameManager.h"
 #include "Intro.h"
-#include "PlayingState.h"
+#include "Playing.h"
 namespace Manager
 {
 	GameManager gm;

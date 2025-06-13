@@ -10,6 +10,7 @@ namespace InGame
 		MovementSpeed = 100.f;
 		size.x = 40;
 		size.y = 40;
+		CollisionRadius = 5;
 	}
 
 	void InGame::EnemyCharacter::Update()
