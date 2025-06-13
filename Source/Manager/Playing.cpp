@@ -154,6 +154,7 @@ namespace Manager
 		}
 		bSuccess = EPs.empty();
 		delete CAM;
+		CAM = nullptr;
 	}
 	void Playing::SpawnWave()
 	{
