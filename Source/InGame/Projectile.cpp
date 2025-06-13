@@ -1,5 +1,6 @@
 #include "Projectile.h"
 #include "../Utils/Utils.h"
+#include "../Global/GlobalVariables.h"
 
 void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
 {
@@ -27,4 +28,16 @@ void InGame::Projectile::Destroy()
 {
 	Utils::DestroyMesh(Mesh);
 	Mesh = nullptr;
+}
+
+bool InGame::Projectile::IsOutOfWorld()
+{
+	if (position.x > global::worldMax.x ||
+		position.y > global::worldMax.y ||
+		position.x < global::worldMin.x ||
+		position.y < global::worldMin.y)
+	{
+		return true;
+	}
+	return false;
 }

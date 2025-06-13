@@ -14,6 +14,7 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
+		bool IsOutOfWorld();
 		s32 Damage = 1;
 		
 	};

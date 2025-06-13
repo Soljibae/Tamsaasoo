@@ -33,19 +33,32 @@ namespace Manager
 			SpawnWave();
 		}
 		PC->Update();
-		for (InGame::Projectile* PP : PPs)
+		for (InGame::Projectile*& PP : PPs)
 		{
 			PP->Update();
+			if (PP->IsOutOfWorld())
+			{
+				PP->Destroy();
+				delete PP;
+				PP = nullptr;
+			}
 		}
+		PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			EC->Update();
 		}
-		for (InGame::Projectile* EP : EPs)
+		for (InGame::Projectile*& EP : EPs)
 		{
 			EP->Update();
+			if (EP->IsOutOfWorld())
+			{
+				EP->Destroy();
+				delete EP;
+				EP = nullptr;
+			}
 		}
-
+		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
 		for (InGame::Projectile*& PP : PPs)
 		{
 			bool bIsHit = false;
@@ -85,6 +98,7 @@ namespace Manager
 			}
 		}
 		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
+		CAM->Update(*PC);
 	}
 	void Playing::Draw()
 	{

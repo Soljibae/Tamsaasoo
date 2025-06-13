@@ -25,18 +25,34 @@ namespace InGame
 			if(AEInputCheckCurr(AEVK_W))
 			{
 				position.y += MovementSpeed * global::DeltaTime;
+				if (position.y > global::worldMax.y - size.y/2)
+				{
+					position.y = global::worldMax.y - size.y/2;
+				}
 			}
 			if(AEInputCheckCurr(AEVK_S))
 			{
 				position.y -= MovementSpeed * global::DeltaTime;
+				if (position.y < global::worldMin.y + size.y / 2)
+				{
+					position.y = global::worldMin.y + size.y / 2;
+				}
 			}
 			if(AEInputCheckCurr(AEVK_A))
 			{
 				position.x -= MovementSpeed * global::DeltaTime;
+				if (position.x < global::worldMin.x + size.x / 2)
+				{
+					position.x = global::worldMin.x + size.x / 2;
+				}
 			}
 			if(AEInputCheckCurr(AEVK_D))
 			{
 				position.x += MovementSpeed * global::DeltaTime;
+				if (position.x > global::worldMax.x - size.x / 2)
+				{
+					position.x = global::worldMax.x - size.x / 2;
+				}
 			}
 
 			global::PlayerLocation = position;
