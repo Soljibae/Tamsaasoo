@@ -6,6 +6,10 @@
 
 namespace Manager
 {
+	static struct Button : public InGame::Actor
+	{
+		bool press, release;
+	};
 	class MainMenu : public AGameState
 	{
 	public:
@@ -16,11 +20,9 @@ namespace Manager
 	private:
 		InGame::Actor Illust;
 		InGame::Actor Black;
+		f32 fadeInTime{ 0 };
+		const f32 fadeInDuration{ 1.f };
 		static f32 alpha;
-
-		struct Button
-		{
-			f32 x, y, w, h;
-		};
+		Button button;
 	};
 }

@@ -6,7 +6,8 @@ namespace Utils
 {
 	struct Camera
 	{
-		AEVec2 position;
+		AEVec2 curr_position;
+		AEVec2 target_position;
 		AEMtx33 translate_matrix;
 		AEVec2 deadzoneSize;
 

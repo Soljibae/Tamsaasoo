@@ -20,6 +20,12 @@ namespace Manager
 			CAM = new Utils::Camera();
 			CAM->Init(*PC);
 		}
+		if (BG == nullptr)
+		{
+			BG = new InGame::Background();
+			BG->Init();
+		}
+
 		WaveTimer = 0.;
 		SpawnCount = 0;
 	}
@@ -104,11 +110,12 @@ namespace Manager
 			}
 		}
 		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
-		
+
 		CAM->Update(*PC);
 	}
 	void Playing::Draw()
 	{
+		BG->Draw();
 		PC->Draw();
 		for (InGame::Projectile* PP : PPs)
 		{

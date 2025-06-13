@@ -4,6 +4,7 @@
 #include "../InGame/PlayerCharacter.h"
 #include "../InGame/Projectile.h"
 #include "../InGame/EnemyCharacter.h"
+#include "../InGame/Background.h"
 #include "../Utils/Camera.h"
 #include <vector>
 namespace Manager
@@ -20,6 +21,8 @@ namespace Manager
 		std::vector<InGame::Projectile*> PPs;
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
+		InGame::Background* BG;
+
 
 		f32 WaveTimer;
 		u8 SpawnCount;
