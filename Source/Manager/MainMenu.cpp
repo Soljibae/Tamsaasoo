@@ -33,11 +33,11 @@ namespace Manager
 	}
 	void MainMenu::Draw()
 	{
-		Utils::DrawObject(Illust);
+		Utils::DrawObject(Illust, false);
 
 		if (alpha != 0)
 		{
-			Utils::DrawObject(Black, alpha);
+			Utils::DrawObject(Black, false, alpha);
 		}
 	}
 	void MainMenu::Destroy()

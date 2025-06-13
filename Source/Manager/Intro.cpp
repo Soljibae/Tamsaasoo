@@ -41,7 +41,7 @@ namespace Manager
 	}
 	void Intro::Draw()
 	{
-		Utils::DrawObject(Splash, alpha);
+		Utils::DrawObject(Splash, false, alpha);
 	}
 	void Intro::Destroy()
 	{
