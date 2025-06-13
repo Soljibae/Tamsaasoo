@@ -9,6 +9,7 @@ namespace InGame
 	{
 		position.x = 0;
 		position.y = 0;
+		CollisionRadius = 5;
 		size.x = 100;
 		size.y = 100;
 		MovementSpeed = 300;
