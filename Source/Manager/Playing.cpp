@@ -91,6 +91,7 @@ namespace Manager
 			}
 		}
 		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
+		CAM->Update(*PC);
 	}
 	void Playing::Draw()
 	{
