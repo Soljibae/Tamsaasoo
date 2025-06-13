@@ -36,7 +36,7 @@ namespace Manager
 		}
 		if (sceneTime >= sceneDuration)
 		{
-			gm.SetNextGameState(EGameState::MAINMENU);
+			gm.SetNextGameState(EGameState::PLAYING);
 		}
 	}
 	void Intro::Draw()

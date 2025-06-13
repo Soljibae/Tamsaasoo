@@ -17,6 +17,12 @@ namespace Manager
 			CAM = new Utils::Camera();
 			CAM->Init(*PC);
 		}
+
+		if (BG == nullptr)
+		{
+			BG = new InGame::Background();
+			BG->Init();
+		}
 	}
 	void Playing::Update()
 	{
@@ -37,6 +43,7 @@ namespace Manager
 	}
 	void Playing::Draw()
 	{
+		BG->Draw();
 		PC->Draw();
 		for (InGame::Projectile* PP : PPs)
 		{
