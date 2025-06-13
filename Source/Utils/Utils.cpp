@@ -110,6 +110,11 @@ bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
 	return distSq <= radiusSumSq;
 }
 
+bool Utils::IsMouseInSquare(InGame::Actor& object)
+{
+	return Utils::IsMouseInSquare(object.position.x, object.position.y, object.size.x, object.size.y);
+}
+
 bool Utils::IsMouseInSquare(f32 x, f32 y, f32 width, f32 height)
 {
 	s32 mx = 0;
@@ -121,6 +126,11 @@ bool Utils::IsMouseInSquare(f32 x, f32 y, f32 width, f32 height)
 	f32 mouse_y = AEGfxGetWindowHeight() / 2.0f - static_cast<f32>(my);
 
 	return (x - width / 2.f <= mouse_x && mouse_x <= x + width / 2.f && y - height / 2.f <= mouse_y && mouse_y <= y + height / 2.f);
+}
+
+bool Utils::IsMouseInCircle(InGame::Actor& object)
+{
+	return Utils::IsMouseInCircle(object.position.x, object.position.y, object.CollisionRadius);
 }
 
 bool Utils::IsMouseInCircle(f32 x, f32 y, f32 r)

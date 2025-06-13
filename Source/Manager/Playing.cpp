@@ -49,14 +49,21 @@ namespace Manager
 		for (InGame::Projectile*& PP : PPs)
 		{
 			bool bIsHit = false;
-			for (InGame::EnemyCharacter* EC : ECs)
+			for (InGame::EnemyCharacter*& EC : ECs)
 			{
 				if (Utils::CheckCollision(*PP, *EC))
 				{
-					EC->Health -= PP->Damage;
+					EC->adjustHealth(-PP->Damage);
+					if(EC->Health<1)
+					{
+						EC->Destroy();
+						delete EC;
+						EC = nullptr;
+					}
 					bIsHit = true;
+					break;
 				}
-				break;
+				
 			}
 			if (bIsHit)
 			{
@@ -66,11 +73,12 @@ namespace Manager
 			}
 		}
 		PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
+		ECs.erase(std::remove(ECs.begin(), ECs.end(), nullptr), ECs.end());
 		for (InGame::Projectile*& EP : EPs)
 		{
 			if (Utils::CheckCollision(*EP, *PC))
 			{
-				PC->Health -= EP->Damage;
+				PC->adjustHealth(-EP->Damage);
 				EP->Destroy();
 				delete EP;
 				EP = nullptr;
