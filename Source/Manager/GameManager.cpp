@@ -42,9 +42,18 @@ namespace Manager
 				currStateREF->Init();
 				break;
 			}
-			
 		}
 		currStateREF->Update();
+	}
+
+	void GameManager::Pause()
+	{
+		GamePaused = true;
+	}
+
+	void GameManager::Resume()
+	{
+		GamePaused = false;
 	}
 
 	void GameManager::Draw()

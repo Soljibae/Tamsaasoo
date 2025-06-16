@@ -3,13 +3,9 @@
 #include "../Global/GlobalVariables.h"
 #include "../InGame/Actor.h"
 #include "../Utils/Utils.h"
-
+#include "Button.h"
 namespace Manager
 {
-	static struct Button : public InGame::Actor
-	{
-		bool press, release;
-	};
 	class MainMenu : public AGameState
 	{
 	public:
@@ -23,6 +19,6 @@ namespace Manager
 		f32 fadeInTime{ 0 };
 		const f32 fadeInDuration{ 1.f };
 		static f32 alpha;
-		Button button;
+		Button startButton;
 	};
 }

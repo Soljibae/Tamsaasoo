@@ -16,6 +16,8 @@ namespace Manager
 		void Update() override;
 		void Draw() override;
 		void Destroy() override;
+		void Pause();
+		void Resume();
 
 		InGame::PlayerCharacter* PC;
 		std::vector<InGame::Projectile*> PPs;

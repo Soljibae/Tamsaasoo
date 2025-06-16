@@ -28,12 +28,13 @@
     <ClCompile Include="..\Source\InGame\Gun\Gun.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
+    <ClCompile Include="..\Source\Manager\Button.cpp" />
     <ClCompile Include="..\Source\Manager\GameManager.cpp" />
     <ClCompile Include="..\Source\Manager\GameState.cpp" />
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
     <ClCompile Include="..\Source\Manager\MainMenu.cpp" />
+    <ClCompile Include="..\Source\Manager\PauseUI.cpp" />
     <ClCompile Include="..\Source\Manager\Playing.cpp" />
-    <ClCompile Include="..\Source\Manager\UI.cpp" />
     <ClCompile Include="..\Source\Utils\Camera.cpp" />
     <ClCompile Include="..\Source\Utils\Utils.cpp" />
   </ItemGroup>
@@ -46,12 +47,13 @@
     <ClInclude Include="..\Source\InGame\Gun\Gun.h" />
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
+    <ClInclude Include="..\Source\Manager\Button.h" />
     <ClInclude Include="..\Source\Manager\GameManager.h" />
     <ClInclude Include="..\Source\Manager\GameState.h" />
     <ClInclude Include="..\Source\Manager\Intro.h" />
     <ClInclude Include="..\Source\Manager\MainMenu.h" />
+    <ClInclude Include="..\Source\Manager\PauseUI.h" />
     <ClInclude Include="..\Source\Manager\Playing.h" />
-    <ClInclude Include="..\Source\Manager\UI.h" />
     <ClInclude Include="..\Source\Utils\Camera.h" />
     <ClInclude Include="..\Source\Utils\Utils.h" />
   </ItemGroup>

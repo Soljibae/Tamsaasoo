@@ -22,10 +22,6 @@ namespace Manager
 		sceneTime += global::DeltaTime;
 		Splash.size.x += global::DeltaTime * xSizeScale;
 		Splash.size.y += global::DeltaTime * ySizeScale;
-		if (global::KeyInput(AEVK_SPACE) || global::KeyInput(AEVK_LBUTTON) || global::KeyInput(AEVK_ESCAPE))
-		{
-			sceneTime = 50;
-		}
 		if (sceneTime <= halfTime)
 		{
 			alpha += global::DeltaTime;
@@ -34,7 +30,7 @@ namespace Manager
 		{
 			alpha -= global::DeltaTime;
 		}
-		if (sceneTime >= sceneDuration)
+		if (sceneTime >= sceneDuration || global::KeyInput(AEVK_SPACE) || global::KeyInput(AEVK_LBUTTON) || global::KeyInput(AEVK_ESCAPE))
 		{
 			gm.SetNextGameState(EGameState::MAINMENU);
 		}

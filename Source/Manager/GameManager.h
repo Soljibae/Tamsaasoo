@@ -11,6 +11,8 @@ namespace Manager
 	public:
 		void Init();
 		void Update();
+		void Pause();
+		void Resume();
 		void Draw();
 		void Destroy();
 		void SetNextGameState(EGameState state);
@@ -18,6 +20,7 @@ namespace Manager
 		AGameState* currStateREF;
 		EGameState currState;
 		EGameState nextState;
+		bool GamePaused{ false };
 	};
 	extern GameManager gm;
 }

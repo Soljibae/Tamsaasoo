@@ -1,6 +1,9 @@
 #include "Playing.h"
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
+#include "Button.h"
+#include "GameManager.h"
+#include "PauseUI.h"
 #include <iostream>
 
 namespace Manager
@@ -25,93 +28,117 @@ namespace Manager
 			BG = new InGame::Background();
 			BG->Init();
 		}
-
 		WaveTimer = 0.;
 		SpawnCount = 0;
+
+		pausePanel.Init();
+		gm.GamePaused = false;
 	}
 	void Playing::Update()
 	{
-		WaveTimer += global::DeltaTime;
-		if (WaveTimer > 10.f)
+		// Press ESCAPE to pause the game
+		if (global::KeyInput(AEVK_ESCAPE))
 		{
-			WaveTimer = 0;
-			SpawnCount++;
-			SpawnWave();
-		}
-		PC->Update();
-		for (InGame::Projectile*& PP : PPs)
-		{
-			PP->Update();
-			PP->IsOutOfWorld();
-		}
-		for (InGame::EnemyCharacter* EC : ECs)
-		{
-			EC->Update();
-		}
-		for (InGame::Projectile*& EP : EPs)
-		{
-			EP->Update();
-			EP->IsOutOfWorld();
-		}
-		for (InGame::Projectile*& PP : PPs)
-		{
-			bool bIsHit = false;
-			for (InGame::EnemyCharacter*& EC : ECs)
+			if (!gm.GamePaused)
 			{
-				if (PP->bIsPandingKill)
+				gm.Pause();
+			}
+			else
+			{
+				gm.Resume();
+			}
+		}
+
+		// Playing
+		if (!gm.GamePaused)
+		{
+			WaveTimer += global::DeltaTime;
+			if (WaveTimer > 10.f)
+			{
+				WaveTimer = 0;
+				SpawnCount++;
+				SpawnWave();
+			}
+			PC->Update();
+			for (InGame::Projectile*& PP : PPs)
+			{
+				PP->Update();
+				PP->IsOutOfWorld();
+			}
+			for (InGame::EnemyCharacter* EC : ECs)
+			{
+				EC->Update();
+			}
+			for (InGame::Projectile*& EP : EPs)
+			{
+				EP->Update();
+				EP->IsOutOfWorld();
+			}
+			for (InGame::Projectile*& PP : PPs)
+			{
+				bool bIsHit = false;
+				for (InGame::EnemyCharacter*& EC : ECs)
 				{
-					break;
-				}
-				else
-				{
-					if (Utils::CheckCollision(*PP, *EC))
+					if (PP->bIsPandingKill)
 					{
-						EC->adjustHealth(-PP->Damage);
-						PP->OnHit();
+						break;
+					}
+					else
+					{
+						if (Utils::CheckCollision(*PP, *EC))
+						{
+							EC->adjustHealth(-PP->Damage);
+							PP->OnHit();
+						}
 					}
 				}
 			}
-		}
-		for (InGame::Projectile*& EP : EPs)
-		{
-			if (Utils::CheckCollision(*EP, *PC))
+			for (InGame::Projectile*& EP : EPs)
 			{
-				PC->adjustHealth(-EP->Damage);
-				EP->OnHit();
+				if (Utils::CheckCollision(*EP, *PC))
+				{
+					PC->adjustHealth(-EP->Damage);
+					EP->OnHit();
+				}
 			}
-		}
-		for (InGame::Projectile*& PP : PPs)
-		{
-			if (PP->bIsPandingKill)
+			for (InGame::Projectile*& PP : PPs)
 			{
-				PP->Destroy();
-				delete PP;
-				PP = nullptr;
+				if (PP->bIsPandingKill)
+				{
+					PP->Destroy();
+					delete PP;
+					PP = nullptr;
+				}
 			}
-		}
-		PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
-		for (InGame::EnemyCharacter*& EC : ECs)
-		{
-			if (EC->bIsPandingKill)
+			PPs.erase(std::remove(PPs.begin(), PPs.end(), nullptr), PPs.end());
+			for (InGame::EnemyCharacter*& EC : ECs)
 			{
-				EC->Destroy();
-				delete EC;
-				EC = nullptr;
+				if (EC->bIsPandingKill)
+				{
+					EC->Destroy();
+					delete EC;
+					EC = nullptr;
+				}
 			}
-		}
-		ECs.erase(std::remove(ECs.begin(), ECs.end(), nullptr), ECs.end());
-		for (InGame::Projectile*& EP : EPs)
-		{
-			if (EP->bIsPandingKill)
+			ECs.erase(std::remove(ECs.begin(), ECs.end(), nullptr), ECs.end());
+			for (InGame::Projectile*& EP : EPs)
 			{
-				EP->Destroy();
-				delete EP;
-				EP = nullptr;
+				if (EP->bIsPandingKill)
+				{
+					EP->Destroy();
+					delete EP;
+					EP = nullptr;
+				}
 			}
-		}
-		EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
+			EPs.erase(std::remove(EPs.begin(), EPs.end(), nullptr), EPs.end());
 
-		CAM->Update(*PC);
+			CAM->Update(*PC);
+		}
+		// Paused
+		else
+		{
+			pausePanel.Update();
+		}
 	}
 	void Playing::Draw()
 	{
@@ -128,6 +155,12 @@ namespace Manager
 		for (InGame::Projectile* EP : EPs)
 		{
 			EP->Draw();
+		}
+
+		// Paused
+		if (gm.GamePaused)
+		{
+			pausePanel.Draw();
 		}
 	}
 	void Playing::Destroy()
@@ -155,6 +188,7 @@ namespace Manager
 		bSuccess = EPs.empty();
 		delete CAM;
 		CAM = nullptr;
+		pausePanel.Destroy();
 	}
 	void Playing::SpawnWave()
 	{
