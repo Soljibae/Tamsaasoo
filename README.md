@@ -5,18 +5,18 @@
 
 | 마일스톤 | 주차 | 기간 | 목표 | 주요 작업 | 비고 |
 |----------|------|-------|-------|------------|------|
-| 개발 | 1주차 | 06-09 ~ 06-15 | 핵심 루프 구현 | - 캐릭터 설계<br>- 기본 플레이 흐름 구축 |  |
-|  | 2주차 | 06-16 ~ 06-22 |  | |  |
-|  | 3주차 | 06-23 ~ 06-29 |  | |  |
-|  | 4주차 | 06-30 ~ 07-06 |  | |  |
-|  | 5주차 | 07-07 ~ 07-13 |  | |  |
-|  | 6주차 | 07-14 ~ 07-16 |  | |  |
+| 개발 | 1주차 | 06-09 ~ 06-15 | - 기본적인 시스템 구현 | - 게임 내부 오브젝트들의 클래스 설계<br>- 기본 플레이 흐름 구축 |  |
+| 개발 | 2주차 | 06-16 ~ 06-22 | - 게임 핵심 루프 설계<br>- 아이템 기획 및 구현 | - 1 스테이지 구현(보스 및 적 ai 추가)<br>- 아이템 class 생성 및 아이템 구현 |  |
+| 개발 | 3주차 | 06-23 ~ 06-29 | - 2,3 스테이지 구현<br>- 아이템 기획 및 구현<br>- 기본 무기 강화 구현 | |  |
+| 개발 | 4주차 | 06-30 ~ 07-06 | - 2,3 스테이지 구현<br>- 아이템 기획 및 구현<br>- 기본 무기 강화 구현 <br>- 사운드 삽입 | |  |
+| 폴리싱 | 5주차 | 07-07 ~ 07-13 | - 게임 내부 밸런스 조정<br>- 내부 애니메이션 구현<br>- 사운드 삽입<br>- 디버깅 | |  |
+| 폴리싱 | 6주차 | 07-14 ~ 07-16 | - 게임 내부 밸런스 조정<br>- 디버깅 | |  |
 
 ---
 
 ## Daily Report 링크
 
-- [Daily Report](https://docs.google.com/spreadsheets/d/1iiQpPAQpZT1S8zdqiECrYfTQu0Vxf6EsAT6ODF53S9g/edit?usp=sharing)
+> https://docs.google.com/spreadsheets/d/1iiQpPAQpZT1S8zdqiECrYfTQu0Vxf6EsAT6ODF53S9g/edit?usp=sharing
 
 ---
 
@@ -52,7 +52,7 @@
 
 ## 플레이 영상
 
-- [1주차 영상](https://drive.google.com/file/d/1bHSuhmY9qJ8aNfNPiAnHpkBafLchmZBD/view?usp=sharing)
+- [1주차 영상](#https://drive.google.com/file/d/1bHSuhmY9qJ8aNfNPiAnHpkBafLchmZBD/view?usp=sharing)
 
 ---
 

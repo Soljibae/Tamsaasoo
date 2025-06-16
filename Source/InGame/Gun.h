@@ -1,6 +1,6 @@
 #pragma once
-#include "../Actor.h"
-#include "../Projectile.h"
+#include "Actor.h"
+#include "Projectile.h"
 namespace InGame
 {
 	class Gun : public Actor

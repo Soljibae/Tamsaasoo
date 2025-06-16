@@ -15,7 +15,7 @@ namespace InGame
 		AEVec2 position;
 		f32 CollisionRadius = 0.f;
 		AEVec2 direction;
-		f32 MovementSpeed = 0.f;
+		f32 MovementSpeed = 0.f; 
 		s32 row, column;
 		f32 FrameTime;
 		f32 TimeAcc = 0.f;

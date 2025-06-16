@@ -5,7 +5,7 @@
 void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
-	Texture = AEGfxTextureLoad("Assets/TestBlankBlue.png");
+	Texture = AEGfxTextureLoad("Assets/icon.ico");
 }
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos)
@@ -26,7 +26,7 @@ void InGame::Projectile::Update()
 
 void InGame::Projectile::Draw()
 {
-	Utils::DrawObject(*this);
+	Utils::DrawObjectWithDirection(*this);
 }
 
 void InGame::Projectile::Destroy()

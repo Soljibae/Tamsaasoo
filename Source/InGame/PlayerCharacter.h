@@ -1,6 +1,6 @@
 #pragma once
 #include "Character.h"
-#include "Gun/Gun.h"
+#include "Gun.h"
 namespace InGame
 {
 	class PlayerCharacter : public Character
