@@ -44,7 +44,7 @@ namespace InGame
 				}
 			}
 		}
-		std::cout << "ProjectileFired" << std::endl;
+		//std::cout << "ProjectileFired" << std::endl;
 	}
 }
 

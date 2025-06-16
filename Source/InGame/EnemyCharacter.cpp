@@ -6,28 +6,46 @@ namespace InGame
 	void InGame::EnemyCharacter::Init()
 	{
 		Mesh = Utils::CreateMesh();
-		Texture = AEGfxTextureLoad("Assets/TestBlankRed.png");
 	}
 
-	void EnemyCharacter::Spawn(AEVec2 Pos)
+	void EnemyCharacter::Spawn(AEVec2 Pos, EnemyData* InData)
 	{
-		MovementSpeed = 100.f;
-		size.x = 40;
-		size.y = 40;
-		CollisionRadius = 20;
+		if (InData->Texture == nullptr)
+		{
+			InData->Init();
+		}
+		Type = InData->Type;
+		Texture = InData->Texture;
+		Damage = InData->Damage;
+		Exp = InData->Exp;
+		MovementSpeed = InData->MovementSpeed;
+		size = InData->DrawSize;
+		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
 	}
 
 	void InGame::EnemyCharacter::Update()
 	{
-		global::PlayerLocation;
 		f32 len = AEVec2Distance(&global::PlayerLocation, &position);
 		f32 dx = position.x - global::PlayerLocation.x;
 		f32 dy = position.y - global::PlayerLocation.y;
 		direction.x = dx / len;
+		if ((direction.x > 0 && size.x > 0) || (direction.x < 0 && size.x < 0))
+		{
+			size.x *= -1;
+		}
 		direction.y = dy / len;
-		position.x -= direction.x * MovementSpeed * global::DeltaTime;
-		position.y -= direction.y * MovementSpeed * global::DeltaTime;
+		switch (Type)
+		{
+		case EnemyType::MINION:
+			position.x -= direction.x * MovementSpeed * global::DeltaTime;
+			position.y -= direction.y * MovementSpeed * global::DeltaTime;
+			break;
+		case EnemyType::ARCHER:
+
+			break;
+		}
+		
 	}
 	void EnemyCharacter::Draw()
 	{

@@ -127,5 +127,8 @@
     <ClInclude Include="..\Source\Manager\UI.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\InGame\EnemyData.h">
+      <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

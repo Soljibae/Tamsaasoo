@@ -15,7 +15,7 @@ namespace InGame
 		size.y = 100;
 		MovementSpeed = 300;
 		Mesh = Utils::CreateMesh();
-		Texture = AEGfxTextureLoad("Assets/idle_right_down.png");
+		Texture = AEGfxTextureLoad("Assets/Character.png");
 		HoldingGun = new Gun();
 		HoldingGun->Init();
 	}
@@ -37,10 +37,18 @@ namespace InGame
 			if (AEInputCheckCurr(AEVK_A))
 			{
 				MovingVec.x -= 1.f;
+				if (size.x > 0)
+				{
+					size.x *= -1;
+				}
 			}
 			if (AEInputCheckCurr(AEVK_D))
 			{
 				MovingVec.x += 1.f;
+				if (size.x < 0)
+				{
+					size.x *= -1;
+				}
 			}
 
 			if(MovingVec.x != 0 && MovingVec.y != 0)
@@ -93,13 +101,13 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		KillCount+= Exp;
-		if (KillCount >= TargetExp)
+		ExpCount += Exp;
+		if (ExpCount >= TargetExp)
 		{
+			ExpCount -= TargetExp;
 			TargetExp *= 2;
-			KillCount = 0;
 			Level++;
-			std::cout << Level << std::endl;
+			std::cout << "Level Up : " << Level  << " Next : Target Exp : " << TargetExp << std::endl;
 		}
 	}
 }

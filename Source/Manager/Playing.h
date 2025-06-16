@@ -7,6 +7,7 @@
 #include "../InGame/Background.h"
 #include "../Utils/Camera.h"
 #include <vector>
+#include "../InGame/EnemyData.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -29,6 +30,9 @@ namespace Manager
 
 		f32 WaveTimer;
 		u8 SpawnCount;
+		InGame::EnemyType SpawningEnemyType;
+		InGame::MinionData MinionStruct;
+		InGame::ArcherData ArcherStruct;
 		void SpawnWave();
 	};
 	extern Utils::Camera* CAM;

@@ -41,7 +41,7 @@ namespace Manager
 			ECPool.push_back(EC);
 		}
 		WaveTimer = 0.;
-		SpawnCount = 0;
+		SpawnCount = 10;
 	}
 	void Playing::Update()
 	{
@@ -50,10 +50,15 @@ namespace Manager
 		{
 			std::cout << global::DeltaTime << std::endl;
 		}
-		if (WaveTimer > 1.f)
+		if (WaveTimer > 10.f)
 		{
 			WaveTimer = 0;
-			SpawnCount++;
+			SpawnCount+=10;
+			if (SpawnCount > 50)
+			{
+				SpawnCount = 10;
+				SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
+			}
 			SpawnWave();
 		}
 		PC->Update();
@@ -116,6 +121,7 @@ namespace Manager
 			if (PP->bIsPandingKill)
 			{
 				PPPool.push_back(PP);
+				PP->bIsPandingKill = false;
 				PPs[i] = PPs.back();
 				PPs.pop_back();
 			}
@@ -130,6 +136,8 @@ namespace Manager
 
 			if (EC->bIsPandingKill)
 			{
+				PC->UpdateKill(EC->Exp);
+				EC->bIsPandingKill = false;
 				ECPool.push_back(EC);
 				ECs[i] = ECs.back();
 				ECs.pop_back();
@@ -146,6 +154,7 @@ namespace Manager
 			if (EP->bIsPandingKill)
 			{
 				EPPool.push_back(EP);
+				EP->bIsPandingKill = false;
 				EPs[i] = EPs.back();
 				EPs.pop_back();
 			}
@@ -250,7 +259,7 @@ namespace Manager
 				static std::random_device rd;
 				static std::mt19937 gen(rd());
 				double theta = angleDist(gen);
-				double distance = global::ScreenWidth * 1.5 * std::sqrt(radiusDist(gen)); // sqrt 적용해서 균일 분포
+				double distance = global::ScreenWidth * 1.5 * std::sqrt(radiusDist(gen));
 
 				SpawnPos.x = PC->position.x + distance * std::cos(theta);
 				SpawnPos.y = PC->position.y + distance * std::sin(theta);
@@ -265,7 +274,15 @@ namespace Manager
 					break;
 				}
 			}
-			EC->Spawn(SpawnPos);
+			switch (SpawningEnemyType)
+			{
+			case InGame::EnemyType::MINION:
+				EC->Spawn(SpawnPos, &MinionStruct);
+				break;
+			case InGame::EnemyType::ARCHER:
+				EC->Spawn(SpawnPos, &ArcherStruct);
+				break;
+			}
 			ECs.push_back(EC);
 		}
 	}

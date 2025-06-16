@@ -15,7 +15,6 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos)
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;
-	bIsValid = true;
 	bIsPandingKill = false;
 }
 
