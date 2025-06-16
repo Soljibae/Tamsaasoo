@@ -3,6 +3,7 @@
 #include "../Utils/Utils.h"
 #include "../Manager/Playing.h"
 #include <iostream>
+#include <algorithm>
 namespace InGame
 {
 	void PlayerCharacter::Init()
@@ -22,38 +23,32 @@ namespace InGame
 	{
 		if(Health > 0)
 		{
-			if(AEInputCheckCurr(AEVK_W))
+			AEVec2 MovingVec;
+			AEVec2Set(&MovingVec, 0.f, 0.f);
+
+			if (AEInputCheckCurr(AEVK_W))
 			{
-				position.y += MovementSpeed * global::DeltaTime;
-				if (position.y > global::worldMax.y - size.y/2)
-				{
-					position.y = global::worldMax.y - size.y/2;
-				}
+				MovingVec.y += 1.f;
 			}
-			if(AEInputCheckCurr(AEVK_S))
+			if (AEInputCheckCurr(AEVK_S))
 			{
-				position.y -= MovementSpeed * global::DeltaTime;
-				if (position.y < global::worldMin.y + size.y / 2)
-				{
-					position.y = global::worldMin.y + size.y / 2;
-				}
+				MovingVec.y -= 1.f;
 			}
-			if(AEInputCheckCurr(AEVK_A))
+			if (AEInputCheckCurr(AEVK_A))
 			{
-				position.x -= MovementSpeed * global::DeltaTime;
-				if (position.x < global::worldMin.x + size.x / 2)
-				{
-					position.x = global::worldMin.x + size.x / 2;
-				}
+				MovingVec.x -= 1.f;
 			}
-			if(AEInputCheckCurr(AEVK_D))
+			if (AEInputCheckCurr(AEVK_D))
 			{
-				position.x += MovementSpeed * global::DeltaTime;
-				if (position.x > global::worldMax.x - size.x / 2)
-				{
-					position.x = global::worldMax.x - size.x / 2;
-				}
+				MovingVec.x += 1.f;
 			}
+
+			if(MovingVec.x != 0 && MovingVec.y != 0)
+				AEVec2Normalize(&MovingVec, &MovingVec);
+			AEVec2Scale(&MovingVec, &MovingVec, MovementSpeed * global::DeltaTime);
+
+			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + size.x / 2, global::worldMax.x - size.x / 2);
+			position.y = std::clamp(position.y + MovingVec.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
 
 			global::PlayerLocation = position;
 			GetMouseDir();
