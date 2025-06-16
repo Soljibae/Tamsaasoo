@@ -9,7 +9,8 @@ namespace Utils
 		AEVec2 curr_position;
 		AEVec2 target_position;
 		AEMtx33 translate_matrix;
-		AEVec2 deadzoneSize;
+		AEVec2 deadzone_size;
+		f32 camera_speed;
 
 		void Init(InGame::Character& player);
 		void Update(InGame::Character& player);
