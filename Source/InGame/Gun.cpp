@@ -1,10 +1,10 @@
 #include "Gun.h"
-#include "../../Global/GlobalVariables.h"
-#include "../../Utils/Utils.h"
+#include "../Global/GlobalVariables.h"
+#include "../Utils/Utils.h"
 #include <iostream>
-#include "../../Manager/GameManager.h"
-#include "../Projectile.h"
-#include "../../Manager/Playing.h"
+#include "../Manager/GameManager.h"
+#include "Projectile.h"
+#include "../Manager/Playing.h"
 namespace InGame
 {
 	void Gun::Init()

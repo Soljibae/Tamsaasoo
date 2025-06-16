@@ -25,9 +25,11 @@
     <ClCompile Include="..\Source\InGame\Background.cpp" />
     <ClCompile Include="..\Source\InGame\Character.cpp" />
     <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp" />
-    <ClCompile Include="..\Source\InGame\Gun\Gun.cpp" />
+    <ClCompile Include="..\Source\InGame\Gun.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
+    <ClCompile Include="..\Source\InGame\PlayerStat.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
+    <ClCompile Include="..\Source\InGame\Stat.cpp" />
     <ClCompile Include="..\Source\Manager\GameManager.cpp" />
     <ClCompile Include="..\Source\Manager\GameState.cpp" />
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
@@ -43,9 +45,11 @@
     <ClInclude Include="..\Source\InGame\Background.h" />
     <ClInclude Include="..\Source\InGame\Character.h" />
     <ClInclude Include="..\Source\InGame\EnemyCharacter.h" />
-    <ClInclude Include="..\Source\InGame\Gun\Gun.h" />
+    <ClInclude Include="..\Source\InGame\Gun.h" />
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
+    <ClInclude Include="..\Source\InGame\PlayerStat.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
+    <ClInclude Include="..\Source\InGame\Stat.h" />
     <ClInclude Include="..\Source\Manager\GameManager.h" />
     <ClInclude Include="..\Source\Manager\GameState.h" />
     <ClInclude Include="..\Source\Manager\Intro.h" />
