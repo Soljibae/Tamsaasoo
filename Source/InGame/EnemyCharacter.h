@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "Stat.h"
 namespace InGame
 {
 	enum EnemyType
@@ -14,7 +15,9 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
-	s32 Damage = 1;
+		virtual void adjustHealth(s32 Amount) override;
+
+		Stat Stats;
 	protected:
 	private:
 	};

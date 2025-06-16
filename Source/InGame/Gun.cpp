@@ -5,13 +5,19 @@
 #include "../Manager/GameManager.h"
 #include "Projectile.h"
 #include "../Manager/Playing.h"
+#include "PlayerCharacter.h"
 namespace InGame
 {
-	void Gun::Init()
+	void Gun::Init(Actor* object)
 	{
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad("Assets/TestBlankWhite.png");
+		Source = object;
+		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
+
+		ChamberTime = player->Stats.FireRate;
 	}
+
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
 		FireTimer += global::DeltaTime;
@@ -30,7 +36,7 @@ namespace InGame
 	void Gun::FireProjectile(AEVec2 Dir, AEVec2 Pos)
 	{
 		Projectile* PP = new Projectile();
-		PP->Init(Dir,Pos);
+		PP->Init(Dir,Pos,Source);
 		PP->direction = Dir;
 		if (Manager::gm.currStateREF)
 		{

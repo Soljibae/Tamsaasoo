@@ -1,8 +1,10 @@
 #include "Projectile.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
+#include "PlayerCharacter.h"
+#include "EnemyCharacter.h"
 
-void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
+void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos, Actor* object)
 {
 	Mesh = Utils::CreateMesh();
 	Texture = AEGfxTextureLoad("Assets/icon.ico");
@@ -11,12 +13,28 @@ void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;
+
+	PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
+	EnemyCharacter* enemy = dynamic_cast<EnemyCharacter*>(object);
+
+	if (player)
+	{
+		BulletSpeed = player->Stats.BulletSpeed;
+		HitCount = player->Stats.HitCount;
+		Damage = player->Stats.Damage;
+	}
+	else if (enemy)
+	{
+		BulletSpeed = enemy->Stats.BulletSpeed;
+		Damage = enemy->Stats.Damage;
+	}
+	
 }
 
 void InGame::Projectile::Update()
 {
-	position.x += direction.x * 30.f;
-	position.y += direction.y * 30.f;
+	position.x += direction.x * BulletSpeed;
+	position.y += direction.y * BulletSpeed;
 }
 
 void InGame::Projectile::Draw()
