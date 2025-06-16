@@ -2,6 +2,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
 #include "../Manager/GameManager.h"
+#include "PauseUI.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -28,7 +29,7 @@ namespace Manager
 			BG = new InGame::Background();
 			BG->Init();
 		}
-		for (int i = 0;i < 1000;i++)
+		for (int i = 0; i < 1000; i++)
 		{
 			InGame::Projectile* PP = new InGame::Projectile();
 			PP->Init();
@@ -42,131 +43,152 @@ namespace Manager
 		}
 		WaveTimer = 0.;
 		SpawnCount = 10;
+		pausePanel.Init();
+		gm.GamePaused = false;
 	}
 	void Playing::Update()
 	{
-		WaveTimer += global::DeltaTime;
-		if (global::DeltaTime > 0.02)
+		// Press ESCAPE to pause the game
+		if (global::KeyInput(AEVK_ESCAPE))
 		{
-			std::cout << global::DeltaTime << std::endl;
-		}
-		if (WaveTimer > 10.f)
-		{
-			WaveTimer = 0;
-			SpawnCount+=10;
-			if (SpawnCount > 50)
+			if (!gm.GamePaused)
 			{
-				SpawnCount = 10;
-				SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
+				gm.Pause();
 			}
-			SpawnWave();
-		}
-		PC->Update();
-		for (InGame::Projectile*& PP : PPs)
-		{
-			PP->Update();
-			PP->IsOutOfWorld();
-		}
-		for (InGame::EnemyCharacter* EC : ECs)
-		{
-			EC->Update();
-		}
-		for (InGame::Projectile*& EP : EPs)
-		{
-			EP->Update();
-			EP->IsOutOfWorld();
-		}
-		for (InGame::Projectile*& PP : PPs)
-		{
-			bool bIsHit = false;
-			for (InGame::EnemyCharacter*& EC : ECs)
+			else
 			{
-				if (PP->bIsPandingKill)
+				gm.Resume();
+			}
+		}
+		if (!gm.GamePaused)
+		{
+			WaveTimer += global::DeltaTime;
+			if (global::DeltaTime > 0.02)
+			{
+				std::cout << global::DeltaTime << std::endl;
+			}
+			if (WaveTimer > 10.f)
+			{
+				WaveTimer = 0;
+				SpawnCount += 10;
+				if (SpawnCount > 50)
 				{
-					break;
+					SpawnCount = 10;
+					SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
 				}
-				else if (EC->bIsPandingKill)
+				SpawnWave();
+			}
+			PC->Update();
+			for (InGame::Projectile*& PP : PPs)
+			{
+				PP->Update();
+				PP->IsOutOfWorld();
+			}
+			for (InGame::EnemyCharacter* EC : ECs)
+			{
+				EC->Update();
+			}
+			for (InGame::Projectile*& EP : EPs)
+			{
+				EP->Update();
+				EP->IsOutOfWorld();
+			}
+			for (InGame::Projectile*& PP : PPs)
+			{
+				bool bIsHit = false;
+				for (InGame::EnemyCharacter*& EC : ECs)
 				{
-					continue;
-				}
-				else
-				{
-					if (Utils::CheckCollision(*PP, *EC))
+					if (PP->bIsPandingKill)
 					{
-						EC->adjustHealth(-PP->Damage);
-						PP->OnHit();
+						break;
+					}
+					else if (EC->bIsPandingKill)
+					{
+						continue;
+					}
+					else
+					{
+						if (Utils::CheckCollision(*PP, *EC))
+						{
+							EC->adjustHealth(-PP->Damage);
+							PP->OnHit();
+						}
 					}
 				}
 			}
-		}
-		for (InGame::EnemyCharacter*& EC : ECs)
-		{
-			if (Utils::CheckCollision(*EC, *PC))
+			for (InGame::EnemyCharacter*& EC : ECs)
 			{
-				PC->adjustHealth(-EC->Stats.Damage);
+				if (Utils::CheckCollision(*EC, *PC))
+				{
+					PC->adjustHealth(-EC->Stats.Damage);
+				}
 			}
-		}
-		for (InGame::Projectile*& EP : EPs)
-		{
-			if (Utils::CheckCollision(*EP, *PC))
+			for (InGame::Projectile*& EP : EPs)
 			{
-				PC->adjustHealth(-EP->Damage);
-				EP->OnHit();
+				if (Utils::CheckCollision(*EP, *PC))
+				{
+					PC->adjustHealth(-EP->Damage);
+					EP->OnHit();
+				}
 			}
-		}
-		for (size_t i = 0; i < PPs.size(); )
-		{
-			InGame::Projectile*& PP = PPs[i];
+			for (size_t i = 0; i < PPs.size(); )
+			{
+				InGame::Projectile*& PP = PPs[i];
 
-			if (PP->bIsPandingKill)
-			{
-				PPPool.push_back(PP);
-				PP->bIsPandingKill = false;
-				PPs[i] = PPs.back();
-				PPs.pop_back();
+				if (PP->bIsPandingKill)
+				{
+					PPPool.push_back(PP);
+					PP->bIsPandingKill = false;
+					PPs[i] = PPs.back();
+					PPs.pop_back();
+				}
+				else
+				{
+					++i;
+				}
 			}
-			else
+			for (size_t i = 0; i < ECs.size(); )
 			{
-				++i;
-			}
-		}
-		for (size_t i = 0; i < ECs.size(); )
-		{
-			InGame::EnemyCharacter*& EC = ECs[i];
+				InGame::EnemyCharacter*& EC = ECs[i];
 
-			if (EC->bIsPandingKill)
-			{
-				PC->UpdateKill(EC->Exp);
-				EC->bIsPandingKill = false;
-				ECPool.push_back(EC);
-				ECs[i] = ECs.back();
-				ECs.pop_back();
+				if (EC->bIsPandingKill)
+				{
+					PC->UpdateKill(EC->Exp);
+					EC->bIsPandingKill = false;
+					ECPool.push_back(EC);
+					ECs[i] = ECs.back();
+					ECs.pop_back();
+				}
+				else
+				{
+					++i;
+				}
 			}
-			else
+			for (size_t i = 0; i < EPs.size(); )
 			{
-				++i;
-			}
-		}
-		for (size_t i = 0; i < EPs.size(); )
-		{
-			InGame::Projectile*& EP = EPs[i];
+				InGame::Projectile*& EP = EPs[i];
 
-			if (EP->bIsPandingKill)
-			{
-				EPPool.push_back(EP);
-				EP->bIsPandingKill = false;
-				EPs[i] = EPs.back();
-				EPs.pop_back();
+				if (EP->bIsPandingKill)
+				{
+					EPPool.push_back(EP);
+					EP->bIsPandingKill = false;
+					EPs[i] = EPs.back();
+					EPs.pop_back();
+				}
+				else
+				{
+					++i;
+				}
 			}
-			else
+			CAM->Update(*PC);
+			if (PC->bIsPandingKill)
 			{
-				++i;
+				Manager::gm.nextState = EGameState::MAINMENU;
 			}
 		}
-		CAM->Update(*PC);
-		if (PC->bIsPandingKill)
+		else
 		{
-			Manager::gm.nextState = EGameState::MAINMENU;
+			pausePanel.Update();
 		}
 	}
 	void Playing::Draw()
@@ -193,6 +215,10 @@ namespace Manager
 			{
 				EP->Draw();
 			}
+		}
+		if (gm.GamePaused)
+		{
+			pausePanel.Draw();
 		}
 	}
 	void Playing::Destroy()
@@ -241,11 +267,13 @@ namespace Manager
 		CAM = nullptr;
 		BG->Destroy();
 		delete BG;
+		
+		pausePanel.Destroy();
 	}
 	void Playing::SpawnWave()
 	{
 		std::cout << "Spawn Wave" << std::endl;
-		for (u8 i = 0; i < SpawnCount;i++)
+		for (u8 i = 0; i < SpawnCount; i++)
 		{
 			if (ECPool.size() == 0)
 			{

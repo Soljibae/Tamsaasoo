@@ -20,35 +20,29 @@ namespace Manager
 		Black.position = { 0.f, 0.f };
 		Black.size = { w, h };
 
-		button.Mesh = Utils::CreateMesh();
-		button.Texture = AEGfxTextureLoad("Assets/StartButton.png");
-		button.position = { 0.f, 100.f };
-		button.size = { 300.f, 300.f };
+		startButton.Mesh = Utils::CreateMesh();
+		startButton.Texture = AEGfxTextureLoad("Assets/StartButton.png");
+		startButton.position = { 0.f, 100.f };
+		startButton.size = { 300, 120 };
+		startButton.SetCallback([]() {gm.SetNextGameState(EGameState::PLAYING); });
 	}
 	void MainMenu::Update()
 	{
-		fadeInTime += global::DeltaTime;
 		if (fadeInTime < fadeInDuration)
 		{
+			fadeInTime += global::DeltaTime;
 			alpha = 1.0f - (fadeInTime / fadeInDuration);
 		}
 		else
 		{
 			alpha = 0;
-			if (Utils::IsMouseInSquare(button))
-			{
-				if (global::KeyInput(AEVK_LBUTTON))
-				{
-					gm.SetNextGameState(EGameState::PLAYING);
-				}
-
-			}
+			startButton.Update();
 		}
 	}
 	void MainMenu::Draw()
 	{
 		Utils::DrawObject(Illust, false);
-		Utils::DrawObject(button, false);
+		Utils::DrawObject(startButton, false);
 		if (alpha != 0)
 		{
 			Utils::DrawObject(Black, false, alpha);
@@ -62,7 +56,7 @@ namespace Manager
 		AEGfxMeshFree(Black.Mesh);
 		AEGfxTextureUnload(Black.Texture);
 
-		AEGfxMeshFree(button.Mesh);
-		AEGfxTextureUnload(button.Texture);
+		AEGfxMeshFree(startButton.Mesh);
+		AEGfxTextureUnload(startButton.Texture);
 	}
 }
