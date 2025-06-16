@@ -22,7 +22,7 @@ namespace InGame
 		Stats.Damage = 1;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
-		Stats.HitCount = 1;
+		Stats.HitCount = 6;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 1.f;
 
@@ -67,7 +67,7 @@ namespace InGame
 				AEVec2Normalize(&MovingVec, &MovingVec);
 			AEVec2Scale(&MovingVec, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
 
-			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + size.x / 2, global::worldMax.x - size.x / 2);
+			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
 			position.y = std::clamp(position.y + MovingVec.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
 
 			global::PlayerLocation = position;

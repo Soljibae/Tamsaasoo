@@ -239,6 +239,8 @@ namespace Manager
 		bSuccess = EPPool.empty();
 		delete CAM;
 		CAM = nullptr;
+		BG->Destroy();
+		delete BG;
 	}
 	void Playing::SpawnWave()
 	{
