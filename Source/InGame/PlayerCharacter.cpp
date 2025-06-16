@@ -15,8 +15,6 @@ namespace InGame
 		size.y = 100;
 		MovementSpeed = 300;
 		Mesh = Utils::CreateMesh();
-		Texture = AEGfxTextureLoad("Assets/idle_right_down.png");
-
 		Stats.HP = 1;
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 1.f;
@@ -25,7 +23,10 @@ namespace InGame
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
+		Stats.ExpCount = 0.f;
+		Stats.TargetExp = 1.f;
 
+		Texture = AEGfxTextureLoad("Assets/Character.png");
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
@@ -48,10 +49,18 @@ namespace InGame
 			if (AEInputCheckCurr(AEVK_A))
 			{
 				MovingVec.x -= 1.f;
+				if (size.x > 0)
+				{
+					size.x *= -1;
+				}
 			}
 			if (AEInputCheckCurr(AEVK_D))
 			{
 				MovingVec.x += 1.f;
+				if (size.x < 0)
+				{
+					size.x *= -1;
+				}
 			}
 
 			if(MovingVec.x != 0 && MovingVec.y != 0)
@@ -65,7 +74,7 @@ namespace InGame
 			GetMouseDir();
 			if (HoldingGun)
 			{
-				HoldingGun->Update(MouseDirection, position);
+				HoldingGun->Update(MouseDirection, position, Stats.Level);
 			}
 		}
 	}
@@ -109,5 +118,16 @@ namespace InGame
 		f32 dy = Result.y - position.y;
 		MouseDirection.x = dx / length;
 		MouseDirection.y = dy / length;
+	}
+	void PlayerCharacter::UpdateKill(u32 Exp)
+	{
+		Stats.ExpCount += Exp;
+		if (Stats.ExpCount >= Stats.TargetExp)
+		{
+			Stats.ExpCount -= Stats.TargetExp;
+			Stats.TargetExp *= 2;
+			Stats.Level++;
+			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
+		}
 	}
 }

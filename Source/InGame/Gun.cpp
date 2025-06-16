@@ -6,6 +6,7 @@
 #include "Projectile.h"
 #include "../Manager/Playing.h"
 #include "PlayerCharacter.h"
+
 namespace InGame
 {
 	void Gun::Init(Actor* object)
@@ -18,12 +19,13 @@ namespace InGame
 		ChamberTime = player->Stats.FireRate;
 	}
 
-	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
+
+	void Gun::Update(AEVec2 Dir, AEVec2 Pos, u32 Level)
 	{
 		FireTimer += global::DeltaTime;
 		if (FireTimer > ChamberTime)
 		{
-			FireProjectile(Dir, Pos);
+			FireProjectile(Dir, Pos, Level);
 			FireTimer = 0.f;
 		}
 	}
@@ -33,17 +35,23 @@ namespace InGame
 		Utils::DrawObject(*this);
 	}
 
-	void Gun::FireProjectile(AEVec2 Dir, AEVec2 Pos)
+	void Gun::FireProjectile(AEVec2 Dir, AEVec2 Pos, u32 Level)
 	{
-		Projectile* PP = new Projectile();
-		PP->Init(Dir,Pos,Source);
-		PP->direction = Dir;
 		if (Manager::gm.currStateREF)
 		{
-			static_cast<Manager::Playing*>(Manager::gm.currStateREF)->PPs.push_back(PP);
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->PPPool.size() > 0)
+				{
+					Projectile* PP = GS->PPPool.back();
+					GS->PPPool.pop_back();
+					PP->Spawn(Dir, Pos, Source);
+					GS->PPs.push_back(PP);
+				}
+			}
 		}
-		
-		std::cout << "ProjectileFired" << std::endl;
+		//std::cout << "ProjectileFired" << std::endl;
 	}
 }
 

@@ -15,6 +15,7 @@ namespace InGame
 		void GetMouseDir();
 
 		PlayerStat Stats;
+		void UpdateKill(u32 Exp);
 	protected:
 		AEVec2 MouseDirection;
 		Gun* HoldingGun = nullptr;

@@ -4,15 +4,21 @@
 #include "PlayerCharacter.h"
 #include "EnemyCharacter.h"
 
-void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos, Actor* object)
+
+void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
 	Texture = AEGfxTextureLoad("Assets/icon.ico");
-	size.x = 100;
-	size.y = 100;
+}
+
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object)
+{
+	size.x = 10;
+	size.y = 10;
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;
+	bIsPandingKill = false;
 
 	PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
 	EnemyCharacter* enemy = dynamic_cast<EnemyCharacter*>(object);
@@ -28,7 +34,6 @@ void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos, Actor* object)
 		BulletSpeed = enemy->Stats.BulletSpeed;
 		Damage = enemy->Stats.Damage;
 	}
-	
 }
 
 void InGame::Projectile::Update()

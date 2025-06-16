@@ -13,7 +13,9 @@ namespace InGame
 		virtual void Destroy() override;
 
 		u32 Level;
+		u32 ExpCount;
 		f32 ExpGained;
 		s32 HitCount;
+		u32 TargetExp;
 	};
 }
