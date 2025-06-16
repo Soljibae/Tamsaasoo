@@ -33,16 +33,10 @@ namespace InGame
 		if (Manager::gm.currStateREF)
 		{
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-			if (GS)
-			{
-				if (GS->PPPool.size() > 0)
-				{
-					Projectile* PP = GS->PPPool.back();
-					GS->PPPool.pop_back();
-					PP->Spawn(Dir, Pos);
-					GS->PPs.push_back(PP);
-				}
-			}
+			Projectile* PP = GS->PPPool.back();
+			GS->PPPool.pop_back();
+			PP->Spawn(Dir, Pos);
+			GS->PPs.push_back(PP);
 		}
 		std::cout << "ProjectileFired" << std::endl;
 	}

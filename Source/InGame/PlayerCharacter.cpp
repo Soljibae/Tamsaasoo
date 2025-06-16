@@ -59,7 +59,7 @@ namespace InGame
 			GetMouseDir();
 			if (HoldingGun)
 			{
-				HoldingGun->Update(MouseDirection, position);
+				HoldingGun->Update(MouseDirection, position, Level);
 			}
 		}
 	}
@@ -95,5 +95,16 @@ namespace InGame
 		f32 dy = Result.y - position.y;
 		MouseDirection.x = dx / length;
 		MouseDirection.y = dy / length;
+	}
+	void PlayerCharacter::UpdateKill(u32 Exp)
+	{
+		KillCount+= Exp;
+		if (KillCount >= TargetExp)
+		{
+			TargetExp *= 2;
+			KillCount = 0;
+			Level++;
+			std::cout << Level << std::endl;
+		}
 	}
 }

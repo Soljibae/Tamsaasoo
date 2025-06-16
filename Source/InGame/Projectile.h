@@ -10,7 +10,8 @@ namespace InGame
 	class Projectile : public Actor
 	{
 	public:
-		void Init(AEVec2 Dir, AEVec2 Pos);
+		virtual void Init() override;
+		void Spawn(AEVec2 Dir, AEVec2 Pos);
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;

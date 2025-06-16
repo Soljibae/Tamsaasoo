@@ -236,10 +236,6 @@ namespace Manager
 		std::cout << "Spawn Wave" << std::endl;
 		for (u8 i = 0; i < SpawnCount;i++)
 		{
-			if (ECPool.size() == 0)
-			{
-				break;
-			}
 			InGame::EnemyCharacter* EC = ECPool.back();
 			ECPool.pop_back();
 			AEVec2 SpawnPos;

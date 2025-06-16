@@ -7,11 +7,11 @@ namespace InGame
 	{
 	public:
 		virtual void Init() override;
-		void Update(AEVec2 Dir, AEVec2 Pos);
+		void Update(AEVec2 Dir, AEVec2 Pos, u32 Level);
 		virtual void Draw() override;
-		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos);
+		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos, u32 Level);
 		s32 Damage = 1;
 		f32 FireTimer = 0.f;
-		f32 ChamberTime = 1.f;
+		f32 ChamberTime = 0.2f;
 	};
 }

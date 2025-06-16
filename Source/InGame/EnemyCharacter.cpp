@@ -7,10 +7,15 @@ namespace InGame
 	{
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad("Assets/TestBlankRed.png");
+	}
+
+	void EnemyCharacter::Spawn(AEVec2 Pos)
+	{
 		MovementSpeed = 100.f;
 		size.x = 40;
 		size.y = 40;
 		CollisionRadius = 20;
+		position = Pos;
 	}
 
 	void InGame::EnemyCharacter::Update()

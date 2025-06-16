@@ -18,6 +18,9 @@ namespace Manager
 		void Destroy() override;
 
 		InGame::PlayerCharacter* PC;
+		std::vector<InGame::Projectile*> PPPool;
+		std::vector<InGame::EnemyCharacter*> ECPool;
+		std::vector<InGame::Projectile*> EPPool;
 		std::vector<InGame::Projectile*> PPs;
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;

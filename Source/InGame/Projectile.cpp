@@ -2,15 +2,21 @@
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 
-void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
+void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
 	Texture = AEGfxTextureLoad("Assets/TestBlankBlue.png");
+}
+
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos)
+{
 	size.x = 10;
 	size.y = 10;
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;
+	bIsValid = true;
+	bIsPandingKill = false;
 }
 
 void InGame::Projectile::Update()
