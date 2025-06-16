@@ -11,6 +11,8 @@ namespace Utils
 
 	void DrawObject(InGame::Actor& object, bool is_camera_enabled = true, f32 alpha = 1.f);
 
+	void DrawObjectWithDirection(InGame::Actor& object);
+
 	void InitOffset(InGame::Actor& object);
 
 	void UpdateOffset(InGame::Actor& object);

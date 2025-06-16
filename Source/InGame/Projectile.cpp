@@ -5,9 +5,9 @@
 void InGame::Projectile::Init(AEVec2 Dir, AEVec2 Pos)
 {
 	Mesh = Utils::CreateMesh();
-	Texture = AEGfxTextureLoad("Assets/TestBlankBlue.png");
-	size.x = 10;
-	size.y = 10;
+	Texture = AEGfxTextureLoad("Assets/icon.ico");
+	size.x = 100;
+	size.y = 100;
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;
@@ -21,7 +21,7 @@ void InGame::Projectile::Update()
 
 void InGame::Projectile::Draw()
 {
-	Utils::DrawObject(*this);
+	Utils::DrawObjectWithDirection(*this);
 }
 
 void InGame::Projectile::Destroy()
