@@ -139,5 +139,8 @@
     <ClInclude Include="..\Source\InGame\Stat.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\InGame\EnemyData.h">
+      <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

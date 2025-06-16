@@ -14,6 +14,9 @@ namespace InGame
 		EnemyType Type;
 		s32 Damage = 1;
 		u32 Exp = 1;
+		f32 ProjectileSpawnTimer = 0.f;
+		f32 ProjectileChamberTimer = 10.f;
+		void SpawnProjectile(AEVec2 Dir, AEVec2 Pos);
 	protected:
 	private:
 	};

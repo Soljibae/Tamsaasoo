@@ -10,8 +10,8 @@ void InGame::Projectile::Init()
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos)
 {
-	size.x = 10;
-	size.y = 10;
+	size.x = 100;
+	size.y = 100;
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;

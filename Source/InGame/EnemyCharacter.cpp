@@ -1,6 +1,8 @@
 #include "EnemyCharacter.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
+#include "../Manager/GameManager.h"
+#include "../Manager/Playing.h"
 namespace InGame
 {
 	void InGame::EnemyCharacter::Init()
@@ -42,7 +44,20 @@ namespace InGame
 			position.y -= direction.y * MovementSpeed * global::DeltaTime;
 			break;
 		case EnemyType::ARCHER:
-
+			ProjectileSpawnTimer += global::DeltaTime;
+			if (len > 500)
+			{
+				position.x -= direction.x * MovementSpeed * global::DeltaTime;
+				position.y -= direction.y * MovementSpeed * global::DeltaTime;
+			}
+			else
+			{
+				if (ProjectileSpawnTimer > ProjectileChamberTimer)
+				{
+					ProjectileSpawnTimer = 0;
+					SpawnProjectile(direction,position);
+				}
+			}
 			break;
 		}
 		
@@ -56,6 +71,24 @@ namespace InGame
 		if (Mesh)
 		{
 			Utils::DestroyMesh(Mesh);
+		}
+	}
+	void EnemyCharacter::SpawnProjectile(AEVec2 Dir, AEVec2 Pos)
+	{
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->EPPool.size() > 0)
+				{
+					Projectile* EP = GS->EPPool.back();
+					GS->EPPool.pop_back();
+					EP->Spawn(Dir, Pos);
+					GS->EPs.push_back(EP);
+				}
+
+			}
 		}
 	}
 }
