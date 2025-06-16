@@ -10,13 +10,15 @@ namespace InGame
 	class Projectile : public Actor
 	{
 	public:
-		void Init(AEVec2 Dir, AEVec2 Pos);
+		void Init();
+		void Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object);
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
 		void IsOutOfWorld();
 		void OnHit();
-		s32 Damage = 1;
-		s32 HitCount = 1;
+		s32 Damage;
+		s32 HitCount;
+		f32 BulletSpeed;
 	};
 }

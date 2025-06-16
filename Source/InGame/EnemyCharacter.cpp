@@ -11,18 +11,53 @@ namespace InGame
 		size.x = 40;
 		size.y = 40;
 		CollisionRadius = 20;
+
+		Stats.HP = 1;
+		Stats.FireRate = 1.f;
+		Stats.BulletSpeed = 30.f;
+		Stats.Damage = 1;
+	}
+
+	void EnemyCharacter::Spawn(AEVec2 Pos, EnemyData* InData)
+	{
+		if (InData->Texture == nullptr)
+		{
+			InData->Init();
+		}
+		Type = InData->Type;
+		Texture = InData->Texture;
+		Stats.Damage = InData->Damage;
+		Exp = InData->Exp;
+		Stats.MovementSpeed = InData->MovementSpeed;
+		size = InData->DrawSize;
+		CollisionRadius = InData->CollisionRadius;
+		position = Pos;
 	}
 
 	void InGame::EnemyCharacter::Update()
 	{
-		global::PlayerLocation;
 		f32 len = AEVec2Distance(&global::PlayerLocation, &position);
 		f32 dx = position.x - global::PlayerLocation.x;
 		f32 dy = position.y - global::PlayerLocation.y;
 		direction.x = dx / len;
+		if ((direction.x > 0 && size.x > 0) || (direction.x < 0 && size.x < 0))
+		{
+			size.x *= -1;
+		}
 		direction.y = dy / len;
-		position.x -= direction.x * MovementSpeed * global::DeltaTime;
-		position.y -= direction.y * MovementSpeed * global::DeltaTime;
+
+
+		switch (Type)
+		{
+		case EnemyType::MINION:
+			position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
+			position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+			break;
+		case EnemyType::ARCHER:
+
+			break;
+		}
+		
 	}
 	void EnemyCharacter::Draw()
 	{
@@ -33,6 +68,14 @@ namespace InGame
 		if (Mesh)
 		{
 			Utils::DestroyMesh(Mesh);
+		}
+	}
+	void EnemyCharacter::adjustHealth(s32 Amount)
+	{
+		Stats.HP += Amount;
+		if (Stats.HP <= 0)
+		{
+			bIsPandingKill = true;
 		}
 	}
 }
