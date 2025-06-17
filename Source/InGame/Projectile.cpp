@@ -1,6 +1,9 @@
 #include "Projectile.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
+#include "PlayerCharacter.h"
+#include "EnemyCharacter.h"
+
 
 void InGame::Projectile::Init()
 {
@@ -8,7 +11,7 @@ void InGame::Projectile::Init()
 	Texture = AEGfxTextureLoad("Assets/icon.ico");
 }
 
-void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos)
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object)
 {
 	size.x = 100;
 	size.y = 100;
@@ -16,12 +19,27 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos)
 	position = Pos;
 	CollisionRadius = 5;
 	bIsPandingKill = false;
+
+	PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
+	EnemyCharacter* enemy = dynamic_cast<EnemyCharacter*>(object);
+
+	if (player)
+	{
+		BulletSpeed = player->Stats.BulletSpeed;
+		HitCount = player->Stats.HitCount;
+		Damage = player->Stats.Damage;
+	}
+	else if (enemy)
+	{
+		BulletSpeed = enemy->Stats.BulletSpeed;
+		Damage = enemy->Stats.Damage;
+	}
 }
 
 void InGame::Projectile::Update()
 {
-	position.x += direction.x * 30.f;
-	position.y += direction.y * 30.f;
+	position.x += direction.x * BulletSpeed;
+	position.y += direction.y * BulletSpeed;
 }
 
 void InGame::Projectile::Draw()
@@ -31,8 +49,13 @@ void InGame::Projectile::Draw()
 
 void InGame::Projectile::Destroy()
 {
-	Utils::DestroyMesh(Mesh);
-	Mesh = nullptr;
+	if (Mesh)
+	{
+		Utils::DestroyMesh(Mesh);
+		Mesh = nullptr;
+	}
+	AEGfxTextureUnload(Texture);
+	Texture = nullptr;
 }
 
 void InGame::Projectile::IsOutOfWorld()

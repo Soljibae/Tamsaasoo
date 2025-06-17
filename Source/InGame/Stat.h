@@ -14,5 +14,6 @@ namespace InGame
 		f32 MovementSpeed;
 		f32 FireRate;
 		f32 BulletSpeed;
+		s32 Damage;
 	};
 }

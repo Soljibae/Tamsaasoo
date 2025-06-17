@@ -6,6 +6,5 @@ namespace InGame
 	{
 	public:
 		virtual void adjustHealth(s32 Amount);
-		s32 Health = 1;
 	};
 }

@@ -36,6 +36,13 @@ namespace InGame
 		{
 
 		}
+		~EnemyData()
+		{
+			if (Texture)
+			{
+				AEGfxTextureUnload(Texture);
+			}
+		}
 	};
 
 	struct MinionData : EnemyData

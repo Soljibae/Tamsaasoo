@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "Stat.h"
 #include "EnemyData.h"
 namespace InGame
 {
@@ -11,8 +12,10 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
+		virtual void adjustHealth(s32 Amount) override;
+
+		Stat Stats;
 		EnemyType Type;
-		s32 Damage = 1;
 		u32 Exp = 1;
 		f32 ProjectileSpawnTimer = 0.f;
 		f32 ProjectileChamberTimer = 10.f;

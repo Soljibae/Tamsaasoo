@@ -20,6 +20,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	AEInputShowCursor(1);
 
 	Manager::gm.Init();
+
 	while (gGameRunning)
 	{
 		Manager::gm.Update();
@@ -28,6 +29,5 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 			gGameRunning = 0;
 	}
 	Manager::gm.Destroy();
-
 	AESysExit();
 }

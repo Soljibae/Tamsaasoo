@@ -5,14 +5,21 @@
 #include "../Manager/GameManager.h"
 #include "Projectile.h"
 #include "../Manager/Playing.h"
+#include "PlayerCharacter.h"
 
 namespace InGame
 {
-	void Gun::Init()
+	void Gun::Init(Actor* object)
 	{
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad("Assets/TestBlankWhite.png");
+		Source = object;
+		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
+
+		ChamberTime = player->Stats.FireRate;
 	}
+
+
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos, u32 Level)
 	{
 		FireTimer += global::DeltaTime;
@@ -39,7 +46,7 @@ namespace InGame
 				{
 					Projectile* PP = GS->PPPool.back();
 					GS->PPPool.pop_back();
-					PP->Spawn(Dir, Pos);
+					PP->Spawn(Dir, Pos, Source);
 					GS->PPs.push_back(PP);
 				}
 			}

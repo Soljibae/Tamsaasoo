@@ -15,13 +15,25 @@ namespace InGame
 		size.y = 100;
 		MovementSpeed = 300;
 		Mesh = Utils::CreateMesh();
+		Stats.HP = 1;
+		Stats.MovementSpeed = MovementSpeed;
+		Stats.FireRate = 1.f;
+		Stats.BulletSpeed = 30.f;
+		Stats.Damage = 1;
+		Stats.Level = 1;
+		Stats.ExpGained = 1.f;
+		Stats.HitCount = 6;
+		Stats.ExpCount = 0.f;
+		Stats.TargetExp = 1.f;
+
 		Texture = AEGfxTextureLoad("Assets/Character.png");
 		HoldingGun = new Gun();
-		HoldingGun->Init();
+		HoldingGun->Init(this);
+
 	}
 	void PlayerCharacter::Update()
 	{
-		if(Health > 0)
+		if(Stats.HP > 0)
 		{
 			AEVec2 MovingVec;
 			AEVec2Set(&MovingVec, 0.f, 0.f);
@@ -53,16 +65,16 @@ namespace InGame
 
 			if(MovingVec.x != 0 && MovingVec.y != 0)
 				AEVec2Normalize(&MovingVec, &MovingVec);
-			AEVec2Scale(&MovingVec, &MovingVec, MovementSpeed * global::DeltaTime);
+			AEVec2Scale(&MovingVec, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
 
-			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + size.x / 2, global::worldMax.x - size.x / 2);
+			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
 			position.y = std::clamp(position.y + MovingVec.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
 
 			global::PlayerLocation = position;
 			GetMouseDir();
 			if (HoldingGun)
 			{
-				HoldingGun->Update(MouseDirection, position, Level);
+				HoldingGun->Update(MouseDirection, position, Stats.Level);
 			}
 		}
 	}
@@ -73,7 +85,22 @@ namespace InGame
 	}
 	void PlayerCharacter::Destroy()
 	{
-		Utils::DestroyMesh(Mesh);
+		if (Mesh)
+		{
+			Utils::DestroyMesh(Mesh);
+		}
+		if (Texture)
+		{
+			AEGfxTextureUnload(Texture);
+		}
+	}
+	void PlayerCharacter::adjustHealth(s32 Amount)
+	{
+		Stats.HP += Amount;
+		if (Stats.HP <= 0)
+		{
+			bIsPandingKill = true;
+		}
 	}
 	void PlayerCharacter::GetMouseDir()
 	{
@@ -101,13 +128,13 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		ExpCount += Exp;
-		if (ExpCount >= TargetExp)
+		Stats.ExpCount += Exp;
+		if (Stats.ExpCount >= Stats.TargetExp)
 		{
-			ExpCount -= TargetExp;
-			TargetExp *= 2;
-			Level++;
-			std::cout << "Level Up : " << Level  << " Next : Target Exp : " << TargetExp << std::endl;
+			Stats.ExpCount -= Stats.TargetExp;
+			Stats.TargetExp *= 2;
+			Stats.Level++;
+			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
 		}
 	}
 }

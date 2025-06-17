@@ -8,6 +8,15 @@ namespace InGame
 	void InGame::EnemyCharacter::Init()
 	{
 		Mesh = Utils::CreateMesh();
+		MovementSpeed = 100.f;
+		size.x = 40;
+		size.y = 40;
+		CollisionRadius = 20;
+
+		Stats.HP = 1;
+		Stats.FireRate = 1.f;
+		Stats.BulletSpeed = 30.f;
+		Stats.Damage = 1;
 	}
 
 	void EnemyCharacter::Spawn(AEVec2 Pos, EnemyData* InData)
@@ -18,9 +27,9 @@ namespace InGame
 		}
 		Type = InData->Type;
 		Texture = InData->Texture;
-		Damage = InData->Damage;
+		Stats.Damage = InData->Damage;
 		Exp = InData->Exp;
-		MovementSpeed = InData->MovementSpeed;
+		Stats.MovementSpeed = InData->MovementSpeed;
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
@@ -37,11 +46,13 @@ namespace InGame
 			size.x *= -1;
 		}
 		direction.y = dy / len;
+
+
 		switch (Type)
 		{
 		case EnemyType::MINION:
-			position.x -= direction.x * MovementSpeed * global::DeltaTime;
-			position.y -= direction.y * MovementSpeed * global::DeltaTime;
+			position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
+			position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
 			break;
 		case EnemyType::ARCHER:
 			ProjectileSpawnTimer += global::DeltaTime;
@@ -71,6 +82,16 @@ namespace InGame
 		if (Mesh)
 		{
 			Utils::DestroyMesh(Mesh);
+			Mesh = nullptr;
+		}
+		Texture = nullptr;
+	}
+	void EnemyCharacter::adjustHealth(s32 Amount)
+	{
+		Stats.HP += Amount;
+		if (Stats.HP <= 0)
+		{
+			bIsPandingKill = true;
 		}
 	}
 	void EnemyCharacter::SpawnProjectile(AEVec2 Dir, AEVec2 Pos)
@@ -84,7 +105,7 @@ namespace InGame
 				{
 					Projectile* EP = GS->EPPool.back();
 					GS->EPPool.pop_back();
-					EP->Spawn(Dir, Pos);
+					EP->Spawn(Dir, Pos, this);
 					GS->EPs.push_back(EP);
 				}
 
