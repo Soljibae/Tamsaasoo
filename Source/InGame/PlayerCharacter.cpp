@@ -93,6 +93,12 @@ namespace InGame
 		{
 			AEGfxTextureUnload(Texture);
 		}
+		if (HoldingGun)
+		{
+			HoldingGun->Destroy();
+			delete HoldingGun;
+			HoldingGun = nullptr;
+		}
 	}
 	void PlayerCharacter::adjustHealth(s32 Amount)
 	{
