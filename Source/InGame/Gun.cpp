@@ -23,7 +23,7 @@ namespace InGame
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos, u32 Level)
 	{
 		FireTimer += global::DeltaTime;
-		if (FireTimer > ChamberTime)
+		if (FireTimer > 1.f / ChamberTime)
 		{
 			FireProjectile(Dir, Pos, Level);
 			FireTimer = 0.f;
