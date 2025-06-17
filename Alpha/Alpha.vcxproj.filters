@@ -68,9 +68,6 @@
     <ClCompile Include="..\Source\InGame\Background.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\Gun\Gun.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Manager\PauseUI.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
@@ -84,6 +81,9 @@
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\Stat.cpp">
+      <Filter>소스 파일\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\Item.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
   </ItemGroup>
@@ -133,9 +133,6 @@
     <ClInclude Include="..\Source\InGame\Background.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\InGame\Gun\Gun.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Manager\PauseUI.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -149,6 +146,9 @@
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\Stat.h">
+      <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Item.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
   </ItemGroup>
