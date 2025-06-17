@@ -32,7 +32,7 @@ namespace Manager
 
 		f32 WaveTimer;
 		u8 SpawnCount;
-		InGame::EnemyType SpawningEnemyType = InGame::EnemyType::ARCHER;
+		InGame::EnemyType SpawningEnemyType;
 		InGame::MinionData MinionStruct;
 		InGame::ArcherData ArcherStruct;
 		void SpawnWave();
