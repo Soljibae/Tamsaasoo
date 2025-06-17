@@ -22,7 +22,7 @@ namespace InGame
 		Stats.Damage = 1;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
-		Stats.HitCount = 6;
+		Stats.HitCount = 1;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 1.f;
 
