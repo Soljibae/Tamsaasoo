@@ -65,6 +65,7 @@ void Utils::DrawObject(InGame::Actor& object, bool is_camera_enabled, f32 alpha)
 
 void Utils::DrawObjectWithDirection(InGame::Actor& object)
 {
+	/*
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -101,7 +102,47 @@ void Utils::DrawObjectWithDirection(InGame::Actor& object)
 	AEGfxSetTransform(transform.m);
 
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
+	*/
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(object.Texture, object.offset.x, object.offset.y);
+
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.position);
+
+	AEMtx33 tran_inv;
+	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
+
+	// 좌우 반전 플래그
+	float flipX = (object.direction.x >= 0) ? 1.0f : -1.0f;
+
+	// 회전각 계산 (항상 오른쪽 기준으로)
+	float angle = atan2f(object.direction.y, fabsf(object.direction.x));
+	AEMtx33 rotate;
+	AEMtx33Rot(&rotate, angle);
+
+	// 스케일 적용
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.size.x * flipX, object.size.y);
+
+	// 최종 변환
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+
+	AEMtx33 transform;
+	AEMtx33Concat(&transform, &scale, &rotate);
+	AEMtx33Concat(&transform, &tran, &transform);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }
+
+
 
 void Utils::InitOffset(InGame::Actor& object)
 {

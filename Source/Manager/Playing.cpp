@@ -62,13 +62,17 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
-			WaveTimer += global::DeltaTime;
+			if (!bIsBossFight)
+			{
+				WaveTimer += global::DeltaTime;
+			}
 			if (global::DeltaTime > 0.02)
 			{
 				std::cout << global::DeltaTime << std::endl;
 			}
 			if (WaveTimer > 10.f)
 			{
+				WaveCount++;
 				WaveTimer = 0;
 				SpawnCount += 10;
 				if (SpawnCount > 50)
@@ -76,7 +80,15 @@ namespace Manager
 					SpawnCount = 10;
 					SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
 				}
-				SpawnWave();
+				if (WaveCount > 3)
+				{
+					ClearWave();
+					bIsBossFight = true;
+				}
+				else
+				{
+					SpawnWave();
+				}
 			}
 			PC->Update();
 			for (InGame::Projectile*& PP : PPs)
@@ -314,5 +326,19 @@ namespace Manager
 			}
 			ECs.push_back(EC);
 		}
+	}
+	void Playing::ClearWave()
+	{
+		for (InGame::EnemyCharacter* EC : ECs)
+		{
+			EC->bIsPandingKill = true;
+		}
+		for (InGame::Projectile*& EP : EPs)
+		{
+			EP->bIsPandingKill = true;
+		}
+	}
+	void Playing::InitBossFight()
+	{
 	}
 }

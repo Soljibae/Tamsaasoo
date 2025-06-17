@@ -29,13 +29,16 @@ namespace Manager
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
 
-
+		bool bIsBossFight = false;
+		u8 WaveCount = 0;
 		f32 WaveTimer;
 		u8 SpawnCount;
 		InGame::EnemyType SpawningEnemyType;
 		InGame::MinionData MinionStruct;
 		InGame::ArcherData ArcherStruct;
 		void SpawnWave();
+		void ClearWave();
+		void InitBossFight();
 	};
 	extern Utils::Camera* CAM;
 }

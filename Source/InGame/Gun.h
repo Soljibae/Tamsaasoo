@@ -7,10 +7,10 @@ namespace InGame
 	{
 	public:
 		void Init(Actor* object);
-		void Update(AEVec2 Dir, AEVec2 Pos, u32 Level);
+		void Update(AEVec2 Dir, AEVec2 Pos);
 		virtual void Draw() override;
 		virtual void Destroy() override;
-		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos, u32 Level);
+		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos);
 		f32 FireTimer = 0.f;
 		f32 ChamberTime;
 		Actor* Source;

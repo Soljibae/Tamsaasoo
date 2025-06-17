@@ -17,7 +17,7 @@ namespace InGame
 		Mesh = Utils::CreateMesh();
 		Stats.HP = 100;
 		Stats.MovementSpeed = MovementSpeed;
-		Stats.FireRate = 0.1f;
+		Stats.FireRate = 10.0f;
 		Stats.BulletSpeed = 30.f;
 		Stats.Damage = 1;
 		Stats.Level = 1;
@@ -74,7 +74,7 @@ namespace InGame
 			GetMouseDir();
 			if (HoldingGun)
 			{
-				HoldingGun->Update(MouseDirection, position, Stats.Level);
+				HoldingGun->Update(MouseDirection, position);
 			}
 			if (bIsInvincible)
 			{
