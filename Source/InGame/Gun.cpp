@@ -12,30 +12,44 @@ namespace InGame
 	void Gun::Init(Actor* object)
 	{
 		Mesh = Utils::CreateMesh();
-		Texture = AEGfxTextureLoad("Assets/TestBlankWhite.png");
+		Texture = AEGfxTextureLoad("Assets/Pistol.png");
 		Source = object;
 		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
-
+		size.x = 40;
+		size.y = 40;
 		ChamberTime = player->Stats.FireRate;
+		direction.x = 1;
+		direction.y = 0;
 	}
 
 
-	void Gun::Update(AEVec2 Dir, AEVec2 Pos, u32 Level)
+	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
 		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(Source);
 		ChamberTime = player->Stats.FireRate;
 
+		position = Pos;
+		if (Dir.x < 0)
+		{
+			position.x -= 30;
+		}
+		else
+		{
+			position.x += 30;
+		}
+		direction = Dir;
+		
 		FireTimer += global::DeltaTime;
 		if (FireTimer > 1.f / ChamberTime)
 		{
-			FireProjectile(Dir, Pos, Level);
+			FireProjectile(Dir, Pos);
 			FireTimer = 0.f;
 		}
 	}
 
 	void Gun::Draw()
 	{
-		Utils::DrawObject(*this);
+		Utils::DrawObjectWithDirection(*this);
 	}
 
 	void Gun::Destroy()
@@ -50,7 +64,7 @@ namespace InGame
 		}
 	}
 
-	void Gun::FireProjectile(AEVec2 Dir, AEVec2 Pos, u32 Level)
+	void Gun::FireProjectile(AEVec2 Dir, AEVec2 Pos)
 	{
 		if (Manager::gm.currStateREF)
 		{

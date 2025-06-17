@@ -103,6 +103,8 @@ namespace InGame
 			{
 				if (GS->EPPool.size() > 0)
 				{
+					Dir.x *= -1;
+					Dir.y *= -1;
 					Projectile* EP = GS->EPPool.back();
 					GS->EPPool.pop_back();
 					EP->Spawn(Dir, Pos, this);

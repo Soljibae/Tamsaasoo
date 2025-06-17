@@ -25,6 +25,9 @@ namespace InGame
 	protected:
 		AEVec2 MouseDirection;
 		Gun* HoldingGun = nullptr;
+
+		bool bIsInvincible = false;
+		f32 InvincibleTimer = 0.f;
 	private:
 	};
 }

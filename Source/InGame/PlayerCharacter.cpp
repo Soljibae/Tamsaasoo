@@ -10,14 +10,14 @@ namespace InGame
 	{
 		position.x = 0;
 		position.y = 0;
-		CollisionRadius = 5;
+		CollisionRadius = 50;
 		size.x = 100;
 		size.y = 100;
 		MovementSpeed = 300;
 		Mesh = Utils::CreateMesh();
-		Stats.HP = 1;
+		Stats.HP = 100;
 		Stats.MovementSpeed = MovementSpeed;
-		Stats.FireRate = 1.f;
+		Stats.FireRate = 10.0f;
 		Stats.BulletSpeed = 30.f;
 		Stats.Damage = 1;
 		Stats.Level = 1;
@@ -75,7 +75,16 @@ namespace InGame
 			GetMouseDir();
 			if (HoldingGun)
 			{
-				HoldingGun->Update(MouseDirection, position, Stats.Level);
+				HoldingGun->Update(MouseDirection, position);
+			}
+			if (bIsInvincible)
+			{
+				InvincibleTimer += global::DeltaTime;
+				if (InvincibleTimer > 0.5f)
+				{
+					bIsInvincible = false;
+					InvincibleTimer = 0.f;
+				}
 			}
 
 			for (const auto& item_ptr : inventory)
@@ -90,7 +99,14 @@ namespace InGame
 	}
 	void PlayerCharacter::Draw()
 	{
-		Utils::DrawObject(*this);
+		if (bIsInvincible)
+		{
+			Utils::DrawObject(*this, true, 0.5f);
+		}
+		else
+		{
+			Utils::DrawObject(*this);
+		}
 		HoldingGun->Draw();
 	}
 	void PlayerCharacter::Destroy()
@@ -112,10 +128,17 @@ namespace InGame
 	}
 	void PlayerCharacter::adjustHealth(s32 Amount)
 	{
-		Stats.HP += Amount;
-		if (Stats.HP <= 0)
+		if (!bIsInvincible)
 		{
-			bIsPandingKill = true;
+			Stats.HP += Amount;
+			if (Stats.HP <= 0)
+			{
+				bIsPandingKill = true;
+			}
+			else
+			{
+				bIsInvincible = true;
+			}
 		}
 	}
 	void PlayerCharacter::GetMouseDir()
