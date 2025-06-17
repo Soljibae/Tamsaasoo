@@ -29,6 +29,11 @@ namespace Manager
 			BG = new InGame::Background();
 			BG->Init();
 		}
+		if (ITDB == nullptr)
+		{
+			ITDB = new InGame::ItemDatabase();
+			ITDB->Init();
+		}
 		for (int i = 0; i < 1000; i++)
 		{
 			InGame::Projectile* PP = new InGame::Projectile();
@@ -63,6 +68,12 @@ namespace Manager
 		if (!gm.GamePaused)
 		{
 			WaveTimer += global::DeltaTime;
+			//
+			if (global::KeyInput(AEVK_SPACE))
+			{
+				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
+			}
+			//
 			if (global::DeltaTime > 0.02)
 			{
 				std::cout << global::DeltaTime << std::endl;
@@ -266,6 +277,8 @@ namespace Manager
 		CAM = nullptr;
 		BG->Destroy();
 		delete BG;
+		delete ITDB;
+		ITDB = nullptr;
 		
 		pausePanel.Destroy();
 	}

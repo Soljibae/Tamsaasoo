@@ -8,6 +8,7 @@
 #include "../Utils/Camera.h"
 #include <vector>
 #include "../InGame/EnemyData.h"
+#include "../InGame/ItemDatabase.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -28,7 +29,7 @@ namespace Manager
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
-
+		InGame::ItemDatabase* ITDB;
 
 		f32 WaveTimer;
 		u8 SpawnCount;
@@ -38,4 +39,5 @@ namespace Manager
 		void SpawnWave();
 	};
 	extern Utils::Camera* CAM;
+	
 }

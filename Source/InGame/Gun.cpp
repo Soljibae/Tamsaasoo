@@ -22,6 +22,9 @@ namespace InGame
 
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos, u32 Level)
 	{
+		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(Source);
+		ChamberTime = player->Stats.FireRate;
+
 		FireTimer += global::DeltaTime;
 		if (FireTimer > 1.f / ChamberTime)
 		{
