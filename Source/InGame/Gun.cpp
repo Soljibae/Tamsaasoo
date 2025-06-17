@@ -35,6 +35,18 @@ namespace InGame
 		Utils::DrawObject(*this);
 	}
 
+	void Gun::Destroy()
+	{
+		if (Mesh)
+		{
+			Utils::DestroyMesh(Mesh);
+		}
+		if (Texture)
+		{
+			AEGfxTextureUnload(Texture);
+		}
+	}
+
 	void Gun::FireProjectile(AEVec2 Dir, AEVec2 Pos, u32 Level)
 	{
 		if (Manager::gm.currStateREF)
