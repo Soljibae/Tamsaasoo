@@ -85,7 +85,14 @@ namespace InGame
 	}
 	void PlayerCharacter::Destroy()
 	{
-		Utils::DestroyMesh(Mesh);
+		if (Mesh)
+		{
+			Utils::DestroyMesh(Mesh);
+		}
+		if (Texture)
+		{
+			AEGfxTextureUnload(Texture);
+		}
 	}
 	void PlayerCharacter::adjustHealth(s32 Amount)
 	{

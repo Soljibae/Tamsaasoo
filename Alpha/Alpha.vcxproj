@@ -47,6 +47,7 @@
     <ClInclude Include="..\Source\InGame\Background.h" />
     <ClInclude Include="..\Source\InGame\Character.h" />
     <ClInclude Include="..\Source\InGame\EnemyCharacter.h" />
+    <ClInclude Include="..\Source\InGame\EnemyData.h" />
     <ClInclude Include="..\Source\InGame\Gun.h" />
     <ClInclude Include="..\Source\InGame\Item.h" />
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />

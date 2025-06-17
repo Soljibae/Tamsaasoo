@@ -226,43 +226,42 @@ namespace Manager
 		PC->Destroy();
 		delete PC;
 		PC = nullptr;
-		bool bSuccess = false;
 		for (InGame::Projectile* PP : PPs)
 		{
 			PP->Destroy();
 			delete PP;
 		}
-		bSuccess = PPs.empty();
+		PPs.clear();
 		for (InGame::Projectile* PP : PPPool)
 		{
 			PP->Destroy();
 			delete PP;
 		}
-		bSuccess = PPPool.empty();
+		PPPool.clear();
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			EC->Destroy();
 			delete EC;
 		}
-		bSuccess = ECs.empty();
+		ECs.clear();
 		for (InGame::EnemyCharacter* EC : ECPool)
 		{
 			EC->Destroy();
 			delete EC;
 		}
-		bSuccess = ECPool.empty();
+		ECPool.clear();
 		for (InGame::Projectile* EP : EPs)
 		{
 			EP->Destroy();
 			delete EP;
 		}
-		bSuccess = EPs.empty();
+		EPs.clear();
 		for (InGame::Projectile* EP : EPPool)
 		{
 			EP->Destroy();
 			delete EP;
 		}
-		bSuccess = EPPool.empty();
+		EPPool.clear();
 		delete CAM;
 		CAM = nullptr;
 		BG->Destroy();

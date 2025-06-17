@@ -29,6 +29,5 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 			gGameRunning = 0;
 	}
 	Manager::gm.Destroy();
-
 	AESysExit();
 }
