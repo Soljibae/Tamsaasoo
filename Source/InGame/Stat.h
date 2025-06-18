@@ -3,7 +3,7 @@
 #include <map>
 namespace InGame
 {
-	enum AnimationState
+	enum EAnimationState
 	{
 		NONE,
 		IDLE,
@@ -24,8 +24,8 @@ namespace InGame
 		f32 FireRate;
 		f32 BulletSpeed;
 		s32 Damage;
-		AnimationState AnimationState;
+		EAnimationState AnimationState;
 		s32 AnimationCount;
-		std::map<AnimationState, s32>
+		std::map<EAnimationState, s32> MaxAnimationCount;
 	};
 }

@@ -209,7 +209,7 @@ void Utils::InitOffset(InGame::Actor& object)
 
 void Utils::UpdateOffset(InGame::Actor& object)
 {
-	object.TimeAcc += global::DeltaTime;
+	/*object.TimeAcc += global::DeltaTime;
 
 	if (object.TimeAcc > object.FrameTime)
 	{
@@ -218,7 +218,7 @@ void Utils::UpdateOffset(InGame::Actor& object)
 	}
 
 	object.offset.x = (1.f / static_cast<f32>(object.column)) * static_cast<f32>((animation_cnt) % object.column);
-	object.offset.y = (1.f / static_cast<f32>(object.row)) * static_cast<f32>((animation_cnt) / object.column);
+	object.offset.y = (1.f / static_cast<f32>(object.row)) * static_cast<f32>((animation_cnt) / object.column);*/
 }
 
 bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
