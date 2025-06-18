@@ -49,7 +49,7 @@ namespace Manager
 		}
 		WaveTimer = 0.;
 		SpawnCount = 10;
-		pausePanel.Init();
+		pausePanel.Init(PC);
 		gm.GamePaused = false;
 	}
 	void Playing::Update()
@@ -224,7 +224,7 @@ namespace Manager
 		PC->Draw();
 		for (const auto& item_ptr : PC->inventory)
 		{
-			item_ptr->Draw();
+			item_ptr.first->Draw();
 		}
 		for (InGame::Projectile* PP : PPs)
 		{

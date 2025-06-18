@@ -19,9 +19,10 @@ namespace InGame
 		
 		PlayerStat Stats;
 		void UpdateKill(u32 Exp);
-
-		std::vector<std::unique_ptr<Item>> inventory;
+		// first: item / second: count
+		std::vector<std::pair<std::unique_ptr<Item>, s16>> inventory;
 		void AddItemToInventory(std::unique_ptr<Item> item);
+		
 	protected:
 		AEVec2 MouseDirection;
 		Gun* HoldingGun = nullptr;
