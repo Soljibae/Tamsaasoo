@@ -31,6 +31,7 @@ namespace Manager
 		static AEGfxTexture* slotTexture;
 		//white image to rendered at mouse over on itemslot
 		InGame::Actor slotWhite;
+		s8 pFont;
 	};
 	extern PauseUI pausePanel;
 }
