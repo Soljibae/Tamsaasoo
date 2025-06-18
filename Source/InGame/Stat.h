@@ -1,5 +1,6 @@
 #pragma once
 #include "AEEngine.h"
+#include <map>
 namespace InGame
 {
 	enum AnimationState
@@ -23,5 +24,8 @@ namespace InGame
 		f32 FireRate;
 		f32 BulletSpeed;
 		s32 Damage;
+		AnimationState AnimationState;
+		s32 AnimationCount;
+		std::map<AnimationState, s32>
 	};
 }
