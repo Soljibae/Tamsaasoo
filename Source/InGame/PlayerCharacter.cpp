@@ -14,7 +14,7 @@ namespace InGame
 		size.x = 100;
 		size.y = 100;
 		MovementSpeed = 300;
-		Mesh = Utils::CreateMesh();
+		Mesh = Utils::CreateMesh(2, 2);
 		Stats.HP = 100;
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 10.0f;
@@ -25,6 +25,7 @@ namespace InGame
 		Stats.HitCount = 1;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 1.f;
+		Stats.AnimationState = IDLE;
 
 		Texture = AEGfxTextureLoad("Assets/Character.png");
 		HoldingGun = new Gun();

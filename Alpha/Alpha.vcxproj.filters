@@ -89,6 +89,9 @@
     <ClCompile Include="..\Source\InGame\ItemDatabase.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\InGame\EnemyBoss.cpp">
+      <Filter>소스 파일\InGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -158,6 +161,9 @@
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\ItemDatabase.h">
+      <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\EnemyBoss.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
   </ItemGroup>

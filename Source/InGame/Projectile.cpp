@@ -8,10 +8,25 @@
 void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
-	Texture = AEGfxTextureLoad("Assets/icon.ico");
+	Texture = AEGfxTextureLoad("Assets/Bullet.png");
 }
 
-void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object)
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
+{
+	size.x = 10;
+	size.y = 10;
+	direction = Dir;
+	position = Pos;
+	CollisionRadius = 5;
+	bIsPandingKill = false;
+
+	BulletSpeed = object->Stats.BulletSpeed;
+	HitCount = object->Stats.HitCount;
+	Damage = object->Stats.Damage;
+
+}
+
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 {
 	size.x = 100;
 	size.y = 100;
@@ -20,20 +35,8 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object)
 	CollisionRadius = 5;
 	bIsPandingKill = false;
 
-	PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
-	EnemyCharacter* enemy = dynamic_cast<EnemyCharacter*>(object);
-
-	if (player)
-	{
-		BulletSpeed = player->Stats.BulletSpeed;
-		HitCount = player->Stats.HitCount;
-		Damage = player->Stats.Damage;
-	}
-	else if (enemy)
-	{
-		BulletSpeed = enemy->Stats.BulletSpeed;
-		Damage = enemy->Stats.Damage;
-	}
+	BulletSpeed = object->Stats.BulletSpeed;
+	Damage = object->Stats.Damage;
 }
 
 void InGame::Projectile::Update()

@@ -47,7 +47,7 @@ namespace InGame
 
 	void Item_1::Init()
 	{
-		id = 3;
+		id = 1;
 		name = "item_1";
 		description = "this is item_1";
 		AEVec2Set(&position, 0.f, 0.f);
