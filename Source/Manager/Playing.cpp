@@ -29,6 +29,12 @@ namespace Manager
 			BG = new InGame::Background();
 			BG->Init();
 		}
+		if (ITDB == nullptr)
+		{
+			ITDB = new InGame::ItemDatabase();
+			ITDB->Init();
+		}
+		InGame::Item::StaticInit();
 		for (int i = 0; i < 1000; i++)
 		{
 			InGame::Projectile* PP = new InGame::Projectile();
@@ -62,10 +68,19 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
+
+			//
+			if (global::KeyInput(AEVK_SPACE))
+			{
+				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
+			}
+			//
+
 			if (!bIsBossFight)
 			{
 				WaveTimer += global::DeltaTime;
 			}
+
 			if (global::DeltaTime > 0.02)
 			{
 				std::cout << global::DeltaTime << std::endl;
@@ -238,6 +253,10 @@ namespace Manager
 	{
 		BG->Draw();
 		PC->Draw();
+		for (const auto& item_ptr : PC->inventory)
+		{
+			item_ptr->Draw();
+		}
 		for (InGame::Projectile* PP : PPs)
 		{
 			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)
@@ -313,12 +332,17 @@ namespace Manager
 		CAM = nullptr;
 		BG->Destroy();
 		delete BG;
+
 		if (Boss)
 		{
 			Boss->Destroy();
 			delete Boss;
 			Boss = nullptr;
 		}
+		delete ITDB;
+		ITDB = nullptr;
+		InGame::Item::StaticDestroy();
+
 		pausePanel.Destroy();
 	}
 	void Playing::SpawnWave()

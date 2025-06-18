@@ -26,10 +26,15 @@ namespace InGame
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
 		AEVec2 Vec;
+
+		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(Source);
+		ChamberTime = player->Stats.FireRate;
+
 		position = Pos;
 		AEVec2Scale(&Vec, &Dir, 40.f);
 		AEVec2Add(&position, &position, &Vec);
 		direction = Dir;
+		
 		FireTimer += global::DeltaTime;
 		if (FireTimer > 1.f / ChamberTime)
 		{

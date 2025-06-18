@@ -30,6 +30,7 @@ namespace InGame
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
+		inventory.clear();
 	}
 	void PlayerCharacter::Update()
 	{
@@ -83,6 +84,14 @@ namespace InGame
 				{
 					bIsInvincible = false;
 					InvincibleTimer = 0.f;
+				}
+			}
+
+			for (const auto& item_ptr : inventory)
+			{
+				if (item_ptr)
+				{
+					item_ptr->Use(this);
 				}
 			}
 		}
@@ -165,5 +174,9 @@ namespace InGame
 			Stats.Level++;
 			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
 		}
+	}
+	void PlayerCharacter::AddItemToInventory(std::unique_ptr<Item> item)
+	{
+		inventory.push_back(std::move(item));
 	}
 }

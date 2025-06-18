@@ -9,6 +9,9 @@
 #include <vector>
 #include "../InGame/EnemyData.h"
 #include "../InGame/EnemyBoss.h"
+#include "../InGame/Item.h"
+#include "../InGame/ItemDatabase.h"
+
 namespace Manager
 {
 	class Playing : public AGameState
@@ -18,8 +21,6 @@ namespace Manager
 		void Update() override;
 		void Draw() override;
 		void Destroy() override;
-		void Pause();
-		void Resume();
 
 		InGame::PlayerCharacter* PC;
 		std::vector<InGame::Projectile*> PPPool;
@@ -29,7 +30,8 @@ namespace Manager
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
-
+		InGame::ItemDatabase* ITDB;
+		
 		bool bIsBossFight = false;
 		u8 WaveCount = 0;
 		f32 WaveTimer;
@@ -44,4 +46,5 @@ namespace Manager
 		InGame::EnemyBoss* Boss = nullptr;
 	};
 	extern Utils::Camera* CAM;
+	
 }
