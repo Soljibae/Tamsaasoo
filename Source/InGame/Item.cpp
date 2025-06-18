@@ -72,4 +72,37 @@ namespace InGame
 	{
 		return std::make_unique<Item_1>(*this);
 	}
+
+	Item_2::Item_2(const Item_2& other)
+		: Item(other)
+	{
+	}
+
+	void Item_2::Init()
+	{
+		id = 2;
+		name = "item_2";
+		description = "this is item_1";
+		AEVec2Set(&position, 0.f, 0.f);
+
+		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_2::Use(Actor* owner)
+	{
+		if (!bHasBeenUsed)
+		{
+			PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
+
+			if (player)
+			{
+				player->Stats.BulletSpeed *= 2.f;
+				bHasBeenUsed = true;
+			}
+		}
+	}
+	std::unique_ptr<Item> Item_2::Clone() const
+	{
+		return std::make_unique<Item_2>(*this);
+	}
 }

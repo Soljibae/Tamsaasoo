@@ -74,6 +74,10 @@ namespace Manager
 			{
 				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
 			}
+			if (global::KeyInput(AEVK_LSHIFT))
+			{
+				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
+			}
 			//
 
 			if (!bIsBossFight)
