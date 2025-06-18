@@ -25,8 +25,10 @@ AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
 
 void Utils::DestroyMesh(AEGfxVertexList* Mesh)
 {
-	if(Mesh)
+	if (Mesh != nullptr)
+	{
 		AEGfxMeshFree(Mesh);
+	}
 }
 
 void Utils::DrawObject(InGame::Actor& object, bool is_camera_enabled, f32 alpha)
@@ -142,7 +144,32 @@ void Utils::DrawObjectWithDirection(InGame::Actor& object)
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
+void Utils::DrawItem(InGame::Item& item)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(InGame::Item::itemTexture, item.offset.x, item.offset.y);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, InGame::Item::size.x, InGame::Item::size.y);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, item.position.x, item.position.y);
+	AEMtx33 transform;
+
+	AEMtx33Concat(&transform, &tran, &scale);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(InGame::Item::itemMesh, AE_GFX_MDM_TRIANGLES);
+}
 
 void Utils::InitOffset(InGame::Actor& object)
 {

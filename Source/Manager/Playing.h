@@ -8,6 +8,7 @@
 #include "../Utils/Camera.h"
 #include <vector>
 #include "../InGame/EnemyData.h"
+#include "../InGame/Item.h"
 #include "../InGame/ItemDatabase.h"
 namespace Manager
 {

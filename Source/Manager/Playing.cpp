@@ -34,6 +34,7 @@ namespace Manager
 			ITDB = new InGame::ItemDatabase();
 			ITDB->Init();
 		}
+		InGame::Item::StaticInit();
 		for (int i = 0; i < 1000; i++)
 		{
 			InGame::Projectile* PP = new InGame::Projectile();
@@ -294,7 +295,8 @@ namespace Manager
 		delete BG;
 		delete ITDB;
 		ITDB = nullptr;
-		
+		InGame::Item::StaticDestroy();
+
 		pausePanel.Destroy();
 	}
 	void Playing::SpawnWave()
