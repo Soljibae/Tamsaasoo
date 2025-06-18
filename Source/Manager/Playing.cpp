@@ -49,7 +49,7 @@ namespace Manager
 		}
 		WaveTimer = 0.;
 		SpawnCount = 10;
-		pausePanel.Init();
+		pausePanel.Init(PC);
 		gm.GamePaused = false;
 	}
 	void Playing::Update()

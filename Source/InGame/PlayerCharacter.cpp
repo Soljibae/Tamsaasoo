@@ -120,10 +120,7 @@ namespace InGame
 
 			for (const auto& item_ptr : inventory)
 			{
-				if (item_ptr)
-				{
-					item_ptr->Use(this);
-				}
+				item_ptr.first->Use(this);
 			}
 		}
 	}
@@ -208,6 +205,15 @@ namespace InGame
 	}
 	void PlayerCharacter::AddItemToInventory(std::unique_ptr<Item> item)
 	{
-		inventory.push_back(std::move(item));
+		auto it = std::find_if(inventory.begin(), inventory.end(),
+			[&](const auto& pair) {return pair.first->id == item->id; });
+		if (it == inventory.end())
+		{
+			inventory.push_back({ std::move(item), 1 });
+		}
+		else
+		{
+			it->second++;
+		}
 	}
 }
