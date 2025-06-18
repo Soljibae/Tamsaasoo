@@ -204,21 +204,22 @@ void Utils::DrawItem(InGame::Item& item)
 
 void Utils::InitOffset(InGame::Actor& object)
 {
-	AEVec2Set(&object.offset, 0.f, 1.f - 1.f / object.column);
+	AEVec2Set(&object.offset, 0.f, 0.f);
 }
 
 void Utils::UpdateOffset(InGame::Actor& object)
 {
-	/*object.TimeAcc += global::DeltaTime;
+	object.TimeAcc += global::DeltaTime;
 
 	if (object.TimeAcc > object.FrameTime)
 	{
 		object.TimeAcc = 0;
-		object.animation_cnt = (object.animation_cnt + 1) % object.max_animation_cnt;
+		object.AnimationCount = (object.AnimationCount + 1) % object.MaxAnimationCount[object.AnimationState];
+
 	}
 
-	object.offset.x = (1.f / static_cast<f32>(object.column)) * static_cast<f32>((animation_cnt) % object.column);
-	object.offset.y = (1.f / static_cast<f32>(object.row)) * static_cast<f32>((animation_cnt) / object.column);*/
+	object.offset.x = 1.f / object.column * static_cast<f32>(object.AnimationCount);
+	object.offset.y = 1.f / object.row * static_cast<f32>(object.AnimationState - 1);
 }
 
 bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)

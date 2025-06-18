@@ -14,7 +14,16 @@ namespace InGame
 		size.x = 100;
 		size.y = 100;
 		MovementSpeed = 300;
-		Mesh = Utils::CreateMesh(2, 2);
+		row = 2;
+		column = 2;
+		Mesh = Utils::CreateMesh(row, column);
+		FrameTime = 1.f;
+		TimeAcc = 0.f;
+		AnimationState = IDLE;
+		AnimationCount = 0;
+		MaxAnimationCount[IDLE] = 2;
+		MaxAnimationCount[MOVE] = 2;
+
 		Stats.HP = 100;
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 10.0f;
@@ -25,7 +34,8 @@ namespace InGame
 		Stats.HitCount = 1;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 1.f;
-		Stats.AnimationState = IDLE;
+		
+		Utils::InitOffset(*this);
 
 		Texture = AEGfxTextureLoad("Assets/Character.png");
 		HoldingGun = new Gun();
@@ -65,6 +75,23 @@ namespace InGame
 				}
 			}
 
+			if (MovingVec.x == 0 && MovingVec.y == 0)
+			{
+				if (AnimationState == MOVE)
+				{
+					AnimationCount = 0;
+				}
+				AnimationState = IDLE;
+			}
+			else
+			{
+				if (AnimationState == IDLE)
+				{
+					AnimationCount = 0;
+				}
+				AnimationState = MOVE;
+			}
+
 			if(MovingVec.x != 0 && MovingVec.y != 0)
 				AEVec2Normalize(&MovingVec, &MovingVec);
 			AEVec2Scale(&MovingVec, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
@@ -73,6 +100,9 @@ namespace InGame
 			position.y = std::clamp(position.y + MovingVec.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
 
 			global::PlayerLocation = position;
+
+			Utils::UpdateOffset(*this);
+
 			GetMouseDir();
 			if (HoldingGun)
 			{
