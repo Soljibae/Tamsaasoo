@@ -222,6 +222,10 @@ namespace Manager
 	{
 		BG->Draw();
 		PC->Draw();
+		for (const auto& item_ptr : PC->inventory)
+		{
+			item_ptr->Draw();
+		}
 		for (InGame::Projectile* PP : PPs)
 		{
 			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)

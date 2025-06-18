@@ -92,7 +92,6 @@ namespace InGame
 				if (item_ptr)
 				{
 					item_ptr->Use(this);
-					std::cout << this->Stats.FireRate;
 				}
 			}
 		}

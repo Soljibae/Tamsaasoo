@@ -10,6 +10,9 @@ namespace InGame
 	class Item
 	{
 	public:
+		Item() = default; 
+		Item(const Item& other); 
+
 		virtual void Init() = 0;
 		virtual void Use(Actor* owner) = 0;
 		void Draw();
@@ -34,6 +37,9 @@ namespace InGame
 	class Item_1 : public Item // to do change class name
 	{
 	public:
+		Item_1() = default;
+		Item_1(const Item_1& other); 
+
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;
 		virtual std::unique_ptr<Item> Clone() const override;

@@ -8,15 +8,19 @@ AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
 
 	AEGfxMeshStart();
 
-	AEGfxTriAdd(
-		-0.5f, -0.5f, 0xFFFFFFFF, 0.0, 1.0f,
-		0.5f, -0.5f, 0xFFFFFFFF, 1.0f / static_cast<float>(row), 1.0f,
-		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 1.0f - 1.0f / static_cast<float>(column));
+	f32 sprite_uv_width = 1.f / static_cast<f32>(column);
+	f32 sprite_uv_height = 1.f / static_cast<f32>(row);
+
 
 	AEGfxTriAdd(
-		0.5f, -0.5f, 0xFFFFFFFF, 1.0f / static_cast<float>(row), 1.0f,
-		0.5f, 0.5f, 0xFFFFFFFF, 1.0f / static_cast<float>(row), 1.0f - 1.0f / static_cast<float>(column),
-		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 1.0f - 1.0f / static_cast<float>(column));
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, sprite_uv_height,
+		0.5f, -0.5f, 0xFFFFFFFF, sprite_uv_width, sprite_uv_height,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	AEGfxTriAdd(
+		0.5f, -0.5f, 0xFFFFFFFF, sprite_uv_width, sprite_uv_height,
+		0.5f, 0.5f, 0xFFFFFFFF, sprite_uv_width, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
 	Mesh = AEGfxMeshEnd();
 
