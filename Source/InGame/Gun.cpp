@@ -25,22 +25,16 @@ namespace InGame
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
 		ChamberTime = Source->Stats.FireRate;
-
+		AEVec2 Vec;
 		position = Pos;
-		if (Dir.x < 0)
-		{
-			position.x -= 30;
-		}
-		else
-		{
-			position.x += 30;
-		}
+		AEVec2Scale(&Vec, &Dir, 40.f);
+		AEVec2Add(&position, &position, &Vec);
 		direction = Dir;
 		
 		FireTimer += global::DeltaTime;
 		if (FireTimer > 1.f / ChamberTime)
 		{
-			FireProjectile(Dir, Pos);
+			FireProjectile(Dir, position);
 			FireTimer = 0.f;
 		}
 	}

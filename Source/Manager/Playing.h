@@ -8,8 +8,10 @@
 #include "../Utils/Camera.h"
 #include <vector>
 #include "../InGame/EnemyData.h"
+#include "../InGame/EnemyBoss.h"
 #include "../InGame/Item.h"
 #include "../InGame/ItemDatabase.h"
+
 namespace Manager
 {
 	class Playing : public AGameState
@@ -19,8 +21,6 @@ namespace Manager
 		void Update() override;
 		void Draw() override;
 		void Destroy() override;
-		void Pause();
-		void Resume();
 
 		InGame::PlayerCharacter* PC;
 		std::vector<InGame::Projectile*> PPPool;
@@ -42,6 +42,8 @@ namespace Manager
 		void SpawnWave();
 		void ClearWave();
 		void InitBossFight();
+		void FinishBossFight();
+		InGame::EnemyBoss* Boss = nullptr;
 	};
 	extern Utils::Camera* CAM;
 	
