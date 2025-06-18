@@ -69,7 +69,7 @@ void Utils::DrawObject(InGame::Actor& object, bool is_camera_enabled, f32 alpha)
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
-void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh)
+void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -89,7 +89,7 @@ void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertex
 
 	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
 
-	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
 
 	AEGfxSetTransform(transform.m);
 
