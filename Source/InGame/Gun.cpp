@@ -9,15 +9,14 @@
 
 namespace InGame
 {
-	void Gun::Init(Actor* object)
+	void Gun::Init(PlayerCharacter* object)
 	{
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad("Assets/Pistol.png");
 		Source = object;
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(object);
 		size.x = 40;
 		size.y = 40;
-		ChamberTime = player->Stats.FireRate;
+		ChamberTime = Source->Stats.FireRate;
 		direction.x = 1;
 		direction.y = 0;
 	}
@@ -25,8 +24,7 @@ namespace InGame
 
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
-		PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(Source);
-		ChamberTime = player->Stats.FireRate;
+		ChamberTime = Source->Stats.FireRate;
 
 		position = Pos;
 		if (Dir.x < 0)
