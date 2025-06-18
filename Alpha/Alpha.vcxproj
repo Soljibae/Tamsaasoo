@@ -24,6 +24,7 @@
     <ClCompile Include="..\Source\InGame\Actor.cpp" />
     <ClCompile Include="..\Source\InGame\Background.cpp" />
     <ClCompile Include="..\Source\InGame\Character.cpp" />
+    <ClCompile Include="..\Source\InGame\EnemyBoss.cpp" />
     <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\Gun.cpp" />
     <ClCompile Include="..\Source\InGame\Item.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="..\Source\InGame\Actor.h" />
     <ClInclude Include="..\Source\InGame\Background.h" />
     <ClInclude Include="..\Source\InGame\Character.h" />
+    <ClInclude Include="..\Source\InGame\EnemyBoss.h" />
     <ClInclude Include="..\Source\InGame\EnemyCharacter.h" />
     <ClInclude Include="..\Source\InGame\EnemyData.h" />
     <ClInclude Include="..\Source\InGame\Gun.h" />

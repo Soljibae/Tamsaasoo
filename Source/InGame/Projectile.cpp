@@ -8,13 +8,13 @@
 void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
-	Texture = AEGfxTextureLoad("Assets/icon.ico");
+	Texture = AEGfxTextureLoad("Assets/Bullet.png");
 }
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object)
 {
-	size.x = 100;
-	size.y = 100;
+	size.x = 10;
+	size.y = 10;
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;

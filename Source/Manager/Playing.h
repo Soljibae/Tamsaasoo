@@ -8,6 +8,7 @@
 #include "../Utils/Camera.h"
 #include <vector>
 #include "../InGame/EnemyData.h"
+#include "../InGame/EnemyBoss.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -39,6 +40,8 @@ namespace Manager
 		void SpawnWave();
 		void ClearWave();
 		void InitBossFight();
+		void FinishBossFight();
+		InGame::EnemyBoss* Boss = nullptr;
 	};
 	extern Utils::Camera* CAM;
 }

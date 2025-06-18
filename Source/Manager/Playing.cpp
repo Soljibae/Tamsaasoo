@@ -80,10 +80,9 @@ namespace Manager
 					SpawnCount = 10;
 					SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
 				}
-				if (WaveCount > 3)
+				if (WaveCount > 1)
 				{
-					ClearWave();
-					bIsBossFight = true;
+					InitBossFight();
 				}
 				else
 				{
@@ -91,6 +90,7 @@ namespace Manager
 				}
 			}
 			PC->Update();
+			
 			for (InGame::Projectile*& PP : PPs)
 			{
 				PP->Update();
@@ -124,6 +124,20 @@ namespace Manager
 						{
 							EC->adjustHealth(-PP->Damage);
 							PP->OnHit();
+						}
+					}
+				}
+				if (!PP->bIsPandingKill)
+				{
+					if (Boss)
+					{
+						if (!Boss->bIsPandingKill)
+						{
+							if (Utils::CheckCollision(*PP, *Boss))
+							{
+								Boss->adjustHealth(-PP->Damage);
+								PP->OnHit();
+							}
 						}
 					}
 				}
@@ -193,6 +207,23 @@ namespace Manager
 				}
 			}
 			CAM->Update(*PC);
+			
+			if (Boss)
+			{
+				if (Boss->bIsPandingKill)
+				{
+					FinishBossFight();
+					Boss->Destroy();
+					delete Boss;
+					Boss = nullptr;
+					bIsBossFight = false;
+				}
+				else
+				{
+					Boss->Update();
+				}
+			}
+
 			if (PC->bIsPandingKill)
 			{
 				Manager::gm.nextState = EGameState::MAINMENU;
@@ -227,6 +258,10 @@ namespace Manager
 			{
 				EP->Draw();
 			}
+		}
+		if (Boss)
+		{
+			Boss->Draw();
 		}
 		if (gm.GamePaused)
 		{
@@ -278,7 +313,12 @@ namespace Manager
 		CAM = nullptr;
 		BG->Destroy();
 		delete BG;
-		
+		if (Boss)
+		{
+			Boss->Destroy();
+			delete Boss;
+			Boss = nullptr;
+		}
 		pausePanel.Destroy();
 	}
 	void Playing::SpawnWave()
@@ -339,6 +379,16 @@ namespace Manager
 		}
 	}
 	void Playing::InitBossFight()
+	{
+		ClearWave();
+		bIsBossFight = true;
+		if (Boss == nullptr)
+		{
+			Boss = new InGame::Stage1Boss;
+			Boss->Init();
+		}
+	}
+	void Playing::FinishBossFight()
 	{
 	}
 }
