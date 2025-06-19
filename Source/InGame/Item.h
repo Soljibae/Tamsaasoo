@@ -16,7 +16,7 @@ namespace InGame
 		virtual void Init() = 0;
 		virtual void Use(Actor* owner) = 0;
 		void Draw();
-		virtual std::unique_ptr<Item> Clone() const = 0;
+		virtual std::shared_ptr<Item> Clone() const = 0;
 
 		static void StaticInit();
 		static void StaticDestroy();
@@ -42,7 +42,7 @@ namespace InGame
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;
-		virtual std::unique_ptr<Item> Clone() const override;
+		virtual std::shared_ptr<Item> Clone() const override;
 	};
 
 	class Item_2 : public Item // to do change class name
@@ -53,6 +53,6 @@ namespace InGame
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;
-		virtual std::unique_ptr<Item> Clone() const override;
+		virtual std::shared_ptr<Item> Clone() const override;
 	};
 }

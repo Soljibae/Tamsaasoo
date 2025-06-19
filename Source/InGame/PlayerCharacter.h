@@ -3,6 +3,12 @@
 #include "Gun.h"
 #include "Item.h"
 #include "PlayerStat.h"
+#include "../Global/GlobalVariables.h"
+#include "../Utils/Utils.h"
+#include "../Manager/Playing.h"
+#include "../Manager/LevelUpUI.h"
+#include <iostream>
+#include <algorithm>
 #include <vector>
 #include <memory>
 namespace InGame
@@ -20,8 +26,8 @@ namespace InGame
 		PlayerStat Stats;
 		void UpdateKill(u32 Exp);
 		// first: item / second: count
-		std::vector<std::pair<std::unique_ptr<Item>, s16>> inventory;
-		void AddItemToInventory(std::unique_ptr<Item> item);
+		std::vector<std::pair<std::shared_ptr<Item>, s16>> inventory;
+		void AddItemToInventory(std::shared_ptr<Item> item);
 		
 	protected:
 		AEVec2 MouseDirection;

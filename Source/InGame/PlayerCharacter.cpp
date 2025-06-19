@@ -1,9 +1,5 @@
 #include "PlayerCharacter.h"
-#include "../Global/GlobalVariables.h"
-#include "../Utils/Utils.h"
-#include "../Manager/Playing.h"
-#include <iostream>
-#include <algorithm>
+
 namespace InGame
 {
 	void PlayerCharacter::Init()
@@ -201,9 +197,10 @@ namespace InGame
 			Stats.TargetExp *= 2;
 			Stats.Level++;
 			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
+			Manager::pickPanel.Show(Manager::pickPanel.GenerateRandomRewards());
 		}
 	}
-	void PlayerCharacter::AddItemToInventory(std::unique_ptr<Item> item)
+	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)
 	{
 		auto it = std::find_if(inventory.begin(), inventory.end(),
 			[&](const auto& pair) {return pair.first->id == item->id; });
