@@ -14,7 +14,7 @@ namespace InGame
 		size.x = 100;
 		size.y = 100;
 		MovementSpeed = 300;
-		row = 2;
+		row = 4;
 		column = 2;
 		Mesh = Utils::CreateMesh(row, column);
 		FrameTime = 1.f;
