@@ -104,6 +104,9 @@ namespace InGame
 			Utils::UpdateOffset(*this);
 
 			GetMouseDir();
+
+			global::PlayerMouseDirection = MouseDirection;
+
 			if (HoldingGun)
 			{
 				HoldingGun->Update(MouseDirection, position);
@@ -203,7 +206,7 @@ namespace InGame
 			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
 		}
 	}
-	void PlayerCharacter::AddItemToInventory(std::unique_ptr<Item> item)
+	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)
 	{
 		auto it = std::find_if(inventory.begin(), inventory.end(),
 			[&](const auto& pair) {return pair.first->id == item->id; });

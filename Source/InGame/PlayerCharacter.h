@@ -20,8 +20,8 @@ namespace InGame
 		PlayerStat Stats;
 		void UpdateKill(u32 Exp);
 		// first: item / second: count
-		std::vector<std::pair<std::unique_ptr<Item>, s16>> inventory;
-		void AddItemToInventory(std::unique_ptr<Item> item);
+		std::vector<std::pair<std::shared_ptr<Item>, s16>> inventory;
+		void AddItemToInventory(std::shared_ptr<Item> item);
 		
 	protected:
 		AEVec2 MouseDirection;

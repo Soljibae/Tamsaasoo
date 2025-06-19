@@ -9,6 +9,6 @@ namespace InGame
     private:
     public:
         void Init();
-        std::map<int, std::unique_ptr<Item>> itemList;
+        std::map<int, std::shared_ptr<Item>> itemList;
     };
 }

@@ -183,7 +183,7 @@ void Utils::DrawItem(InGame::Item& item)
 
 	AEGfxSetTransparency(1.0f);
 
-	AEGfxTextureSet(InGame::Item::itemTexture, item.offset.x, item.offset.y);
+	AEGfxTextureSet(InGame::Item::itemIconTexture, item.offset.x, item.offset.y);
 
 	AEMtx33 scale;
 	AEMtx33Scale(&scale, InGame::Item::size.x, InGame::Item::size.y);
@@ -199,7 +199,39 @@ void Utils::DrawItem(InGame::Item& item)
 
 	AEGfxSetTransform(transform.m);
 
-	AEGfxMeshDraw(InGame::Item::itemMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxMeshDraw(InGame::Item::itemIconMesh, AE_GFX_MDM_TRIANGLES);
+}
+
+void Utils::DrawTest(f32 x, f32 y, f32 width, f32 height)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(global::testTexture, 0.f, 0.f);
+
+	AEVec2 pos;
+	AEVec2Set(&pos, x, y);
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &pos);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, width, height);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+	AEMtx33 transform;
+
+	AEMtx33Concat(&transform, &tran, &scale);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(global::testMesh, AE_GFX_MDM_TRIANGLES);
 }
 
 void Utils::InitOffset(InGame::Actor& object)
@@ -270,4 +302,16 @@ bool Utils::IsMouseInCircle(f32 x, f32 y, f32 r)
 	f32 mouse_y = AEGfxGetWindowHeight() / 2.0f - static_cast<f32>(my);
 
 	return ((mouse_x - x) * (mouse_x - x) + (mouse_y - y) * (mouse_y - y) <= r * r);
+}
+
+void Utils::TestInit()
+{
+	global::testTexture = AEGfxTextureLoad("Assets/test.png");
+	global::testMesh = Utils::CreateMesh();
+}
+
+void Utils::TestDestroy()
+{
+	AEGfxTextureUnload(global::testTexture);
+	Utils::DestroyMesh(global::testMesh);
 }

@@ -7,6 +7,9 @@ namespace global
 	extern s8 font;
 	extern f32 DeltaTime;
 	extern AEVec2 PlayerLocation;
+	extern AEVec2 PlayerMouseDirection;
 	extern AEVec2 worldMin, worldMax;
 	extern u8 (*KeyInput)(u8);
+	extern AEGfxTexture* testTexture;
+	extern AEGfxVertexList* testMesh;
 }
