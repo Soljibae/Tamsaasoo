@@ -39,6 +39,19 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 	Damage = object->Stats.Damage;
 }
 
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, s32 Damage)
+{
+	size.x = 10;
+	size.y = 10;
+	direction = Dir;
+	position = Pos;
+	CollisionRadius = 5;
+	bIsPandingKill = false;
+
+	this->BulletSpeed = BulletSpeed;
+	this->Damage = Damage;
+}
+
 void InGame::Projectile::Update()
 {
 	position.x += direction.x * BulletSpeed;

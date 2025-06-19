@@ -15,14 +15,15 @@ namespace InGame
 
 		virtual void Init() = 0;
 		virtual void Use(Actor* owner) = 0;
-		void Draw();
+		void DrawIcon();
+		virtual void Draw() = 0;
 		virtual std::shared_ptr<Item> Clone() const = 0;
 
 		static void StaticInit();
 		static void StaticDestroy();
 
-		static AEGfxTexture* itemTexture;
-		static AEGfxVertexList* itemMesh;
+		static AEGfxTexture* itemIconTexture;
+		static AEGfxVertexList* itemIconMesh;
 		static AEVec2 size;
 		static s32 row, column;
 
@@ -42,6 +43,7 @@ namespace InGame
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;
+		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
 	};
 
@@ -53,6 +55,42 @@ namespace InGame
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+	};
+
+	class Item_3 : public Item // to do change class name
+	{
+	public:
+		Item_3() = default;
+		Item_3(const Item_3& other);
+
+		AEVec2 dir;
+		AEVec2 pos1;
+		AEVec2 pos2;
+		f32 distance;
+		s32 Damage;
+		f32 FireRate;
+		f32 FireTimer;
+		s32 HitCount;
+		s32 BulletSpeed;
+		AEVec2 objectSize;
+
+		virtual void Init() override;
+		virtual void Use(Actor* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+	};
+
+	class Item_4 : public Item // to do change class name
+	{
+	public:
+		Item_4() = default;
+		Item_4(const Item_4& other);
+
+		virtual void Init() override;
+		virtual void Use(Actor* owner) override;
+		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
 	};
 }

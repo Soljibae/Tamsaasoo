@@ -100,6 +100,9 @@ namespace InGame
 			Utils::UpdateOffset(*this);
 
 			GetMouseDir();
+
+			global::PlayerMouseDirection = MouseDirection;
+
 			if (HoldingGun)
 			{
 				HoldingGun->Update(MouseDirection, position);

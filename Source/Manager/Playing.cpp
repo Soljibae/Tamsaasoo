@@ -52,6 +52,7 @@ namespace Manager
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
 		gm.GamePaused = false;
+		Utils::TestInit();
 	}
 	void Playing::Update()
 	{
@@ -71,13 +72,17 @@ namespace Manager
 		{
 
 			//
-			if (global::KeyInput(AEVK_SPACE))
+			if (global::KeyInput(AEVK_1))
 			{
 				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
 			}
-			if (global::KeyInput(AEVK_LSHIFT))
+			if (global::KeyInput(AEVK_2))
 			{
 				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
+			}
+			if (global::KeyInput(AEVK_3))
+			{
+				PC->AddItemToInventory(ITDB->itemList[3]->Clone());
 			}
 			//
 
@@ -276,6 +281,10 @@ namespace Manager
 				EC->Draw();
 			}
 		}
+		for (const auto& item_ptr : PC->inventory)
+		{
+			item_ptr.first->Draw();
+		}
 		for (InGame::Projectile* EP : EPs)
 		{
 			if (abs(EP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(EP->position.y - PC->position.y) < global::ScreenHeight / 2)
@@ -353,6 +362,7 @@ namespace Manager
 		InGame::Item::StaticDestroy();
 
 		pausePanel.Destroy();
+		Utils::TestDestroy();
 	}
 	void Playing::SpawnWave()
 	{

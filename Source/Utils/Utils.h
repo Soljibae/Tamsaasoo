@@ -18,6 +18,8 @@ namespace Utils
 
 	void DrawItem(InGame::Item& item);
 
+	void DrawTest(f32 x, f32 y, f32 width, f32 height);
+
 	void InitOffset(InGame::Actor& object);
 
 	void UpdateOffset(InGame::Actor& object);
@@ -31,4 +33,10 @@ namespace Utils
 	bool IsMouseInCircle(InGame::Actor& object);
 
 	bool IsMouseInCircle(f32 x, f32 y, f32 r);
+
+	s32 GetItemCount(s32 ID);
+
+	void TestInit();
+
+	void TestDestroy();
 }
