@@ -26,9 +26,9 @@ namespace InGame
 
 	void Item::StaticInit()
 	{
-		itemIconTexture = AEGfxTextureLoad("Assets/Character.png");
+		itemIconTexture = AEGfxTextureLoad("Assets/Item.png");
 
-		itemIconMesh = Utils::CreateMesh(1, 3);
+		itemIconMesh = Utils::CreateMesh(7, 3);
 
 		AEVec2Set(&size, 64.f, 64.f);
 	}
@@ -42,7 +42,7 @@ namespace InGame
 
 		Utils::DestroyMesh(itemIconMesh);
 	}
-
+	//============================================= ID_1
 	Item_1::Item_1(const Item_1& other)
 		: Item(other)
 	{
@@ -75,7 +75,7 @@ namespace InGame
 	{
 		return std::make_unique<Item_1>(*this);
 	}
-
+	//============================================= ID_2
 	Item_2::Item_2(const Item_2& other)
 		: Item(other)
 	{
@@ -108,7 +108,7 @@ namespace InGame
 	{
 		return std::make_unique<Item_2>(*this);
 	}
-
+	//============================================= ID_3
 	Item_3::Item_3(const Item_3& other)
 		: Item(other), dir{ other.dir }, pos1{ other.pos1 }, pos2{ other.pos2 }, distance{ other.distance },
 		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, objectSize{ other.objectSize },
@@ -133,6 +133,9 @@ namespace InGame
 	}
 	void Item_3::Use(Actor* owner)
 	{
+		s16 count = Utils::GetItemCount(3);
+		std::cout << count << std::endl;
+
 		dir = global::PlayerMouseDirection;
 		AEVec2 DirectionVector;
 		AEVec2Scale(&DirectionVector, &dir, distance);
@@ -177,6 +180,30 @@ namespace InGame
 	}
 	std::shared_ptr<Item> Item_3::Clone() const
 	{
-		return std::make_unique<Item_3>(*this);
+		return std::make_shared<Item_3>(*this);
+	}
+	//============================================= ID_4
+	Item_4::Item_4(const Item_4& other)
+		: Item(other)
+	{
+	}
+
+	void Item_4::Init()
+	{
+		id = 4;
+		name = "item_4";
+		description = "this is item_4";
+		AEVec2Set(&position, 0.f, 0.f);
+
+		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_4::Use(Actor* owner)
+	{
+	}
+	void Item_4::Draw() {}
+	std::shared_ptr<Item> Item_4::Clone() const
+	{
+		return std::make_shared<Item_4>(*this);
 	}
 }

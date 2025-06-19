@@ -34,6 +34,8 @@ namespace Utils
 
 	bool IsMouseInCircle(f32 x, f32 y, f32 r);
 
+	s32 GetItemCount(s32 ID);
+
 	void TestInit();
 
 	void TestDestroy();

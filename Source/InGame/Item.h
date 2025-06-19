@@ -81,4 +81,16 @@ namespace InGame
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
 	};
+
+	class Item_4 : public Item // to do change class name
+	{
+	public:
+		Item_4() = default;
+		Item_4(const Item_4& other);
+
+		virtual void Init() override;
+		virtual void Use(Actor* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+	};
 }

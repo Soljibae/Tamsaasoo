@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "../Global/GlobalVariables.h"
 #include "../Manager/Playing.h"
+#include "../Manager/GameManager.h"
 
 AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
 {
@@ -302,6 +303,21 @@ bool Utils::IsMouseInCircle(f32 x, f32 y, f32 r)
 	f32 mouse_y = AEGfxGetWindowHeight() / 2.0f - static_cast<f32>(my);
 
 	return ((mouse_x - x) * (mouse_x - x) + (mouse_y - y) * (mouse_y - y) <= r * r);
+}
+
+s32 Utils::GetItemCount(s32 ID)
+{
+	Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+
+	for (auto curr = GS->PC->inventory.begin(); curr != GS->PC->inventory.end(); ++curr)
+	{
+		if (curr->first->id == ID)
+		{
+			return curr->second;
+		}
+	}
+
+	return 0;
 }
 
 void Utils::TestInit()

@@ -71,11 +71,15 @@ namespace Manager
 		{
 
 			//
-			if (global::KeyInput(AEVK_SPACE))
+			if (global::KeyInput(AEVK_1))
 			{
 				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
 			}
-			if (global::KeyInput(AEVK_LSHIFT))
+			if (global::KeyInput(AEVK_2))
+			{
+				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
+			}
+			if (global::KeyInput(AEVK_3))
 			{
 				PC->AddItemToInventory(ITDB->itemList[3]->Clone());
 			}
