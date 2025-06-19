@@ -2,14 +2,6 @@
 #include "AEEngine.h"
 namespace InGame
 {
-	enum AnimationState
-	{
-		NONE,
-		IDLE,
-		MOVE,
-		DEAD,
-		JUMP,
-	};
 	class Stat
 	{
 	public:

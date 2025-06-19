@@ -44,4 +44,15 @@ namespace InGame
 		virtual void Use(Actor* owner) override;
 		virtual std::unique_ptr<Item> Clone() const override;
 	};
+
+	class Item_2 : public Item // to do change class name
+	{
+	public:
+		Item_2() = default;
+		Item_2(const Item_2& other);
+
+		virtual void Init() override;
+		virtual void Use(Actor* owner) override;
+		virtual std::unique_ptr<Item> Clone() const override;
+	};
 }

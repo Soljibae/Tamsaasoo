@@ -1,7 +1,16 @@
 #pragma once
 #include "AEEngine.h"
+#include <map>
 namespace InGame
 {
+	enum EAnimationState
+	{
+		NONE,
+		IDLE,
+		MOVE,
+		DEAD,
+		JUMP,
+	};
 	class Actor
 	{
 	public:
@@ -21,5 +30,8 @@ namespace InGame
 		f32 TimeAcc = 0.f;
 		AEVec2 offset;
 		bool bIsPandingKill = false;
+		EAnimationState AnimationState;
+		s32 AnimationCount;
+		std::map<EAnimationState, s32> MaxAnimationCount;
 	};
 }

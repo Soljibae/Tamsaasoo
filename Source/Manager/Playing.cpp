@@ -49,7 +49,7 @@ namespace Manager
 		}
 		WaveTimer = 0.;
 		SpawnCount = 10;
-		pausePanel.Init();
+		pausePanel.Init(PC);
 		gm.GamePaused = false;
 	}
 	void Playing::Update()
@@ -73,6 +73,10 @@ namespace Manager
 			if (global::KeyInput(AEVK_SPACE))
 			{
 				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
+			}
+			if (global::KeyInput(AEVK_LSHIFT))
+			{
+				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
 			}
 			//
 
@@ -253,10 +257,6 @@ namespace Manager
 	{
 		BG->Draw();
 		PC->Draw();
-		for (const auto& item_ptr : PC->inventory)
-		{
-			item_ptr->Draw();
-		}
 		for (InGame::Projectile* PP : PPs)
 		{
 			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)

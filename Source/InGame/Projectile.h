@@ -11,7 +11,8 @@ namespace InGame
 	{
 	public:
 		void Init();
-		void Spawn(AEVec2 Dir, AEVec2 Pos, Actor* object);
+		void Spawn(AEVec2 Dir, AEVec2 Pos, class PlayerCharacter* object);
+		void Spawn(AEVec2 Dir, AEVec2 Pos, class EnemyCharacter* object);
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;

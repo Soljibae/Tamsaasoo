@@ -69,6 +69,33 @@ void Utils::DrawObject(InGame::Actor& object, bool is_camera_enabled, f32 alpha)
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
+void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(Texture, object.offset.x, object.offset.y);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.size.x, object.size.y);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, object.position.x, object.position.y);
+	AEMtx33 transform;
+
+	AEMtx33Concat(&transform, &tran, &scale);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
+}
+
 void Utils::DrawObjectWithDirection(InGame::Actor& object)
 {
 	/*
@@ -177,35 +204,22 @@ void Utils::DrawItem(InGame::Item& item)
 
 void Utils::InitOffset(InGame::Actor& object)
 {
-	AEVec2Set(&object.offset, 0.f, 1.f - 1.f / object.column);
+	AEVec2Set(&object.offset, 0.f, 0.f);
 }
 
 void Utils::UpdateOffset(InGame::Actor& object)
 {
-	s32 animation_cnt{ 0 }; // actor���� animation_count ���� �������ҵ�
-	s32 n = object.row * object.column; // actor���� max_animation_count ���� �������ҵ�
-
 	object.TimeAcc += global::DeltaTime;
 
 	if (object.TimeAcc > object.FrameTime)
 	{
 		object.TimeAcc = 0;
-		animation_cnt = (animation_cnt + 1) % n;
+		object.AnimationCount = (object.AnimationCount + 1) % object.MaxAnimationCount[object.AnimationState];
+
 	}
 
-	object.offset.x = 1.f / static_cast<f32>(object.column) * static_cast<f32>(animation_cnt % object.column);
-	object.offset.y = 1.f - 1.f / static_cast<f32>(object.row) * static_cast<f32>(animation_cnt / object.column + 1);
-
-	/*object.TimeAcc += global::DeltaTime;
-
-	if (object.TimeAcc > object.FrameTime)
-	{
-		object.TimeAcc = 0;
-		object.animation_cnt = (object.animation_cnt + 1) % object.max_animation_cnt;
-	}
-
-	object.offset.x = 1.f / static_cast<f32>(object.column) * static_cast<f32>(object.animation_cnt % object.column);
-	object.offset.y = 1.f - 1.f / static_cast<f32>(object.row) * static_cast<f32>(object.animation_cnt / object.column + 1);*/
+	object.offset.x = 1.f / object.column * static_cast<f32>(object.AnimationCount);
+	object.offset.y = 1.f / object.row * static_cast<f32>(object.AnimationState - 1);
 }
 
 bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
