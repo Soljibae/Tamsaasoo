@@ -12,6 +12,6 @@ namespace InGame
         //
         auto item2_prototype = std::make_unique<Item_2>();
         item2_prototype->Init();
-        itemList[1] = std::move(item2_prototype);
+        itemList[2] = std::move(item2_prototype);
     }
 }
