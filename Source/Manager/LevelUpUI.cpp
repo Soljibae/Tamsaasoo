@@ -12,8 +12,8 @@ namespace Manager
 		PC = InPC;
 		const float windowWidth = 200.f;
 		const float windowHeight = 500.f;
-		const float spacingX = 20.0f; // 가로 간격
-		const float spacingY = 20.0f; // 세로 간격
+		const float spacingX = 50.0f; // 가로 간격
+		const float spacingY = 50.0f; // 세로 간격
 		const float startX = -300.f; // 전체 위치 조정
 		const float startY = -500.f;
 		for (int i = 0; i < ItemWindow.size(); ++i)
@@ -45,6 +45,7 @@ namespace Manager
 			if (ItemWindow[i].IsClicked())
 			{
 				ItemWindow[i].OnClick();
+				std::cout << "choosed item: " << currentOptions[i]->name << std::endl;
 			}
 		}
 	}
@@ -77,9 +78,10 @@ namespace Manager
 
 		std::mt19937 gen(rd());
 
-		size_t min = 0;
+		//range of item id
+		size_t min = 1;
 
-		size_t max = game->ITDB->itemList.size();
+		size_t max = game->ITDB->itemList.size()-1;
 
 		std::uniform_int_distribution<> dis(min, max);
 
