@@ -95,6 +95,9 @@
     <ClCompile Include="..\Source\Manager\LevelUpUI.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\InGame\Stage.cpp">
+      <Filter>소스 파일\InGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -171,6 +174,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Manager\LevelUpUI.h">
       <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Stage.h">
+      <Filter>소스 파일\InGame</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

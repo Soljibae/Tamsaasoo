@@ -1,4 +1,10 @@
 #include "PlayerCharacter.h"
+#include "../Global/GlobalVariables.h"
+#include "../Utils/Utils.h"
+#include "../Manager/Playing.h"
+#include "../Manager/LevelUpUI.h"
+#include <iostream>
+#include <algorithm>
 
 namespace InGame
 {
@@ -41,86 +47,68 @@ namespace InGame
 	}
 	void PlayerCharacter::Update()
 	{
-		if(Stats.HP > 0)
+		if (bIsDashing)
 		{
-			AEVec2 MovingVec;
-			AEVec2Set(&MovingVec, 0.f, 0.f);
+			UpdateDash();
+		}
+		else
+		{
+			DashCooldownTimer += global::DeltaTime;
 
-			if (AEInputCheckCurr(AEVK_W))
+			if (AEInputCheckTriggered(AEVK_SPACE) && DashCooldownTimer >= DashCooldown)
 			{
-				MovingVec.y += 1.f;
-			}
-			if (AEInputCheckCurr(AEVK_S))
-			{
-				MovingVec.y -= 1.f;
-			}
-			if (AEInputCheckCurr(AEVK_A))
-			{
-				MovingVec.x -= 1.f;
-				if (size.x > 0)
+				AEVec2Set(&DashDirection, 0.f, 0.f);
+				if (AEInputCheckCurr(AEVK_W))
 				{
-					size.x *= -1;
+					DashDirection.y += 1.f;
 				}
-			}
-			if (AEInputCheckCurr(AEVK_D))
-			{
-				MovingVec.x += 1.f;
-				if (size.x < 0)
+				if (AEInputCheckCurr(AEVK_S))
 				{
-					size.x *= -1;
+					DashDirection.y -= 1.f;
 				}
-			}
-
-			if (MovingVec.x == 0 && MovingVec.y == 0)
-			{
-				if (AnimationState == MOVE)
+				if (AEInputCheckCurr(AEVK_A))
 				{
-					AnimationCount = 0;
+					DashDirection.x -= 1.f;
 				}
-				AnimationState = IDLE;
-			}
-			else
-			{
-				if (AnimationState == IDLE)
+				if (AEInputCheckCurr(AEVK_D))
 				{
-					AnimationCount = 0;
+					DashDirection.x += 1.f;
 				}
-				AnimationState = MOVE;
-			}
 
-			if(MovingVec.x != 0 && MovingVec.y != 0)
-				AEVec2Normalize(&MovingVec, &MovingVec);
-			AEVec2Scale(&MovingVec, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
-
-			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
-			position.y = std::clamp(position.y + MovingVec.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
-
-			global::PlayerLocation = position;
-
-			Utils::UpdateOffset(*this);
-
-			GetMouseDir();
-
-			global::PlayerMouseDirection = MouseDirection;
-
-			if (HoldingGun)
-			{
-				HoldingGun->Update(MouseDirection, position);
-			}
-			if (bIsInvincible)
-			{
-				InvincibleTimer += global::DeltaTime;
-				if (InvincibleTimer > 0.5f)
+				if (DashDirection.x != 0.f || DashDirection.y != 0.f)
 				{
-					bIsInvincible = false;
-					InvincibleTimer = 0.f;
+					AEVec2Normalize(&DashDirection, &DashDirection);
+					bIsDashing = true;
 				}
 			}
 
-			for (const auto& item_ptr : inventory)
+			if (Stats.HP > 0)
 			{
-				item_ptr.first->Use(this);
+				UpdateMovement();
 			}
+		}
+
+		GetMouseDir();
+
+		if (HoldingGun)
+		{
+			HoldingGun->Update(MouseDirection, position);
+		}
+
+		if (bIsInvincible)
+		{
+			InvincibleTimer += global::DeltaTime;
+			if (InvincibleTimer > 0.5f)
+			{
+				bIsInvincible = false;
+				InvincibleTimer = 0.f;
+			}
+		}
+		global::PlayerLocation = position;
+		Utils::UpdateOffset(*this);
+		for (const auto& item_ptr : inventory)
+		{
+			item_ptr.first->Use(this);
 		}
 	}
 	void PlayerCharacter::Draw()
@@ -214,6 +202,123 @@ namespace InGame
 		else
 		{
 			it->second++;
+		}
+	}
+	void PlayerCharacter::UpdateMovement()
+	{
+		AEVec2 MovingVec;
+		AEVec2Set(&MovingVec, 0.f, 0.f);
+
+		if (AEInputCheckCurr(AEVK_W))
+		{
+			MovingVec.y += 1.f;
+		}
+		if (AEInputCheckCurr(AEVK_S))
+		{
+			MovingVec.y -= 1.f;
+		}
+		if (AEInputCheckCurr(AEVK_A))
+		{
+			MovingVec.x -= 1.f;
+			if (size.x > 0) size.x *= -1;
+		}
+		if (AEInputCheckCurr(AEVK_D))
+		{
+			MovingVec.x += 1.f;
+			if (size.x < 0) size.x *= -1;
+		}
+
+		if (MovingVec.x == 0 && MovingVec.y == 0)
+		{
+			if (AnimationState == MOVE)
+			{
+				AnimationCount = 0;
+			}
+			AnimationState = IDLE;
+		}
+		else
+		{
+			if (AnimationState == IDLE)
+			{
+				AnimationCount = 0;
+			}
+			AnimationState = MOVE;
+		}
+
+		if (MovingVec.x != 0 && MovingVec.y != 0)
+		{
+			AEVec2Normalize(&MovingVec, &MovingVec);
+		}
+			
+		AEVec2 delta;
+		AEVec2Scale(&delta, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
+
+		AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* PC = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (PC)
+			{
+				if (PC->CurrentStageType == InGame::StageType::TOWER)
+				{
+					float EllipseA = (global::worldMax.x - global::worldMin.x)/2;
+					float EllipseB = (global::worldMax.y - global::worldMin.y)/2;
+					float value = (newPos.x * newPos.x) / (EllipseA * EllipseA) + (newPos.y * newPos.y) / (EllipseB * EllipseB);
+					if (value <= 1.0f)
+					{
+						position = newPos;
+					}
+				}
+				else
+				{
+					position.x = std::clamp(newPos.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
+					position.y = std::clamp(newPos.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
+				}
+			}
+		}
+	}
+	void PlayerCharacter::UpdateDash()
+	{
+		DashTimer += global::DeltaTime;
+		AEVec2 delta;
+		AEVec2Scale(&delta, &DashDirection, DashSpeed * global::DeltaTime);
+
+		AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* PC = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (PC)
+			{
+				if (PC->CurrentStageType == InGame::StageType::TOWER)
+				{
+					float EllipseA = (global::worldMax.x - global::worldMin.x) / 2;
+					float EllipseB = (global::worldMax.y - global::worldMin.y) / 2;
+					float value = (newPos.x * newPos.x) / (EllipseA * EllipseA) + (newPos.y * newPos.y) / (EllipseB * EllipseB);
+					if (value <= 1.0f)
+					{
+						position = newPos;
+					}
+				}
+				else
+				{
+					position.x = std::clamp(newPos.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
+					position.y = std::clamp(newPos.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
+				}
+			}
+		}
+		
+
+		if (HoldingGun)
+		{
+			HoldingGun->Update(MouseDirection, position);
+		}
+		if (DashTimer >= DashTime)
+		{
+			bIsDashing = false;
+			DashTimer = 0.0f;
+			DashCooldownTimer = 0.0f;
 		}
 	}
 }

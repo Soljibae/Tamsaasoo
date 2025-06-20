@@ -32,7 +32,6 @@ namespace InGame
 	void Stage1Boss::Init()
 	{
 		EnemyBoss::Init();
-		Texture = AEGfxTextureLoad("Assets/PlanetTexture.png");
 		MovementSpeed = 100.f;
 		size.x = 400;
 		size.y = 400;
@@ -141,5 +140,6 @@ namespace InGame
 	}
 	void Stage1Boss::Destroy()
 	{
+		EnemyBoss::Destroy();
 	}
 }

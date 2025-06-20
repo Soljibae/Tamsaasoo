@@ -11,7 +11,7 @@
 #include "../InGame/EnemyBoss.h"
 #include "../InGame/Item.h"
 #include "../InGame/ItemDatabase.h"
-
+#include "../InGame/Stage.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -44,6 +44,9 @@ namespace Manager
 		void InitBossFight();
 		void FinishBossFight();
 		InGame::EnemyBoss* Boss = nullptr;
+		InGame::Stage* CurrentStage = nullptr;
+		InGame::StageType CurrentStageType;
+		void InitStage();
 	};
 	extern Utils::Camera* CAM;
 	

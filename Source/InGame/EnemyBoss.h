@@ -30,4 +30,35 @@ namespace InGame
 
 	private:
 	};
+
+	class Stage2Boss : public EnemyBoss
+	{
+	public:
+		//virtual void Init() override;
+		//virtual void Update() override;
+		//virtual void Draw() override;
+		//virtual void Destroy() override;
+
+		//f32 WaveAttackSpawnTimer = 0.f;
+		//f32 WaveAttackChamberTimer = 12.f;
+		//bool bIsWaving = false;
+	protected:
+
+	private:
+	};
+	class Stage3Boss : public EnemyBoss
+	{
+	public:
+		//virtual void Init() override;
+		//virtual void Update() override;
+		//virtual void Draw() override;
+		//virtual void Destroy() override;
+
+		//f32 WaveAttackSpawnTimer = 0.f;
+		//f32 WaveAttackChamberTimer = 12.f;
+		//bool bIsWaving = false;
+	protected:
+
+	private:
+	};
 }
