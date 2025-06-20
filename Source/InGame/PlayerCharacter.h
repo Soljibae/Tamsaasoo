@@ -23,10 +23,10 @@ namespace InGame
 		// first: item / second: count
 		std::vector<std::pair<std::shared_ptr<Item>, s16>> inventory;
 		void AddItemToInventory(std::shared_ptr<Item> item);
-		
+
+		Gun* HoldingGun = nullptr;
 	protected:
 		AEVec2 MouseDirection;
-		Gun* HoldingGun = nullptr;
 
 		bool bIsInvincible = false;
 		f32 InvincibleTimer = 0.f;

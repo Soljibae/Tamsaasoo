@@ -3,6 +3,7 @@
 #include "../Utils/Utils.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/LevelUpUI.h"
+#include "../Manager/HUDController.h"
 #include "PauseUI.h"
 #include <iostream>
 #include <cmath>
@@ -58,6 +59,7 @@ namespace Manager
 		SpawnCount = 10;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
+		HUD.Init(PC, PC->HoldingGun);
 		gm.GamePaused = false;
 		Utils::TestInit();
 	}
@@ -274,6 +276,7 @@ namespace Manager
 			{
 				Manager::gm.nextState = EGameState::MAINMENU;
 			}
+			HUD.Update();
 		}
 		else if (pickPanel.IsActive())
 		{
@@ -317,6 +320,7 @@ namespace Manager
 		{
 			Boss->Draw();
 		}
+		HUD.Draw();
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
