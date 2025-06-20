@@ -28,7 +28,7 @@ namespace InGame
 	{
 		itemIconTexture = AEGfxTextureLoad("Assets/Item.png");
 
-		itemIconMesh = Utils::CreateMesh(7, 3);
+		itemIconMesh = Utils::CreateMesh(row, column);
 
 		AEVec2Set(&size, 64.f, 64.f);
 	}
@@ -210,7 +210,7 @@ namespace InGame
 	{
 		return std::make_shared<Item_4>(*this);
 	}
-	//============================================= ID_
+	//============================================= ID_5
 	Item_5::Item_5(const Item_5& other)
 		: Item(other)
 	{
