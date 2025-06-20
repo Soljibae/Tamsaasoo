@@ -48,9 +48,11 @@ namespace Manager
 	}
 	void HUDController::Update()
 	{
+		
 		while (currentHP > PC->Stats.HP)
 		{
-			HP.pop_back();
+			if(!HP.empty())
+				HP.pop_back();
 			currentHP--;
 		}
 		currentHP = PC->Stats.HP;
