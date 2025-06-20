@@ -105,6 +105,7 @@ namespace InGame
 			}
 		}
 		global::PlayerLocation = position;
+		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
 		for (const auto& item_ptr : inventory)
 		{
