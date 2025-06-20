@@ -2,9 +2,10 @@
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
 #include "../Manager/Playing.h"
-#include "../Manager/GameManager.h"
+#include "../Manager/LevelUpUI.h"
 #include <iostream>
 #include <algorithm>
+
 namespace InGame
 {
 	void PlayerCharacter::Init()
@@ -44,139 +45,6 @@ namespace InGame
 
 		inventory.clear();
 	}
-	//void PlayerCharacter::Update()
-	//{
-	//	if (bIsDashing)
-	//	{
-	//		DashTimer += global::DeltaTime;
-	//		AEVec2 delta;
-	//		AEVec2Scale(&delta, &DashDirection, DashSpeed * global::DeltaTime);
-	//		position.x += delta.x;
-	//		position.y += delta.y;
-	//		position.x = std::clamp(position.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
-	//		position.y = std::clamp(position.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
-	//		if (HoldingGun)
-	//		{
-	//			HoldingGun->Update(MouseDirection, position);
-	//		}
-	//		if (DashTimer >= DashTime)
-	//		{
-	//			bIsDashing = false;
-	//			DashTimer = 0.0f;
-	//			DashCooldownTimer = 0.0f;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		DashCooldownTimer += global::DeltaTime;
-	//		if (AEInputCheckTriggered(AEVK_SPACE) && DashCooldownTimer >= DashCooldown)
-	//		{
-	//			AEVec2Set(&DashDirection, 0.f, 0.f);
-	//			if (AEInputCheckCurr(AEVK_W))
-	//			{
-	//				DashDirection.y += 1.f;
-	//			}
-	//			if (AEInputCheckCurr(AEVK_S))
-	//			{
-	//				DashDirection.y -= 1.f;
-	//			}
-	//			if (AEInputCheckCurr(AEVK_A))
-	//			{
-	//				DashDirection.x -= 1.f;
-	//			}
-	//			if (AEInputCheckCurr(AEVK_D))
-	//			{
-	//				DashDirection.x += 1.f;
-	//			}
-	//			if (DashDirection.x != 0.f || DashDirection.y != 0.f)
-	//			{
-	//				AEVec2Normalize(&DashDirection, &DashDirection);
-	//				bIsDashing = true;
-	//			}
-	//		}
-	//		if (Stats.HP > 0)
-	//		{
-	//			DashCooldownTimer += global::DeltaTime;
-	//			AEVec2 MovingVec;
-	//			AEVec2Set(&MovingVec, 0.f, 0.f);
-	//			if (AEInputCheckCurr(AEVK_W))
-	//			{
-	//				MovingVec.y += 1.f;
-	//			}
-	//			if (AEInputCheckCurr(AEVK_S))
-	//			{
-	//				MovingVec.y -= 1.f;
-	//			}
-	//			if (AEInputCheckCurr(AEVK_A))
-	//			{
-	//				MovingVec.x -= 1.f;
-	//				if (size.x > 0)
-	//				{
-	//					size.x *= -1;
-	//				}
-	//			}
-	//			if (AEInputCheckCurr(AEVK_D))
-	//			{
-	//				MovingVec.x += 1.f;
-	//				if (size.x < 0)
-	//				{
-	//					size.x *= -1;
-	//				}
-	//			}
-	//			if (AEInputCheckTriggered(AEVK_SPACE) && DashCooldownTimer >= DashCooldown)
-	//			{
-	//				if (MovingVec.x != 0.f || MovingVec.y != 0.f)
-	//				{
-	//					bIsDashing = true;
-	//				}
-	//			}
-	//			if (MovingVec.x == 0 && MovingVec.y == 0)
-	//			{
-	//				if (AnimationState == MOVE)
-	//				{
-	//					AnimationCount = 0;
-	//				}
-	//				AnimationState = IDLE;
-	//			}
-	//			else
-	//			{
-	//				if (AnimationState == IDLE)
-	//				{
-	//					AnimationCount = 0;
-	//				}
-	//				AnimationState = MOVE;
-	//			}
-	//			if (MovingVec.x != 0 && MovingVec.y != 0)
-	//			{
-	//				AEVec2Normalize(&MovingVec, &MovingVec);
-	//			}
-	//			AEVec2Scale(&MovingVec, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
-	//			position.x = std::clamp(position.x + MovingVec.x, global::worldMin.x + abs(size.x) / 2, global::worldMax.x - abs(size.x) / 2);
-	//			position.y = std::clamp(position.y + MovingVec.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
-	//			global::PlayerLocation = position;
-	//			Utils::UpdateOffset(*this);
-	//			GetMouseDir();
-	//			if (HoldingGun)
-	//			{
-	//				HoldingGun->Update(MouseDirection, position);
-	//			}
-	//			if (bIsInvincible)
-	//			{
-	//				InvincibleTimer += global::DeltaTime;
-	//				if (InvincibleTimer > 0.5f)
-	//				{
-	//					bIsInvincible = false;
-	//					InvincibleTimer = 0.f;
-	//				}
-	//			}
-	//		}
-	//	}
-	//	for (const auto& item_ptr : inventory)
-	//	{
-	//		item_ptr.first->Use(this);
-	//	}
-	//}
-
 	void PlayerCharacter::Update()
 	{
 		if (bIsDashing)
@@ -320,9 +188,10 @@ namespace InGame
 			Stats.TargetExp *= 2;
 			Stats.Level++;
 			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
+			Manager::pickPanel.Show(Manager::pickPanel.GenerateRandomRewards());
 		}
 	}
-	void PlayerCharacter::AddItemToInventory(std::unique_ptr<Item> item)
+	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)
 	{
 		auto it = std::find_if(inventory.begin(), inventory.end(),
 			[&](const auto& pair) {return pair.first->id == item->id; });

@@ -2,6 +2,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
 #include "../Manager/GameManager.h"
+#include "../Manager/LevelUpUI.h"
 #include "PauseUI.h"
 #include <iostream>
 #include <cmath>
@@ -56,9 +57,9 @@ namespace Manager
 		WaveTimer = 0.;
 		SpawnCount = 10;
 		pausePanel.Init(PC);
+		pickPanel.Init(PC);
 		gm.GamePaused = false;
-
-		
+		Utils::TestInit();
 	}
 	void Playing::Update()
 	{
@@ -78,13 +79,29 @@ namespace Manager
 		{
 
 			//
-			if (global::KeyInput(AEVK_SPACE))
+			if (global::KeyInput(AEVK_1))
 			{
 				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
 			}
-			if (global::KeyInput(AEVK_LSHIFT))
+			if (global::KeyInput(AEVK_2))
 			{
 				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
+			}
+			if (global::KeyInput(AEVK_3))
+			{
+				PC->AddItemToInventory(ITDB->itemList[3]->Clone());
+			}
+			if (global::KeyInput(AEVK_4))
+			{
+				PC->AddItemToInventory(ITDB->itemList[4]->Clone());
+			}
+			if (global::KeyInput(AEVK_5))
+			{
+				PC->AddItemToInventory(ITDB->itemList[5]->Clone());
+			}
+			if (global::KeyInput(AEVK_6))
+			{
+				PC->AddItemToInventory(ITDB->itemList[6]->Clone());
 			}
 			//
 
@@ -258,6 +275,10 @@ namespace Manager
 				Manager::gm.nextState = EGameState::MAINMENU;
 			}
 		}
+		else if (pickPanel.IsActive())
+		{
+			pickPanel.Update();
+		}
 		else
 		{
 			pausePanel.Update();
@@ -281,6 +302,10 @@ namespace Manager
 				EC->Draw();
 			}
 		}
+		for (const auto& item_ptr : PC->inventory)
+		{
+			item_ptr.first->Draw();
+		}
 		for (InGame::Projectile* EP : EPs)
 		{
 			if (abs(EP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(EP->position.y - PC->position.y) < global::ScreenHeight / 2)
@@ -292,7 +317,11 @@ namespace Manager
 		{
 			Boss->Draw();
 		}
-		if (gm.GamePaused)
+		if (pickPanel.IsActive())
+		{
+			pickPanel.Draw();
+		}
+		else if (gm.GamePaused)
 		{
 			pausePanel.Draw();
 		}
@@ -359,6 +388,7 @@ namespace Manager
 		InGame::Item::StaticDestroy();
 
 		pausePanel.Destroy();
+		Utils::TestDestroy();
 	}
 	void Playing::SpawnWave()
 	{
