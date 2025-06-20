@@ -35,7 +35,7 @@ namespace InGame
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
 		Stats.ExpCount = 0.f;
-		Stats.TargetExp = 1.f;
+		Stats.TargetExp = 8.f;
 		
 		Utils::InitOffset(*this);
 

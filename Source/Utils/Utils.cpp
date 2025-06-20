@@ -97,6 +97,41 @@ void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertex
 	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
+void Utils::DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	if (Manager::gm.currStateREF)
+	{
+		Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+		
+		AEGfxTextureSet(Texture, offset.x, offset.y);
+
+		AEMtx33 scale;
+		AEMtx33Scale(&scale, size.x, size.y);
+		AEMtx33 tran;
+		AEVec2 translated_pos;
+		AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &position);
+		AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+		AEMtx33 transform;
+
+		AEMtx33Concat(&transform, &tran, &scale);
+
+		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+		AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
+
+		AEGfxSetTransform(transform.m);
+
+		AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
+			
+	}
+}
+
 void Utils::DrawObjectWithDirection(InGame::Actor& object)
 {
 	/*
@@ -184,23 +219,33 @@ void Utils::DrawItem(InGame::Item& item)
 
 	AEGfxSetTransparency(1.0f);
 
-	AEGfxTextureSet(InGame::Item::itemIconTexture, item.offset.x, item.offset.y);
+	if (Manager::gm.currStateREF)
+	{
+		Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+		if (GS)
+		{
+			if (GS->ITRM)
+			{
+				AEGfxTextureSet(GS->ITRM->itemIconTexture, item.offset.x, item.offset.y);
 
-	AEMtx33 scale;
-	AEMtx33Scale(&scale, InGame::Item::size.x, InGame::Item::size.y);
-	AEMtx33 tran;
-	AEMtx33Trans(&tran, item.position.x, item.position.y);
-	AEMtx33 transform;
+				AEMtx33 scale;
+				AEMtx33Scale(&scale, InGame::Item::size.x, InGame::Item::size.y);
+				AEMtx33 tran;
+				AEMtx33Trans(&tran, item.position.x, item.position.y);
+				AEMtx33 transform;
 
-	AEMtx33Concat(&transform, &tran, &scale);
+				AEMtx33Concat(&transform, &tran, &scale);
 
-	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+				AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
 
-	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+				AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
 
-	AEGfxSetTransform(transform.m);
+				AEGfxSetTransform(transform.m);
 
-	AEGfxMeshDraw(InGame::Item::itemIconMesh, AE_GFX_MDM_TRIANGLES);
+				AEGfxMeshDraw(GS->ITRM->itemIconMesh, AE_GFX_MDM_TRIANGLES);
+			}
+		}
+	}
 }
 
 void Utils::DrawTest(f32 x, f32 y, f32 width, f32 height)
@@ -264,6 +309,20 @@ bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)
 	f32 distSq = delta.x * delta.x + delta.y * delta.y;
 
 	f32 radiusSum = object1.CollisionRadius + object2.CollisionRadius;
+	f32 radiusSumSq = radiusSum * radiusSum;
+
+	return distSq <= radiusSumSq;
+}
+
+bool Utils::CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r)
+{
+	AEVec2 delta;
+
+	AEVec2Sub(&delta, &object1.position, &pos);
+
+	f32 distSq = delta.x * delta.x + delta.y * delta.y;
+
+	f32 radiusSum = object1.CollisionRadius + r;
 	f32 radiusSumSq = radiusSum * radiusSum;
 
 	return distSq <= radiusSumSq;

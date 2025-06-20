@@ -8,8 +8,6 @@
 
 namespace InGame
 {
-	AEGfxTexture* Item::itemIconTexture = nullptr;
-	AEGfxVertexList* Item::itemIconMesh = nullptr;
 	AEVec2 Item::size;
 	s32 Item::row = 7, Item::column = 3;
 
@@ -26,21 +24,7 @@ namespace InGame
 
 	void Item::StaticInit()
 	{
-		itemIconTexture = AEGfxTextureLoad("Assets/Item.png");
-
-		itemIconMesh = Utils::CreateMesh(row, column);
-
 		AEVec2Set(&size, 64.f, 64.f);
-	}
-	void Item::StaticDestroy()
-	{
-		if (itemIconTexture)
-		{
-			AEGfxTextureUnload(itemIconTexture);
-			itemIconTexture = nullptr;
-		}
-
-		Utils::DestroyMesh(itemIconMesh);
 	}
 	//============================================= ID_1
 	Item_1::Item_1(const Item_1& other)
@@ -187,7 +171,8 @@ namespace InGame
 	}
 	//============================================= ID_4
 	Item_4::Item_4(const Item_4& other)
-		: Item(other)
+		: Item(other), CoolDown{ other.CoolDown }, pos{ other.pos }, isReady{ other.isReady }, FireTimer{ other.FireTimer }, isStarted{ other.isStarted }, explodeSize{ other.explodeSize }
+		, FrameTime{ other.FrameTime }, AnimationOffset{ other.AnimationOffset }, AnimationCount{ other.AnimationCount }, AnimationTimer{ other.AnimationTimer }, Damage{ other.Damage }
 	{
 	}
 	void Item_4::Init()
@@ -196,14 +181,89 @@ namespace InGame
 		name = "item_4";
 		description = "this is item_4";
 		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&explodeSize, 400.f, 400.f);
 		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		isReady = true;
+		isStarted = false;
+		CoolDown = 4.f;
+		FireTimer = 0.f;
+		FrameTime = 0.1f;
+		AEVec2Set(&AnimationOffset, 0.f, 0.f);
+		AnimationCount = 0;
+		AnimationTimer = 0.f;
+		Damage = 1;
 	}
 	void Item_4::Use(Actor* owner)
 	{
+		if (!isStarted)
+		{
+			FireTimer += global::DeltaTime;
+			if (FireTimer >= CoolDown)
+			{
+				FireTimer = 0;
+				isReady = true;
+			}
+		}
+
+		if (isReady && global::IsEnemyRecentlyDied)
+		{
+			pos = global::RecentlyDeadEnemyPosition;
+			isReady = false;
+			isStarted = true;
+
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->ECs.size() > 0)
+					{
+						for (size_t i = 0; i < GS->ECs.size(); i++)
+						{
+							if (Utils::CheckCollision(*GS->ECs[i], pos, explodeSize.x / 2))
+							{
+								GS->ECs[i]->adjustHealth(-Damage);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (isStarted)
+		{
+			AnimationTimer += global::DeltaTime;
+			if (AnimationTimer >= FrameTime)
+			{
+				AnimationTimer = 0;
+				AnimationCount = (AnimationCount + 1) % 9;
+			}
+			AnimationOffset.x = 1.f / 9.f * static_cast<f32>(AnimationCount);
+		}
 	}
 	void Item_4::Draw()
 	{
+		if (isStarted)
+		{
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->ITRM)
+					{
+						Utils::DrawObject(pos, AnimationOffset, explodeSize, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
+					}
+				}
+			}
+
+			if (AnimationCount == 8)
+			{
+				AnimationCount = 0;
+				isStarted = false;
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_4::Clone() const
 	{

@@ -41,6 +41,11 @@ namespace Manager
 			ITDB = new InGame::ItemDatabase();
 			ITDB->Init();
 		}
+		if (ITRM == nullptr)
+		{
+			ITRM = new InGame::ItemResourceManager();
+			ITRM->Init();
+		}
 		InGame::Item::StaticInit();
 		for (int i = 0; i < 1000; i++)
 		{
@@ -77,7 +82,18 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
+			
+			if (global::IsEnemyRecentlyDied)
+			{
+				static f32 cooldown = 0.f;
 
+				cooldown += global::DeltaTime;
+				if (cooldown > 0.5f)
+				{
+					global::IsEnemyRecentlyDied = false;
+					cooldown = 0.f;
+				}
+			}
 			//
 			if (global::KeyInput(AEVK_1))
 			{
@@ -224,6 +240,8 @@ namespace Manager
 
 				if (EC->bIsPandingKill)
 				{
+					global::IsEnemyRecentlyDied = true;
+					global::RecentlyDeadEnemyPosition = EC->position;
 					PC->UpdateKill(EC->Exp);
 					EC->bIsPandingKill = false;
 					ECPool.push_back(EC);
@@ -385,7 +403,8 @@ namespace Manager
 		}
 		delete ITDB;
 		ITDB = nullptr;
-		InGame::Item::StaticDestroy();
+		ITRM->Destroy();
+		delete ITRM;
 
 		pausePanel.Destroy();
 		pickPanel.Destroy();

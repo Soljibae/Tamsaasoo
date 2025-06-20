@@ -8,6 +8,8 @@ namespace global
 	extern f32 DeltaTime;
 	extern AEVec2 PlayerLocation;
 	extern AEVec2 PlayerMouseDirection;
+	extern bool IsEnemyRecentlyDied;
+	extern AEVec2 RecentlyDeadEnemyPosition;
 	extern AEVec2 worldMin, worldMax;
 	extern u8 (*KeyInput)(u8);
 	extern AEGfxTexture* testTexture;

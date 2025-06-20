@@ -12,6 +12,8 @@
 #include "../InGame/Item.h"
 #include "../InGame/ItemDatabase.h"
 #include "../InGame/Stage.h"
+#include "../InGame/ItemResourceManager.h"
+
 namespace Manager
 {
 	class Playing : public AGameState
@@ -31,6 +33,7 @@ namespace Manager
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
 		InGame::ItemDatabase* ITDB;
+		InGame::ItemResourceManager* ITRM;
 		
 		bool bIsBossFight = false;
 		u8 WaveCount = 0;
