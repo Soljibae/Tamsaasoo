@@ -10,6 +10,7 @@ namespace InGame
 		virtual void Draw();
 		virtual void Destroy();
 
+		s32 MaxHP;
 		s32 HP;
 		f32 MovementSpeed;
 		f32 FireRate;

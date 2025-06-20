@@ -38,6 +38,7 @@
     <ClCompile Include="..\Source\InGame\Stat.cpp" />
     <ClCompile Include="..\Source\Manager\GameManager.cpp" />
     <ClCompile Include="..\Source\Manager\GameState.cpp" />
+    <ClCompile Include="..\Source\Manager\HUDController.cpp" />
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
     <ClCompile Include="..\Source\Manager\LevelUpUI.cpp" />
     <ClCompile Include="..\Source\Manager\MainMenu.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="..\Source\InGame\Stat.h" />
     <ClInclude Include="..\Source\Manager\GameManager.h" />
     <ClInclude Include="..\Source\Manager\GameState.h" />
+    <ClInclude Include="..\Source\Manager\HUDController.h" />
     <ClInclude Include="..\Source\Manager\Intro.h" />
     <ClInclude Include="..\Source\Manager\LevelUpUI.h" />
     <ClInclude Include="..\Source\Manager\MainMenu.h" />

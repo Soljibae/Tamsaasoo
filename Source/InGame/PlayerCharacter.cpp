@@ -26,7 +26,8 @@ namespace InGame
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
 
-		Stats.HP = 100;
+		Stats.MaxHP = 5;
+		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 10.0f;
 		Stats.BulletSpeed = 30.f;
