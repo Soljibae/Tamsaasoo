@@ -87,7 +87,7 @@ namespace Manager
 
 		std::vector<std::shared_ptr<InGame::Item>> options;
 		options.reserve(3);
-
+		for (int i = 0; i < 3; i++)
 		{
 			options.push_back(game->ITDB->itemList[dis(gen)]);
 		}
