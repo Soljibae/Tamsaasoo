@@ -1,5 +1,6 @@
 #include "LevelUpUI.h"
 #include <random>
+#include <unordered_set>
 namespace Manager
 {
 	LevelUpUI pickPanel;
@@ -85,11 +86,20 @@ namespace Manager
 
 		std::uniform_int_distribution<> dis(min, max);
 
+		std::unordered_set<int> used_indices;
 		std::vector<std::shared_ptr<InGame::Item>> options;
 		options.reserve(3);
 		for (int i = 0; i < 3; i++)
 		{
-			options.push_back(game->ITDB->itemList[dis(gen)]);
+			int idx;
+			while(true)
+			{
+				idx = dis(gen);
+				auto result = used_indices.insert(idx);
+				if (result.second)
+					break;
+			}
+			options.push_back(game->ITDB->itemList[idx]);
 		}
 		return options;
 	}
