@@ -50,6 +50,7 @@ namespace Manager
 		WaveTimer = 0.;
 		SpawnCount = 10;
 		pausePanel.Init(PC);
+		pickPanel.Init(PC);
 		gm.GamePaused = false;
 		Utils::TestInit();
 	}
@@ -253,6 +254,10 @@ namespace Manager
 				Manager::gm.nextState = EGameState::MAINMENU;
 			}
 		}
+		else if (pickPanel.IsActive())
+		{
+			pickPanel.Update();
+		}
 		else
 		{
 			pausePanel.Update();
@@ -291,7 +296,11 @@ namespace Manager
 		{
 			Boss->Draw();
 		}
-		if (gm.GamePaused)
+		if (pickPanel.IsActive())
+		{
+			pickPanel.Draw();
+		}
+		else if (gm.GamePaused)
 		{
 			pausePanel.Draw();
 		}

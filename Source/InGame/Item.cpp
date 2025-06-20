@@ -73,7 +73,7 @@ namespace InGame
 	void Item_1::Draw() {}
 	std::shared_ptr<Item> Item_1::Clone() const
 	{
-		return std::make_unique<Item_1>(*this);
+		return std::make_shared<Item_1>(*this);
 	}
 	//============================================= ID_2
 	Item_2::Item_2(const Item_2& other)
@@ -106,7 +106,7 @@ namespace InGame
 	void Item_2::Draw() {}
 	std::shared_ptr<Item> Item_2::Clone() const
 	{
-		return std::make_unique<Item_2>(*this);
+		return std::make_shared<Item_2>(*this);
 	}
 	//============================================= ID_3
 	Item_3::Item_3(const Item_3& other)

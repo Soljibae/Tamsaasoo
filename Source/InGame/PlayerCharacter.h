@@ -3,6 +3,12 @@
 #include "Gun.h"
 #include "Item.h"
 #include "PlayerStat.h"
+#include "../Global/GlobalVariables.h"
+#include "../Utils/Utils.h"
+#include "../Manager/Playing.h"
+#include "../Manager/LevelUpUI.h"
+#include <iostream>
+#include <algorithm>
 #include <vector>
 #include <memory>
 namespace InGame

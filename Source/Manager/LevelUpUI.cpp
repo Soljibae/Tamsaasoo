@@ -1,0 +1,107 @@
+#include "LevelUpUI.h"
+#include <random>
+namespace Manager
+{
+	LevelUpUI pickPanel;
+	AEGfxVertexList* LevelUpUI::windowMesh{ nullptr };
+	AEGfxTexture* LevelUpUI::windowTexture{ nullptr };
+
+	void LevelUpUI::Init(InGame::PlayerCharacter* InPC)
+	{
+		currentOptions.reserve(3);
+		PC = InPC;
+		const float windowWidth = 200.f;
+		const float windowHeight = 500.f;
+		const float spacingX = 20.0f; // 가로 간격
+		const float spacingY = 20.0f; // 세로 간격
+		const float startX = -300.f; // 전체 위치 조정
+		const float startY = -500.f;
+		for (int i = 0; i < ItemWindow.size(); ++i)
+		{
+			int row = static_cast<int>(i);
+			int col = static_cast<int>(i);
+
+			ItemWindow[i].position = {
+				startX + col * (windowWidth + spacingX),
+				startY + (windowHeight + spacingY)
+			};
+
+			ItemWindow[i].size = { windowWidth, windowHeight };
+			ItemWindow[i].SetCallback([this, i]() {PC->AddItemToInventory(currentOptions[i]->Clone()); this->isActive = false; gm.Resume(); });
+		}
+		//todo: load mesh, texture
+		windowMesh = Utils::CreateMesh();
+		windowTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
+	}
+
+	void LevelUpUI::Update()
+	{
+		if (!IsActive())
+		{
+			return;
+		}
+		for (size_t i = 0; i < ItemWindow.size(); i++)
+		{
+			if (ItemWindow[i].IsClicked())
+			{
+				ItemWindow[i].OnClick();
+			}
+		}
+	}
+
+	void LevelUpUI::Draw()
+	{
+		for (int i = 0; i < ItemWindow.size(); i++)
+		{
+			Utils::DrawObject(ItemWindow[i], windowTexture, windowMesh, 1.f);
+			Utils::DrawItem(*currentOptions[i]);
+		}
+	}
+
+	void LevelUpUI::Show(const std::vector<std::shared_ptr<InGame::Item>>& options)
+	{
+		currentOptions = options;
+		for (int i = 0; i < currentOptions.size(); i++)
+		{
+			currentOptions[i]->position = ItemWindow[i].position;
+		}
+		isActive = true;
+		gm.Pause();
+	}
+
+	std::vector<std::shared_ptr<InGame::Item>> LevelUpUI::GenerateRandomRewards()
+	{
+		const Playing* game = static_cast<Playing*>(gm.currStateREF);
+
+		std::random_device rd;
+
+		std::mt19937 gen(rd());
+
+		size_t min = 0;
+
+		size_t max = game->ITDB->itemList.size();
+
+		std::uniform_int_distribution<> dis(min, max);
+
+		std::vector<std::shared_ptr<InGame::Item>> options;
+		options.reserve(3);
+
+		for (int i = 0; i < 3; i++)
+		{
+			options.push_back(game->ITDB->itemList[dis(gen)]);
+		}
+		return options;
+	}
+
+	bool LevelUpUI::IsActive() const
+	{
+		return isActive;
+	}
+
+	void LevelUpUI::Destroy()
+	{
+		AEGfxMeshFree(windowMesh);
+		AEGfxTextureUnload(windowTexture);
+	}
+
+}
