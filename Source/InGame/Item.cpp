@@ -138,7 +138,6 @@ namespace InGame
 	void Item_3::Use(Actor* owner)
 	{
 		s16 count = Utils::GetItemCount(3);
-		std::cout << count << std::endl;
 
 		dir = global::PlayerMouseDirection;
 		AEVec2 DirectionVector;

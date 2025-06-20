@@ -64,7 +64,7 @@ namespace Manager
 	void Playing::Update()
 	{
 		// Press ESCAPE to pause the game
-		if (global::KeyInput(AEVK_ESCAPE))
+		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
 		{
 			if (!gm.GamePaused)
 			{
@@ -388,6 +388,7 @@ namespace Manager
 		InGame::Item::StaticDestroy();
 
 		pausePanel.Destroy();
+		pickPanel.Destroy();
 		Utils::TestDestroy();
 	}
 	void Playing::SpawnWave()
