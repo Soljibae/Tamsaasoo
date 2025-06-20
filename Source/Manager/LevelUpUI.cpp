@@ -14,7 +14,7 @@ namespace Manager
 		const float windowHeight = 500.f;
 		const float spacingX = 50.0f; // 가로 간격
 		const float spacingY = 50.0f; // 세로 간격
-		const float startX = -300.f; // 전체 위치 조정
+		const float startX = -100.f; // 전체 위치 조정
 		const float startY = -500.f;
 		for (int i = 0; i < ItemWindow.size(); ++i)
 		{
@@ -81,14 +81,13 @@ namespace Manager
 		//range of item id
 		size_t min = 1;
 
-		size_t max = game->ITDB->itemList.size()-1;
+		size_t max = game->ITDB->itemList.size();
 
 		std::uniform_int_distribution<> dis(min, max);
 
 		std::vector<std::shared_ptr<InGame::Item>> options;
 		options.reserve(3);
 
-		for (int i = 0; i < 3; i++)
 		{
 			options.push_back(game->ITDB->itemList[dis(gen)]);
 		}
