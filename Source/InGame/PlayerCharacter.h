@@ -16,7 +16,8 @@ namespace InGame
 		virtual void Destroy() override;
 		virtual void adjustHealth(s32 Amount) override;
 		void GetMouseDir();
-		
+		void UpdateMovement();
+		void UpdateDash();
 		PlayerStat Stats;
 		void UpdateKill(u32 Exp);
 		// first: item / second: count
@@ -29,6 +30,16 @@ namespace InGame
 
 		bool bIsInvincible = false;
 		f32 InvincibleTimer = 0.f;
+
+
+		bool bIsDashing = false;
+		float DashSpeed = 800.0f;
+		float DashTime = 0.2f;
+		float DashTimer = 0.0f;
+		float DashCooldown = 1.0f;
+		float DashCooldownTimer = 0.0f;
+		AEVec2 DashDirection;
+
 	private:
 	};
 }

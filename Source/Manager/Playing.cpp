@@ -13,6 +13,11 @@ namespace Manager
 
 	void Playing::Init()
 	{
+		if (CurrentStage == nullptr)
+		{
+			CurrentStage = new InGame::Stage1();
+		}
+		CurrentStageType = InGame::StageType::LAND;
 		if (PC == nullptr)
 		{
 			PC = new InGame::PlayerCharacter();
@@ -28,6 +33,7 @@ namespace Manager
 		{
 			BG = new InGame::Background();
 			BG->Init();
+			InitStage();
 		}
 		if (ITDB == nullptr)
 		{
@@ -51,6 +57,8 @@ namespace Manager
 		SpawnCount = 10;
 		pausePanel.Init(PC);
 		gm.GamePaused = false;
+
+		
 	}
 	void Playing::Update()
 	{
@@ -84,11 +92,12 @@ namespace Manager
 			{
 				WaveTimer += global::DeltaTime;
 			}
-
+/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (global::DeltaTime > 0.02)
 			{
 				std::cout << global::DeltaTime << std::endl;
 			}
+/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (WaveTimer > 10.f)
 			{
 				WaveCount++;
@@ -99,7 +108,7 @@ namespace Manager
 					SpawnCount = 10;
 					SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
 				}
-				if (WaveCount > 1)
+				if (WaveCount > 10)
 				{
 					InitBossFight();
 				}
@@ -231,11 +240,12 @@ namespace Manager
 			{
 				if (Boss->bIsPandingKill)
 				{
-					FinishBossFight();
 					Boss->Destroy();
 					delete Boss;
 					Boss = nullptr;
 					bIsBossFight = false;
+					FinishBossFight();
+					
 				}
 				else
 				{
@@ -339,6 +349,11 @@ namespace Manager
 			delete Boss;
 			Boss = nullptr;
 		}
+		if (CurrentStage)
+		{
+			delete CurrentStage;
+			CurrentStage = nullptr;
+		}
 		delete ITDB;
 		ITDB = nullptr;
 		InGame::Item::StaticDestroy();
@@ -408,11 +423,67 @@ namespace Manager
 		bIsBossFight = true;
 		if (Boss == nullptr)
 		{
-			Boss = new InGame::Stage1Boss;
+			switch (CurrentStageType)
+			{
+			case InGame::StageType::LAND:
+				Boss = new InGame::Stage1Boss();
+				break;
+			case InGame::StageType::TOWER:
+				Boss = new InGame::Stage2Boss();
+				break;
+			case InGame::StageType::HEAVEN:
+				Boss = new InGame::Stage3Boss();
+				break;
+			}
+			Boss->Texture = AEGfxTextureLoad(CurrentStage->BossTextureAddress.c_str());
 			Boss->Init();
 		}
 	}
 	void Playing::FinishBossFight()
 	{
+		//TODO : Select Item
+		//TODO : Play Jump Animation
+		if (PC)
+		{
+			AEVec2Set(&PC->position, 0.f, 0.f);
+		}
+		switch (CurrentStageType)
+		{
+		case InGame::StageType::LAND:
+			CurrentStageType = InGame::StageType::TOWER;
+			if (CurrentStage)
+			{
+				delete CurrentStage;
+			}
+			CurrentStage = new InGame::Stage2();
+			break;
+		case InGame::StageType::TOWER:
+			CurrentStageType = InGame::StageType::HEAVEN;
+			if (CurrentStage)
+			{
+				delete CurrentStage;
+			}
+			CurrentStage = new InGame::Stage3();
+			break;
+		case InGame::StageType::HEAVEN:
+			Manager::gm.nextState = EGameState::MAINMENU;
+			break;
+		}
+		WaveCount = 0;
+		InitStage();
+	}
+	void Playing::InitStage()
+	{
+		if (CurrentStage)
+		{
+			if (BG)
+			{
+				if (BG->Texture)
+				{
+					AEGfxTextureUnload(BG->Texture);
+				}
+				BG->Texture = AEGfxTextureLoad(CurrentStage->MapTextureAddress.c_str());
+			}
+		}
 	}
 }

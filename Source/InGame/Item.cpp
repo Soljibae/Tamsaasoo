@@ -23,7 +23,7 @@ namespace InGame
 
 	void Item::StaticInit()
 	{
-		itemTexture = AEGfxTextureLoad("Assets/Character.png");
+		itemTexture = AEGfxTextureLoad("Assets/Item.png");
 
 		itemMesh = Utils::CreateMesh(1, 3);
 
