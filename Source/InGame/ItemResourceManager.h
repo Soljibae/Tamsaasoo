@@ -14,5 +14,8 @@ namespace InGame
 
 		AEGfxTexture* explosionTexture;
 		AEGfxVertexList* explosionMesh;
+
+		AEGfxTexture* minionTexture;
+		AEGfxVertexList* minionMesh;
 	};
 }

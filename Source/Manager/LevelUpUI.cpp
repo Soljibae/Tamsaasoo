@@ -65,7 +65,7 @@ namespace Manager
 		currentOptions = options;
 		for (int i = 0; i < currentOptions.size(); i++)
 		{
-			currentOptions[i]->position = ItemWindow[i].position;
+			currentOptions[i]->iconPosition = ItemWindow[i].position;
 		}
 		isActive = true;
 		gm.Pause();
