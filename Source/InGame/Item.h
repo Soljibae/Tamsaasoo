@@ -7,6 +7,17 @@
 
 namespace InGame
 {
+	enum ItemTag
+	{
+		EMPTY,
+		ENVY,
+		GLUTTONY,
+		GREED,
+		LUST,
+		SLOTH,
+		WRATH,
+		PRIDE,
+	};
 	class Item
 	{
 	public:
@@ -20,10 +31,7 @@ namespace InGame
 		virtual std::shared_ptr<Item> Clone() const = 0;
 
 		static void StaticInit();
-		static void StaticDestroy();
 
-		static AEGfxTexture* itemIconTexture;
-		static AEGfxVertexList* itemIconMesh;
 		static AEVec2 size;
 		static s32 row, column;
 
@@ -87,6 +95,17 @@ namespace InGame
 	public:
 		Item_4() = default;
 		Item_4(const Item_4& other);
+		f32 CoolDown;
+		f32 FireTimer;
+		AEVec2 pos;
+		AEVec2 explodeSize;
+		bool isReady;
+		bool isStarted;
+		f32 FrameTime;
+		AEVec2 AnimationOffset;
+		s32 AnimationCount;
+		f32 AnimationTimer;
+		s32 Damage;
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;

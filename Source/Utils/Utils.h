@@ -14,6 +14,8 @@ namespace Utils
 
 	void DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha = 1.f);
 
+	void DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha = 1.f);
+
 	void DrawObjectWithDirection(InGame::Actor& object);
 
 	void DrawItem(InGame::Item& item);
@@ -25,6 +27,8 @@ namespace Utils
 	void UpdateOffset(InGame::Actor& object);
 
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
+
+	bool CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r);
   
 	bool IsMouseInSquare(InGame::Actor& object);
 

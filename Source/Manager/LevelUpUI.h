@@ -1,10 +1,10 @@
 #pragma once
 #include "GameManager.h"
 #include "../InGame/PlayerCharacter.h"
-#include <vector>
 #include "Playing.h"
-#include "Button.h"
 #include "../Utils/Utils.h"
+#include "Button.h"
+#include <vector>
 #include <array>
 namespace Manager
 {
@@ -25,9 +25,9 @@ namespace Manager
 		std::array<Button, 3> ItemWindow;
 		static AEGfxVertexList* windowMesh;
 		static AEGfxTexture* windowTexture;
-		std::array<Button, 3> ItemSlot;
-		static AEGfxVertexList* slotMesh;
-		static AEGfxTexture* slotTexture;
+		//std::array<Button, 3> ItemSlot;
+		//static AEGfxVertexList* slotMesh;
+		//static AEGfxTexture* slotTexture;
 	};
 	extern LevelUpUI pickPanel;
 }
