@@ -5,6 +5,9 @@
 namespace Manager
 {
 	HUDController HUD;
+	AEGfxVertexList* HUDController::HPMesh = nullptr;
+	AEGfxTexture* HUDController::HPTex = nullptr;
+	AEGfxTexture* HUDController::HPBGTex = nullptr;
 	void HUDController::Init(InGame::PlayerCharacter* InPC, InGame::Gun* InGUN)
 	{
 		PC = InPC;
@@ -12,7 +15,6 @@ namespace Manager
 		MaxHP = PC->Stats.MaxHP;
 		currentHP = PC->Stats.HP;
 		fireTimer = GUN->FireTimer;
-
 		int w = global::ScreenWidth;
 		int h = global::ScreenHeight;
 		const float actorWidth = 60.f;
@@ -20,30 +22,34 @@ namespace Manager
 		const float spacingX = 15.0f; // 가로 간격
 		const float startX = -(w / 2) + 100.f;
 		const float Y = (h / 2) - 100.f;
+
+		HPMesh = Utils::CreateMesh();
+		HPTex = AEGfxTextureLoad("Assets/HPBG.png");
 		//HPBG HUD init
+		InGame::Actor bgobj;
+		bgobj.Texture = HPTex;
+		bgobj.Mesh = HPMesh;
 		for (int i = 0; i < MaxHP; ++i)
 		{
 			int row = i;
 			int col = i;
-			InGame::Actor obj;
-			obj.position = {
+			bgobj.position = {
 				startX + col * (actorWidth + spacingX),
 				Y
 			};
-			obj.size = { actorWidth, actorHeight};
-			obj.Mesh = Utils::CreateMesh();
-			obj.Texture = AEGfxTextureLoad("Assets/HPBG.png");
-			HPBG.push_back(obj);
+			bgobj.size = { actorWidth, actorHeight};
+			HPBG.push_back(bgobj);
 		}
 		//HP HUD init
+		HPBGTex = AEGfxTextureLoad("Assets/HP.png");
+		InGame::Actor hpobj;
+		hpobj.Texture = HPBGTex;
+		hpobj.Mesh = HPMesh;
 		for (int i = 0; i < currentHP; i++)
 		{
-			InGame::Actor obj;
-			obj.position = HPBG[i].position;
-			obj.size = { actorWidth, actorHeight };
-			obj.Mesh = Utils::CreateMesh();
-			obj.Texture = AEGfxTextureLoad("Assets/HP.png");
-			HP.push_back(obj);
+			hpobj.position = HPBG[i].position;
+			hpobj.size = { actorWidth, actorHeight };
+			HP.push_back(hpobj);
 		}
 	}
 	void HUDController::Update()
@@ -67,7 +73,8 @@ namespace Manager
 	}
 	void HUDController::Destroy()
 	{
-		HPBG.clear();
-		HP.clear();
+		AEGfxMeshFree(HPMesh);
+		AEGfxTextureUnload(HPTex);
+		AEGfxTextureUnload(HPBGTex);
 	}
 }

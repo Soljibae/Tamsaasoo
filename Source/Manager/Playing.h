@@ -42,6 +42,7 @@ namespace Manager
 		InGame::EnemyType SpawningEnemyType;
 		InGame::MinionData MinionStruct;
 		InGame::ArcherData ArcherStruct;
+		InGame::DasherData DasherStruct;
 		void SpawnWave();
 		void ClearWave();
 		void InitBossFight();

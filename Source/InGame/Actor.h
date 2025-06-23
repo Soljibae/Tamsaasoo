@@ -10,6 +10,8 @@ namespace InGame
 		MOVE,
 		DEAD,
 		JUMP,
+		DASH,
+		ATTACK,
 	};
 	class Actor
 	{

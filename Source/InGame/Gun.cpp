@@ -32,7 +32,7 @@ namespace InGame
 		direction = Dir;
 		
 		FireTimer += global::DeltaTime;
-		if (FireTimer > 1.f / ChamberTime)
+		if (FireTimer > 1.f / ChamberTime && AEInputCheckCurr(AEVK_LBUTTON))
 		{
 			FireProjectile(Dir, position);
 			FireTimer = 0.f;

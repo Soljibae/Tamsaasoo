@@ -5,6 +5,7 @@ namespace InGame
 	{
 		MINION = 0,
 		ARCHER = 1,
+		DASHER = 2,
 	};
 
 	static EnemyType GetNextEnemyType(EnemyType InEnemyType)
@@ -14,6 +15,8 @@ namespace InGame
 		case EnemyType::MINION : 
 			return EnemyType::ARCHER;
 		case EnemyType::ARCHER : 
+			return EnemyType::DASHER;
+		case EnemyType::DASHER:
 			return EnemyType::MINION;
 		}
 		return EnemyType::MINION;
@@ -57,7 +60,7 @@ namespace InGame
 			Health = 3;
 			AEVec2Set(&DrawSize, 40.f, 40.f);
 			CollisionRadius = 20;
-			MovementSpeed = 300;
+			MovementSpeed = 200;
 		}
 	};
 
@@ -76,4 +79,20 @@ namespace InGame
 			MovementSpeed = 100;
 		}
 	};
+	struct DasherData : EnemyData
+	{
+	public:
+		virtual void Init() override
+		{
+			Type = EnemyType::DASHER;
+			Texture = AEGfxTextureLoad("Assets/Minion.png");
+			Damage = 5;
+			Exp = 2;
+			Health = 1;
+			AEVec2Set(&DrawSize, 30.f, 30.f);
+			CollisionRadius = 30;
+			MovementSpeed = 100;
+		}
+	};
+
 }

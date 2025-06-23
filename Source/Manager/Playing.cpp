@@ -412,6 +412,7 @@ namespace Manager
 
 		pausePanel.Destroy();
 		pickPanel.Destroy();
+		HUD.Destroy();
 		Utils::TestDestroy();
 	}
 	void Playing::SpawnWave()
@@ -456,6 +457,9 @@ namespace Manager
 			case InGame::EnemyType::ARCHER:
 				EC->Spawn(SpawnPos, &ArcherStruct);
 				break;
+			case InGame::EnemyType::DASHER:
+				EC->Spawn(SpawnPos, &DasherStruct);
+				break;
 			}
 			ECs.push_back(EC);
 		}
@@ -497,6 +501,13 @@ namespace Manager
 	{
 		//TODO : Select Item
 		//TODO : Play Jump Animation
+		for (size_t i = 0; i < EPs.size(); i++)
+		{
+			InGame::Projectile*& EP = EPs[i];
+			EPPool.push_back(EP);
+			EP->bIsPandingKill = false;
+		}
+		EPs.clear();
 		if (PC)
 		{
 			AEVec2Set(&PC->position, 0.f, 0.f);

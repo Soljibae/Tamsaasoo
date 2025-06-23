@@ -1,6 +1,7 @@
 #include "EnemyBoss.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
+#include <random>
 namespace InGame
 {
 	void EnemyBoss::Init()
@@ -84,6 +85,28 @@ namespace InGame
 			{
 				bIsWaving = false;
 				WaveAttackSpawnTimer = 0;
+				std::random_device rd;
+				std::mt19937 gen(rd());
+				std::uniform_int_distribution<> dist(0, 4);
+				int randIndex = dist(gen);
+				switch (randIndex)
+				{
+				case 0:
+					AEVec2Set(&position, 0.f, 0.f);
+					break;
+				case 1:
+					AEVec2Set(&position, 800.f, 450.f);
+					break;
+				case 2:
+					AEVec2Set(&position, -800.f, 450.f);
+					break;
+				case 3:
+					AEVec2Set(&position, 800.f, -450.f);
+					break;
+				case 4:
+					AEVec2Set(&position, -800.f, -450.f);
+					break;
+				}
 			}
 		}
 		if (bIsWaving)
@@ -131,6 +154,7 @@ namespace InGame
 			{
 				bulletIndex = 0;
 				waveTimer = 0.0f;
+				
 			}
 		}
 	}

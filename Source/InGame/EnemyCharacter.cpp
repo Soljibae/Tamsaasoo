@@ -17,6 +17,11 @@ namespace InGame
 		Stats.FireRate = 1.f;
 		Stats.BulletSpeed = 30.f;
 		Stats.Damage = 1;
+
+		bHasDashed = false;
+		dashDuration = 0.f;
+		recoverTimer = 0.f;
+		dashDirection = { 0, 0 };
 	}
 
 	void EnemyCharacter::Spawn(AEVec2 Pos, EnemyData* InData)
@@ -33,6 +38,12 @@ namespace InGame
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
+
+		bHasDashed = false;
+		dashDuration = 0.f;
+		recoverTimer = 0.f;
+		dashDirection = direction;
+		dashStartPos = position;
 	}
 
 	void InGame::EnemyCharacter::Update()
@@ -70,8 +81,64 @@ namespace InGame
 				}
 			}
 			break;
+		case EnemyType::DASHER:
+			static const float dashSpeed = 400.f;
+			static const float walkSpeed = 80.f;
+			static const float dashTriggerDistance = 300.f;
+			static const float recoveryTime = 1.0f;
+			static const float dashRange = 400.f;
+
+			f32 len = AEVec2Distance(&global::PlayerLocation, &position);
+
+			if (!bHasDashed)
+			{
+				if (len <= dashTriggerDistance)
+				{
+					if (!bIsDashing)
+					{
+						// 돌진 시작
+						dashDirection = direction;
+						dashStartPos = position;
+						bIsDashing = true;
+					}
+
+					// 현재 위치에서 얼마나 이동했는지 측정
+					AEVec2 moved;
+					AEVec2Sub(&moved, &position, &dashStartPos);
+					float dashMoved = AEVec2Length(&moved);
+
+					if (dashMoved < dashRange)
+					{
+						// 계속 돌진
+						position.x -= dashDirection.x * dashSpeed * global::DeltaTime;
+						position.y -= dashDirection.y * dashSpeed * global::DeltaTime;
+					}
+					else
+					{
+						// 돌진 완료
+						bIsDashing = false;
+						bHasDashed = true;
+						recoverTimer = 0.f;
+					}
+				}
+				else
+				{
+					// 사정거리 밖 → 천천히 추적
+					position.x -= direction.x * walkSpeed * global::DeltaTime;
+					position.y -= direction.y * walkSpeed * global::DeltaTime;
+				}
+			}
+			else
+			{
+				recoverTimer += global::DeltaTime;
+				if (recoverTimer >= recoveryTime)
+				{
+					dashDuration = 0.f;
+					bHasDashed = false;
+				}
+			}
+			break;
 		}
-		
 	}
 	void EnemyCharacter::Draw()
 	{
