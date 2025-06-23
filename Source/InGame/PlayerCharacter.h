@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "EnemyCharacter.h"
 #include "Gun.h"
 #include "Item.h"
 #include "PlayerStat.h"
@@ -25,6 +26,8 @@ namespace InGame
 		void AddItemToInventory(std::shared_ptr<Item> item);
 
 		Gun* HoldingGun = nullptr;
+
+		void OnProjectileHit(InGame::EnemyCharacter* target);
 	protected:
 		AEVec2 MouseDirection;
 

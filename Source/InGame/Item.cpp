@@ -5,6 +5,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Manager/Playing.h"
 #include "../Manager/GameManager.h"
+#include "Stat.h"
 
 namespace InGame
 {
@@ -12,8 +13,8 @@ namespace InGame
 	s32 Item::row = 7, Item::column = 3;
 
 	Item::Item(const Item& other)
-		: id(other.id), name(other.name), description(other.description),
-		iconPosition(other.iconPosition), iconOffset(other.iconOffset), bHasBeenUsed(other.bHasBeenUsed), tag( other.tag )
+		: id(other.id), name(other.name), description(other.description), appliedStack(other.appliedStack),
+		iconPosition(other.iconPosition), iconOffset(other.iconOffset), tag( other.tag ), effectTime( other.effectTime ), procChance(other.procChance)
 	{
 	}
 	void Item::DrawIcon()
@@ -41,21 +42,27 @@ namespace InGame
 		name = "item_1";
 		description = "this is item_1";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		
 	}
 	void Item_1::Use(Actor* owner)
 	{
-		if (!bHasBeenUsed)
+		int currentStack = Utils::GetItemCount(this->id);
+
+		if (currentStack > this->appliedStack)
 		{
 			PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
 
-			if (player)
+			int newItems = currentStack - this->appliedStack;
+			for (int i = 0; i < newItems; ++i)
 			{
-				player->Stats.FireRate *= 2.f;
-				bHasBeenUsed = true;
+				player->Stats.FireRate *= 2.0f;
 			}
+
+			this->appliedStack = currentStack;
 		}
 	}
 	void Item_1::Draw()
@@ -76,21 +83,26 @@ namespace InGame
 		name = "item_2";
 		description = "this is item_2";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_2::Use(Actor* owner)
 	{
-		if (!bHasBeenUsed)
+		int currentStack = Utils::GetItemCount(this->id);
+
+		if (currentStack > this->appliedStack)
 		{
 			PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
 
-			if (player)
+			int newItems = currentStack - this->appliedStack;
+			for (int i = 0; i < newItems; ++i)
 			{
 				player->Stats.BulletSpeed *= 2.f;
-				bHasBeenUsed = true;
 			}
+
+			this->appliedStack = currentStack;
 		}
 	}
 	void Item_2::Draw()
@@ -122,6 +134,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		AEVec2Set(&AnimationOffset, 0, 0);
+		tag = EMPTY; 
 	}
 	void Item_3::Use(Actor* owner)
 	{
@@ -208,6 +221,7 @@ namespace InGame
 		Damage = 1;
 		effectRow = 1;
 		effectColumn = 9;
+		tag = EMPTY;
 	}
 	void Item_4::Use(Actor* owner)
 	{
@@ -289,6 +303,9 @@ namespace InGame
 		name = "item_5";
 		description = "this is item_5";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		effectTime = 3.f;
+		procChance = 0.2f;
+		tag = EMPTY;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -302,6 +319,11 @@ namespace InGame
 	std::shared_ptr<Item> Item_5::Clone() const
 	{
 		return std::make_shared<Item_5>(*this);
+	}
+	void Item_5::OnHit(InGame::EnemyCharacter* target)
+	{
+		if(Utils::GetRandomFloat(0.f, 1.f) <= procChance + (Utils::GetItemCount(id) - 1) * 0.04)
+			target->Stats.StatusEffectTimer[STUN] = effectTime;
 	}
 	//============================================= ID_6
 	Item_6::Item_6(const Item_6& other)

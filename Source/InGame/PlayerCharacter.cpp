@@ -29,14 +29,16 @@ namespace InGame
 		Stats.MaxHP = 5;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = MovementSpeed;
-		Stats.FireRate = 10.0f;
+		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 1;
+		Stats.Damage = 0;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 8.f;
+
+		Stats.Init();
 		
 		Utils::InitOffset(*this);
 
@@ -321,6 +323,13 @@ namespace InGame
 			bIsDashing = false;
 			DashTimer = 0.0f;
 			DashCooldownTimer = 0.0f;
+		}
+	}
+	void PlayerCharacter::OnProjectileHit(InGame::EnemyCharacter* target)
+	{
+		for (const auto& item_pair : inventory)
+		{
+			item_pair.first->OnHit(target);
 		}
 	}
 }

@@ -3,6 +3,11 @@ namespace InGame
 {
 	void Stat::Init()
 	{
+		StatusEffectTimer[BURN] = true;
+		StatusEffectTimer[STUN] = true;
+		StatusEffectTimer[SLOW] = true;
+		StatusEffectTimer[FEAR] = true;
+		StatusEffectTimer[VULNERABLE] = true;
 	}
 	void Stat::Update()
 	{

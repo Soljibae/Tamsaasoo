@@ -2,6 +2,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Manager/Playing.h"
 #include "../Manager/GameManager.h"
+#include <random>
 
 AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
 {
@@ -447,6 +448,16 @@ s32 Utils::GetItemCount(s32 ID)
 	}
 
 	return 0;
+}
+
+f32 Utils::GetRandomFloat(f32 min, f32 max)
+{
+	static std::random_device rd; 
+	static std::mt19937 gen(rd());
+
+	std::uniform_real_distribution<float> dis(min, max);
+
+	return dis(gen);
 }
 
 void Utils::TestInit()

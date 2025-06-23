@@ -185,6 +185,7 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
+							PC->OnProjectileHit(EC);
 							EC->adjustHealth(-PP->Damage);
 							PP->OnHit();
 						}
