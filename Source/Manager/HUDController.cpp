@@ -62,7 +62,7 @@ namespace Manager
 		fireTimeBar.Mesh = Utils::CreateMesh();
 		fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 		ChamberTimeBar.position = { 0.f, -30.f };
-		ChamberTimeBar.size = { 62.f, 14.f };
+		ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
 		fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		fireTimeBar.position.y = ChamberTimeBar.position.y;
 		fireTimeBar.size = { 10.f, 30.f };
@@ -82,12 +82,15 @@ namespace Manager
 			switch (GUN->gunType)
 			{
 			case InGame::GunType::PISTOL:
+				ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
 				GUN->gunType = InGame::GunType::RIFLE;
 				break;
 			case InGame::GunType::RIFLE:
+				ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
 				GUN->gunType = InGame::GunType::SHOTGUN;
 				break;
 			case InGame::GunType::SHOTGUN:
+				ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
 				GUN->gunType = InGame::GunType::PISTOL;
 				break;
 			}
