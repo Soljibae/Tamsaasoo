@@ -68,7 +68,7 @@ void Utils::DrawObject(InGame::Actor& object, bool is_camera_enabled, f32 alpha)
 	AEGfxSetTransform(transform.m);
 
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
-}
+  }
 
 void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha)
 {

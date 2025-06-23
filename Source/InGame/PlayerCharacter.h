@@ -25,6 +25,7 @@ namespace InGame
 		void AddItemToInventory(std::shared_ptr<Item> item);
 
 		Gun* HoldingGun = nullptr;
+		bool bIsDashing = false;
 	protected:
 		AEVec2 MouseDirection;
 
@@ -32,7 +33,7 @@ namespace InGame
 		f32 InvincibleTimer = 0.f;
 
 
-		bool bIsDashing = false;
+		
 		float DashSpeed = 800.0f;
 		float DashTime = 0.2f;
 		float DashTimer = 0.0f;

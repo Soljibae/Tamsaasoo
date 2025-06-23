@@ -28,8 +28,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 {
-	size.x = 100;
-	size.y = 100;
+	size = object->ProjectileSize;
 	direction = Dir;
 	position = Pos;
 	CollisionRadius = 5;
