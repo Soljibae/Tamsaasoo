@@ -18,6 +18,8 @@ namespace InGame
 		Stats.BulletSpeed = 30.f;
 		Stats.Damage = 1;
 
+		Stats.Init();
+
 		bHasDashed = false;
 		dashDuration = 0.f;
 		recoverTimer = 0.f;
@@ -62,132 +64,137 @@ namespace InGame
 
 	void InGame::EnemyCharacter::Update()
 	{
-		f32 len = AEVec2Distance(&global::PlayerLocation, &position);
-		f32 dx = position.x - global::PlayerLocation.x;
-		f32 dy = position.y - global::PlayerLocation.y;
-		direction.x = dx / len;
-		if ((direction.x > 0 && size.x > 0) || (direction.x < 0 && size.x < 0))
+		UpdateEffectTime();
+		
+		if (!(Stats.StatusEffectTimer[STUN] > 0))
 		{
-			size.x *= -1;
-		}
-		direction.y = dy / len;
-
-
-		switch (Type)
-		{
-			case EnemyType::MINION:
+			f32 len = AEVec2Distance(&global::PlayerLocation, &position);
+			f32 dx = position.x - global::PlayerLocation.x;
+			f32 dy = position.y - global::PlayerLocation.y;
+			direction.x = dx / len;
+			if ((direction.x > 0 && size.x > 0) || (direction.x < 0 && size.x < 0))
 			{
-				position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
-				position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
-				break;
+				size.x *= -1;
 			}
-			case EnemyType::ARCHER:
-			{
-				ProjectileSpawnTimer += global::DeltaTime;
-				if (len > 500)
-				{
-					position.x -= direction.x * MovementSpeed * global::DeltaTime;
-					position.y -= direction.y * MovementSpeed * global::DeltaTime;
-				}
-				else
-				{
-					if (ProjectileSpawnTimer > ProjectileChamberTimer)
-					{
-						ProjectileSpawnTimer = 0;
-						SpawnProjectile(direction, position);
-					}
-				}
-				break;
-			}
-			case EnemyType::DASHER:
-			{
-				static const float dashSpeed = 400.f;
-				static const float walkSpeed = 80.f;
-				static const float dashTriggerDistance = 300.f;
-				static const float recoveryTime = 1.0f;
-				static const float dashRange = 400.f;
+			direction.y = dy / len;
 
-				f32 len = AEVec2Distance(&global::PlayerLocation, &position);
 
-				if (!bHasDashed)
-				{
-					if (len <= dashTriggerDistance)
-					{
-						if (!bIsDashing)
-						{
-							// µ¹Áø ½ÃÀÛ
-							dashDirection = direction;
-							dashStartPos = position;
-							bIsDashing = true;
-						}
-
-						// ÇöÀç À§Ä¡¿¡¼­ ¾ó¸¶³ª ÀÌµ¿Çß´ÂÁö ÃøÁ¤
-						AEVec2 moved;
-						AEVec2Sub(&moved, &position, &dashStartPos);
-						float dashMoved = AEVec2Length(&moved);
-
-						if (dashMoved < dashRange)
-						{
-							// °è¼Ó µ¹Áø
-							position.x -= dashDirection.x * dashSpeed * global::DeltaTime;
-							position.y -= dashDirection.y * dashSpeed * global::DeltaTime;
-						}
-						else
-						{
-							// µ¹Áø ¿Ï·á
-							bIsDashing = false;
-							bHasDashed = true;
-							recoverTimer = 0.f;
-						}
-					}
-					else
-					{
-						// »çÁ¤°Å¸® ¹Û ¡æ ÃµÃµÈ÷ ÃßÀû
-						position.x -= direction.x * walkSpeed * global::DeltaTime;
-						position.y -= direction.y * walkSpeed * global::DeltaTime;
-					}
-				}
-				else
-				{
-					recoverTimer += global::DeltaTime;
-					if (recoverTimer >= recoveryTime)
-					{
-						dashDuration = 0.f;
-						bHasDashed = false;
-					}
-				}
-				break;
-			}
-			case EnemyType::TANKER:
+			switch (Type)
 			{
-				position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
-				position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
-				break;
-			}
-			case EnemyType::BOMBER:
-			{
-				if (!isDetonating)
+				case EnemyType::MINION:
 				{
-					if (len <= 200.f)
-					{
-						isDetonating = true;
-						detonationTimer = 0.f;
-					}
-					else
+					position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
+					position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+					break;
+				}
+				case EnemyType::ARCHER:
+				{
+					ProjectileSpawnTimer += global::DeltaTime;
+					if (len > 500)
 					{
 						position.x -= direction.x * MovementSpeed * global::DeltaTime;
 						position.y -= direction.y * MovementSpeed * global::DeltaTime;
 					}
-				}
-				else
-				{
-					detonationTimer += global::DeltaTime;
-					if (detonationTimer >= detonationDelay)
+					else
 					{
-						this->adjustHealth(-9999);
+						if (ProjectileSpawnTimer > ProjectileChamberTimer)
+						{
+							ProjectileSpawnTimer = 0;
+							SpawnProjectile(direction, position);
+						}
 					}
+					break;
 				}
-				break;
+				case EnemyType::DASHER:
+				{
+					static const float dashSpeed = 400.f;
+					static const float walkSpeed = 80.f;
+					static const float dashTriggerDistance = 300.f;
+					static const float recoveryTime = 1.0f;
+					static const float dashRange = 400.f;
+
+					f32 len = AEVec2Distance(&global::PlayerLocation, &position);
+
+					if (!bHasDashed)
+					{
+						if (len <= dashTriggerDistance)
+						{
+							if (!bIsDashing)
+							{
+								// ëŒì§„ ì‹œìž‘
+								dashDirection = direction;
+								dashStartPos = position;
+								bIsDashing = true;
+							}
+
+							// í˜„ìž¬ ìœ„ì¹˜ì—ì„œ ì–¼ë§ˆë‚˜ ì´ë™í–ˆëŠ”ì§€ ì¸¡ì •
+							AEVec2 moved;
+							AEVec2Sub(&moved, &position, &dashStartPos);
+							float dashMoved = AEVec2Length(&moved);
+
+							if (dashMoved < dashRange)
+							{
+								// ê³„ì† ëŒì§„
+								position.x -= dashDirection.x * dashSpeed * global::DeltaTime;
+								position.y -= dashDirection.y * dashSpeed * global::DeltaTime;
+							}
+							else
+							{
+								// ëŒì§„ ì™„ë£Œ
+								bIsDashing = false;
+								bHasDashed = true;
+								recoverTimer = 0.f;
+							}
+						}
+						else
+						{
+							// ì‚¬ì •ê±°ë¦¬ ë°– â†’ ì²œì²œížˆ ì¶”ì 
+							position.x -= direction.x * walkSpeed * global::DeltaTime;
+							position.y -= direction.y * walkSpeed * global::DeltaTime;
+						}
+					}
+					else
+					{
+						recoverTimer += global::DeltaTime;
+						if (recoverTimer >= recoveryTime)
+						{
+							dashDuration = 0.f;
+							bHasDashed = false;
+						}
+					}
+					break;
+				}
+				case EnemyType::TANKER:
+				{
+					position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
+					position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+					break;
+				}
+				case EnemyType::BOMBER:
+				{
+					if (!isDetonating)
+					{
+						if (len <= 200.f)
+						{
+							isDetonating = true;
+							detonationTimer = 0.f;
+						}
+						else
+						{
+							position.x -= direction.x * MovementSpeed * global::DeltaTime;
+							position.y -= direction.y * MovementSpeed * global::DeltaTime;
+						}
+					}
+					else
+					{
+						detonationTimer += global::DeltaTime;
+						if (detonationTimer >= detonationDelay)
+						{
+							this->adjustHealth(-9999);
+						}
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -229,6 +236,42 @@ namespace InGame
 					GS->EPs.push_back(EP);
 				}
 
+			}
+		}
+	}
+	void EnemyCharacter::UpdateEffectTime()
+	{
+		for (size_t i = 0; i < Stats.StatusEffectTimer.size(); i++)
+		{
+			switch (i)
+			{
+			case 0:
+				if (Stats.StatusEffectTimer[BURN] > 0)
+					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[BURN] < 0)
+					Stats.StatusEffectTimer[BURN] = 0;
+			case 1:
+				if (Stats.StatusEffectTimer[STUN] > 0)
+					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[STUN] < 0)
+					Stats.StatusEffectTimer[STUN] = 0;
+			case 2:
+				if (Stats.StatusEffectTimer[SLOW] > 0)
+					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[SLOW] < 0)
+					Stats.StatusEffectTimer[SLOW] = 0;
+			case 3:
+				if (Stats.StatusEffectTimer[FEAR] > 0)
+					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[FEAR] < 0)
+					Stats.StatusEffectTimer[FEAR] = 0;
+			case 4:
+				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
+					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
+					Stats.StatusEffectTimer[VULNERABLE] = 0;
+			default:
+				break;
 			}
 		}
 	}

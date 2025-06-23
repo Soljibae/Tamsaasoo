@@ -1,7 +1,17 @@
 #pragma once
 #include "AEEngine.h"
+#include <map>
+
 namespace InGame
 {
+	enum EStatusEffect
+	{
+		BURN,
+		STUN,
+		SLOW,
+		FEAR,
+		VULNERABLE,
+	};
 	class Stat
 	{
 	public:
@@ -10,6 +20,7 @@ namespace InGame
 		virtual void Draw();
 		virtual void Destroy();
 
+		std::map<EStatusEffect, f32> StatusEffectTimer;
 		s32 MaxHP;
 		s32 HP;
 		f32 MovementSpeed;

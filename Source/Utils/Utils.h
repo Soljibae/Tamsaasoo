@@ -48,6 +48,8 @@ namespace Utils
 
 	s32 GetItemCount(s32 ID);
 
+	f32 GetRandomFloat(f32 min, f32 max);
+
 	void TestInit();
 
 	void TestDestroy();

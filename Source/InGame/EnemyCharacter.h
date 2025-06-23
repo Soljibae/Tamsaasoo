@@ -13,6 +13,7 @@ namespace InGame
 		virtual void Draw() override;
 		virtual void Destroy() override;
 		virtual void adjustHealth(s32 Amount) override;
+		void UpdateEffectTime();
 
 		Stat Stats;
 		EnemyType Type;
