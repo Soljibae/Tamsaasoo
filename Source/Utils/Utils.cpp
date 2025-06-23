@@ -132,6 +132,36 @@ void Utils::DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture
 	}
 }
 
+void Utils::DrawObject(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(Texture, object.AnimationOffset.x, object.AnimationOffset.y);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
+
+	AEMtx33 tran;
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.effectPosition);
+	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+	
+	AEMtx33 transform;
+	AEMtx33Concat(&transform, &tran, &scale);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
+}
+
 void Utils::DrawObjectWithDirection(InGame::Actor& object)
 {
 	/*
@@ -226,12 +256,12 @@ void Utils::DrawItem(InGame::Item& item)
 		{
 			if (GS->ITRM)
 			{
-				AEGfxTextureSet(GS->ITRM->itemIconTexture, item.offset.x, item.offset.y);
+				AEGfxTextureSet(GS->ITRM->itemIconTexture, item.iconOffset.x, item.iconOffset.y);
 
 				AEMtx33 scale;
 				AEMtx33Scale(&scale, InGame::Item::size.x, InGame::Item::size.y);
 				AEMtx33 tran;
-				AEMtx33Trans(&tran, item.position.x, item.position.y);
+				AEMtx33Trans(&tran, item.iconPosition.x, item.iconPosition.y);
 				AEMtx33 transform;
 
 				AEMtx33Concat(&transform, &tran, &scale);
@@ -298,6 +328,18 @@ void Utils::UpdateOffset(InGame::Actor& object)
 
 	object.offset.x = 1.f / object.column * static_cast<f32>(object.AnimationCount);
 	object.offset.y = 1.f / object.row * static_cast<f32>(object.AnimationState - 1);
+}
+
+void Utils::UpdateOffset(InGame::SkillEffectItem& object)
+{
+	object.AnimationTimer += global::DeltaTime;
+	if (object.AnimationTimer >= object.FrameTime)
+	{
+		object.AnimationTimer = 0;
+		object.AnimationCount = (object.AnimationCount + 1) % 9;
+	}
+	object.AnimationOffset.x = 1.f / object.effectColumn * static_cast<f32>(object.AnimationCount);
+	object.AnimationOffset.y = 1.f / object.effectRow * static_cast<f32>(object.AnimationCount / object.effectColumn);
 }
 
 bool Utils::CheckCollision(InGame::Actor& object1, InGame::Actor& object2)

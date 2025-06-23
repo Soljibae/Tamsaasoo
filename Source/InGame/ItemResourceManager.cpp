@@ -6,7 +6,6 @@ namespace InGame
 	void ItemResourceManager::Init()
 	{
 		itemIconTexture = AEGfxTextureLoad("Assets/Item.png");
-
 		itemIconMesh = Utils::CreateMesh(7, 3);
 		
 		explosionTexture = AEGfxTextureLoad("Assets/explosion.png");
