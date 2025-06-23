@@ -529,6 +529,7 @@ namespace Manager
 	void Playing::FinishBossFight()
 	{
 		//TODO : Select Item
+		pickPanel.Show(pickPanel.GenerateRandomRewards());
 		//TODO : Play Jump Animation
 		for (size_t i = 0; i < EPs.size(); i++)
 		{
