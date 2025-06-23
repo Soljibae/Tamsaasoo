@@ -20,9 +20,14 @@ namespace Manager
 		static AEGfxVertexList* HPMesh;
 		static AEGfxTexture* HPTex;
 		static AEGfxTexture* HPBGTex;
+
+		InGame::Actor ChamberTimeBar;
+		InGame::Actor fireTimeBar;
+		
+		InGame::GunType prevGunType;
+
 		s32 MaxHP;
 		s32 currentHP;
-		f32 fireTimer;
 	};
 	
 	extern HUDController HUD;

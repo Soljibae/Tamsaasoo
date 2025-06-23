@@ -43,6 +43,8 @@ namespace Manager
 		InGame::MinionData MinionStruct;
 		InGame::ArcherData ArcherStruct;
 		InGame::DasherData DasherStruct;
+		InGame::TankerData TankerStruct;
+		InGame::BomberData BomberStruct;
 		void SpawnWave();
 		void ClearWave();
 		void InitBossFight();

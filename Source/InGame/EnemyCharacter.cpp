@@ -37,15 +37,29 @@ namespace InGame
 		Stats.Damage = InData->Damage;
 		Exp = InData->Exp;
 		Stats.MovementSpeed = InData->MovementSpeed;
+		Stats.BulletSpeed = InData->BulletSpeed;
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
 
+		AEVec2Set(&ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
+
+		/*--------DASHER--------*/
 		bHasDashed = false;
-		dashDuration = 0.f;
+		bIsDashing = false;
 		recoverTimer = 0.f;
+		dashDuration = 0.f;
 		dashDirection = direction;
 		dashStartPos = position;
+		/*--------DASHER--------*/
+
+		/*--------BOMBER--------*/
+		isDetonating = false;
+		detonationTimer = 0.f;
+		detonationDelay = 2.0f;
+		explosionRadius = 150.f;
+		explosionDamage = 4;
+		/*--------BOMBER--------*/
 	}
 
 	void InGame::EnemyCharacter::Update()
@@ -67,86 +81,122 @@ namespace InGame
 
 			switch (Type)
 			{
-			case EnemyType::MINION:
-				position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
-				position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
-				break;
-			case EnemyType::ARCHER:
-				ProjectileSpawnTimer += global::DeltaTime;
-				if (len > 500)
+				case EnemyType::MINION:
 				{
-					position.x -= direction.x * MovementSpeed * global::DeltaTime;
-					position.y -= direction.y * MovementSpeed * global::DeltaTime;
+					position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
+					position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+					break;
 				}
-				else
+				case EnemyType::ARCHER:
 				{
-					if (ProjectileSpawnTimer > ProjectileChamberTimer)
+					ProjectileSpawnTimer += global::DeltaTime;
+					if (len > 500)
 					{
-						ProjectileSpawnTimer = 0;
-						SpawnProjectile(direction, position);
+						position.x -= direction.x * MovementSpeed * global::DeltaTime;
+						position.y -= direction.y * MovementSpeed * global::DeltaTime;
 					}
-				}
-				break;
-			case EnemyType::DASHER:
-				static const float dashSpeed = 400.f;
-				static const float walkSpeed = 80.f;
-				static const float dashTriggerDistance = 300.f;
-				static const float recoveryTime = 1.0f;
-				static const float dashRange = 400.f;
-
-				f32 len = AEVec2Distance(&global::PlayerLocation, &position);
-
-				if (!bHasDashed)
-				{
-					if (len <= dashTriggerDistance)
+					else
 					{
-						if (!bIsDashing)
+						if (ProjectileSpawnTimer > ProjectileChamberTimer)
 						{
-							// µ¹Áø ½ÃÀÛ
-							dashDirection = direction;
-							dashStartPos = position;
-							bIsDashing = true;
+							ProjectileSpawnTimer = 0;
+							SpawnProjectile(direction, position);
 						}
+					}
+					break;
+				}
+				case EnemyType::DASHER:
+				{
+					static const float dashSpeed = 400.f;
+					static const float walkSpeed = 80.f;
+					static const float dashTriggerDistance = 300.f;
+					static const float recoveryTime = 1.0f;
+					static const float dashRange = 400.f;
 
-						// ÇöÀç À§Ä¡¿¡¼­ ¾ó¸¶³ª ÀÌµ¿Çß´ÂÁö ÃøÁ¤
-						AEVec2 moved;
-						AEVec2Sub(&moved, &position, &dashStartPos);
-						float dashMoved = AEVec2Length(&moved);
+					f32 len = AEVec2Distance(&global::PlayerLocation, &position);
 
-						if (dashMoved < dashRange)
+					if (!bHasDashed)
+					{
+						if (len <= dashTriggerDistance)
 						{
-							// °è¼Ó µ¹Áø
-							position.x -= dashDirection.x * dashSpeed * global::DeltaTime;
-							position.y -= dashDirection.y * dashSpeed * global::DeltaTime;
+							if (!bIsDashing)
+							{
+								// ëŒì§„ ì‹œìž‘
+								dashDirection = direction;
+								dashStartPos = position;
+								bIsDashing = true;
+							}
+
+							// í˜„ìž¬ ìœ„ì¹˜ì—ì„œ ì–¼ë§ˆë‚˜ ì´ë™í–ˆëŠ”ì§€ ì¸¡ì •
+							AEVec2 moved;
+							AEVec2Sub(&moved, &position, &dashStartPos);
+							float dashMoved = AEVec2Length(&moved);
+
+							if (dashMoved < dashRange)
+							{
+								// ê³„ì† ëŒì§„
+								position.x -= dashDirection.x * dashSpeed * global::DeltaTime;
+								position.y -= dashDirection.y * dashSpeed * global::DeltaTime;
+							}
+							else
+							{
+								// ëŒì§„ ì™„ë£Œ
+								bIsDashing = false;
+								bHasDashed = true;
+								recoverTimer = 0.f;
+							}
 						}
 						else
 						{
-							// µ¹Áø ¿Ï·á
-							bIsDashing = false;
-							bHasDashed = true;
-							recoverTimer = 0.f;
+							// ì‚¬ì •ê±°ë¦¬ ë°– â†’ ì²œì²œížˆ ì¶”ì 
+							position.x -= direction.x * walkSpeed * global::DeltaTime;
+							position.y -= direction.y * walkSpeed * global::DeltaTime;
 						}
 					}
 					else
 					{
-						// »çÁ¤°Å¸® ¹Û ¡æ ÃµÃµÈ÷ ÃßÀû
-						position.x -= direction.x * walkSpeed * global::DeltaTime;
-						position.y -= direction.y * walkSpeed * global::DeltaTime;
+						recoverTimer += global::DeltaTime;
+						if (recoverTimer >= recoveryTime)
+						{
+							dashDuration = 0.f;
+							bHasDashed = false;
+						}
 					}
+					break;
 				}
-				else
+				case EnemyType::TANKER:
 				{
-					recoverTimer += global::DeltaTime;
-					if (recoverTimer >= recoveryTime)
-					{
-						dashDuration = 0.f;
-						bHasDashed = false;
-					}
+					position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
+					position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+					break;
 				}
-				break;
+				case EnemyType::BOMBER:
+				{
+					if (!isDetonating)
+					{
+						if (len <= 200.f)
+						{
+							isDetonating = true;
+							detonationTimer = 0.f;
+						}
+						else
+						{
+							position.x -= direction.x * MovementSpeed * global::DeltaTime;
+							position.y -= direction.y * MovementSpeed * global::DeltaTime;
+						}
+					}
+					else
+					{
+						detonationTimer += global::DeltaTime;
+						if (detonationTimer >= detonationDelay)
+						{
+							this->adjustHealth(-9999);
+						}
+					}
+					break;
+				}
 			}
 		}
-		
 	}
 	void EnemyCharacter::Draw()
 	{

@@ -15,8 +15,8 @@ namespace Manager
 		const float windowHeight = 500.f;
 		const float spacingX = 50.0f; // 가로 간격
 		const float spacingY = 50.0f; // 세로 간격
-		const float startX = -100.f; // 전체 위치 조정
-		const float startY = -500.f;
+		const float startX = -250.f; // 전체 위치 조정
+		const float startY = -600.f;
 		for (int i = 0; i < ItemWindow.size(); ++i)
 		{
 			int row = static_cast<int>(i);

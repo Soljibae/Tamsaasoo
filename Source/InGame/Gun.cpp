@@ -16,15 +16,16 @@ namespace InGame
 		Source = object;
 		size.x = 40;
 		size.y = 40;
-		ChamberTime = Source->Stats.FireRate;
+		RoundPerSec = Source->Stats.FireRate;
 		direction.x = 1;
 		direction.y = 0;
+		gunType = PISTOL;
 	}
 
 
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
-		ChamberTime = Source->Stats.FireRate;
+		RoundPerSec = Source->Stats.FireRate;
 		AEVec2 Vec;
 		position = Pos;
 		AEVec2Scale(&Vec, &Dir, 40.f);
@@ -32,7 +33,7 @@ namespace InGame
 		direction = Dir;
 		
 		FireTimer += global::DeltaTime;
-		if (FireTimer > 1.f / ChamberTime && AEInputCheckCurr(AEVK_LBUTTON))
+		if (FireTimer > 1.f / RoundPerSec && AEInputCheckCurr(AEVK_LBUTTON))
 		{
 			FireProjectile(Dir, position);
 			FireTimer = 0.f;

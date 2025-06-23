@@ -18,16 +18,27 @@ namespace InGame
 		Stat Stats;
 		EnemyType Type;
 		u32 Exp = 1;
+		AEVec2 ProjectileSize;
 		f32 ProjectileSpawnTimer = 0.f;
 		f32 ProjectileChamberTimer = 5.f;
 		void SpawnProjectile(AEVec2 Dir, AEVec2 Pos);
 
+		/*--------DASHER--------*/
 		bool bHasDashed = false;
 		bool bIsDashing = false;
 		AEVec2 dashDirection = { 0.f, 0.f };
 		AEVec2 dashStartPos = { 0.f, 0.f };
 		float recoverTimer = 0.f;
 		float dashDuration = 0.f;
+		/*--------DASHER--------*/
+
+		/*--------BOMBER--------*/
+		bool isDetonating = false;
+		float detonationTimer = 0.f;
+		float detonationDelay = 2.0f;
+		float explosionRadius = 150.f;
+		int explosionDamage = 4;
+		/*--------BOMBER--------*/
 	protected:
 	private:
 	};
