@@ -10,7 +10,6 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
-		~HUDController() { if (Mesh)AEGfxMeshFree(Mesh); };
 	private:
 		InGame::PlayerCharacter* PC;
 		InGame::Gun* GUN;
@@ -18,8 +17,9 @@ namespace Manager
 		std::vector<InGame::Actor> HP;
 		//HPBackGround HUD
 		std::vector<InGame::Actor> HPBG;
-		static AEGfxTexture* HPTexture;
-		static AEGfxTexture* HPBGTexture;
+		static AEGfxVertexList* HPMesh;
+		static AEGfxTexture* HPTex;
+		static AEGfxTexture* HPBGTex;
 		s32 MaxHP;
 		s32 currentHP;
 		f32 fireTimer;

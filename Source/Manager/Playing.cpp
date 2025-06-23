@@ -412,6 +412,7 @@ namespace Manager
 
 		pausePanel.Destroy();
 		pickPanel.Destroy();
+		HUD.Destroy();
 		Utils::TestDestroy();
 	}
 	void Playing::SpawnWave()
