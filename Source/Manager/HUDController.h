@@ -21,6 +21,8 @@ namespace Manager
 		static AEGfxTexture* HPTex;
 		static AEGfxTexture* HPBGTex;
 
+		InGame::Actor Coin;
+
 		InGame::Actor ChamberTimeBar;
 		InGame::Actor fireTimeBar;
 		
@@ -28,6 +30,7 @@ namespace Manager
 
 		s32 MaxHP;
 		s32 currentHP;
+		s8 pFont;
 	};
 	
 	extern HUDController HUD;

@@ -10,19 +10,20 @@ namespace Manager
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
 	AEGfxTexture* HUDController::HPBGTex = nullptr;
-	AEGfxVertexList* MChamberTime{ nullptr };
-	AEGfxTexture* TChamberTime{ nullptr };
-	AEGfxVertexList* MfireTimer{ nullptr };
-	AEGfxTexture* TfireTimer{ nullptr };
 
 	void HUDController::Init(InGame::PlayerCharacter* InPC, InGame::Gun* InGUN)
 	{
+		f32 w = static_cast<f32>(global::ScreenWidth);
+		f32 h = static_cast<f32>(global::ScreenHeight);
 		PC = InPC;
 		GUN = InGUN;
 		MaxHP = PC->Stats.MaxHP;
 		currentHP = PC->Stats.HP;
-		int w = global::ScreenWidth;
-		int h = global::ScreenHeight;
+
+		Coin.Mesh = Utils::CreateMesh();
+		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
+		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2 };
+		Coin.size = { 30.f, 30.f };
 		const float actorWidth = 40.f;
 		const float actorHeight = 50.f;
 		const float spacingX = 10.0f; // 가로 간격
@@ -54,6 +55,7 @@ namespace Manager
 			hpobj.size = { actorWidth, actorHeight };
 			HP.push_back(hpobj);
 		}
+
 		prevGunType = GUN->gunType;
 		ChamberTimeBar.Mesh = Utils::CreateMesh();
 		ChamberTimeBar.Texture = AEGfxTextureLoad("Assets/FireDelayBG.png");
@@ -71,6 +73,7 @@ namespace Manager
 		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
 		fireTimeBar.MovementSpeed = fillPercent * (barEndX - barStartX) * global::DeltaTime;
 
+		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", 72.f);
 	}
 	void HUDController::Update()
 	{
@@ -138,9 +141,16 @@ namespace Manager
 		{
 			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		}
+		if (global::KeyInput(AEVK_M))
+		{
+			PC->Stats.Money += 100;
+		}
 	}
 	void HUDController::Draw()
 	{
+		f32 w = static_cast<f32>(global::ScreenWidth);
+		f32 h = static_cast<f32>(global::ScreenHeight);
+
 		for(int i = 0; i < HPBG.size(); i++)
 			Utils::DrawObject(HPBG[i], false);
 		for (int i = 0; i < HP.size(); i++)
@@ -150,17 +160,30 @@ namespace Manager
 			Utils::DrawObject(ChamberTimeBar, false);
 			Utils::DrawObject(fireTimeBar, false);
 		}
+
+		Utils::DrawObject(Coin, false);
+		std::string pText = std::to_string(PC->Stats.Money);
+		f32 textW, textH;
+		AEGfxGetPrintSize(pFont, pText.c_str(), 1.f, &textW, &textH);
+		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x / (w / 2))+0.03f, (Coin.position.y / (h / 2))-0.025f, 0.3f, 1, 1, 1, 1);
 	}
 	void HUDController::Destroy()
 	{
 		AEGfxMeshFree(HPMesh);
 		AEGfxTextureUnload(HPTex);
 		AEGfxTextureUnload(HPBGTex);
+
 		HPBG.clear();
 		HP.clear();
+
 		AEGfxMeshFree(ChamberTimeBar.Mesh);
 		AEGfxMeshFree(fireTimeBar.Mesh);
+
 		AEGfxTextureUnload(ChamberTimeBar.Texture);
 		AEGfxTextureUnload(fireTimeBar.Texture);
+
+		AEGfxMeshFree(Coin.Mesh);
+		AEGfxTextureUnload(Coin.Texture);
+		AEGfxDestroyFont(pFont);
 	}
 }

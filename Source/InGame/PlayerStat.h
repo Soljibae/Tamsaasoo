@@ -17,5 +17,6 @@ namespace InGame
 		f32 ExpGained;
 		s32 HitCount;
 		u32 TargetExp;
+		u32 Money;
 	};
 }
