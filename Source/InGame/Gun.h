@@ -3,6 +3,12 @@
 #include "Projectile.h"
 namespace InGame
 {
+	enum GunType
+	{
+		PISTOL,
+		RIFLE,
+		SHOTGUN,
+	};
 	class Gun : public Actor
 	{
 	public:
@@ -12,7 +18,8 @@ namespace InGame
 		virtual void Destroy() override;
 		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos);
 		f32 FireTimer = 0.f;
-		f32 ChamberTime;
+		f32 RoundPerSec;
+		GunType gunType;
 		class PlayerCharacter* Source;
 	};
 }

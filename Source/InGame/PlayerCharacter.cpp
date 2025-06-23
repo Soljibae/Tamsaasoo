@@ -29,7 +29,7 @@ namespace InGame
 		Stats.MaxHP = 5;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = MovementSpeed;
-		Stats.FireRate = 10.0f;
+		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
 		Stats.Damage = 1;
 		Stats.Level = 1;
