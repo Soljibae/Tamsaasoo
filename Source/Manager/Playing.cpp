@@ -133,14 +133,14 @@ namespace Manager
 				std::cout << global::DeltaTime << std::endl;
 			}
 /*--------------------------------DEBUG FOR LATENCY--------------------------------*/
-			if (WaveTimer > 10.f)
+			if (WaveTimer > 3.f)
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				SpawnCount += 10;
-				if (SpawnCount > 50)
+				SpawnCount += 5;
+				if (SpawnCount > 15)
 				{
-					SpawnCount = 10;
+					SpawnCount = 5;
 					SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
 				}
 				if (WaveCount > 10)
@@ -205,21 +205,25 @@ namespace Manager
 					}
 				}
 			}
-			for (InGame::EnemyCharacter*& EC : ECs)
+			if (!PC->bIsDashing)
 			{
-				if (Utils::CheckCollision(*EC, *PC))
+				for (InGame::EnemyCharacter*& EC : ECs)
 				{
-					PC->adjustHealth(-EC->Stats.Damage);
+					if (Utils::CheckCollision(*EC, *PC))
+					{
+						PC->adjustHealth(-EC->Stats.Damage);
+					}
+				}
+				for (InGame::Projectile*& EP : EPs)
+				{
+					if (Utils::CheckCollision(*EP, *PC))
+					{
+						PC->adjustHealth(-EP->Damage);
+						EP->OnHit();
+					}
 				}
 			}
-			for (InGame::Projectile*& EP : EPs)
-			{
-				if (Utils::CheckCollision(*EP, *PC))
-				{
-					PC->adjustHealth(-EP->Damage);
-					EP->OnHit();
-				}
-			}
+			
 			for (size_t i = 0; i < PPs.size(); )
 			{
 				InGame::Projectile*& PP = PPs[i];
@@ -242,6 +246,25 @@ namespace Manager
 
 				if (EC->bIsPandingKill)
 				{
+					if (EC->Type == InGame::EnemyType::BOMBER)
+					{
+						float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);
+						if (distToPlayer <= EC->explosionRadius)
+						{
+							PC->adjustHealth(-EC->explosionDamage);
+						}
+						for (InGame::EnemyCharacter* enemy : ECs)
+						{
+							if (enemy != EC)
+							{
+								float distToEnemy = AEVec2Distance(&EC->position, &enemy->position);
+								if (distToEnemy <= EC->explosionRadius)
+								{
+									enemy->adjustHealth(-EC->explosionDamage);
+								}
+							}
+						}
+					}
 					global::IsEnemyRecentlyDied = true;
 					global::RecentlyDeadEnemyPosition = EC->position;
 					PC->UpdateKill(EC->Exp);
@@ -459,6 +482,12 @@ namespace Manager
 				break;
 			case InGame::EnemyType::DASHER:
 				EC->Spawn(SpawnPos, &DasherStruct);
+				break;
+			case InGame::EnemyType::TANKER:
+				EC->Spawn(SpawnPos, &TankerStruct);
+				break;
+			case InGame::EnemyType::BOMBER:
+				EC->Spawn(SpawnPos, &BomberStruct);
 				break;
 			}
 			ECs.push_back(EC);

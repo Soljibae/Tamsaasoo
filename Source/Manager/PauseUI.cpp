@@ -89,7 +89,7 @@ namespace Manager
 
 			std::string pText = "x" + std::to_string(PC->inventory[i].second);
 
-			PC->inventory[i].first->position = ItemSlot[i].position;
+			PC->inventory[i].first->iconPosition = ItemSlot[i].position;
 			PC->inventory[i].first->DrawIcon();
 			f32 textW, textH;
 			AEGfxGetPrintSize(pFont, pText.c_str(), 1.f, &textW, &textH);

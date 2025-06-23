@@ -38,9 +38,28 @@ namespace InGame
 		int id;
 		std::string name;
 		std::string description;
-		AEVec2 position;
-		AEVec2 offset;
+		AEVec2 iconPosition;
+		AEVec2 iconOffset;
 		bool bHasBeenUsed = false;
+		ItemTag tag;
+	};
+	class SkillEffectItem : public Item
+	{
+	public:
+		SkillEffectItem() = default;
+		SkillEffectItem(const SkillEffectItem& other);
+
+		virtual std::shared_ptr<Item> Clone() const override = 0;
+
+		f32 FrameTime;
+		f32 FireTimer;
+		AEVec2 AnimationOffset;
+		s32 AnimationCount;
+		f32 AnimationTimer;
+		AEVec2 effectPosition;
+		AEVec2 effectSize;
+		s32 effectRow, effectColumn;
+
 	};
 	//============================================= ID_1
 	class Item_1 : public Item // to do change class name
@@ -67,22 +86,20 @@ namespace InGame
 		virtual std::shared_ptr<Item> Clone() const override;
 	};
 	//============================================= ID_3
-	class Item_3 : public Item // to do change class name
+	class Item_3 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_3() = default;
 		Item_3(const Item_3& other);
 
 		AEVec2 dir;
-		AEVec2 pos1;
-		AEVec2 pos2;
 		f32 distance;
-		s32 Damage;
+		AEVec2 effectPosition2;
+
 		f32 FireRate;
-		f32 FireTimer;
+		s32 Damage;
 		s32 HitCount;
 		s32 BulletSpeed;
-		AEVec2 objectSize;
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;
@@ -90,21 +107,15 @@ namespace InGame
 		virtual std::shared_ptr<Item> Clone() const override;
 	};
 	//============================================= ID_4
-	class Item_4 : public Item // to do change class name
+	class Item_4 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_4() = default;
 		Item_4(const Item_4& other);
+
 		f32 CoolDown;
-		f32 FireTimer;
-		AEVec2 pos;
-		AEVec2 explodeSize;
 		bool isReady;
 		bool isStarted;
-		f32 FrameTime;
-		AEVec2 AnimationOffset;
-		s32 AnimationCount;
-		f32 AnimationTimer;
 		s32 Damage;
 
 		virtual void Init() override;

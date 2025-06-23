@@ -39,7 +39,7 @@ namespace InGame
 		position.x = 0;
 		position.y = 0;
 		CollisionRadius = 200;
-
+		AEVec2Set(&ProjectileSize, 30, 30);
 		ProjectileSpawnTimer = 0;
 		ProjectileChamberTimer = 5;
 		bIsWaving = false;

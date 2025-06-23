@@ -19,7 +19,7 @@ namespace InGame
 		row = 4;
 		column = 2;
 		Mesh = Utils::CreateMesh(row, column);
-		FrameTime = 1.f;
+		FrameTime = 0.2f;
 		TimeAcc = 0.f;
 		AnimationState = IDLE;
 		AnimationCount = 0;

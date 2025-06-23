@@ -16,7 +16,13 @@ namespace Utils
 
 	void DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha = 1.f);
 
+	void DrawObject(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh);
+
 	void DrawObjectWithDirection(InGame::Actor& object);
+
+	void DrawObjectWithDirection(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction);
+
+	void DrawObjectWithDirection(InGame::SkillEffectItem& object, AEVec2 Position, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction);
 
 	void DrawItem(InGame::Item& item);
 
@@ -25,6 +31,8 @@ namespace Utils
 	void InitOffset(InGame::Actor& object);
 
 	void UpdateOffset(InGame::Actor& object);
+
+	void UpdateOffset(InGame::SkillEffectItem& object);
 
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
 

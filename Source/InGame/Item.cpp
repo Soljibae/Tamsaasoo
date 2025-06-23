@@ -13,18 +13,22 @@ namespace InGame
 
 	Item::Item(const Item& other)
 		: id(other.id), name(other.name), description(other.description),
-		position(other.position), offset(other.offset), bHasBeenUsed(other.bHasBeenUsed)
+		iconPosition(other.iconPosition), iconOffset(other.iconOffset), bHasBeenUsed(other.bHasBeenUsed), tag( other.tag )
 	{
 	}
-
 	void Item::DrawIcon()
 	{
 		Utils::DrawItem(*this);
 	}
-
 	void Item::StaticInit()
 	{
 		AEVec2Set(&size, 64.f, 64.f);
+	}
+	SkillEffectItem::SkillEffectItem(const SkillEffectItem& other)
+		: Item(other), FrameTime(other.FrameTime), FireTimer(other.FireTimer), AnimationOffset(other.AnimationOffset),
+		AnimationCount(other.AnimationCount), AnimationTimer(other.AnimationTimer), effectPosition(other.effectPosition), effectSize(other.effectSize),
+		effectRow(other.effectRow), effectColumn(other.effectColumn)
+	{
 	}
 	//============================================= ID_1
 	Item_1::Item_1(const Item_1& other)
@@ -36,10 +40,10 @@ namespace InGame
 		id = 1;
 		name = "item_1";
 		description = "this is item_1";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_1::Use(Actor* owner)
 	{
@@ -71,10 +75,10 @@ namespace InGame
 		id = 2;
 		name = "item_2";
 		description = "this is item_2";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_2::Use(Actor* owner)
 	{
@@ -98,9 +102,8 @@ namespace InGame
 	}
 	//============================================= ID_3
 	Item_3::Item_3(const Item_3& other)
-		: Item(other), dir{ other.dir }, pos1{ other.pos1 }, pos2{ other.pos2 }, distance{ other.distance },
-		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, objectSize{ other.objectSize },
-		FireRate{ other.FireRate }, FireTimer{ other.FireTimer }
+		: SkillEffectItem(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance },
+		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, FireRate{ other.FireRate }
 	{
 	}
 	void Item_3::Init()
@@ -108,16 +111,17 @@ namespace InGame
 		id = 3;
 		name = "item_3";
 		description = "this is item_3";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 		distance = 80.f;
 		Damage = 1;
 		FireRate = 5.f;
 		FireTimer = 0.f;
 		HitCount = 1;
 		BulletSpeed = 15.f;
-		AEVec2Set(&objectSize, 40.f, 40.f);
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		AEVec2Set(&effectSize, 128.f, 45.f);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		AEVec2Set(&AnimationOffset, 0, 0);
 	}
 	void Item_3::Use(Actor* owner)
 	{
@@ -129,12 +133,12 @@ namespace InGame
 
 		AEMtx33 rotate;
 		AEMtx33Rot(&rotate, AEDegToRad(90.f));
-		AEMtx33MultVec(&pos1, &rotate, &DirectionVector);
-		AEVec2Add(&pos1, &pos1, &global::PlayerLocation);
+		AEMtx33MultVec(&effectPosition, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition, &effectPosition, &global::PlayerLocation);
 
 		AEMtx33Rot(&rotate, AEDegToRad(-90.f));
-		AEMtx33MultVec(&pos2, &rotate, &DirectionVector);
-		AEVec2Add(&pos2, &pos2, &global::PlayerLocation);
+		AEMtx33MultVec(&effectPosition2, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition2, &effectPosition2, &global::PlayerLocation);
 
 		FireTimer += global::DeltaTime;
 		if (FireTimer >= 1.f / FireRate)
@@ -149,11 +153,11 @@ namespace InGame
 					{
 						Projectile* PP1 = GS->PPPool.back();
 						GS->PPPool.pop_back();
-						PP1->Spawn(dir, pos1, BulletSpeed, Damage);
+						PP1->Spawn(dir, effectPosition, BulletSpeed, Damage);
 						GS->PPs.push_back(PP1);
 						Projectile* PP2 = GS->PPPool.back();
 						GS->PPPool.pop_back();
-						PP2->Spawn(dir, pos2, BulletSpeed, Damage);
+						PP2->Spawn(dir, effectPosition2, BulletSpeed, Damage);
 						GS->PPs.push_back(PP2);
 					}
 				}
@@ -162,8 +166,18 @@ namespace InGame
 	}
 	void Item_3::Draw()
 	{
-		Utils::DrawTest(pos1.x, pos1.y, objectSize.x, objectSize.y);
-		Utils::DrawTest(pos2.x, pos2.y, objectSize.x, objectSize.y);
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+					Utils::DrawObjectWithDirection(*this, this->effectPosition2, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+				}
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_3::Clone() const
 	{
@@ -171,8 +185,7 @@ namespace InGame
 	}
 	//============================================= ID_4
 	Item_4::Item_4(const Item_4& other)
-		: Item(other), CoolDown{ other.CoolDown }, pos{ other.pos }, isReady{ other.isReady }, FireTimer{ other.FireTimer }, isStarted{ other.isStarted }, explodeSize{ other.explodeSize }
-		, FrameTime{ other.FrameTime }, AnimationOffset{ other.AnimationOffset }, AnimationCount{ other.AnimationCount }, AnimationTimer{ other.AnimationTimer }, Damage{ other.Damage }
+		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }, Damage{ other.Damage }
 	{
 	}
 	void Item_4::Init()
@@ -180,10 +193,10 @@ namespace InGame
 		id = 4;
 		name = "item_4";
 		description = "this is item_4";
-		AEVec2Set(&position, 0.f, 0.f);
-		AEVec2Set(&explodeSize, 400.f, 400.f);
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		AEVec2Set(&effectSize, 400.f, 400.f);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		isReady = true;
 		isStarted = false;
 		CoolDown = 4.f;
@@ -193,6 +206,8 @@ namespace InGame
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
 		Damage = 1;
+		effectRow = 1;
+		effectColumn = 9;
 	}
 	void Item_4::Use(Actor* owner)
 	{
@@ -208,7 +223,7 @@ namespace InGame
 
 		if (isReady && global::IsEnemyRecentlyDied)
 		{
-			pos = global::RecentlyDeadEnemyPosition;
+			effectPosition = global::RecentlyDeadEnemyPosition;
 			isReady = false;
 			isStarted = true;
 
@@ -221,7 +236,7 @@ namespace InGame
 					{
 						for (size_t i = 0; i < GS->ECs.size(); i++)
 						{
-							if (Utils::CheckCollision(*GS->ECs[i], pos, explodeSize.x / 2))
+							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
 							{
 								GS->ECs[i]->adjustHealth(-Damage);
 							}
@@ -233,13 +248,7 @@ namespace InGame
 
 		if (isStarted)
 		{
-			AnimationTimer += global::DeltaTime;
-			if (AnimationTimer >= FrameTime)
-			{
-				AnimationTimer = 0;
-				AnimationCount = (AnimationCount + 1) % 9;
-			}
-			AnimationOffset.x = 1.f / 9.f * static_cast<f32>(AnimationCount);
+			Utils::UpdateOffset(*this);
 		}
 	}
 	void Item_4::Draw()
@@ -253,12 +262,12 @@ namespace InGame
 				{
 					if (GS->ITRM)
 					{
-						Utils::DrawObject(pos, AnimationOffset, explodeSize, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
+						Utils::DrawObject(*this, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
 					}
 				}
 			}
 
-			if (AnimationCount == 8)
+			if (AnimationCount == effectColumn - 1)
 			{
 				AnimationCount = 0;
 				isStarted = false;
@@ -279,10 +288,10 @@ namespace InGame
 		id = 5;
 		name = "item_5";
 		description = "this is item_5";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_5::Use(Actor* owner)
 	{
@@ -304,10 +313,10 @@ namespace InGame
 		id = 6;
 		name = "item_6";
 		description = "this is item_6";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_6::Use(Actor* owner)
 	{
@@ -329,10 +338,10 @@ namespace InGame
 		id = 7;
 		name = "item_7";
 		description = "this is item_7";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_7::Use(Actor* owner)
 	{
@@ -354,10 +363,10 @@ namespace InGame
 		id = 8;
 		name = "item_8";
 		description = "this is item_8";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_8::Use(Actor* owner)
 	{
@@ -379,10 +388,10 @@ namespace InGame
 		id = 9;
 		name = "item_9";
 		description = "this is item_9";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_9::Use(Actor* owner)
 	{
@@ -404,10 +413,10 @@ namespace InGame
 		id = 10;
 		name = "item_10";
 		description = "this is item_10";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_10::Use(Actor* owner)
 	{
@@ -429,10 +438,10 @@ namespace InGame
 		id = 11;
 		name = "item_11";
 		description = "this is item_11";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_11::Use(Actor* owner)
 	{
@@ -454,10 +463,10 @@ namespace InGame
 		id = 12;
 		name = "item_12";
 		description = "this is item_12";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_12::Use(Actor* owner)
 	{
@@ -479,10 +488,10 @@ namespace InGame
 		id = 13;
 		name = "item_13";
 		description = "this is item_13";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_13::Use(Actor* owner)
 	{
@@ -504,10 +513,10 @@ namespace InGame
 		id = 14;
 		name = "item_14";
 		description = "this is item_14";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_14::Use(Actor* owner)
 	{
@@ -529,10 +538,10 @@ namespace InGame
 		id = 15;
 		name = "item_15";
 		description = "this is item_15";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_15::Use(Actor* owner)
 	{
@@ -554,10 +563,10 @@ namespace InGame
 		id = 16;
 		name = "item_16";
 		description = "this is item_16";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_16::Use(Actor* owner)
 	{
@@ -579,10 +588,10 @@ namespace InGame
 		id = 17;
 		name = "item_17";
 		description = "this is item_17";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_17::Use(Actor* owner)
 	{
@@ -604,10 +613,10 @@ namespace InGame
 		id = 18;
 		name = "item_18";
 		description = "this is item_18";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_18::Use(Actor* owner)
 	{
@@ -629,10 +638,10 @@ namespace InGame
 		id = 19;
 		name = "item_19";
 		description = "this is item_19";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_19::Use(Actor* owner)
 	{
@@ -654,10 +663,10 @@ namespace InGame
 		id = 20;
 		name = "item_20";
 		description = "this is item_20";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_20::Use(Actor* owner)
 	{
@@ -679,10 +688,10 @@ namespace InGame
 		id = 21;
 		name = "item_21";
 		description = "this is item_21";
-		AEVec2Set(&position, 0.f, 0.f);
+		AEVec2Set(&iconPosition, 0.f, 0.f);
 
-		offset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		offset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_21::Use(Actor* owner)
 	{
