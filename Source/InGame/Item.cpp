@@ -118,9 +118,10 @@ namespace InGame
 		FireTimer = 0.f;
 		HitCount = 1;
 		BulletSpeed = 15.f;
-		AEVec2Set(&effectSize, 40.f, 40.f);
+		AEVec2Set(&effectSize, 128.f, 45.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		AEVec2Set(&AnimationOffset, 0, 0);
 	}
 	void Item_3::Use(Actor* owner)
 	{
@@ -165,8 +166,18 @@ namespace InGame
 	}
 	void Item_3::Draw()
 	{
-		Utils::DrawTest(effectPosition.x, effectPosition.y, effectSize.x, effectSize.y);
-		Utils::DrawTest(effectPosition2.x, effectPosition2.y, effectSize.x, effectSize.y);
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+					Utils::DrawObjectWithDirection(*this, this->effectPosition2, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+				}
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_3::Clone() const
 	{

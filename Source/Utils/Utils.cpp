@@ -164,74 +164,32 @@ void Utils::DrawObject(InGame::SkillEffectItem& object, AEGfxTexture* Texture, A
 
 void Utils::DrawObjectWithDirection(InGame::Actor& object)
 {
-	/*
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-
 	AEGfxSetTransparency(1.0f);
 
 	AEGfxTextureSet(object.Texture, object.offset.x, object.offset.y);
 
-	AEVec2 direction_vector;
-	AEVec2Set(&direction_vector, object.direction.x, object.direction.y);
-	AEVec2Normalize(&direction_vector, &direction_vector);
-
-	AEVec2 translated_pos;
-	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.position);
-
-	AEMtx33 tran_inv;
-	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
 	AEMtx33 scale;
 	AEMtx33Scale(&scale, object.size.x, object.size.y);
-	AEMtx33 rotate;
-	AEMtx33Rot(&rotate, atan2f(direction_vector.y, direction_vector.x));
-	AEMtx33 tran;
-	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
-	AEMtx33 transform;
 
-	AEMtx33Concat(&transform, &scale, &tran_inv);
-	AEMtx33Concat(&transform, &rotate, &scale);
-	AEMtx33Concat(&transform, &tran, &transform);
-
-	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
-
-	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
-
-	AEGfxSetTransform(transform.m);
-
-	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
-	*/
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetTransparency(1.0f);
-
-	AEGfxTextureSet(object.Texture, object.offset.x, object.offset.y);
-
-	AEVec2 translated_pos;
-	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.position);
-
-	AEMtx33 tran_inv;
-	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
-
-	// 좌우 반전 플래그
-	float flipX = (object.direction.x >= 0) ? 1.0f : -1.0f;
-
-	// 회전각 계산 (항상 오른쪽 기준으로)
 	float angle = atan2f(object.direction.y, fabsf(object.direction.x));
 	AEMtx33 rotate;
 	AEMtx33Rot(&rotate, angle);
 
-	// 스케일 적용
-	AEMtx33 scale;
-	AEMtx33Scale(&scale, object.size.x * flipX, object.size.y);
+	AEMtx33 flip;
+	float flipX = (object.direction.x >= 0) ? 1.0f : -1.0f;
+	AEMtx33Scale(&flip, flipX, 1.0f);
 
-	// 최종 변환
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.position);
+
 	AEMtx33 tran;
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
 
 	AEMtx33 transform;
 	AEMtx33Concat(&transform, &scale, &rotate);
+	AEMtx33Concat(&transform, &flip, &transform);
 	AEMtx33Concat(&transform, &tran, &transform);
 
 	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
@@ -239,6 +197,76 @@ void Utils::DrawObjectWithDirection(InGame::Actor& object)
 
 	AEGfxSetTransform(transform.m);
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
+}
+
+void Utils::DrawObjectWithDirection(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(Texture, object.AnimationOffset.x, object.AnimationOffset.y);
+
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.effectPosition);
+
+	AEMtx33 tran_inv;
+	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
+
+	float angle = atan2f(Direction.y, Direction.x);
+	AEMtx33 rotate;
+	AEMtx33Rot(&rotate, angle);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
+
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+
+	AEMtx33 transform;
+	AEMtx33Concat(&transform, &rotate, &scale);
+	AEMtx33Concat(&transform, &tran, &transform);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
+}
+
+void Utils::DrawObjectWithDirection(InGame::SkillEffectItem& object, AEVec2 Position, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(Texture, object.AnimationOffset.x, object.AnimationOffset.y);
+
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &Position);
+
+	AEMtx33 tran_inv;
+	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
+
+	float angle = atan2f(Direction.y, Direction.x);
+	AEMtx33 rotate;
+	AEMtx33Rot(&rotate, angle);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
+
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+
+	AEMtx33 transform;
+	AEMtx33Concat(&transform, &rotate, &scale);
+	AEMtx33Concat(&transform, &tran, &transform);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
 void Utils::DrawItem(InGame::Item& item)

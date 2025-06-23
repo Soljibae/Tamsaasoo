@@ -20,6 +20,10 @@ namespace Utils
 
 	void DrawObjectWithDirection(InGame::Actor& object);
 
+	void DrawObjectWithDirection(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction);
+
+	void DrawObjectWithDirection(InGame::SkillEffectItem& object, AEVec2 Position, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction);
+
 	void DrawItem(InGame::Item& item);
 
 	void DrawTest(f32 x, f32 y, f32 width, f32 height);
