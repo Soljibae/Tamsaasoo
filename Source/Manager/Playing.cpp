@@ -61,12 +61,12 @@ namespace Manager
 			ECPool.push_back(EC);
 		}
 		WaveTimer = 0.;
-		SpawnCount = 10;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
 		HUD.Init(PC, PC->HoldingGun);
 		gm.GamePaused = false;
 		Utils::TestInit();
+		WM.Init();
 	}
 	void Playing::Update()
 	{
@@ -137,13 +137,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				SpawnCount += 5;
-				if (SpawnCount > 15)
-				{
-					SpawnCount = 5;
-					SpawningEnemyType = InGame::GetNextEnemyType(SpawningEnemyType);
-				}
-				if (WaveCount > 10)
+				if (WaveCount > 100)
 				{
 					InitBossFight();
 				}
@@ -438,60 +432,49 @@ namespace Manager
 		pickPanel.Destroy();
 		HUD.Destroy();
 		Utils::TestDestroy();
+		WM.Destroy();
 	}
 	void Playing::SpawnWave()
 	{
 		std::cout << "Spawn Wave" << std::endl;
-		for (u8 i = 0; i < SpawnCount; i++)
+		WM.GetNextList();
+		if (ECPool.size() >= std::stoi(WM.CurrList.MinionNum) + std::stoi(WM.CurrList.ArcherNum) + std::stoi(WM.CurrList.DasherNum) + std::stoi(WM.CurrList.TankerNum) + std::stoi(WM.CurrList.BomberNum))
 		{
-			if (ECPool.size() == 0)
+			for (int i = 0; i < std::stoi(WM.CurrList.MinionNum);i++)
 			{
-				break;
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &MinionStruct);
+				ECs.push_back(EC);
 			}
-			InGame::EnemyCharacter* EC = ECPool.back();
-			ECPool.pop_back();
-			AEVec2 SpawnPos;
-			std::uniform_real_distribution<> angleDist(0.0, 2 * 3.141592);
-			std::uniform_real_distribution<> radiusDist(0.0, 1.0);
-			while (true)
+			for (int i = 0; i < std::stoi(WM.CurrList.ArcherNum);i++)
 			{
-				static std::random_device rd;
-				static std::mt19937 gen(rd());
-				double theta = angleDist(gen);
-				double distance = global::ScreenWidth * 1.5 * std::sqrt(radiusDist(gen));
-
-				SpawnPos.x = PC->position.x + distance * std::cos(theta);
-				SpawnPos.y = PC->position.y + distance * std::sin(theta);
-				if (SpawnPos.x < global::worldMax.x &&
-					SpawnPos.x > global::worldMin.x &&
-					SpawnPos.y < global::worldMax.y &&
-					SpawnPos.y > global::worldMin.y &&
-					(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 ||
-						SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2)
-					)
-				{
-					break;
-				}
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &ArcherStruct);
+				ECs.push_back(EC);
 			}
-			switch (SpawningEnemyType)
+			for (int i = 0; i < std::stoi(WM.CurrList.DasherNum);i++)
 			{
-			case InGame::EnemyType::MINION:
-				EC->Spawn(SpawnPos, &MinionStruct);
-				break;
-			case InGame::EnemyType::ARCHER:
-				EC->Spawn(SpawnPos, &ArcherStruct);
-				break;
-			case InGame::EnemyType::DASHER:
-				EC->Spawn(SpawnPos, &DasherStruct);
-				break;
-			case InGame::EnemyType::TANKER:
-				EC->Spawn(SpawnPos, &TankerStruct);
-				break;
-			case InGame::EnemyType::BOMBER:
-				EC->Spawn(SpawnPos, &BomberStruct);
-				break;
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &DasherStruct);
+				ECs.push_back(EC);
 			}
-			ECs.push_back(EC);
+			for (int i = 0; i < std::stoi(WM.CurrList.TankerNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &TankerStruct);
+				ECs.push_back(EC);
+			}
+			for (int i = 0; i < std::stoi(WM.CurrList.BomberNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &BomberStruct);
+				ECs.push_back(EC);
+			}
 		}
 	}
 	void Playing::ClearWave()
@@ -581,5 +564,32 @@ namespace Manager
 				BG->Texture = AEGfxTextureLoad(CurrentStage->MapTextureAddress.c_str());
 			}
 		}
+	}
+	AEVec2 Playing::GetSpawnLocation()
+	{
+		AEVec2 SpawnPos;
+		std::uniform_real_distribution<> angleDist(0.0, 2 * 3.141592);
+		std::uniform_real_distribution<> radiusDist(0.0, 1.0);
+		while (true)
+		{
+			static std::random_device rd;
+			static std::mt19937 gen(rd());
+			double theta = angleDist(gen);
+			double distance = global::ScreenWidth * 1.5 * std::sqrt(radiusDist(gen));
+
+			SpawnPos.x = PC->position.x + distance * std::cos(theta);
+			SpawnPos.y = PC->position.y + distance * std::sin(theta);
+			if (SpawnPos.x < global::worldMax.x &&
+				SpawnPos.x > global::worldMin.x &&
+				SpawnPos.y < global::worldMax.y &&
+				SpawnPos.y > global::worldMin.y &&
+				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 ||
+					SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2)
+				)
+			{
+				break;
+			}
+		}
+		return SpawnPos;
 	}
 }
