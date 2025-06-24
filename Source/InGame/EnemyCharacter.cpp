@@ -8,12 +8,19 @@ namespace InGame
 {
 	void InGame::EnemyCharacter::Init()
 	{
-		Mesh = Utils::CreateMesh();
+		row = 4;
+		column = 2;
+		FrameTime = 0.2f;
+		AnimationState = IDLE;
+		AnimationCount = 0;
+		MaxAnimationCount[IDLE] = 2;
+		MaxAnimationCount[MOVE] = 2;
+		Mesh = Utils::CreateMesh(row,column);
 		MovementSpeed = 100.f;
 		size.x = 40;
 		size.y = 40;
 		CollisionRadius = 20;
-
+		
 		Stats.HP = 1;
 		Stats.FireRate = 1.f;
 		Stats.BulletSpeed = 30.f;
@@ -68,14 +75,22 @@ namespace InGame
 	void InGame::EnemyCharacter::Update()
 	{
 		UpdateEffectTime();
-		
+		Utils::UpdateOffset(*this);
+		if (Stats.StatusEffectTimer[SLOW] > 0)
+		{
+			FrameTime = 0.6f;
+		}
+		else
+		{
+			FrameTime = 0.2f;
+		}
 		if (Stats.StatusEffectTimer[BURN] > 0)
 		{
 			BurnTimer += global::DeltaTime;
-			if (BurnTimer >= 1.f)
+			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats.MaxHP / 0.05);
+				adjustHealth(-Stats.MaxHP * global::effectiveBurnDamage);
 			}
 		}
 
@@ -282,7 +297,7 @@ namespace InGame
 		}
 		Texture = nullptr;
 	}
-	void EnemyCharacter::adjustHealth(s32 Amount)
+	void EnemyCharacter::adjustHealth(f32 Amount)
 	{
 		if (Stats.StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
 		{

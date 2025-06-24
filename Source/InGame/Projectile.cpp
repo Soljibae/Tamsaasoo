@@ -21,8 +21,8 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
 	bIsPandingKill = false;
 
 	BulletSpeed = object->Stats.BulletSpeed;
-	HitCount = object->Stats.HitCount;
-	Damage = object->Stats.Damage;
+	HitCount = object->Stats.effectiveHitCount ;
+	Damage = object->Stats.effectiveDamage;
 
 }
 
@@ -38,7 +38,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 	Damage = object->Stats.Damage;
 }
 
-void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, s32 Damage)
+void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Damage, s32 HitCount)
 {
 	size.x = 10;
 	size.y = 10;
@@ -47,6 +47,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, s32 Dama
 	CollisionRadius = 5;
 	bIsPandingKill = false;
 
+	this->HitCount = HitCount;
 	this->BulletSpeed = BulletSpeed;
 	this->Damage = Damage;
 }

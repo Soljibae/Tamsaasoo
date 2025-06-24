@@ -19,5 +19,13 @@ namespace InGame
 		u32 TargetExp;
 		u32 Money;
 		u32 Potion;
+
+		f32 BurnDamage;
+		f32 BurnRate;
+
+		f32 effectiveDamage;
+		f32 effectiveFireRate;
+		f32 effectiveExpGained;
+		s32 effectiveHitCount;
 	};
 }
