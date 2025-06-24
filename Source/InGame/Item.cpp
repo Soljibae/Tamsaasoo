@@ -6,6 +6,7 @@
 #include "../Manager/Playing.h"
 #include "../Manager/GameManager.h"
 #include "Stat.h"
+#include <algorithm>
 
 namespace InGame
 {
@@ -39,33 +40,25 @@ namespace InGame
 	void Item_1::Init()
 	{
 		id = 1;
-		name = "item_1";
-		description = "this is item_1";
+		name = "PRIDE_1";
+		description = "Your attack power is increased by an amount proportional to your missing health when you are below half health.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = PRIDE;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
 	}
-	void Item_1::Use(Actor* owner)
+	void Item_1::Use(PlayerCharacter* owner)
 	{
-		//int currentStack = Utils::GetItemCount(this->id);
 
-		//if (currentStack > this->appliedStack)
-		//{
-		//	PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
-
-		//	int newItems = currentStack - this->appliedStack;
-		//	for (int i = 0; i < newItems; ++i)
-		//	{
-		//		player->Stats.FireRate *= 2.0f;
-		//	}
-
-		//	this->appliedStack = currentStack;
-		//}
-
-		global::additionalFireRate += 1.0f * Utils::GetItemCount(this->id);
+		if (owner->Stats.HP / owner->Stats.MaxHP <= 0.5f)
+		{
+			global::additionalDamageRatio += (0.05f * (owner->Stats.MaxHP - owner->Stats.HP) * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+		}
+	}
+	void Item_1::Update(PlayerCharacter* owner)
+	{
 	}
 	void Item_1::Draw()
 	{
@@ -76,36 +69,71 @@ namespace InGame
 	}
 	//============================================= ID_2
 	Item_2::Item_2(const Item_2& other)
-		: Item(other)
+		: Item(other), prev_PlayerPos(other.prev_PlayerPos), stacks(other.stacks), triggerTimer(other.triggerTimer),
+		isActivated(other.isActivated), stackTimer(other.stackTimer)
 	{
 	}
 	void Item_2::Init()
 	{
 		id = 2;
 		name = "item_2";
-		description = "this is item_2";
+		description = "After standing still for 3 seconds, your fire rate increases every second. This effect stacks up to 10 times.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = PRIDE;
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				prev_PlayerPos = GS->PC->position;
+			}
+		}
 
+		triggerTimer = 0.f;
+		stackTimer = 0.f;
+		stacks = 0;
+		isActivated = false;
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_2::Use(Actor* owner)
+	void Item_2::Use(PlayerCharacter* owner)
 	{
-		/*int currentStack = Utils::GetItemCount(this->id);
-
-		if (currentStack > this->appliedStack)
+		if (AEVec2Distance(&prev_PlayerPos, &owner->position) <= 0.1f)
 		{
-			PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
-
-			int newItems = currentStack - this->appliedStack;
-			for (int i = 0; i < newItems; ++i)
+			if (!isActivated)
 			{
-				player->Stats.BulletSpeed *= 2.f;
+				triggerTimer += global::DeltaTime;
+				if (triggerTimer >= 3.f)
+				{
+					triggerTimer = 0.f;
+					isActivated = true;
+					stacks = 1;
+				}
 			}
+			else
+			{
+				stackTimer += global::DeltaTime;
+				if (stackTimer >= 1.f)
+				{
+					stackTimer = 0.f;
+					stacks = std::clamp(stacks + 1, 0, 10);
+				}
+			}	
+		}
+		else
+		{
+			triggerTimer = 0.f;
+			stackTimer = 0.f;
+			stacks = 0;
+			isActivated = false;
+		}
 
-			this->appliedStack = currentStack;
-		}*/
+		global::additionalFireRate += ((static_cast<f32>(stacks) * 0.05f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
+
+		prev_PlayerPos = owner->position;
+	}
+	void Item_2::Update(PlayerCharacter* owner)
+	{
 	}
 	void Item_2::Draw()
 	{
@@ -116,9 +144,7 @@ namespace InGame
 	}
 	//============================================= ID_3
 	Item_3::Item_3(const Item_3& other)
-		: SkillEffectItem(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance },
-		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, FireRate{ other.FireRate },
-		effectiveFireRate{ other.effectiveFireRate }, effectiveDamage{ other.effectiveDamage }, effectiveHitCount{ other.effectiveHitCount }
+		: Item(other)
 	{
 	}
 	void Item_3::Init()
@@ -127,78 +153,26 @@ namespace InGame
 		name = "item_3";
 		description = "this is item_3";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		distance = 80.f;
-		Damage = 1;
-		FireRate = 5.f;
-		FireTimer = 0.f;
-		HitCount = 1;
-		BulletSpeed = 15.f;
-		AEVec2Set(&effectSize, 128.f, 45.f);
+
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-		AEVec2Set(&AnimationOffset, 0, 0);
-		tag = EMPTY;
 	}
-	void Item_3::Use(Actor* owner)
-	{
-		//s16 count = Utils::GetItemCount(3);
-
-		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
-		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
-		effectiveHitCount = HitCount + global::additionalMinionHitCount;
-
-
-		dir = global::PlayerMouseDirection;
-		AEVec2 DirectionVector;
-		AEVec2Scale(&DirectionVector, &dir, distance);
-
-		AEMtx33 rotate;
-		AEMtx33Rot(&rotate, AEDegToRad(90.f));
-		AEMtx33MultVec(&effectPosition, &rotate, &DirectionVector);
-		AEVec2Add(&effectPosition, &effectPosition, &global::PlayerLocation);
-
-		AEMtx33Rot(&rotate, AEDegToRad(-90.f));
-		AEMtx33MultVec(&effectPosition2, &rotate, &DirectionVector);
-		AEVec2Add(&effectPosition2, &effectPosition2, &global::PlayerLocation);
-
-		FireTimer += global::DeltaTime;
-		if (FireTimer >= 1.f / effectiveFireRate)
-		{
-			FireTimer = 0.f;
-			if (Manager::gm.currStateREF)
-			{
-				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-				if (GS)
-				{
-					if (GS->PPPool.size() > 0)
-					{
-						Projectile* PP1 = GS->PPPool.back();
-						GS->PPPool.pop_back();
-						PP1->Spawn(dir, effectPosition, BulletSpeed, effectiveDamage, effectiveHitCount);
-						GS->PPs.push_back(PP1);
-						Projectile* PP2 = GS->PPPool.back();
-						GS->PPPool.pop_back();
-						PP2->Spawn(dir, effectPosition2, BulletSpeed, effectiveDamage, effectiveHitCount);
-						GS->PPs.push_back(PP2);
-					}
-				}
-			}
-		}
-	}
-	void Item_3::Draw()
+	void Item_3::Use(PlayerCharacter* owner)
 	{
 		if (Manager::gm.currStateREF)
 		{
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
 			if (GS)
 			{
-				if (GS->ITRM)
-				{
-					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
-					Utils::DrawObjectWithDirection(*this, this->effectPosition2, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
-				}
+				global::additionalDamage += (static_cast<f32>(GS->ECs.size()) * 0.05f * ((1.f) + ((Utils::GetItemCount(id) - 1) * 0.1f)));
 			}
 		}
+	}
+	void Item_3::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_3::Draw()
+	{
 	}
 	std::shared_ptr<Item> Item_3::Clone() const
 	{
@@ -231,7 +205,7 @@ namespace InGame
 		effectColumn = 9;
 		tag = EMPTY;
 	}
-	void Item_4::Use(Actor* owner)
+	void Item_4::Use(PlayerCharacter* owner)
 	{
 		if (!isStarted)
 		{
@@ -272,6 +246,9 @@ namespace InGame
 		{
 			Utils::UpdateOffset(*this);
 		}
+	}
+	void Item_4::Update(PlayerCharacter* owner)
+	{
 	}
 	void Item_4::Draw()
 	{
@@ -318,7 +295,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_5::Use(Actor* owner)
+	void Item_5::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_5::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_5::Draw()
@@ -348,7 +328,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_6::Use(Actor* owner)
+	void Item_6::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_6::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_6::Draw()
@@ -373,7 +356,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_7::Use(Actor* owner)
+	void Item_7::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_7::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_7::Draw()
@@ -398,7 +384,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_8::Use(Actor* owner)
+	void Item_8::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_8::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_8::Draw()
@@ -423,7 +412,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_9::Use(Actor* owner)
+	void Item_9::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_9::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_9::Draw()
@@ -448,7 +440,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_10::Use(Actor* owner)
+	void Item_10::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_10::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_10::Draw()
@@ -473,7 +468,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_11::Use(Actor* owner)
+	void Item_11::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_11::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_11::Draw()
@@ -498,7 +496,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_12::Use(Actor* owner)
+	void Item_12::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_12::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_12::Draw()
@@ -523,7 +524,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_13::Use(Actor* owner)
+	void Item_13::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_13::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_13::Draw()
@@ -548,7 +552,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_14::Use(Actor* owner)
+	void Item_14::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_14::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_14::Draw()
@@ -573,7 +580,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_15::Use(Actor* owner)
+	void Item_15::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_15::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_15::Draw()
@@ -598,7 +608,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_16::Use(Actor* owner)
+	void Item_16::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_16::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_16::Draw()
@@ -623,7 +636,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_17::Use(Actor* owner)
+	void Item_17::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_17::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_17::Draw()
@@ -648,7 +664,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_18::Use(Actor* owner)
+	void Item_18::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_18::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_18::Draw()
@@ -673,7 +692,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_19::Use(Actor* owner)
+	void Item_19::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_19::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_19::Draw()
@@ -698,7 +720,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_20::Use(Actor* owner)
+	void Item_20::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_20::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_20::Draw()
@@ -723,7 +748,10 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
-	void Item_21::Use(Actor* owner)
+	void Item_21::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_21::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_21::Draw()
@@ -732,5 +760,99 @@ namespace InGame
 	std::shared_ptr<Item> Item_21::Clone() const
 	{
 		return std::make_shared<Item_21>(*this);
+	}
+	//============================================= ID_31
+	Item_31::Item_31(const Item_31& other)
+		: SkillEffectItem(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance },
+		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, FireRate{ other.FireRate },
+		effectiveFireRate{ other.effectiveFireRate }, effectiveDamage{ other.effectiveDamage }, effectiveHitCount{ other.effectiveHitCount }
+	{
+	}
+	void Item_31::Init()
+	{
+		id = 31;
+		name = "item_31";
+		description = "this is item_31";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		distance = 80.f;
+		Damage = 1;
+		FireRate = 5.f;
+		FireTimer = 0.f;
+		HitCount = 1;
+		BulletSpeed = 15.f;
+		AEVec2Set(&effectSize, 128.f, 45.f);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		AEVec2Set(&AnimationOffset, 0, 0);
+		tag = EMPTY;
+	}
+	void Item_31::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_31::Update(PlayerCharacter* owner)
+	{
+		//s16 count = Utils::GetItemCount(3);
+
+		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
+		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+		effectiveHitCount = HitCount + global::additionalMinionHitCount;
+
+		std::cout << effectiveDamage << std::endl;
+
+		dir = global::PlayerMouseDirection;
+		AEVec2 DirectionVector;
+		AEVec2Scale(&DirectionVector, &dir, distance);
+
+		AEMtx33 rotate;
+		AEMtx33Rot(&rotate, AEDegToRad(90.f));
+		AEMtx33MultVec(&effectPosition, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition, &effectPosition, &global::PlayerLocation);
+
+		AEMtx33Rot(&rotate, AEDegToRad(-90.f));
+		AEMtx33MultVec(&effectPosition2, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition2, &effectPosition2, &global::PlayerLocation);
+
+		FireTimer += global::DeltaTime;
+		if (FireTimer >= 1.f / effectiveFireRate)
+		{
+			FireTimer = 0.f;
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->PPPool.size() > 0)
+					{
+						Projectile* PP1 = GS->PPPool.back();
+						GS->PPPool.pop_back();
+						PP1->Spawn(dir, effectPosition, BulletSpeed, effectiveDamage, effectiveHitCount);
+						GS->PPs.push_back(PP1);
+						Projectile* PP2 = GS->PPPool.back();
+						GS->PPPool.pop_back();
+						PP2->Spawn(dir, effectPosition2, BulletSpeed, effectiveDamage, effectiveHitCount);
+						GS->PPs.push_back(PP2);
+					}
+				}
+			}
+		}
+	}
+	void Item_31::Draw()
+	{
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+					Utils::DrawObjectWithDirection(*this, this->effectPosition2, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+				}
+			}
+		}
+	}
+	std::shared_ptr<Item> Item_31::Clone() const
+	{
+		return std::make_shared<Item_31>(*this);
 	}
 }

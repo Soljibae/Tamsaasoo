@@ -31,7 +31,7 @@ namespace InGame
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 0.f;
+		Stats.Damage = 1.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
@@ -59,20 +59,16 @@ namespace InGame
 
 		for (const auto& item_ptr : inventory)
 		{
-			if (dynamic_cast<SkillEffectItem*>(item_ptr.first.get()) == nullptr)
-			{
-				item_ptr.first->Use(this);
-			}
+			item_ptr.first->Use(this);
 		}
 
 		UpdateStats();
+		
+		std::cout << Stats.effectiveDamage << std::endl;
 
 		for (const auto& item_ptr : inventory)
 		{
-			if (dynamic_cast<SkillEffectItem*>(item_ptr.first.get()) != nullptr)
-			{
-				item_ptr.first->Use(this);
-			}
+			item_ptr.first->Update(this);
 		}
 
 		if (bIsDashing)
