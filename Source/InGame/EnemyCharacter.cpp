@@ -87,10 +87,10 @@ namespace InGame
 		if (Stats.StatusEffectTimer[BURN] > 0)
 		{
 			BurnTimer += global::DeltaTime;
-			if (BurnTimer >= 1.f)
+			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats.MaxHP / 0.05);
+				adjustHealth(-Stats.MaxHP * global::effectiveBurnDamage);
 			}
 		}
 
@@ -297,9 +297,9 @@ namespace InGame
 		}
 		Texture = nullptr;
 	}
-	void EnemyCharacter::adjustHealth(s32 Amount)
+	void EnemyCharacter::adjustHealth(f32 Amount)
 	{
-		Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
+		Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 		if (Stats.HP <= 0)
 		{
 			bIsPandingKill = true;

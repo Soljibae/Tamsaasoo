@@ -21,11 +21,11 @@ namespace InGame
 		virtual void Destroy();
 
 		std::map<EStatusEffect, f32> StatusEffectTimer;
-		s32 MaxHP;
-		s32 HP;
+		f32 MaxHP;
+		f32 HP;
 		f32 MovementSpeed;
 		f32 FireRate;
 		f32 BulletSpeed;
-		s32 Damage;
+		f32 Damage;
 	};
 }

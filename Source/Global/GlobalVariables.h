@@ -14,4 +14,30 @@ namespace global
 	extern u8 (*KeyInput)(u8);
 	extern AEGfxTexture* testTexture;
 	extern AEGfxVertexList* testMesh;
+
+
+	// additionalStats =================
+	extern f32 additionalDamage;
+	extern f32 additionalDamageRatio;
+
+	extern f32 additionalFireRate;
+	extern f32 additionalFireRateRatio;
+
+	extern f32 additionalExpGainedRatio;
+	extern s32 additionalHitCount;
+
+	extern f32 effectiveBurnDamage;
+	extern f32 additionalBurnDamage;
+	extern f32 effectiveBurnRate;
+	extern f32 additionalBurnRate;
+
+	extern f32 additionalMinionDamage;
+	extern f32 additionalMinionDamageRatio;
+
+	extern f32 additionalMinionFireRate;
+	extern f32 additionalMinionFireRateRatio;
+	extern s32 additionalMinionHitCount;
+
+	extern f32 additionalProcChanceRatio;
+	//==================================
 }
