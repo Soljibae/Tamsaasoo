@@ -153,6 +153,7 @@ namespace InGame
 		name = "item_3";
 		description = "this is item_3";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = PRIDE;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
