@@ -13,6 +13,7 @@
 #include "../InGame/ItemDatabase.h"
 #include "../InGame/Stage.h"
 #include "../InGame/ItemResourceManager.h"
+#include "../InGame/SpawnList.h"
 
 namespace Manager
 {
@@ -34,11 +35,11 @@ namespace Manager
 		InGame::Background* BG;
 		InGame::ItemDatabase* ITDB;
 		InGame::ItemResourceManager* ITRM;
-		
+		InGame::WaveManager WM;
+
 		bool bIsBossFight = false;
 		u8 WaveCount = 0;
 		f32 WaveTimer;
-		u8 SpawnCount;
 		InGame::EnemyType SpawningEnemyType;
 		InGame::MinionData MinionStruct;
 		InGame::ArcherData ArcherStruct;
@@ -53,6 +54,7 @@ namespace Manager
 		InGame::Stage* CurrentStage = nullptr;
 		InGame::StageType CurrentStageType;
 		void InitStage();
+		AEVec2 GetSpawnLocation();
 	};
 	extern Utils::Camera* CAM;
 	

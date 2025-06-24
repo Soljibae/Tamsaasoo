@@ -104,6 +104,9 @@
     <ClCompile Include="..\Source\InGame\ItemResourceManager.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\InGame\SpawnList.cpp">
+      <Filter>소스 파일\InGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -189,6 +192,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Manager\HUDController.h">
       <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\SpawnList.h">
+      <Filter>소스 파일\InGame</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
