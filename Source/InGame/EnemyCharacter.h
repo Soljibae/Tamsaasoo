@@ -12,7 +12,7 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
-		virtual void adjustHealth(s32 Amount) override;
+		virtual void adjustHealth(f32 Amount) override;
 		void UpdateEffectTime();
 
 		Stat Stats;

@@ -13,8 +13,8 @@ namespace InGame
 	s32 Item::row = 7, Item::column = 3;
 
 	Item::Item(const Item& other)
-		: id(other.id), name(other.name), description(other.description), appliedStack(other.appliedStack),
-		iconPosition(other.iconPosition), iconOffset(other.iconOffset), tag( other.tag ), effectTime( other.effectTime ), procChance(other.procChance)
+		: id(other.id), name(other.name), description(other.description), iconPosition(other.iconPosition),
+		iconOffset(other.iconOffset), tag(other.tag), effectTime(other.effectTime), procChance(other.procChance)
 	{
 	}
 	void Item::DrawIcon()
@@ -46,24 +46,26 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-		
+
 	}
 	void Item_1::Use(Actor* owner)
 	{
-		int currentStack = Utils::GetItemCount(this->id);
+		//int currentStack = Utils::GetItemCount(this->id);
 
-		if (currentStack > this->appliedStack)
-		{
-			PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
+		//if (currentStack > this->appliedStack)
+		//{
+		//	PlayerCharacter* player = dynamic_cast<PlayerCharacter*>(owner);
 
-			int newItems = currentStack - this->appliedStack;
-			for (int i = 0; i < newItems; ++i)
-			{
-				player->Stats.FireRate *= 2.0f;
-			}
+		//	int newItems = currentStack - this->appliedStack;
+		//	for (int i = 0; i < newItems; ++i)
+		//	{
+		//		player->Stats.FireRate *= 2.0f;
+		//	}
 
-			this->appliedStack = currentStack;
-		}
+		//	this->appliedStack = currentStack;
+		//}
+
+		global::additionalFireRate += 1.0f * Utils::GetItemCount(this->id);
 	}
 	void Item_1::Draw()
 	{
@@ -90,7 +92,7 @@ namespace InGame
 	}
 	void Item_2::Use(Actor* owner)
 	{
-		int currentStack = Utils::GetItemCount(this->id);
+		/*int currentStack = Utils::GetItemCount(this->id);
 
 		if (currentStack > this->appliedStack)
 		{
@@ -103,7 +105,7 @@ namespace InGame
 			}
 
 			this->appliedStack = currentStack;
-		}
+		}*/
 	}
 	void Item_2::Draw()
 	{
@@ -115,7 +117,8 @@ namespace InGame
 	//============================================= ID_3
 	Item_3::Item_3(const Item_3& other)
 		: SkillEffectItem(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance },
-		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, FireRate{ other.FireRate }
+		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, FireRate{ other.FireRate },
+		effectiveFireRate{ other.effectiveFireRate }, effectiveDamage{ other.effectiveDamage }, effectiveHitCount{ other.effectiveHitCount }
 	{
 	}
 	void Item_3::Init()
@@ -134,11 +137,16 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		AEVec2Set(&AnimationOffset, 0, 0);
-		tag = EMPTY; 
+		tag = EMPTY;
 	}
 	void Item_3::Use(Actor* owner)
 	{
-		s16 count = Utils::GetItemCount(3);
+		//s16 count = Utils::GetItemCount(3);
+
+		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
+		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+		effectiveHitCount = HitCount + global::additionalMinionHitCount;
+
 
 		dir = global::PlayerMouseDirection;
 		AEVec2 DirectionVector;
@@ -154,7 +162,7 @@ namespace InGame
 		AEVec2Add(&effectPosition2, &effectPosition2, &global::PlayerLocation);
 
 		FireTimer += global::DeltaTime;
-		if (FireTimer >= 1.f / FireRate)
+		if (FireTimer >= 1.f / effectiveFireRate)
 		{
 			FireTimer = 0.f;
 			if (Manager::gm.currStateREF)
@@ -166,11 +174,11 @@ namespace InGame
 					{
 						Projectile* PP1 = GS->PPPool.back();
 						GS->PPPool.pop_back();
-						PP1->Spawn(dir, effectPosition, BulletSpeed, Damage);
+						PP1->Spawn(dir, effectPosition, BulletSpeed, effectiveDamage, effectiveHitCount);
 						GS->PPs.push_back(PP1);
 						Projectile* PP2 = GS->PPPool.back();
 						GS->PPPool.pop_back();
-						PP2->Spawn(dir, effectPosition2, BulletSpeed, Damage);
+						PP2->Spawn(dir, effectPosition2, BulletSpeed, effectiveDamage, effectiveHitCount);
 						GS->PPs.push_back(PP2);
 					}
 				}
@@ -322,7 +330,7 @@ namespace InGame
 	}
 	void Item_5::OnHit(InGame::EnemyCharacter* target)
 	{
-		if(Utils::GetRandomFloat(0.f, 1.f) <= procChance + (Utils::GetItemCount(id) - 1) * 0.04)
+		if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
 			target->Stats.StatusEffectTimer[SLOW] = effectTime;
 	}
 	//============================================= ID_6

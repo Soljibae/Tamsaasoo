@@ -15,7 +15,7 @@ namespace InGame
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
-		virtual void adjustHealth(s32 Amount) override;
+		virtual void adjustHealth(f32 Amount) override;
 		void GetMouseDir();
 		void UpdateMovement();
 		void UpdateDash();
@@ -29,6 +29,8 @@ namespace InGame
 
 		void OnProjectileHit(InGame::EnemyCharacter* target);
 		void UpdateEffectTime();
+		void InitAdditionalStats();
+		void UpdateStats();
 
 		bool bIsDashing = false;
 	protected:

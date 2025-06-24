@@ -45,7 +45,6 @@ namespace InGame
 		ItemTag tag;
 		f32 effectTime;
 		f32 procChance;
-		int appliedStack = 0;
 	};
 	class SkillEffectItem : public Item
 	{
@@ -102,9 +101,12 @@ namespace InGame
 		AEVec2 effectPosition2;
 
 		f32 FireRate;
-		s32 Damage;
+		f32 Damage;
 		s32 HitCount;
-		s32 BulletSpeed;
+		f32 BulletSpeed;
+		f32 effectiveFireRate;
+		f32 effectiveDamage;
+		s32 effectiveHitCount;
 
 		virtual void Init() override;
 		virtual void Use(Actor* owner) override;

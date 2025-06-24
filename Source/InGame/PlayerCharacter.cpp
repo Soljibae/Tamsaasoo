@@ -31,16 +31,19 @@ namespace InGame
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 0;
+		Stats.Damage = 0.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 8.f;
 		Stats.Money = 0;
+		Stats.BurnDamage = 0.05f;
+		global::effectiveBurnDamage = Stats.BurnDamage;
+		Stats.BurnRate = 1.f;
 
 		Stats.Init();
-		
+
 		Utils::InitOffset(*this);
 
 		Texture = AEGfxTextureLoad("Assets/Character.png");
@@ -52,6 +55,25 @@ namespace InGame
 	void PlayerCharacter::Update()
 	{
 		UpdateEffectTime();
+		InitAdditionalStats();
+
+		for (const auto& item_ptr : inventory)
+		{
+			if (dynamic_cast<SkillEffectItem*>(item_ptr.first.get()) == nullptr)
+			{
+				item_ptr.first->Use(this);
+			}
+		}
+
+		UpdateStats();
+
+		for (const auto& item_ptr : inventory)
+		{
+			if (dynamic_cast<SkillEffectItem*>(item_ptr.first.get()) != nullptr)
+			{
+				item_ptr.first->Use(this);
+			}
+		}
 
 		if (bIsDashing)
 		{
@@ -113,10 +135,6 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-		for (const auto& item_ptr : inventory)
-		{
-			item_ptr.first->Use(this);
-		}
 	}
 	void PlayerCharacter::Draw()
 	{
@@ -147,11 +165,11 @@ namespace InGame
 			HoldingGun = nullptr;
 		}
 	}
-	void PlayerCharacter::adjustHealth(s32 Amount)
+	void PlayerCharacter::adjustHealth(f32 Amount)
 	{
 		if (!bIsInvincible)
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
+			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 			if (Stats.HP <= 0)
 			{
 				bIsPandingKill = true;
@@ -174,7 +192,7 @@ namespace InGame
 		AEVec2 MP;
 		MP.x = static_cast<float>(MX) - AEGfxGetWindowWidth() / 2.0f;
 		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(MY);
-		
+
 		AEMtx33 translate_matrix;
 		AEMtx33Inverse(&translate_matrix, &(Manager::CAM->translate_matrix));
 
@@ -188,13 +206,13 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		Stats.ExpCount += Exp;
+		Stats.ExpCount += Exp * Stats.effectiveExpGained;
 		if (Stats.ExpCount >= Stats.TargetExp)
 		{
 			Stats.ExpCount -= Stats.TargetExp;
 			Stats.TargetExp *= 2;
 			Stats.Level++;
-			std::cout << "Level Up : " << Stats.Level  << " Next : Target Exp : " << Stats.TargetExp << std::endl;
+			std::cout << "Level Up : " << Stats.Level << " Next : Target Exp : " << Stats.TargetExp << std::endl;
 			Manager::pickPanel.Show(Manager::pickPanel.GenerateRandomRewards());
 		}
 	}
@@ -256,7 +274,7 @@ namespace InGame
 		{
 			AEVec2Normalize(&MovingVec, &MovingVec);
 		}
-			
+
 		AEVec2 delta;
 		AEVec2Scale(&delta, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
 
@@ -269,8 +287,8 @@ namespace InGame
 			{
 				if (PC->CurrentStageType == InGame::StageType::TOWER)
 				{
-					float EllipseA = (global::worldMax.x - global::worldMin.x)/2;
-					float EllipseB = (global::worldMax.y - global::worldMin.y)/2;
+					float EllipseA = (global::worldMax.x - global::worldMin.x) / 2;
+					float EllipseB = (global::worldMax.y - global::worldMin.y) / 2;
 					float value = (newPos.x * newPos.x) / (EllipseA * EllipseA) + (newPos.y * newPos.y) / (EllipseB * EllipseB);
 					if (value <= 1.0f)
 					{
@@ -315,7 +333,7 @@ namespace InGame
 				}
 			}
 		}
-		
+
 
 		if (HoldingGun)
 		{
@@ -370,5 +388,36 @@ namespace InGame
 				break;
 			}
 		}
+	}
+	void PlayerCharacter::InitAdditionalStats()
+	{
+		global::additionalDamage = 0.f;
+		global::additionalDamageRatio = 1.f;
+		global::additionalFireRate = 0.f;
+		global::additionalFireRateRatio = 1.f;
+		global::additionalExpGainedRatio = 1.f;
+		global::additionalHitCount = 0;
+
+		global::additionalBurnDamage = 0.f;
+		global::additionalBurnRate = 0.f;
+
+		global::additionalMinionDamage = 0.f;
+		global::additionalMinionDamageRatio = 1.f;
+		global::additionalMinionFireRate = 0.f;
+		global::additionalMinionFireRateRatio = 1.f;
+		global::additionalMinionHitCount = 0;
+
+		global::additionalProcChanceRatio = 1.f;
+	}
+
+	void PlayerCharacter::UpdateStats()
+	{
+		Stats.effectiveDamage = (Stats.Damage + global::additionalDamage) * global::additionalDamageRatio;
+		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio;
+		Stats.effectiveExpGained = Stats.ExpGained * global::additionalExpGainedRatio;
+		Stats.effectiveHitCount = Stats.HitCount + global::additionalHitCount;
+
+		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
+		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;
 	}
 }

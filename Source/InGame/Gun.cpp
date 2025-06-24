@@ -25,7 +25,7 @@ namespace InGame
 
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
-		RoundPerSec = Source->Stats.FireRate;
+		RoundPerSec = Source->Stats.effectiveFireRate;
 		AEVec2 Vec;
 		position = Pos;
 		AEVec2Scale(&Vec, &Dir, 40.f);

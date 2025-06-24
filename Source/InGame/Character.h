@@ -5,6 +5,6 @@ namespace InGame
 	class Character : public Actor
 	{
 	public:
-		virtual void adjustHealth(s32 Amount);
+		virtual void adjustHealth(f32 Amount);
 	};
 }
