@@ -18,5 +18,6 @@ namespace InGame
 		s32 HitCount;
 		u32 TargetExp;
 		u32 Money;
+		u32 Potion;
 	};
 }

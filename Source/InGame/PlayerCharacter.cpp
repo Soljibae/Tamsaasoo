@@ -38,6 +38,7 @@ namespace InGame
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 8.f;
 		Stats.Money = 0;
+		Stats.Potion = 0;
 
 		Stats.Init();
 		
@@ -116,6 +117,20 @@ namespace InGame
 		for (const auto& item_ptr : inventory)
 		{
 			item_ptr.first->Use(this);
+		}
+		//About Potion
+		if (Stats.Potion > 100)
+			Stats.Potion = 100;
+		if (global::KeyInput(AEVK_Q))
+		{
+			if (Stats.HP < Stats.MaxHP)
+			{
+				if (Stats.Potion >= 100)
+				{
+					adjustHealth(1);
+					Stats.Potion = 0;
+				}
+			}
 		}
 	}
 	void PlayerCharacter::Draw()

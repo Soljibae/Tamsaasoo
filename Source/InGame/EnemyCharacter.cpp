@@ -284,7 +284,14 @@ namespace InGame
 	}
 	void EnemyCharacter::adjustHealth(s32 Amount)
 	{
-		Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
+		if (Stats.StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
+		{
+			Stats.HP = std::clamp(Stats.HP + Amount * 2, 0, Stats.MaxHP);
+		}
+		else
+		{
+			Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
+		}
 		if (Stats.HP <= 0)
 		{
 			bIsPandingKill = true;

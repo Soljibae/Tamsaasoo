@@ -26,8 +26,11 @@ namespace Manager
 		InGame::Actor ChamberTimeBar;
 		InGame::Actor fireTimeBar;
 		
-		InGame::GunType prevGunType;
+		InGame::Actor Potion;
+		InGame::Actor PotionBG;
 
+		InGame::GunType prevGunType;
+		u32 prevPotion;
 		s32 MaxHP;
 		s32 currentHP;
 		s8 pFont;

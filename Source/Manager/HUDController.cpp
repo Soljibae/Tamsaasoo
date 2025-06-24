@@ -3,6 +3,7 @@
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 #include <iostream>
+#include <algorithm>
 
 namespace Manager
 {
@@ -10,6 +11,27 @@ namespace Manager
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
 	AEGfxTexture* HUDController::HPBGTex = nullptr;
+
+	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
+	{
+		f32 fill = std::clamp(fillPercent, 0.f, 1.f);
+		f32 uv_top = 1.0f - fill;
+		u32 c = 0xFFFFFFFF;
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.5f, -0.5f, c, 0.0f, 1.0f,
+			0.5f, -0.5f, c, 1.0f, 1.0f,
+			-0.5f, -0.5f + fill, c, 0.0f, uv_top
+		);
+		AEGfxTriAdd(
+			0.5f, -0.5f, c, 1.0f, 1.0f,
+			0.5f, -0.5f + fill, c, 1.0f, uv_top,
+			-0.5f, -0.5 + fill, c, 0.0f, uv_top
+		);
+
+		AEGfxVertexList* Mesh = AEGfxMeshEnd();
+		return Mesh;
+	}
 
 	void HUDController::Init(InGame::PlayerCharacter* InPC, InGame::Gun* InGUN)
 	{
@@ -27,7 +49,7 @@ namespace Manager
 		const float actorWidth = 40.f;
 		const float actorHeight = 50.f;
 		const float spacingX = 10.0f; // 가로 간격
-		const float startX = -(w / 2) + 100.f;
+		const float startX = -(w / 2) + 200.f;
 		const float Y = (h / 2) - 100.f;
 		
 		HPMesh = Utils::CreateMesh();
@@ -66,13 +88,19 @@ namespace Manager
 		fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		fireTimeBar.position.y = ChamberTimeBar.position.y;
 		fireTimeBar.size = { 10.f, 30.f };
-
-		f32 fillPercent = 1 / GUN->RoundPerSec;
-		if (fillPercent > 1.f) fillPercent = 1.f;
 		f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
-		fireTimeBar.MovementSpeed = fillPercent * (barEndX - barStartX) * global::DeltaTime;
+		fireTimeBar.MovementSpeed = 0.000016f * (barEndX - barStartX) * global::DeltaTime;
 
+		Potion.position = { -(w/2) + 100.f, h/2 - 100.f };
+		Potion.size = { 90.f, 90.f };
+		Potion.Mesh = FillingMeshUpside(0);
+		Potion.Texture = AEGfxTextureLoad("Assets/Potion.png");
+		PotionBG.position = Potion.position;
+		PotionBG.size = { 100.f, 100.f };
+		PotionBG.Mesh = Utils::CreateMesh();
+		PotionBG.Texture = AEGfxTextureLoad("Assets/PotionBG.png");
+		prevPotion = PC->Stats.Potion;
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", 72.f);
 	}
 	void HUDController::Update()
@@ -97,11 +125,30 @@ namespace Manager
 		}
 		while (currentHP > PC->Stats.HP)
 		{
-			if(!HP.empty())
+			if (!HP.empty())
 				HP.pop_back();
 			currentHP--;
 		}
+		if (currentHP < PC->Stats.HP)
+		{
+			const float actorWidth = 40.f;
+			const float actorHeight = 50.f;
+			const float spacingX = 10.0f; // 가로 간격
+			const float startX = -(global::ScreenWidth / 2) + 200.f;
+			const float Y = (global::ScreenHeight / 2) - 100.f;
+			InGame::Actor hpobj;
+			hpobj.Texture = HPBGTex;
+			hpobj.Mesh = HPMesh;
+			for (int i = 0; i < PC->Stats.HP - currentHP; i++)
+			{
+				hpobj.position = HPBG[currentHP].position;
+				hpobj.size = { actorWidth, actorHeight };
+				HP.push_back(hpobj);
+			}
+		}
 		currentHP = PC->Stats.HP;
+
+		/*--------Centered can fire UI--------*/
 		if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)
 		{
 			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
@@ -134,8 +181,9 @@ namespace Manager
 				break;
 			}
 		}
+
 		//can't fire
-		if (GUN->FireTimer> 0 && GUN->FireTimer < fireDelay)
+		if (GUN->FireTimer > 0 && GUN->FireTimer < fireDelay)
 		{
 			fireTimeBar.position.x = barStartX + (barEndX - barStartX) * fillPercent;
 		}
@@ -144,9 +192,35 @@ namespace Manager
 		{
 			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		}
+		/*--------Centered can fire UI--------*/
+
+		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (global::KeyInput(AEVK_M))
 		{
-			PC->Stats.Money += 100;
+			PC->Stats.Money += 1000;
+		}
+		/*-----*DEBUG* show me the money *DEBUG*-----*/
+		//DEBUG
+		if (global::KeyInput(AEVK_P))
+		{
+			PC->Stats.Potion += 10;
+		}
+		std::cout << PC->Stats.Potion << std::endl;
+		//DEBUG
+		if (PC->Stats.Potion != prevPotion)
+		{
+			f32 fillPercent = static_cast<f32>(prevPotion) / 100.f;
+			AEGfxMeshFree(Potion.Mesh);
+			Potion.Mesh = FillingMeshUpside(fillPercent);
+			if (prevPotion > PC->Stats.Potion)
+			{
+				prevPotion--;
+			}
+			else if (prevPotion < PC->Stats.Potion)
+			{
+				prevPotion++;
+			}
+
 		}
 	}
 	void HUDController::Draw()
@@ -158,12 +232,13 @@ namespace Manager
 			Utils::DrawObject(HPBG[i], false);
 		for (int i = 0; i < HP.size(); i++)
 			Utils::DrawObject(HP[i], false);
+		Utils::DrawObject(PotionBG, false);
+		Utils::DrawObject(Potion, false);
 		if (GUN->FireTimer < 1.f / GUN->RoundPerSec)
 		{
 			Utils::DrawObject(ChamberTimeBar, false);
 			Utils::DrawObject(fireTimeBar, false);
 		}
-
 		Utils::DrawObject(Coin, false);
 		std::string pText = std::to_string(PC->Stats.Money);
 		f32 textW, textH;
@@ -188,5 +263,12 @@ namespace Manager
 		AEGfxMeshFree(Coin.Mesh);
 		AEGfxTextureUnload(Coin.Texture);
 		AEGfxDestroyFont(pFont);
+
+		AEGfxMeshFree(Potion.Mesh);
+		AEGfxTextureUnload(Potion.Texture);
+
+		AEGfxMeshFree(PotionBG.Mesh);
+		AEGfxTextureUnload(PotionBG.Texture);
+
 	}
 }
