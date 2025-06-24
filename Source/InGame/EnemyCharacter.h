@@ -21,6 +21,7 @@ namespace InGame
 		AEVec2 ProjectileSize;
 		f32 ProjectileSpawnTimer = 0.f;
 		f32 ProjectileChamberTimer = 5.f;
+		f32 BurnTimer = 0.f;
 		void SpawnProjectile(AEVec2 Dir, AEVec2 Pos);
 
 		/*--------DASHER--------*/

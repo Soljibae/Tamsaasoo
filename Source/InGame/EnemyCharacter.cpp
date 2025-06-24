@@ -3,6 +3,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Manager/GameManager.h"
 #include "../Manager/Playing.h"
+#include <algorithm>
 namespace InGame
 {
 	void InGame::EnemyCharacter::Init()
@@ -41,6 +42,8 @@ namespace InGame
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
+		Stats.MaxHP = InData->Health;
+		Stats.HP = InData->Health;
 
 		AEVec2Set(&ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
 
@@ -66,6 +69,16 @@ namespace InGame
 	{
 		UpdateEffectTime();
 		
+		if (Stats.StatusEffectTimer[BURN] > 0)
+		{
+			BurnTimer += global::DeltaTime;
+			if (BurnTimer >= 1.f)
+			{
+				BurnTimer = 0.f;
+				adjustHealth(-Stats.MaxHP / 0.05);
+			}
+		}
+
 		if (!(Stats.StatusEffectTimer[STUN] > 0))
 		{
 			f32 len = AEVec2Distance(&global::PlayerLocation, &position);
@@ -77,14 +90,23 @@ namespace InGame
 				size.x *= -1;
 			}
 			direction.y = dy / len;
-
+			
+			if (Stats.StatusEffectTimer[FEAR] > 0)
+				AEVec2Scale(&direction, &direction, -1.f);
 
 			switch (Type)
 			{
 				case EnemyType::MINION:
 				{
-					position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
-					position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+					f32 effectiveMovementSpeed = Stats.MovementSpeed;
+
+					if (Stats.StatusEffectTimer[SLOW] > 0)
+					{
+						effectiveMovementSpeed *= 0.5f;
+					}
+
+					position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+					position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
 					break;
 				}
 				case EnemyType::ARCHER:
@@ -92,12 +114,26 @@ namespace InGame
 					ProjectileSpawnTimer += global::DeltaTime;
 					if (len > 500)
 					{
-						position.x -= direction.x * MovementSpeed * global::DeltaTime;
-						position.y -= direction.y * MovementSpeed * global::DeltaTime;
+						f32 effectiveMovementSpeed = Stats.MovementSpeed;
+
+						if (Stats.StatusEffectTimer[SLOW] > 0)
+						{
+							effectiveMovementSpeed *= 0.5f;
+						}
+
+						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
 					}
 					else
 					{
-						if (ProjectileSpawnTimer > ProjectileChamberTimer)
+						f32 effectiveChamberTimer = ProjectileChamberTimer;
+
+						if (Stats.StatusEffectTimer[SLOW] > 0)
+						{
+							effectiveChamberTimer *= 1.5f;
+						}
+
+						if (ProjectileSpawnTimer > effectiveChamberTimer)
 						{
 							ProjectileSpawnTimer = 0;
 							SpawnProjectile(direction, position);
@@ -135,8 +171,15 @@ namespace InGame
 							if (dashMoved < dashRange)
 							{
 								// 계속 돌진
-								position.x -= dashDirection.x * dashSpeed * global::DeltaTime;
-								position.y -= dashDirection.y * dashSpeed * global::DeltaTime;
+								f32 effectiveDashSpeed = dashSpeed;
+
+								if (Stats.StatusEffectTimer[SLOW] > 0)
+								{
+									effectiveDashSpeed *= 0.5f;
+								}
+							
+								position.x -= dashDirection.x * effectiveDashSpeed * global::DeltaTime;
+								position.y -= dashDirection.y * effectiveDashSpeed * global::DeltaTime;
 							}
 							else
 							{
@@ -149,8 +192,15 @@ namespace InGame
 						else
 						{
 							// 사정거리 밖 → 천천히 추적
-							position.x -= direction.x * walkSpeed * global::DeltaTime;
-							position.y -= direction.y * walkSpeed * global::DeltaTime;
+							f32 effectiveMovementSpeed = walkSpeed;
+
+							if (Stats.StatusEffectTimer[SLOW] > 0)
+							{
+								effectiveMovementSpeed *= 0.5f;
+							}
+
+							position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+							position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
 						}
 					}
 					else
@@ -166,8 +216,15 @@ namespace InGame
 				}
 				case EnemyType::TANKER:
 				{
-					position.x -= direction.x * Stats.MovementSpeed * global::DeltaTime;
-					position.y -= direction.y * Stats.MovementSpeed * global::DeltaTime;
+					f32 effectiveMovementSpeed = Stats.MovementSpeed;
+
+					if (Stats.StatusEffectTimer[SLOW] > 0)
+					{
+						effectiveMovementSpeed *= 0.5f;
+					}
+
+					position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+					position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
 					break;
 				}
 				case EnemyType::BOMBER:
@@ -181,14 +238,28 @@ namespace InGame
 						}
 						else
 						{
-							position.x -= direction.x * MovementSpeed * global::DeltaTime;
-							position.y -= direction.y * MovementSpeed * global::DeltaTime;
+							f32 effectiveMovementSpeed = Stats.MovementSpeed;
+
+							if (Stats.StatusEffectTimer[SLOW] > 0)
+							{
+								effectiveMovementSpeed *= 0.5f;
+							}
+
+							position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+							position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
 						}
 					}
 					else
 					{
+						f32 effectiveDetonationDelay = detonationDelay;
+
+						if (Stats.StatusEffectTimer[SLOW] > 0)
+						{
+							effectiveDetonationDelay *= 1.5f;
+						}
+
 						detonationTimer += global::DeltaTime;
-						if (detonationTimer >= detonationDelay)
+						if (detonationTimer >= effectiveDetonationDelay)
 						{
 							this->adjustHealth(-9999);
 						}
@@ -213,7 +284,7 @@ namespace InGame
 	}
 	void EnemyCharacter::adjustHealth(s32 Amount)
 	{
-		Stats.HP += Amount;
+		Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
 		if (Stats.HP <= 0)
 		{
 			bIsPandingKill = true;

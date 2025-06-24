@@ -28,6 +28,7 @@ namespace InGame
 		Gun* HoldingGun = nullptr;
 
 		void OnProjectileHit(InGame::EnemyCharacter* target);
+		void UpdateEffectTime();
 
 		bool bIsDashing = false;
 	protected:

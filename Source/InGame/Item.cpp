@@ -323,7 +323,7 @@ namespace InGame
 	void Item_5::OnHit(InGame::EnemyCharacter* target)
 	{
 		if(Utils::GetRandomFloat(0.f, 1.f) <= procChance + (Utils::GetItemCount(id) - 1) * 0.04)
-			target->Stats.StatusEffectTimer[STUN] = effectTime;
+			target->Stats.StatusEffectTimer[SLOW] = effectTime;
 	}
 	//============================================= ID_6
 	Item_6::Item_6(const Item_6& other)

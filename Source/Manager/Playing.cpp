@@ -84,7 +84,7 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
-			
+
 			if (global::IsEnemyRecentlyDied)
 			{
 				static f32 cooldown = 0.f;
@@ -127,12 +127,12 @@ namespace Manager
 			{
 				WaveTimer += global::DeltaTime;
 			}
-/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
+			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (global::DeltaTime > 0.02)
 			{
 				std::cout << global::DeltaTime << std::endl;
 			}
-/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
+			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (WaveTimer > 3.f)
 			{
 				WaveCount++;
@@ -153,7 +153,7 @@ namespace Manager
 				}
 			}
 			PC->Update();
-			
+
 			for (InGame::Projectile*& PP : PPs)
 			{
 				PP->Update();
@@ -224,7 +224,7 @@ namespace Manager
 					}
 				}
 			}
-			
+
 			for (size_t i = 0; i < PPs.size(); )
 			{
 				InGame::Projectile*& PP = PPs[i];
@@ -296,7 +296,7 @@ namespace Manager
 				}
 			}
 			CAM->Update(*PC);
-			
+
 			if (Boss)
 			{
 				if (Boss->bIsPandingKill)
@@ -306,7 +306,7 @@ namespace Manager
 					Boss = nullptr;
 					bIsBossFight = false;
 					FinishBossFight();
-					
+
 				}
 				else
 				{

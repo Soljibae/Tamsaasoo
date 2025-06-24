@@ -51,6 +51,8 @@ namespace InGame
 	}
 	void PlayerCharacter::Update()
 	{
+		UpdateEffectTime();
+
 		if (bIsDashing)
 		{
 			UpdateDash();
@@ -149,7 +151,7 @@ namespace InGame
 	{
 		if (!bIsInvincible)
 		{
-			Stats.HP += Amount;
+			Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
 			if (Stats.HP <= 0)
 			{
 				bIsPandingKill = true;
@@ -331,6 +333,42 @@ namespace InGame
 		for (const auto& item_pair : inventory)
 		{
 			item_pair.first->OnHit(target);
+		}
+	}
+	void PlayerCharacter::UpdateEffectTime()
+	{
+		for (size_t i = 0; i < Stats.StatusEffectTimer.size(); i++)
+		{
+			switch (i)
+			{
+			case 0:
+				if (Stats.StatusEffectTimer[BURN] > 0)
+					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[BURN] < 0)
+					Stats.StatusEffectTimer[BURN] = 0;
+			case 1:
+				if (Stats.StatusEffectTimer[STUN] > 0)
+					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[STUN] < 0)
+					Stats.StatusEffectTimer[STUN] = 0;
+			case 2:
+				if (Stats.StatusEffectTimer[SLOW] > 0)
+					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[SLOW] < 0)
+					Stats.StatusEffectTimer[SLOW] = 0;
+			case 3:
+				if (Stats.StatusEffectTimer[FEAR] > 0)
+					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[FEAR] < 0)
+					Stats.StatusEffectTimer[FEAR] = 0;
+			case 4:
+				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
+					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
+				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
+					Stats.StatusEffectTimer[VULNERABLE] = 0;
+			default:
+				break;
+			}
 		}
 	}
 }
