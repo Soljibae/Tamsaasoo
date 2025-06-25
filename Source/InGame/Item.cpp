@@ -230,7 +230,7 @@ namespace InGame
 		description = "this is item_5";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
-		procChance = 
+		procChance = 0.f;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
