@@ -56,6 +56,11 @@ namespace InGame
 	}
 	void PlayerCharacter::Update()
 	{
+		if (Stats.MaxHP <= 0)
+		{
+			bIsPandingKill = true;
+		}
+
 		UpdateEffectTime();
 
 		InitAdditionalStats();
