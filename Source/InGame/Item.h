@@ -119,17 +119,15 @@ namespace InGame
 		Item_4() = default;
 		Item_4(const Item_4& other);
 
-		f32 CoolDown;
-		bool isReady;
-		bool isStarted;
-		s32 Damage;
+		s32 appliedStack;
+		s32 reviveCount;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
 		virtual void Update(class PlayerCharacter* owner) override;
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
-		virtual void OnHit(InGame::EnemyCharacter* target){}
+		virtual void OnHit(InGame::EnemyCharacter* target) {}
 	};
 	//============================================= ID_5
 	class Item_5 : public Item // to do change class name
@@ -244,11 +242,16 @@ namespace InGame
 		virtual void OnHit(InGame::EnemyCharacter* target) {}
 	};
 	//============================================= ID_13
-	class Item_13 : public Item // to do change class name
+	class Item_13 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_13() = default;
 		Item_13(const Item_13& other);
+
+		f32 CoolDown;
+		bool isReady;
+		bool isStarted;
+		s32 Damage;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
