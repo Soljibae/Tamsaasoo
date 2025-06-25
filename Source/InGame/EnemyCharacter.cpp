@@ -301,11 +301,11 @@ namespace InGame
 	{
 		if (Stats.StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount * 2, 0, Stats.MaxHP);
+			Stats.HP = std::clamp(Stats.HP + Amount * 2, 0.0f, Stats.MaxHP);
 		}
 		else
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount, 0, Stats.MaxHP);
+			Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
 		}
 		if (Stats.HP <= 0)
 		{
