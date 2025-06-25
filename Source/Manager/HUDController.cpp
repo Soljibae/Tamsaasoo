@@ -123,10 +123,6 @@ namespace Manager
 				break;
 			}
 		}
-		if (global::KeyInput(AEVK_5))
-		{
-			PC->Stats.MaxHP -= 2;
-		}
 		while (currentHP > PC->Stats.MaxHP)
 		{
 			if (!HP.empty())

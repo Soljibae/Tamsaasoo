@@ -11,6 +11,7 @@ namespace global
 	u8(*KeyInput)(u8) = AEInputCheckTriggered;
 	AEGfxTexture* testTexture = nullptr;
 	AEGfxVertexList* testMesh = nullptr;
+	bool isBossBattleStarted = false;
 
 	// additionalStats =================
 	f32 additionalDamage = 0.f;
@@ -35,5 +36,8 @@ namespace global
 	s32 additionalMinionHitCount = 0;
 
 	f32 additionalProcChanceRatio = 1.f;;
+
+	f32 additionalDamageToBossRatio = 1.f;
+	f32 additionalDamageFromBossRatio = 1.f;
 	//==================================
 }

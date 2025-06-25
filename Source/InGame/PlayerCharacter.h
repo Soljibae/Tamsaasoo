@@ -28,6 +28,7 @@ namespace InGame
 		Gun* HoldingGun = nullptr;
 
 		void OnProjectileHit(InGame::EnemyCharacter* target, bool isTargetBoss);
+		void OnDamaged();
 		void UpdateEffectTime();
 		void InitAdditionalStats();
 		void UpdateStats();

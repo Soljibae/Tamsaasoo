@@ -31,7 +31,7 @@ namespace InGame
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 5.f;
+		Stats.Damage = 0.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
@@ -39,7 +39,7 @@ namespace InGame
 		Stats.TargetExp = 8.f;
 		Stats.Money = 0;
 		Stats.Potion = 0;
-		Stats.BurnDamage = 0.05f;
+		Stats.BurnDamage = 0.1f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
 		Stats.ReviveCount = 0;
@@ -71,7 +71,6 @@ namespace InGame
 		}
 
 		UpdateStats();
-		//std::cout << Stats.effectiveDamage << std::endl;
 
 		for (const auto& item_ptr : inventory)
 		{
@@ -138,11 +137,7 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-		for (const auto& item_ptr : inventory)
-		{
-			item_ptr.first->Use(this);
-		}
-		//About Potion
+
 		if (Stats.Potion > 100)
 			Stats.Potion = 100;
 		if (global::KeyInput(AEVK_Q))
@@ -190,6 +185,8 @@ namespace InGame
 	{
 		if (!bIsInvincible)
 		{
+			Amount = static_cast<s32>(Amount);
+
 			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 			if (Stats.HP <= 0)
 			{
@@ -362,12 +359,6 @@ namespace InGame
 				}
 			}
 		}
-
-
-		if (HoldingGun)
-		{
-			HoldingGun->Update(MouseDirection, position);
-		}
 		if (DashTimer >= DashTime)
 		{
 			bIsDashing = false;
@@ -380,6 +371,13 @@ namespace InGame
 		for (const auto& item_pair : inventory)
 		{
 			item_pair.first->OnHit(target, isTargetBoss);
+		}
+	}
+	void PlayerCharacter::OnDamaged()
+	{
+		for (const auto& item_pair : inventory)
+		{
+			item_pair.first->OnDamaged();
 		}
 	}
 	void PlayerCharacter::UpdateEffectTime()
@@ -437,6 +435,9 @@ namespace InGame
 		global::additionalMinionHitCount = 0;
 
 		global::additionalProcChanceRatio = 1.f;
+
+		global::additionalDamageToBossRatio = 1.f;
+		global::additionalDamageFromBossRatio = 1.f;
 	}
 
 	void PlayerCharacter::UpdateStats()
