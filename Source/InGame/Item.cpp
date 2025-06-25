@@ -51,7 +51,6 @@ namespace InGame
 	}
 	void Item_1::Use(PlayerCharacter* owner)
 	{
-
 		if (owner->Stats.HP / owner->Stats.MaxHP <= 0.5f)
 		{
 			global::additionalDamageRatio += (0.05f * (owner->Stats.MaxHP - owner->Stats.HP) * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
@@ -181,66 +180,208 @@ namespace InGame
 	}
 	//============================================= ID_4
 	Item_4::Item_4(const Item_4& other)
-		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }, Damage{ other.Damage }
+		: SkillEffectItem(other), appliedStack(other.appliedStack)
 	{
 	}
 	void Item_4::Init()
 	{
 		id = 4;
 		name = "item_4";
-		description = "this is item_4";
+		description = "Reduces Max HP by 2. Grants one revive on death.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		AEVec2Set(&effectSize, 400.f, 400.f);
+		tag = PRIDE;
+		appliedStack = 0;
+
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-		isReady = true;
-		isStarted = false;
-		CoolDown = 4.f;
-		FireTimer = 0.f;
-		FrameTime = 0.1f;
-		AEVec2Set(&AnimationOffset, 0.f, 0.f);
-		AnimationCount = 0;
-		AnimationTimer = 0.f;
-		Damage = 1;
-		effectRow = 1;
-		effectColumn = 9;
-		tag = EMPTY;
 	}
 	void Item_4::Use(PlayerCharacter* owner)
 	{
-		if (!isStarted)
+		std::cout << owner->Stats.HP << std::endl;
+		
+		if (Utils::GetItemCount(id) != appliedStack)
 		{
-			FireTimer += global::DeltaTime;
-			if (FireTimer >= CoolDown)
-			{
-				FireTimer = 0;
-				isReady = true;
-			}
+			appliedStack++;
+			owner->Stats.ReviveCount++;
+			owner->Stats.MaxHP -= 2;
 		}
+		
+	}
+	void Item_4::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_4::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_4::Clone() const
+	{
+		return std::make_shared<Item_4>(*this);
+	}
+	//============================================= ID_5
+	Item_5::Item_5(const Item_5& other)
+		: Item(other)
+	{
+	}
+	void Item_5::Init()
+	{
+		id = 5;
+		name = "item_5";
+		description = "Increases damage dealt to bosses by 50%, but you take 100% more damage from them.";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = PRIDE;
 
-		if (isReady && global::IsEnemyRecentlyDied)
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_5::Use(PlayerCharacter* owner)
+	{
+		global::additionalDamageToBossRatio += 0.5f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalDamageFromBossRatio += 1.f;
+	}
+	void Item_5::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_5::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_5::Clone() const
+	{
+		return std::make_shared<Item_5>(*this);
+	}
+	//============================================= ID_6
+	Item_6::Item_6(const Item_6& other)
+		: Item(other)
+	{
+	}
+	void Item_6::Init()
+	{
+		id = 6;
+		name = "item_6";
+		description = "Your attacks have a 30% chance to set the enemy on fire for 3 seconds.";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		effectTime = 3.f;
+		procChance = 0.3f;
+		tag = WRATH;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_6::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_6::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_6::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_6::Clone() const
+	{
+		return std::make_shared<Item_6>(*this);
+	}
+	void Item_6::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
+			target->Stats.StatusEffectTimer[BURN] = effectTime;
+	}
+	//============================================= ID_7
+	Item_7::Item_7(const Item_7& other)
+		: Item(other)
+	{
+	}
+	void Item_7::Init()
+	{
+		id = 7;
+		name = "item_7";
+		description = "Increases the damage your Burn deals based on the enemy's Max Health.";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = WRATH;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_7::Use(PlayerCharacter* owner)
+	{
+		global::additionalBurnDamage += 0.05f * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_7::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_7::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_7::Clone() const
+	{
+		return std::make_shared<Item_7>(*this);
+	}
+	//============================================= ID_8
+	Item_8::Item_8(const Item_8& other)
+		: Item(other)
+	{
+	}
+	void Item_8::Init()
+	{
+		id = 8;
+		name = "item_8";
+		description = "Increases the frequency of your Burn damage ticks.";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = WRATH;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_8::Use(PlayerCharacter* owner)
+	{
+		global::additionalBurnRate = 0.2f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+	}
+	void Item_8::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_8::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_8::Clone() const
+	{
+		return std::make_shared<Item_8>(*this);
+	}
+	//============================================= ID_9
+	Item_9::Item_9(const Item_9& other)
+		: SkillEffectItem(other), CoolDown(other.CoolDown), isStarted(other.isStarted), isReady(other.isReady)
+	{
+	}
+	void Item_9::Init()
+	{
+		id = 9;
+		name = "item_9";
+		description = "Every 2 seconds, taking damage unleashes a fiery nova, burning nearby enemies for 30% of their max HP and applying Burn.";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		effectTime = 5.f;
+		tag = WRATH;
+		CoolDown = 2.f;
+		FireTimer = 0.f;
+		isStarted = false;
+		isReady = false;
+		AEVec2Set(&effectPosition, 0.f, 0.f);
+		FrameTime = 0.1f;
+		AEVec2Set(&AnimationOffset, 0.f, 0.f);
+		AEVec2Set(&effectSize, 400.f, 400.f);
+		AnimationCount = 0;
+		AnimationTimer = 0.f;
+		effectRow = 1;
+		effectColumn = 9;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_9::Use(PlayerCharacter* owner)
+	{
+		effectPosition = owner->position;
+
+		FireTimer += global::DeltaTime;
+		if (FireTimer >= CoolDown)
 		{
-			effectPosition = global::RecentlyDeadEnemyPosition;
-			isReady = false;
-			isStarted = true;
-
-			if (Manager::gm.currStateREF)
-			{
-				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-				if (GS)
-				{
-					if (GS->ECs.size() > 0)
-					{
-						for (size_t i = 0; i < GS->ECs.size(); i++)
-						{
-							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
-							{
-								GS->ECs[i]->adjustHealth(-Damage);
-							}
-						}
-					}
-				}
-			}
+			FireTimer = 0;
+			isReady = true;
 		}
 
 		if (isStarted)
@@ -248,10 +389,11 @@ namespace InGame
 			Utils::UpdateOffset(*this);
 		}
 	}
-	void Item_4::Update(PlayerCharacter* owner)
+	void Item_9::Update(PlayerCharacter* owner)
 	{
+		
 	}
-	void Item_4::Draw()
+	void Item_9::Draw()
 	{
 		if (isStarted)
 		{
@@ -274,157 +416,49 @@ namespace InGame
 			}
 		}
 	}
-	std::shared_ptr<Item> Item_4::Clone() const
-	{
-		return std::make_shared<Item_4>(*this);
-	}
-	//============================================= ID_5
-	Item_5::Item_5(const Item_5& other)
-		: Item(other)
-	{
-	}
-	void Item_5::Init()
-	{
-		id = 5;
-		name = "item_5";
-		description = "this is item_5";
-		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 3.f;
-		procChance = 0.2f;
-		tag = EMPTY;
-
-		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-	}
-	void Item_5::Use(PlayerCharacter* owner)
-	{
-	}
-	void Item_5::Update(PlayerCharacter* owner)
-	{
-	}
-	void Item_5::Draw()
-	{
-	}
-	std::shared_ptr<Item> Item_5::Clone() const
-	{
-		return std::make_shared<Item_5>(*this);
-	}
-	void Item_5::OnHit(InGame::EnemyCharacter* target)
-	{
-		if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
-			target->Stats.StatusEffectTimer[SLOW] = effectTime;
-	}
-	//============================================= ID_6
-	Item_6::Item_6(const Item_6& other)
-		: Item(other)
-	{
-	}
-	void Item_6::Init()
-	{
-		id = 6;
-		name = "item_6";
-		description = "this is item_6";
-		AEVec2Set(&iconPosition, 0.f, 0.f);
-
-		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-	}
-	void Item_6::Use(PlayerCharacter* owner)
-	{
-	}
-	void Item_6::Update(PlayerCharacter* owner)
-	{
-	}
-	void Item_6::Draw()
-	{
-	}
-	std::shared_ptr<Item> Item_6::Clone() const
-	{
-		return std::make_shared<Item_6>(*this);
-	}
-	//============================================= ID_7
-	Item_7::Item_7(const Item_7& other)
-		: Item(other)
-	{
-	}
-	void Item_7::Init()
-	{
-		id = 7;
-		name = "item_7";
-		description = "this is item_7";
-		AEVec2Set(&iconPosition, 0.f, 0.f);
-
-		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-	}
-	void Item_7::Use(PlayerCharacter* owner)
-	{
-	}
-	void Item_7::Update(PlayerCharacter* owner)
-	{
-	}
-	void Item_7::Draw()
-	{
-	}
-	std::shared_ptr<Item> Item_7::Clone() const
-	{
-		return std::make_shared<Item_7>(*this);
-	}
-	//============================================= ID_8
-	Item_8::Item_8(const Item_8& other)
-		: Item(other)
-	{
-	}
-	void Item_8::Init()
-	{
-		id = 8;
-		name = "item_8";
-		description = "this is item_8";
-		AEVec2Set(&iconPosition, 0.f, 0.f);
-
-		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-	}
-	void Item_8::Use(PlayerCharacter* owner)
-	{
-	}
-	void Item_8::Update(PlayerCharacter* owner)
-	{
-	}
-	void Item_8::Draw()
-	{
-	}
-	std::shared_ptr<Item> Item_8::Clone() const
-	{
-		return std::make_shared<Item_8>(*this);
-	}
-	//============================================= ID_9
-	Item_9::Item_9(const Item_9& other)
-		: Item(other)
-	{
-	}
-	void Item_9::Init()
-	{
-		id = 9;
-		name = "item_9";
-		description = "this is item_9";
-		AEVec2Set(&iconPosition, 0.f, 0.f);
-
-		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
-		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-	}
-	void Item_9::Use(PlayerCharacter* owner)
-	{
-	}
-	void Item_9::Update(PlayerCharacter* owner)
-	{
-	}
-	void Item_9::Draw()
-	{
-	}
 	std::shared_ptr<Item> Item_9::Clone() const
 	{
 		return std::make_shared<Item_9>(*this);
+	}
+	void Item_9::OnDamaged()
+	{
+		if (isReady)
+		{
+			isReady = false;
+			
+			isStarted = true;
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->ECs.size() > 0)
+					{
+						for (size_t i = 0; i < GS->ECs.size(); i++)
+						{
+							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
+							{
+								std::cout << GS->ECs[i]->Stats.MaxHP << std::endl;
+								std::cout << GS->ECs[i]->Stats.MaxHP * 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) << std::endl;
+
+								GS->ECs[i]->Stats.StatusEffectTimer[BURN] = effectTime;
+								
+								if (global::isBossBattleStarted)
+								{
+									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) * 0.1f);
+								}
+								else
+								{
+									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
+								}
+
+								std::cout << GS->ECs[i]->Stats.HP << std::endl;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	//============================================= ID_10
 	Item_10::Item_10(const Item_10& other)
@@ -435,14 +469,16 @@ namespace InGame
 	{
 		id = 10;
 		name = "item_10";
-		description = "this is item_10";
+		description = "Your damage multiplier increases based on the amount of Burn damage you inflict.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = WRATH;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_10::Use(PlayerCharacter* owner)
 	{
+		global::additionalDamageRatio += global::effectiveBurnDamage * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_10::Update(PlayerCharacter* owner)
 	{
@@ -512,7 +548,7 @@ namespace InGame
 	}
 	//============================================= ID_13
 	Item_13::Item_13(const Item_13& other)
-		: Item(other)
+		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }, Damage{ other.Damage }
 	{
 	}
 	void Item_13::Init()
@@ -521,18 +557,89 @@ namespace InGame
 		name = "item_13";
 		description = "this is item_13";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-
+		AEVec2Set(&effectSize, 400.f, 400.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		isReady = true;
+		isStarted = false;
+		CoolDown = 4.f;
+		FireTimer = 0.f;
+		FrameTime = 0.1f;
+		AEVec2Set(&AnimationOffset, 0.f, 0.f);
+		AnimationCount = 0;
+		AnimationTimer = 0.f;
+		Damage = 1;
+		effectRow = 1;
+		effectColumn = 9;
+		tag = SLOTH;
 	}
 	void Item_13::Use(PlayerCharacter* owner)
 	{
+		if (!isStarted)
+		{
+			FireTimer += global::DeltaTime;
+			if (FireTimer >= CoolDown)
+			{
+				FireTimer = 0;
+				isReady = true;
+			}
+		}
+
+		if (isReady && global::IsEnemyRecentlyDied)
+		{
+			effectPosition = global::RecentlyDeadEnemyPosition;
+			isReady = false;
+			isStarted = true;
+
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->ECs.size() > 0)
+					{
+						for (size_t i = 0; i < GS->ECs.size(); i++)
+						{
+							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
+							{
+								GS->ECs[i]->adjustHealth(-Damage);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (isStarted)
+		{
+			Utils::UpdateOffset(*this);
+		}
 	}
 	void Item_13::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_13::Draw()
 	{
+		if (isStarted)
+		{
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->ITRM)
+					{
+						Utils::DrawObject(*this, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
+					}
+				}
+			}
+
+			if (AnimationCount == effectColumn - 1)
+			{
+				AnimationCount = 0;
+				isStarted = false;
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_13::Clone() const
 	{
@@ -762,6 +869,50 @@ namespace InGame
 	{
 		return std::make_shared<Item_21>(*this);
 	}
+	//============================================= ID_26
+	Item_26::Item_26(const Item_26& other)
+		: Item(other)
+	{
+	}
+	void Item_26::Init()
+	{
+		id = 26;
+		name = "item_26";
+		description = "this is item_26";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		effectTime = 3.f;
+		procChance = 0.2f;
+		tag = LUST;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_26::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_26::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_26::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_26::Clone() const
+	{
+		return std::make_shared<Item_26>(*this);
+	}
+	void Item_26::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		if (isTargetBoss)
+		{
+			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio) / 10.f)
+				target->Stats.StatusEffectTimer[STUN] = effectTime / 10.f;
+		}
+		else 
+		{
+			if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
+				target->Stats.StatusEffectTimer[STUN] = effectTime;
+		}
+	}
 	//============================================= ID_31
 	Item_31::Item_31(const Item_31& other)
 		: SkillEffectItem(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance },
@@ -798,9 +949,7 @@ namespace InGame
 		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
 		effectiveHitCount = HitCount + global::additionalMinionHitCount;
 
-		std::cout << effectiveDamage << std::endl;
-
-		dir = global::PlayerMouseDirection;
+		dir = global::PlayerMouseDirection; 
 		AEVec2 DirectionVector;
 		AEVec2Scale(&DirectionVector, &dir, distance);
 

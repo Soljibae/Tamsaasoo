@@ -54,100 +54,115 @@ namespace InGame
 	}
 	void Stage1Boss::Update()
 	{
+		UpdateEffectTime();
+
 		static bool angleOffsetToggle = false;
-		ProjectileSpawnTimer += global::DeltaTime;
-		WaveAttackSpawnTimer += global::DeltaTime;
 
-		if (ProjectileSpawnTimer > ProjectileChamberTimer)
+		if (Stats.StatusEffectTimer[BURN] > 0)
 		{
-			ProjectileSpawnTimer = 0;
-
-			const int numProjectiles = 24;
-			const float angleStep = 15.0f * (3.1415926f / 180.0f); 
-			const float radius = 1.0f;
-
-			float angleOffset = angleOffsetToggle ? (7.5f * (3.1415926f / 180.0f)) : 0.0f;
-
-			for (int i = 0; i < numProjectiles; ++i)
+			BurnTimer += global::DeltaTime;
+			if (BurnTimer >= global::effectiveBurnRate)
 			{
-				float angle = i * angleStep + angleOffset;
-				AEVec2 dir;
-				dir.x = cosf(angle) * radius;
-				dir.y = sinf(angle) * radius;
-
-				this->SpawnProjectile(dir, position);
+				BurnTimer = 0.f;
+				adjustHealth(-Stats.MaxHP * global::effectiveBurnDamage / 5);
 			}
-
-			angleOffsetToggle = !angleOffsetToggle;
 		}
 
-		if (WaveAttackSpawnTimer > WaveAttackChamberTimer)
+		if (!(Stats.StatusEffectTimer[STUN] > 0))
 		{
-			bIsWaving = true;
-			if (WaveAttackSpawnTimer > WaveAttackChamberTimer*2)
+			ProjectileSpawnTimer += global::DeltaTime;
+			WaveAttackSpawnTimer += global::DeltaTime;
+
+			if (ProjectileSpawnTimer > ProjectileChamberTimer)
 			{
-				bIsWaving = false;
-				WaveAttackSpawnTimer = 0;
-				std::random_device rd;
-				std::mt19937 gen(rd());
-				std::uniform_int_distribution<> dist(0, 4);
-				int randIndex = dist(gen);
-				switch (randIndex)
+				ProjectileSpawnTimer = 0;
+
+				const int numProjectiles = 24;
+				const float angleStep = 15.0f * (3.1415926f / 180.0f);
+				const float radius = 1.0f;
+
+				float angleOffset = angleOffsetToggle ? (7.5f * (3.1415926f / 180.0f)) : 0.0f;
+
+				for (int i = 0; i < numProjectiles; ++i)
 				{
-				case 0:
-					AEVec2Set(&position, 0.f, 0.f);
-					break;
-				case 1:
-					AEVec2Set(&position, 800.f, 450.f);
-					break;
-				case 2:
-					AEVec2Set(&position, -800.f, 450.f);
-					break;
-				case 3:
-					AEVec2Set(&position, 800.f, -450.f);
-					break;
-				case 4:
-					AEVec2Set(&position, -800.f, -450.f);
-					break;
+					float angle = i * angleStep + angleOffset;
+					AEVec2 dir;
+					dir.x = cosf(angle) * radius;
+					dir.y = sinf(angle) * radius;
+
+					this->SpawnProjectile(dir, position);
+				}
+
+				angleOffsetToggle = !angleOffsetToggle;
+			}
+
+			if (WaveAttackSpawnTimer > WaveAttackChamberTimer)
+			{
+				bIsWaving = true;
+				if (WaveAttackSpawnTimer > WaveAttackChamberTimer * 2)
+				{
+					bIsWaving = false;
+					WaveAttackSpawnTimer = 0;
+					std::random_device rd;
+					std::mt19937 gen(rd());
+					std::uniform_int_distribution<> dist(0, 4);
+					int randIndex = dist(gen);
+					switch (randIndex)
+					{
+					case 0:
+						AEVec2Set(&position, 0.f, 0.f);
+						break;
+					case 1:
+						AEVec2Set(&position, 800.f, 450.f);
+						break;
+					case 2:
+						AEVec2Set(&position, -800.f, 450.f);
+						break;
+					case 3:
+						AEVec2Set(&position, 800.f, -450.f);
+						break;
+					case 4:
+						AEVec2Set(&position, -800.f, -450.f);
+						break;
+					}
 				}
 			}
-		}
-		if (bIsWaving)
-		{
-			const int bulletsPerWave = 40;
-			const float angleRangeDeg = 30.0f;
-			const float angleRangeRad = angleRangeDeg * (3.1415926f / 180.0f);
-			const float frequency = 10.0f;
-			const float intervalTime = 0.03f;
-			const float waveSpeed = 8.0f;
-
-			static float waveTimer = 0.0f;
-			static int bulletIndex = 0;
-			static float wavePhase = 0.0f;
-
-			waveTimer += global::DeltaTime;
-			wavePhase += global::DeltaTime * waveSpeed;
-
-			if (bulletIndex < bulletsPerWave && waveTimer > intervalTime)
+			if (bIsWaving)
 			{
-				AEVec2 baseDir;
-				AEVec2Sub(&baseDir, &global::PlayerLocation, &position);
-				AEVec2Normalize(&baseDir, &baseDir);
+				const int bulletsPerWave = 40;
+				const float angleRangeDeg = 30.0f;
+				const float angleRangeRad = angleRangeDeg * (3.1415926f / 180.0f);
+				const float frequency = 10.0f;
+				const float intervalTime = 0.03f;
+				const float waveSpeed = 8.0f;
 
-				int centeredIndex = bulletIndex - (bulletsPerWave / 2);
+				static float waveTimer = 0.0f;
+				static int bulletIndex = 0;
+				static float wavePhase = 0.0f;
 
-				float waveAngle = sinf(wavePhase + centeredIndex / frequency) * angleRangeRad;
+				waveTimer += global::DeltaTime;
+				wavePhase += global::DeltaTime * waveSpeed;
 
-				float cosA = cosf(waveAngle);
-				float sinA = sinf(waveAngle);
+				if (bulletIndex < bulletsPerWave && waveTimer > intervalTime)
+				{
+					AEVec2 baseDir;
+					AEVec2Sub(&baseDir, &global::PlayerLocation, &position);
+					AEVec2Normalize(&baseDir, &baseDir);
 
-				AEVec2 rotatedDir;
-				rotatedDir.x = baseDir.x * cosA - baseDir.y * sinA;
-				rotatedDir.y = baseDir.x * sinA + baseDir.y * cosA;
+					int centeredIndex = bulletIndex - (bulletsPerWave / 2);
 
-				AEVec2Neg(&rotatedDir, &rotatedDir);
+					float waveAngle = sinf(wavePhase + centeredIndex / frequency) * angleRangeRad;
 
-				this->SpawnProjectile(rotatedDir, position);
+					float cosA = cosf(waveAngle);
+					float sinA = sinf(waveAngle);
+
+					AEVec2 rotatedDir;
+					rotatedDir.x = baseDir.x * cosA - baseDir.y * sinA;
+					rotatedDir.y = baseDir.x * sinA + baseDir.y * cosA;
+
+					AEVec2Neg(&rotatedDir, &rotatedDir);
+
+					this->SpawnProjectile(rotatedDir, position);
 
 				bulletIndex++;
 				waveTimer = 0.0f;

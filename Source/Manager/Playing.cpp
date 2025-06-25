@@ -111,11 +111,11 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[1]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[7]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[10]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
@@ -132,6 +132,11 @@ namespace Manager
 			if (global::KeyInput(AEVK_6))
 			{
 				PC->AddItemToInventory(ITDB->itemList[6]->Clone());
+			}
+			if (global::KeyInput(AEVK_O))
+			{
+				PC->Stats.MaxHP += 2;
+				PC->Stats.HP += 3;
 			}
 			//
 
@@ -191,7 +196,7 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
-							PC->OnProjectileHit(EC);
+							PC->OnProjectileHit(EC, false);
 							EC->adjustHealth(-PP->Damage);
 							PP->OnHit();
 						}
@@ -205,7 +210,8 @@ namespace Manager
 						{
 							if (Utils::CheckCollision(*PP, *Boss))
 							{
-								Boss->adjustHealth(-PP->Damage);
+								PC->OnProjectileHit(Boss, true);
+								Boss->adjustHealth(-PP->Damage * global::additionalDamageToBossRatio);
 								PP->OnHit();
 							}
 						}
@@ -218,14 +224,31 @@ namespace Manager
 				{
 					if (Utils::CheckCollision(*EC, *PC))
 					{
-						PC->adjustHealth(-EC->Stats.Damage);
+						PC->OnDamaged();
+						if (global::isBossBattleStarted)
+						{
+							PC->adjustHealth(-EC->Stats.Damage * global::additionalDamageFromBossRatio);
+						}
+						else
+						{
+							PC->adjustHealth(-EC->Stats.Damage);
+						}
+						
 					}
 				}
 				for (InGame::Projectile*& EP : EPs)
 				{
 					if (Utils::CheckCollision(*EP, *PC))
 					{
-						PC->adjustHealth(-EP->Damage);
+						PC->OnDamaged();
+						if (global::isBossBattleStarted)
+						{
+							PC->adjustHealth(-EP->Damage * global::additionalDamageFromBossRatio);
+						}
+						else
+						{
+							PC->adjustHealth(-EP->Damage);
+						}
 						EP->OnHit();
 					}
 				}
@@ -258,6 +281,7 @@ namespace Manager
 						float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);
 						if (distToPlayer <= EC->explosionRadius)
 						{
+							PC->OnDamaged();
 							PC->adjustHealth(-EC->explosionDamage);
 						}
 						for (InGame::EnemyCharacter* enemy : ECs)
@@ -526,6 +550,8 @@ namespace Manager
 			Boss->Texture = AEGfxTextureLoad(CurrentStage->BossTextureAddress.c_str());
 			Boss->Init();
 		}
+
+		global::isBossBattleStarted = true;
 	}
 	void Playing::FinishBossFight()
 	{
@@ -575,6 +601,7 @@ namespace Manager
 		}
 		WaveCount = 0;
 		InitStage();
+		global::isBossBattleStarted = false;
 	}
 	void Playing::InitStage()
 	{

@@ -14,7 +14,7 @@ namespace global
 	extern u8 (*KeyInput)(u8);
 	extern AEGfxTexture* testTexture;
 	extern AEGfxVertexList* testMesh;
-
+	extern bool isBossBattleStarted;
 
 	// additionalStats =================
 	extern f32 additionalDamage;
@@ -39,5 +39,8 @@ namespace global
 	extern s32 additionalMinionHitCount;
 
 	extern f32 additionalProcChanceRatio;
+
+	extern f32 additionalDamageToBossRatio;
+	extern f32 additionalDamageFromBossRatio;
 	//==================================
 }

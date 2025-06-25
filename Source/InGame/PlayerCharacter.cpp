@@ -39,9 +39,10 @@ namespace InGame
 		Stats.TargetExp = 8.f;
 		Stats.Money = 0;
 		Stats.Potion = 0;
-		Stats.BurnDamage = 0.05f;
+		Stats.BurnDamage = 0.1f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
+		Stats.ReviveCount = 0;
 
 		Stats.Init();
 
@@ -55,7 +56,15 @@ namespace InGame
 	}
 	void PlayerCharacter::Update()
 	{
+		if (Stats.MaxHP <= 0)
+		{
+			bIsPandingKill = true;
+		}
+		
+		Stats.HP = std::clamp(Stats.HP, 0.f, Stats.MaxHP);
+
 		UpdateEffectTime();
+
 		InitAdditionalStats();
 
 		for (const auto& item_ptr : inventory)
@@ -64,8 +73,6 @@ namespace InGame
 		}
 
 		UpdateStats();
-		
-		std::cout << Stats.effectiveDamage << std::endl;
 
 		for (const auto& item_ptr : inventory)
 		{
@@ -132,11 +139,7 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-		for (const auto& item_ptr : inventory)
-		{
-			item_ptr.first->Use(this);
-		}
-		//About Potion
+
 		if (Stats.Potion > 100)
 			Stats.Potion = 100;
 		if (global::KeyInput(AEVK_Q))
@@ -184,10 +187,20 @@ namespace InGame
 	{
 		if (!bIsInvincible)
 		{
+			Amount = static_cast<s32>(Amount);
+
 			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 			if (Stats.HP <= 0)
 			{
-				bIsPandingKill = true;
+				if (IsRevivable())
+				{
+					bIsInvincible = true;
+					Stats.HP = Stats.MaxHP;
+				}
+				else
+				{
+					bIsPandingKill = true;
+				}
 			}
 			else
 			{
@@ -348,12 +361,6 @@ namespace InGame
 				}
 			}
 		}
-
-
-		if (HoldingGun)
-		{
-			HoldingGun->Update(MouseDirection, position);
-		}
 		if (DashTimer >= DashTime)
 		{
 			bIsDashing = false;
@@ -361,11 +368,18 @@ namespace InGame
 			DashCooldownTimer = 0.0f;
 		}
 	}
-	void PlayerCharacter::OnProjectileHit(InGame::EnemyCharacter* target)
+	void PlayerCharacter::OnProjectileHit(InGame::EnemyCharacter* target, bool isTargetBoss)
 	{
 		for (const auto& item_pair : inventory)
 		{
-			item_pair.first->OnHit(target);
+			item_pair.first->OnHit(target, isTargetBoss);
+		}
+	}
+	void PlayerCharacter::OnDamaged()
+	{
+		for (const auto& item_pair : inventory)
+		{
+			item_pair.first->OnDamaged();
 		}
 	}
 	void PlayerCharacter::UpdateEffectTime()
@@ -423,6 +437,9 @@ namespace InGame
 		global::additionalMinionHitCount = 0;
 
 		global::additionalProcChanceRatio = 1.f;
+
+		global::additionalDamageToBossRatio = 1.f;
+		global::additionalDamageFromBossRatio = 1.f;
 	}
 
 	void PlayerCharacter::UpdateStats()
@@ -434,5 +451,18 @@ namespace InGame
 
 		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
 		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;
+
+		std::cout << "BD:" << global::effectiveBurnDamage << std::endl;
+		std::cout << "ED:" << Stats.effectiveDamage << std::endl;
+	}
+
+	bool PlayerCharacter::IsRevivable()
+	{
+		if (Stats.ReviveCount > 0)
+		{
+			Stats.ReviveCount--;
+			return true;
+		}
+		return false;
 	}
 }
