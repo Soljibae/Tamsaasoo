@@ -11,6 +11,8 @@ namespace Manager
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
 	AEGfxTexture* HUDController::HPBGTex = nullptr;
+	const float HPWidth = 40.f;
+	const float HPHeight = 50.f;
 
 	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
 	{
@@ -46,8 +48,6 @@ namespace Manager
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
 		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2 };
 		Coin.size = { 30.f, 30.f };
-		const float actorWidth = 40.f;
-		const float actorHeight = 50.f;
 		const float spacingX = 10.0f; // 가로 간격
 		const float startX = -(w / 2) + 200.f;
 		const float Y = (h / 2) - 100.f;
@@ -62,8 +62,8 @@ namespace Manager
 		{
 			int row = i;
 			int col = i;
-			bgobj.position = { startX + col * (actorWidth + spacingX), Y };
-			bgobj.size = { actorWidth, actorHeight };
+			bgobj.position = { startX + col * (HPWidth + spacingX), Y };
+			bgobj.size = { HPWidth, HPHeight };
 			HPBG.push_back(bgobj);
 		}
 		//HP HUD init
@@ -74,7 +74,7 @@ namespace Manager
 		for (int i = 0; i < currentHP; i++)
 		{
 			hpobj.position = HPBG[i].position;
-			hpobj.size = { actorWidth, actorHeight };
+			hpobj.size = { HPWidth, HPHeight };
 			HP.push_back(hpobj);
 		}
 
@@ -123,6 +123,27 @@ namespace Manager
 				break;
 			}
 		}
+		if (global::KeyInput(AEVK_5))
+		{
+			PC->Stats.MaxHP -= 2;
+		}
+		while (currentHP > PC->Stats.MaxHP)
+		{
+			if (!HP.empty())
+			{
+				HP.pop_back();
+				currentHP--;
+				PC->Stats.HP--;
+			}
+		}
+		while (MaxHP > PC->Stats.MaxHP)
+		{
+			if (!HPBG.empty())
+			{
+				HPBG.pop_back();
+				MaxHP--;
+			}
+		}
 		while (currentHP > PC->Stats.HP)
 		{
 			if (!HP.empty())
@@ -131,21 +152,17 @@ namespace Manager
 		}
 		if (currentHP < PC->Stats.HP)
 		{
-			const float actorWidth = 40.f;
-			const float actorHeight = 50.f;
-			const float spacingX = 10.0f; // 가로 간격
-			const float startX = -(global::ScreenWidth / 2) + 200.f;
-			const float Y = (global::ScreenHeight / 2) - 100.f;
 			InGame::Actor hpobj;
 			hpobj.Texture = HPBGTex;
 			hpobj.Mesh = HPMesh;
 			for (int i = 0; i < PC->Stats.HP - currentHP; i++)
 			{
-				hpobj.position = HPBG[currentHP].position;
-				hpobj.size = { actorWidth, actorHeight };
+				hpobj.position = HPBG[currentHP+i].position;
+				hpobj.size = { HPWidth, HPHeight };
 				HP.push_back(hpobj);
 			}
 		}
+		MaxHP = PC->Stats.MaxHP;
 		currentHP = PC->Stats.HP;
 
 		/*--------Centered can fire UI--------*/
@@ -205,7 +222,6 @@ namespace Manager
 		{
 			PC->Stats.Potion += 10;
 		}
-	
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
 		{
