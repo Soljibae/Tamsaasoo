@@ -123,13 +123,21 @@ namespace Manager
 				break;
 			}
 		}
-		while (PC->Stats.MaxHP < MaxHP)
+		if (global::KeyInput(AEVK_5))
 		{
-			if (!HP.empty() && currentHP > PC->Stats.MaxHP)
+			PC->Stats.MaxHP -= 2;
+		}
+		while (currentHP > PC->Stats.MaxHP)
+		{
+			if (!HP.empty())
 			{
 				HP.pop_back();
 				currentHP--;
+				PC->Stats.HP--;
 			}
+		}
+		while (MaxHP > PC->Stats.MaxHP)
+		{
 			if (!HPBG.empty())
 			{
 				HPBG.pop_back();
@@ -149,10 +157,9 @@ namespace Manager
 			hpobj.Mesh = HPMesh;
 			for (int i = 0; i < PC->Stats.HP - currentHP; i++)
 			{
-				hpobj.position = HPBG[currentHP].position;
+				hpobj.position = HPBG[currentHP+i].position;
 				hpobj.size = { HPWidth, HPHeight };
 				HP.push_back(hpobj);
-				currentHP++;
 			}
 		}
 		MaxHP = PC->Stats.MaxHP;
