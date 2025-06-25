@@ -469,14 +469,16 @@ namespace InGame
 	{
 		id = 10;
 		name = "item_10";
-		description = "this is item_10";
+		description = "Your damage multiplier increases based on the amount of Burn damage you inflict.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = WRATH;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_10::Use(PlayerCharacter* owner)
 	{
+		global::additionalDamageRatio += global::effectiveBurnDamage * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_10::Update(PlayerCharacter* owner)
 	{

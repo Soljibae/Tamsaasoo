@@ -31,7 +31,7 @@ namespace InGame
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 0.f;
+		Stats.Damage = 1.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
@@ -451,6 +451,9 @@ namespace InGame
 
 		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
 		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;
+
+		std::cout << "BD:" << global::effectiveBurnDamage << std::endl;
+		std::cout << "ED:" << Stats.effectiveDamage << std::endl;
 	}
 
 	bool PlayerCharacter::IsRevivable()

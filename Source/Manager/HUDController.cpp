@@ -123,9 +123,6 @@ namespace Manager
 				break;
 			}
 		}
-		
-		std::cout << "MAX:" << PC->Stats.MaxHP << std::endl;
-		std::cout << PC->Stats.HP << std::endl;
 
 		if (prevMaxHP != PC->Stats.MaxHP)
 		{

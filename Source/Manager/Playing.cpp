@@ -99,11 +99,11 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[9]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[7]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[2]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[10]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
