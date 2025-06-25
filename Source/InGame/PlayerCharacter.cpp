@@ -38,6 +38,7 @@ namespace InGame
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 8.f;
 		Stats.Money = 0;
+		Stats.Potion = 0;
 		Stats.BurnDamage = 0.05f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
@@ -130,6 +131,24 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
+		for (const auto& item_ptr : inventory)
+		{
+			item_ptr.first->Use(this);
+		}
+		//About Potion
+		if (Stats.Potion > 100)
+			Stats.Potion = 100;
+		if (global::KeyInput(AEVK_Q))
+		{
+			if (Stats.HP < Stats.MaxHP)
+			{
+				if (Stats.Potion >= 100)
+				{
+					adjustHealth(1);
+					Stats.Potion = 0;
+				}
+			}
+		}
 	}
 	void PlayerCharacter::Draw()
 	{
