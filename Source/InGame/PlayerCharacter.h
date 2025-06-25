@@ -31,6 +31,8 @@ namespace InGame
 		void UpdateEffectTime();
 		void InitAdditionalStats();
 		void UpdateStats();
+		
+		bool IsRevivable();
 
 		bool bIsDashing = false;
 	protected:

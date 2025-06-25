@@ -56,6 +56,7 @@ namespace InGame
 	void PlayerCharacter::Update()
 	{
 		UpdateEffectTime();
+
 		InitAdditionalStats();
 
 		for (const auto& item_ptr : inventory)
@@ -64,7 +65,6 @@ namespace InGame
 		}
 
 		UpdateStats();
-		
 		//std::cout << Stats.effectiveDamage << std::endl;
 
 		for (const auto& item_ptr : inventory)
@@ -187,7 +187,15 @@ namespace InGame
 			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 			if (Stats.HP <= 0)
 			{
-				bIsPandingKill = true;
+				if (IsRevivable())
+				{
+					bIsInvincible = true;
+					Stats.HP = Stats.MaxHP;
+				}
+				else
+				{
+					bIsPandingKill = true;
+				}
 			}
 			else
 			{
@@ -434,5 +442,25 @@ namespace InGame
 
 		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
 		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;
+	}
+
+	bool PlayerCharacter::IsRevivable()
+	{
+		for (auto curr = inventory.begin(); curr != inventory.end(); ++curr)
+		{
+			if (curr->first->id == 4)
+			{
+				if (auto revive_item = dynamic_cast<InGame::Item_4*>(curr->first.get()))
+				{
+					if (revive_item->reviveCount > 0)
+					{
+						revive_item->reviveCount--;
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 }
