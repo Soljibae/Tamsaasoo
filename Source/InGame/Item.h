@@ -395,4 +395,46 @@ namespace InGame
 		virtual std::shared_ptr<Item> Clone() const override;
 		virtual void OnHit(InGame::EnemyCharacter* target) {}
 	};
+	//============================================= ID_34
+	class Item_34 : public Item // to do change class name
+	{
+	public:
+		Item_34() = default;
+		Item_34(const Item_34& other);
+
+		AEVec2 dir;
+		f32 distance;
+		AEVec2 effectPosition2;
+
+		f32 Damage;
+
+
+		virtual void Init() override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target) {}
+	};
+	//============================================= ID_35
+	class Item_35 : public Item // to do change class name
+	{
+	public:
+		Item_35() = default;
+		Item_35(const Item_35& other);
+
+		AEVec2 dir;
+		f32 distance;
+		AEVec2 effectPosition2;
+
+		f32 FireRate;
+		
+
+		virtual void Init() override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target) {}
+	};
 }

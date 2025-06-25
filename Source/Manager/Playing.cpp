@@ -67,6 +67,7 @@ namespace Manager
 		gm.GamePaused = false;
 		Utils::TestInit();
 		WM.Init();
+		bIsJumping = false;
 	}
 	void Playing::Update()
 	{
@@ -84,7 +85,18 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
-
+			// 점프 애니메이션 진행 중
+			if (bIsJumping)
+			{
+				JumpAnimationTimer += global::DeltaTime;
+				Utils::UpdateOffset(*PC);
+				if (JumpAnimationTimer >= 1.5f) // 애니메이션 지속 시간
+				{
+					bIsJumping = false;
+					ChangeStage();  // 스테이지 전환
+				}
+				return; // 다른 업데이트 무시
+			}
 			if (global::IsEnemyRecentlyDied)
 			{
 				static f32 cooldown = 0.f;
@@ -137,7 +149,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 100)
+				if (WaveCount > 2)
 				{
 					InitBossFight();
 				}
@@ -291,7 +303,7 @@ namespace Manager
 			}
 			CAM->Update(*PC);
 
-			if (Boss)
+			if(Boss)
 			{
 				if (Boss->bIsPandingKill)
 				{
@@ -305,6 +317,11 @@ namespace Manager
 				else
 				{
 					Boss->Update();
+					if (Utils::CheckCollision(*Boss, *PC))
+					{
+						PC->adjustHealth(-Boss->Stats.Damage);
+						Boss->OnPlayerHit();
+					}
 				}
 			}
 
@@ -522,6 +539,14 @@ namespace Manager
 			EP->bIsPandingKill = false;
 		}
 		EPs.clear();
+		
+		bIsJumping = true;
+		JumpAnimationTimer = 0.f;
+		PC->AnimationState = InGame::EAnimationState::JUMP;  // 애니메이션 재생 함수 필요
+		PC->AnimationCount = 0;
+	}
+	void Playing::ChangeStage()
+	{
 		if (PC)
 		{
 			AEVec2Set(&PC->position, 0.f, 0.f);

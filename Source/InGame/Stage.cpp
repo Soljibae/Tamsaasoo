@@ -11,7 +11,7 @@ namespace InGame
 	{
 		Type = StageType::TOWER;
 		MapTextureAddress = "Assets/Stage2.png";
-		BossTextureAddress = "Assets/Minion.png";
+		BossTextureAddress = "Assets/test.png";
 	}
 	Stage3::Stage3()
 	{
