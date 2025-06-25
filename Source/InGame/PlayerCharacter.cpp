@@ -15,7 +15,6 @@ namespace InGame
 		CollisionRadius = 50;
 		size.x = 100;
 		size.y = 100;
-		MovementSpeed = 300;
 		row = 4;
 		column = 2;
 		Mesh = Utils::CreateMesh(row, column);
@@ -25,10 +24,11 @@ namespace InGame
 		AnimationCount = 0;
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
+		MaxAnimationCount[JUMP] = 2;
 
 		Stats.MaxHP = 10;
 		Stats.HP = Stats.MaxHP;
-		Stats.MovementSpeed = MovementSpeed;
+		Stats.MovementSpeed = 300;
 		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
 		Stats.Damage = 1.f;

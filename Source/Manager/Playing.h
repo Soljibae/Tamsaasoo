@@ -50,11 +50,15 @@ namespace Manager
 		void ClearWave();
 		void InitBossFight();
 		void FinishBossFight();
+		void ChangeStage();
 		InGame::EnemyBoss* Boss = nullptr;
 		InGame::Stage* CurrentStage = nullptr;
 		InGame::StageType CurrentStageType;
 		void InitStage();
 		AEVec2 GetSpawnLocation();
+
+		bool bIsJumping = false;
+		float JumpAnimationTimer = 0.f;
 	};
 	extern Utils::Camera* CAM;
 	

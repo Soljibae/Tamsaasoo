@@ -30,10 +30,13 @@ namespace InGame
 			Texture = nullptr;
 		}
 	}
+	void EnemyBoss::OnPlayerHit()
+	{
+	}
 	void Stage1Boss::Init()
 	{
 		EnemyBoss::Init();
-		MovementSpeed = 100.f;
+		Stats.MovementSpeed = 100.f;
 		size.x = 400;
 		size.y = 400;
 		position.x = 0;
@@ -164,12 +167,10 @@ namespace InGame
 					bulletIndex++;
 					waveTimer = 0.0f;
 				}
-
 				if (bulletIndex >= bulletsPerWave)
 				{
 					bulletIndex = 0;
 					waveTimer = 0.0f;
-
 				}
 			}
 		}
@@ -181,5 +182,66 @@ namespace InGame
 	void Stage1Boss::Destroy()
 	{
 		EnemyBoss::Destroy();
+	}
+	void Stage2Boss::Init()
+	{
+		EnemyBoss::Init();
+
+		Stats.MovementSpeed = 1200.f;
+		size = { 300.f, 300.f };
+		position = { 0.f, 0.f };
+		CollisionRadius = 150.f;
+
+		Stats.HP = 40;
+		Stats.Damage = 3;
+
+		dashTimer = 0.f;
+		dashSpeed = 500.f;
+		cooldownTime = 0.f;
+	}
+	void Stage2Boss::Update()
+	{
+		if(!bIsCharging)
+		{
+			cooldownTime += global::DeltaTime;
+
+			if (cooldownTime > 2.f) 
+			{
+				AEVec2Sub(&dashDirection, &global::PlayerLocation, &position);
+				AEVec2Normalize(&dashDirection, &dashDirection);
+				bIsCharging = true;
+			}
+		}
+		else
+		{
+			AEVec2 delta;
+			AEVec2Scale(&delta, &dashDirection, Stats.MovementSpeed * global::DeltaTime);
+
+			AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
+			float EllipseA = (global::worldMax.x - global::worldMin.x) / 2 - (size.x / 2);
+			float EllipseB = (global::worldMax.y - global::worldMin.y) / 2 - (size.y / 2);
+			float value = (newPos.x * newPos.x) / (EllipseA * EllipseA) + (newPos.y * newPos.y) / (EllipseB * EllipseB);
+			if (value <= 1.0f)
+			{
+				position = newPos;
+			}
+			else
+			{
+				bIsCharging = false;
+				cooldownTime = 0.f;
+			}
+		}
+	}
+	void Stage2Boss::Draw()
+	{
+		EnemyBoss::Draw();
+	}
+	void Stage2Boss::Destroy()
+	{
+		EnemyBoss::Destroy();
+	}
+	void Stage2Boss::OnPlayerHit()
+	{
+		EnemyBoss::OnPlayerHit();
 	}
 }

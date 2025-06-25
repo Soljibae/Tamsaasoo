@@ -11,7 +11,7 @@
 namespace InGame
 {
 	AEVec2 Item::size;
-	s32 Item::row = 7, Item::column = 3;
+	s32 Item::row = 7, Item::column = 5;
 
 	Item::Item(const Item& other)
 		: id(other.id), name(other.name), description(other.description), iconPosition(other.iconPosition),
@@ -1106,4 +1106,67 @@ namespace InGame
 	{
 		return std::make_shared<Item_31>(*this);
 	}
+	//============================================= ID_34
+	Item_34::Item_34(const Item_34& other)
+		: Item(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance }, Damage{ other.Damage }
+	{
+	}
+	void Item_34::Init()
+	{
+		id = 34;
+		name = "item_34";
+		description = "summoner attack speed faster";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		distance = 80.f;
+		Damage = 1.f;
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		tag = ENVY;
+	}
+	void Item_34::Use(PlayerCharacter* owner)
+	{
+		global::additionalMinionDamage += (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f) * Damage;
+	}
+	void Item_34::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_34::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_34::Clone() const
+	{
+		return std::make_shared<Item_34>(*this);
+	}
+	//============================================= ID_35
+	Item_35::Item_35(const Item_35& other)
+		: Item(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance }, FireRate{ other.FireRate }
+	{
+	}
+	void Item_35::Init()
+	{
+		id = 35;
+		name = "item_35";
+		description = "summoner attack speed faster";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		distance = 80.f;
+		FireRate = 5.f;
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		tag = ENVY;
+	}
+	void Item_35::Use(PlayerCharacter* owner)
+	{
+		global::additionalMinionFireRate += (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f) * FireRate;
+	}
+	void Item_35::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_35::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_35::Clone() const
+	{
+		return std::make_shared<Item_35>(*this);
+	}
+	
 }
