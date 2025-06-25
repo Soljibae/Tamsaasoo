@@ -18,7 +18,7 @@ namespace InGame
 		s32 HitCount;
 		u32 TargetExp;
 		u32 Money;
-		u32 Potion;
+		s16 Potion;
 		s32 ReviveCount;
 
 		f32 BurnDamage;

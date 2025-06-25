@@ -123,6 +123,45 @@ namespace Manager
 				break;
 			}
 		}
+		if (global::KeyInput(AEVK_O))
+		{
+			PC->Stats.MaxHP+=2;
+			PC->Stats.HP+=3;
+		}
+		while (PC->Stats.HP > PC->Stats.MaxHP)
+		{
+			PC->Stats.HP--;
+		}
+		if (MaxHP < PC->Stats.MaxHP)
+		{
+			const float spacingX = 10.0f; // 가로 간격
+			const float startX = -(global::ScreenWidth / 2) + 200.f;
+			const float Y = (global::ScreenHeight / 2) - 100.f;
+
+			InGame::Actor bgobj;
+			bgobj.Texture = HPTex;
+			bgobj.Mesh = HPMesh;
+			for (int i = MaxHP; i < PC->Stats.MaxHP; ++i)
+			{
+				int row = i;
+				int col = i;
+				bgobj.position = { startX + col * (HPWidth + spacingX), Y };
+				bgobj.size = { HPWidth, HPHeight };
+				HPBG.push_back(bgobj);
+			}
+		}
+		if (currentHP < PC->Stats.HP)
+		{
+			InGame::Actor hpobj;
+			hpobj.Texture = HPBGTex;
+			hpobj.Mesh = HPMesh;
+			for (int i = currentHP, j = 0; i < PC->Stats.HP; i++, j++)
+			{
+				hpobj.position = HPBG[currentHP + j].position;
+				hpobj.size = { HPWidth, HPHeight };
+				HP.push_back(hpobj);
+			}
+		}
 		while (currentHP > PC->Stats.MaxHP)
 		{
 			if (!HP.empty())
@@ -134,29 +173,13 @@ namespace Manager
 		}
 		while (MaxHP > PC->Stats.MaxHP)
 		{
-			if (!HPBG.empty())
-			{
-				HPBG.pop_back();
-				MaxHP--;
-			}
+			HPBG.pop_back();
+			MaxHP--;
 		}
 		while (currentHP > PC->Stats.HP)
 		{
-			if (!HP.empty())
-				HP.pop_back();
+			HP.pop_back();
 			currentHP--;
-		}
-		if (currentHP < PC->Stats.HP)
-		{
-			InGame::Actor hpobj;
-			hpobj.Texture = HPBGTex;
-			hpobj.Mesh = HPMesh;
-			for (int i = 0; i < PC->Stats.HP - currentHP; i++)
-			{
-				hpobj.position = HPBG[currentHP+i].position;
-				hpobj.size = { HPWidth, HPHeight };
-				HP.push_back(hpobj);
-			}
 		}
 		MaxHP = PC->Stats.MaxHP;
 		currentHP = PC->Stats.HP;
@@ -216,7 +239,7 @@ namespace Manager
 		//DEBUG
 		if (global::KeyInput(AEVK_P))
 		{
-			PC->Stats.Potion += 10;
+			PC->Stats.Potion += 100;
 		}
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
@@ -226,7 +249,9 @@ namespace Manager
 			Potion.Mesh = FillingMeshUpside(fillPercent);
 			if (prevPotion > PC->Stats.Potion)
 			{
-				prevPotion--;
+				prevPotion-=3;
+				if (prevPotion < PC->Stats.Potion)
+					prevPotion = PC->Stats.Potion;
 			}
 			else if (prevPotion < PC->Stats.Potion)
 			{
