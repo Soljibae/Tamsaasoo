@@ -205,7 +205,7 @@ namespace Manager
 		{
 			PC->Stats.Potion += 10;
 		}
-		std::cout << PC->Stats.Potion << std::endl;
+	
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
 		{

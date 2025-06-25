@@ -42,6 +42,7 @@ namespace InGame
 		Stats.BurnDamage = 0.05f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
+		Stats.ReviveCount = 0;
 
 		Stats.Init();
 
@@ -368,11 +369,11 @@ namespace InGame
 			DashCooldownTimer = 0.0f;
 		}
 	}
-	void PlayerCharacter::OnProjectileHit(InGame::EnemyCharacter* target)
+	void PlayerCharacter::OnProjectileHit(InGame::EnemyCharacter* target, bool isTargetBoss)
 	{
 		for (const auto& item_pair : inventory)
 		{
-			item_pair.first->OnHit(target);
+			item_pair.first->OnHit(target, isTargetBoss);
 		}
 	}
 	void PlayerCharacter::UpdateEffectTime()
@@ -445,21 +446,11 @@ namespace InGame
 
 	bool PlayerCharacter::IsRevivable()
 	{
-		for (auto curr = inventory.begin(); curr != inventory.end(); ++curr)
+		if (Stats.ReviveCount > 0)
 		{
-			if (curr->first->id == 4)
-			{
-				if (auto revive_item = dynamic_cast<InGame::Item_4*>(curr->first.get()))
-				{
-					if (revive_item->reviveCount > 0)
-					{
-						revive_item->reviveCount--;
-						return true;
-					}
-				}
-			}
+			Stats.ReviveCount--;
+			return true;
 		}
-
 		return false;
 	}
 }

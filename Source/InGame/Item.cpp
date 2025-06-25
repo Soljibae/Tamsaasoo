@@ -181,18 +181,17 @@ namespace InGame
 	}
 	//============================================= ID_4
 	Item_4::Item_4(const Item_4& other)
-		: SkillEffectItem(other), appliedStack(other.appliedStack), reviveCount(other.reviveCount)
+		: SkillEffectItem(other), appliedStack(other.appliedStack)
 	{
 	}
 	void Item_4::Init()
 	{
 		id = 4;
 		name = "item_4";
-		description = "this is item_ID";
+		description = "Reduces Max HP by 2. Grants one revive on death.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
 		appliedStack = 0;
-		reviveCount = 0;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -204,7 +203,7 @@ namespace InGame
 		if (Utils::GetItemCount(id) != appliedStack)
 		{
 			appliedStack++;
-			reviveCount++;
+			owner->Stats.ReviveCount++;
 			owner->Stats.MaxHP -= 2;
 		}
 		
@@ -230,9 +229,8 @@ namespace InGame
 		name = "item_5";
 		description = "this is item_5";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 3.f;
-		procChance = 0.2f;
-		tag = EMPTY;
+		tag = PRIDE;
+		procChance = 
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -249,11 +247,6 @@ namespace InGame
 	std::shared_ptr<Item> Item_5::Clone() const
 	{
 		return std::make_shared<Item_5>(*this);
-	}
-	void Item_5::OnHit(InGame::EnemyCharacter* target)
-	{
-		if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
-			target->Stats.StatusEffectTimer[SLOW] = effectTime;
 	}
 	//============================================= ID_6
 	Item_6::Item_6(const Item_6& other)
@@ -773,6 +766,49 @@ namespace InGame
 	std::shared_ptr<Item> Item_21::Clone() const
 	{
 		return std::make_shared<Item_21>(*this);
+	}
+	//============================================= ID_26
+	Item_26::Item_26(const Item_26& other)
+		: Item(other)
+	{
+	}
+	void Item_26::Init()
+	{
+		id = 26;
+		name = "item_26";
+		description = "this is item_26";
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		effectTime = 3.f;
+		procChance = 0.2f;
+		tag = EMPTY;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_26::Use(PlayerCharacter* owner)
+	{
+	}
+	void Item_26::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_26::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_26::Clone() const
+	{
+		return std::make_shared<Item_26>(*this);
+	}
+	void Item_26::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		if (isTargetBoss)
+		{
+
+		}
+		else
+		{
+			if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
+				target->Stats.StatusEffectTimer[STUN] = effectTime;
+		}
 	}
 	//============================================= ID_31
 	Item_31::Item_31(const Item_31& other)

@@ -179,7 +179,7 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
-							PC->OnProjectileHit(EC);
+							PC->OnProjectileHit(EC, false);
 							EC->adjustHealth(-PP->Damage);
 							PP->OnHit();
 						}
