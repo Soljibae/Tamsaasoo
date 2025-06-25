@@ -164,13 +164,14 @@ namespace InGame
 
 					this->SpawnProjectile(rotatedDir, position);
 
-				bulletIndex++;
-				waveTimer = 0.0f;
-			}
-			if (bulletIndex >= bulletsPerWave)
-			{
-				bulletIndex = 0;
-				waveTimer = 0.0f;
+					bulletIndex++;
+					waveTimer = 0.0f;
+				}
+				if (bulletIndex >= bulletsPerWave)
+				{
+					bulletIndex = 0;
+					waveTimer = 0.0f;
+				}
 			}
 		}
 	}
