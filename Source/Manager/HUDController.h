@@ -32,7 +32,7 @@ namespace Manager
 		InGame::GunType prevGunType;
 		u32 prevPotion;
 		s32 MaxHP;
-		s32 currentHP;
+		f32 currentHP;
 		s8 pFont;
 	};
 	

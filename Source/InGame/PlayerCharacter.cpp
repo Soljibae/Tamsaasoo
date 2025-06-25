@@ -31,7 +31,7 @@ namespace InGame
 		Stats.MovementSpeed = MovementSpeed;
 		Stats.FireRate = 1.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 1.f;
+		Stats.Damage = 5.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
@@ -65,7 +65,7 @@ namespace InGame
 
 		UpdateStats();
 		
-		std::cout << Stats.effectiveDamage << std::endl;
+		//std::cout << Stats.effectiveDamage << std::endl;
 
 		for (const auto& item_ptr : inventory)
 		{
