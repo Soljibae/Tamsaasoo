@@ -123,10 +123,6 @@ namespace Manager
 				break;
 			}
 		}
-		if (global::KeyInput(AEVK_5))
-		{
-			PC->Stats.MaxHP -= 2;
-		}
 		while (currentHP > PC->Stats.MaxHP)
 		{
 			if (!HP.empty())
@@ -220,7 +216,7 @@ namespace Manager
 		//DEBUG
 		if (global::KeyInput(AEVK_P))
 		{
-			PC->Stats.Potion += 10;
+			PC->Stats.Potion += 100;
 		}
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
@@ -230,7 +226,9 @@ namespace Manager
 			Potion.Mesh = FillingMeshUpside(fillPercent);
 			if (prevPotion > PC->Stats.Potion)
 			{
-				prevPotion--;
+				prevPotion-=3;
+				if (prevPotion < PC->Stats.Potion)
+					prevPotion = PC->Stats.Potion;
 			}
 			else if (prevPotion < PC->Stats.Potion)
 			{

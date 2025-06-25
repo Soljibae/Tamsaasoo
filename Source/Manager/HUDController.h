@@ -30,7 +30,7 @@ namespace Manager
 		InGame::Actor PotionBG;
 
 		InGame::GunType prevGunType;
-		u32 prevPotion;
+		s16 prevPotion;
 		s32 MaxHP;
 		f32 currentHP;
 		s8 pFont;
