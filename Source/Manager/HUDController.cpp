@@ -41,8 +41,8 @@ namespace Manager
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		PC = InPC;
 		GUN = InGUN;
-		MaxHP = PC->Stats.MaxHP;
-		currentHP = PC->Stats.HP;
+		prevMaxHP = PC->Stats.MaxHP;
+		prevCurrentHP = PC->Stats.HP;
 
 		Coin.Mesh = Utils::CreateMesh();
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
@@ -58,7 +58,7 @@ namespace Manager
 		InGame::Actor bgobj;
 		bgobj.Texture = HPTex;
 		bgobj.Mesh = HPMesh;
-		for (int i = 0; i < MaxHP; ++i)
+		for (int i = 0; i < prevMaxHP; ++i)
 		{
 			int row = i;
 			int col = i;
@@ -71,7 +71,7 @@ namespace Manager
 		InGame::Actor hpobj;
 		hpobj.Texture = HPBGTex;
 		hpobj.Mesh = HPMesh;
-		for (int i = 0; i < currentHP; i++)
+		for (int i = 0; i < prevCurrentHP; i++)
 		{
 			hpobj.position = HPBG[i].position;
 			hpobj.size = { HPWidth, HPHeight };
@@ -123,17 +123,13 @@ namespace Manager
 				break;
 			}
 		}
-		if (global::KeyInput(AEVK_O))
+		
+		std::cout << "MAX:" << PC->Stats.MaxHP << std::endl;
+		std::cout << PC->Stats.HP << std::endl;
+
+		if (prevMaxHP != PC->Stats.MaxHP)
 		{
-			PC->Stats.MaxHP+=2;
-			PC->Stats.HP+=3;
-		}
-		while (PC->Stats.HP > PC->Stats.MaxHP)
-		{
-			PC->Stats.HP--;
-		}
-		if (MaxHP < PC->Stats.MaxHP)
-		{
+			HPBG.clear();
 			const float spacingX = 10.0f; // 가로 간격
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
 			const float Y = (global::ScreenHeight / 2) - 100.f;
@@ -141,7 +137,7 @@ namespace Manager
 			InGame::Actor bgobj;
 			bgobj.Texture = HPTex;
 			bgobj.Mesh = HPMesh;
-			for (int i = MaxHP; i < PC->Stats.MaxHP; ++i)
+			for (int i = 0; i < PC->Stats.MaxHP; ++i)
 			{
 				int row = i;
 				int col = i;
@@ -150,39 +146,23 @@ namespace Manager
 				HPBG.push_back(bgobj);
 			}
 		}
-		if (currentHP < PC->Stats.HP)
+
+		if (prevCurrentHP != PC->Stats.HP)
 		{
+			HP.clear();
 			InGame::Actor hpobj;
 			hpobj.Texture = HPBGTex;
 			hpobj.Mesh = HPMesh;
-			for (int i = currentHP, j = 0; i < PC->Stats.HP; i++, j++)
+			for (int i = 0; i < PC->Stats.HP; i++)
 			{
-				hpobj.position = HPBG[currentHP + j].position;
+				hpobj.position = HPBG[i].position;
 				hpobj.size = { HPWidth, HPHeight };
 				HP.push_back(hpobj);
 			}
 		}
-		while (currentHP > PC->Stats.MaxHP)
-		{
-			if (!HP.empty())
-			{
-				HP.pop_back();
-				currentHP--;
-				PC->Stats.HP--;
-			}
-		}
-		while (MaxHP > PC->Stats.MaxHP)
-		{
-			HPBG.pop_back();
-			MaxHP--;
-		}
-		while (currentHP > PC->Stats.HP)
-		{
-			HP.pop_back();
-			currentHP--;
-		}
-		MaxHP = PC->Stats.MaxHP;
-		currentHP = PC->Stats.HP;
+
+		prevMaxHP = PC->Stats.MaxHP;
+		prevCurrentHP = PC->Stats.HP;
 
 		/*--------Centered can fire UI--------*/
 		if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)

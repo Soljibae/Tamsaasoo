@@ -60,6 +60,8 @@ namespace InGame
 		{
 			bIsPandingKill = true;
 		}
+		
+		Stats.HP = std::clamp(Stats.HP, 0.f, Stats.MaxHP);
 
 		UpdateEffectTime();
 

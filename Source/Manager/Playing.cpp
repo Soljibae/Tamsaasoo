@@ -121,6 +121,11 @@ namespace Manager
 			{
 				PC->AddItemToInventory(ITDB->itemList[6]->Clone());
 			}
+			if (global::KeyInput(AEVK_O))
+			{
+				PC->Stats.MaxHP += 2;
+				PC->Stats.HP += 3;
+			}
 			//
 
 			if (!bIsBossFight)
