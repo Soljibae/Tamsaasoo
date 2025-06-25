@@ -228,11 +228,17 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_11
-	class Item_11 : public Item // to do change class name
+	class Item_11 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_11() = default;
 		Item_11(const Item_11& other);
+
+		f32 CoolDown;
+		bool isStarted;
+		bool isReady;
+		AEVec2 baseEffectSize;
+		f32 additionalEffectSizeRatio;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -267,7 +273,6 @@ namespace InGame
 		f32 CoolDown;
 		bool isReady;
 		bool isStarted;
-		s32 Damage;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -283,6 +288,8 @@ namespace InGame
 	public:
 		Item_14() = default;
 		Item_14(const Item_14& other);
+
+		s32 appliedStack;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;

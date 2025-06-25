@@ -301,12 +301,16 @@ namespace InGame
 	{
 		if (Stats.StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount * 1.2f, 0.0f, Stats.MaxHP);
+			Amount *= 1.2f;
 		}
-		else
+
+		if (Stats.HP / Stats.MaxHP >= 0.8f && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
+			Amount *= 1.5f * (1.f + (Utils::GetItemCount(12) - 1) * 0.1);
 		}
+
+		Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
+
 		if (Stats.HP <= 0)
 		{
 			bIsPandingKill = true;

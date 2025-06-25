@@ -60,8 +60,9 @@ namespace InGame
 		{
 			bIsPandingKill = true;
 		}
-		
+
 		Stats.HP = std::clamp(Stats.HP, 0.f, Stats.MaxHP);
+		Stats.MovementSpeed = std::clamp(Stats.MovementSpeed, 30.f, 600.f);
 
 		UpdateEffectTime();
 
@@ -451,9 +452,6 @@ namespace InGame
 
 		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
 		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;
-
-		std::cout << "BD:" << global::effectiveBurnDamage << std::endl;
-		std::cout << "ED:" << Stats.effectiveDamage << std::endl;
 	}
 
 	bool PlayerCharacter::IsRevivable()
