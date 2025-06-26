@@ -54,6 +54,7 @@
 
 - [1주차 영상](https://drive.google.com/file/d/1bHSuhmY9qJ8aNfNPiAnHpkBafLchmZBD/view?usp=sharing)
 - [2주차 영상](https://drive.google.com/file/d/1WxueMh_DTdlNmREtKTrDE5OeJRer1ju2/view?usp=sharing)
+- [3주차 영상](https://drive.google.com/file/d/1Q3lvfbdrs5O1BvOEBNIxgRsrHhmME7O_/view?usp=sharing)
 
 ---
 

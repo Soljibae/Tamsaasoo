@@ -153,7 +153,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 100)
+				if (WaveCount > 3)
 				{
 					InitBossFight();
 				}
