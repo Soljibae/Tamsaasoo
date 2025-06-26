@@ -29,9 +29,9 @@ namespace InGame
 		Stats.MaxHP = 10;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = 300;
-		Stats.FireRate = 1.0f;
+		Stats.FireRate = 10.0f;
 		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 1.f;
+		Stats.Damage = 10.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = 1;
@@ -61,9 +61,6 @@ namespace InGame
 			bIsPandingKill = true;
 		}
 
-		Stats.HP = std::clamp(Stats.HP, 0.f, Stats.MaxHP);
-		Stats.MovementSpeed = std::clamp(Stats.MovementSpeed, 30.f, 600.f);
-
 		UpdateEffectTime();
 
 		InitAdditionalStats();
@@ -74,6 +71,9 @@ namespace InGame
 		}
 
 		UpdateStats();
+
+		Stats.HP = std::clamp(Stats.HP, 0.f, Stats.MaxHP);
+		Stats.effectiveMovementSpeed = std::clamp(Stats.effectiveMovementSpeed, 30.f, 600.f); // to do
 
 		for (const auto& item_ptr : inventory)
 		{
@@ -186,17 +186,24 @@ namespace InGame
 	}
 	void PlayerCharacter::adjustHealth(f32 Amount)
 	{
+		Amount = static_cast<s32>(Amount);
+
+		if (Amount >= 0)
+		{
+			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
+
+			return;
+		}
+
 		if (!bIsInvincible)
 		{
-			Amount = static_cast<s32>(Amount);
-
 			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 			if (Stats.HP <= 0)
 			{
 				if (IsRevivable())
 				{
 					bIsInvincible = true;
-					Stats.HP = Stats.MaxHP;
+					Stats.HP = Stats.MaxHP; // to do
 				}
 				else
 				{
@@ -305,7 +312,7 @@ namespace InGame
 		}
 
 		AEVec2 delta;
-		AEVec2Scale(&delta, &MovingVec, Stats.MovementSpeed * global::DeltaTime);
+		AEVec2Scale(&delta, &MovingVec, Stats.effectiveMovementSpeed * global::DeltaTime);
 
 		AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
 
@@ -378,9 +385,12 @@ namespace InGame
 	}
 	void PlayerCharacter::OnDamaged()
 	{
-		for (const auto& item_pair : inventory)
+		if (!bIsInvincible)
 		{
-			item_pair.first->OnDamaged();
+			for (const auto& item_pair : inventory)
+			{
+				item_pair.first->OnDamaged();
+			}
 		}
 	}
 	void PlayerCharacter::UpdateEffectTime()
@@ -394,26 +404,31 @@ namespace InGame
 					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[BURN] < 0)
 					Stats.StatusEffectTimer[BURN] = 0;
+				break;
 			case 1:
 				if (Stats.StatusEffectTimer[STUN] > 0)
 					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[STUN] < 0)
 					Stats.StatusEffectTimer[STUN] = 0;
+				break;
 			case 2:
 				if (Stats.StatusEffectTimer[SLOW] > 0)
 					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[SLOW] < 0)
 					Stats.StatusEffectTimer[SLOW] = 0;
+				break;
 			case 3:
 				if (Stats.StatusEffectTimer[FEAR] > 0)
 					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[FEAR] < 0)
 					Stats.StatusEffectTimer[FEAR] = 0;
+				break;
 			case 4:
 				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
 					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
 					Stats.StatusEffectTimer[VULNERABLE] = 0;
+				break;
 			default:
 				break;
 			}
@@ -427,6 +442,7 @@ namespace InGame
 		global::additionalFireRateRatio = 1.f;
 		global::additionalExpGainedRatio = 1.f;
 		global::additionalHitCount = 0;
+		global::additionalMovementSpeed = 0;
 
 		global::additionalBurnDamage = 0.f;
 		global::additionalBurnRate = 0.f;
@@ -449,6 +465,7 @@ namespace InGame
 		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio;
 		Stats.effectiveExpGained = Stats.ExpGained * global::additionalExpGainedRatio;
 		Stats.effectiveHitCount = Stats.HitCount + global::additionalHitCount;
+		Stats.effectiveMovementSpeed = Stats.MovementSpeed + global::additionalMovementSpeed;
 
 		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
 		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;

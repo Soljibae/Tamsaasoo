@@ -460,6 +460,28 @@ f32 Utils::GetRandomFloat(f32 min, f32 max)
 	return dis(gen);
 }
 
+AEVec2 Utils::GetRandomPointInEllipse(f32 collisionSize)
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
+	float angle = dist(gen) * TWO_PI; 
+
+	float distance = std::sqrt(dist(gen));
+
+	float ellipseA = (global::worldMax.x - global::worldMin.x) / 2.0f - collisionSize;
+	float ellipseB = (global::worldMax.y - global::worldMin.y) / 2.0f - collisionSize;
+
+	float relativeX = ellipseA * distance * AECos(angle);
+	float relativeY = ellipseB * distance * AESin(angle);
+
+	AEVec2 Point;
+	AEVec2Set(&Point, relativeX, relativeY);
+
+	return Point;
+}
+
 void Utils::TestInit()
 {
 	global::testTexture = AEGfxTextureLoad("Assets/test.png");

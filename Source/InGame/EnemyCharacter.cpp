@@ -347,26 +347,31 @@ namespace InGame
 					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[BURN] < 0)
 					Stats.StatusEffectTimer[BURN] = 0;
+				break;
 			case 1:
 				if (Stats.StatusEffectTimer[STUN] > 0)
 					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[STUN] < 0)
 					Stats.StatusEffectTimer[STUN] = 0;
+				break;
 			case 2:
 				if (Stats.StatusEffectTimer[SLOW] > 0)
 					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[SLOW] < 0)
 					Stats.StatusEffectTimer[SLOW] = 0;
+				break;
 			case 3:
 				if (Stats.StatusEffectTimer[FEAR] > 0)
 					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[FEAR] < 0)
 					Stats.StatusEffectTimer[FEAR] = 0;
+				break;
 			case 4:
 				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
 					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
 					Stats.StatusEffectTimer[VULNERABLE] = 0;
+				break;
 			default:
 				break;
 			}
