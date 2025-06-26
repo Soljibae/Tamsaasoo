@@ -111,11 +111,11 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[20]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[27]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[16]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
@@ -139,7 +139,6 @@ namespace Manager
 				PC->Stats.HP += 3;
 			}
 			//
-
 			if (!bIsBossFight)
 			{
 				WaveTimer += global::DeltaTime;

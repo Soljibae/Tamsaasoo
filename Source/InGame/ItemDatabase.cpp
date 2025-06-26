@@ -89,5 +89,61 @@ namespace InGame
         auto item21_prototype = std::make_shared<Item_21>();
         item21_prototype->Init();
         itemList[item21_prototype->id] = item21_prototype;
+
+        auto item22_prototype = std::make_shared<Item_22>();
+        item22_prototype->Init();
+        itemList[item22_prototype->id] = item22_prototype;
+
+        auto item23_prototype = std::make_shared<Item_23>();
+        item23_prototype->Init();
+        itemList[item23_prototype->id] = item23_prototype;
+
+        auto item24_prototype = std::make_shared<Item_24>();
+        item24_prototype->Init();
+        itemList[item24_prototype->id] = item24_prototype;
+
+        auto item25_prototype = std::make_shared<Item_25>();
+        item25_prototype->Init();
+        itemList[item25_prototype->id] = item25_prototype;
+
+        auto item26_prototype = std::make_shared<Item_26>();
+        item26_prototype->Init();
+        itemList[item26_prototype->id] = item26_prototype;
+
+        auto item27_prototype = std::make_shared<Item_27>();
+        item27_prototype->Init();
+        itemList[item27_prototype->id] = item27_prototype;
+
+        auto item28_prototype = std::make_shared<Item_28>();
+        item28_prototype->Init();
+        itemList[item28_prototype->id] = item28_prototype;
+
+        auto item29_prototype = std::make_shared<Item_29>();
+        item29_prototype->Init();
+        itemList[item29_prototype->id] = item29_prototype;
+
+        auto item30_prototype = std::make_shared<Item_30>();
+        item30_prototype->Init();
+        itemList[item30_prototype->id] = item30_prototype;
+
+        auto item31_prototype = std::make_shared<Item_31>();
+        item31_prototype->Init();
+        itemList[item31_prototype->id] = item31_prototype;
+
+        auto item32_prototype = std::make_shared<Item_32>();
+        item32_prototype->Init();
+        itemList[item32_prototype->id] = item32_prototype;
+
+        auto item33_prototype = std::make_shared<Item_33>();
+        item33_prototype->Init();
+        itemList[item33_prototype->id] = item33_prototype;
+
+        auto item34_prototype = std::make_shared<Item_34>();
+        item34_prototype->Init();
+        itemList[item34_prototype->id] = item34_prototype;
+
+        auto item35_prototype = std::make_shared<Item_35>();
+        item35_prototype->Init();
+        itemList[item35_prototype->id] = item35_prototype;
     }
 }

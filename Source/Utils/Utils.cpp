@@ -211,9 +211,6 @@ void Utils::DrawObjectWithDirection(InGame::SkillEffectItem& object, AEGfxTextur
 	AEVec2 translated_pos;
 	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.effectPosition);
 
-	AEMtx33 tran_inv;
-	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
-
 	float angle = atan2f(Direction.y, Direction.x);
 	AEMtx33 rotate;
 	AEMtx33Rot(&rotate, angle);
@@ -245,9 +242,6 @@ void Utils::DrawObjectWithDirection(InGame::SkillEffectItem& object, AEVec2 Posi
 
 	AEVec2 translated_pos;
 	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &Position);
-
-	AEMtx33 tran_inv;
-	AEMtx33Trans(&tran_inv, -translated_pos.x, -translated_pos.y);
 
 	float angle = atan2f(Direction.y, Direction.x);
 	AEMtx33 rotate;
