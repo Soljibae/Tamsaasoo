@@ -54,9 +54,6 @@ namespace InGame
 		Stats.Init();
 
 		Utils::InitOffset(*this);
-
-		
-
 		inventory.clear();
 	}
 	void PlayerCharacter::Update()
@@ -131,6 +128,14 @@ namespace InGame
 		if (HoldingGun)
 		{
 			HoldingGun->Update(MouseDirection, position);
+			if (size.x * MouseDirection.x >= 0)
+			{
+				HoldingGun->ArmOffset.x = fabsf(HoldingGun->ArmOffset.x);
+			}
+			else
+			{
+				HoldingGun->ArmOffset.x = -fabsf(HoldingGun->ArmOffset.x);
+			}
 		}
 
 		if (bIsInvincible)
@@ -162,6 +167,7 @@ namespace InGame
 	}
 	void PlayerCharacter::Draw()
 	{
+		HoldingGun->Draw();
 		if (bIsInvincible)
 		{
 			Utils::DrawObject(*this, true, 0.5f);
@@ -170,7 +176,7 @@ namespace InGame
 		{
 			Utils::DrawObject(*this);
 		}
-		HoldingGun->Draw();
+		
 	}
 	void PlayerCharacter::Destroy()
 	{
