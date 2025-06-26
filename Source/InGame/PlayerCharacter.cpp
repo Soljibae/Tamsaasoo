@@ -27,7 +27,7 @@ namespace InGame
 		MaxAnimationCount[JUMP] = 2;
 
 		Texture = AEGfxTextureLoad("Assets/Character.png");
-		GunData = new PistolStruct;
+		GunData = new ShotGunStruct;
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
