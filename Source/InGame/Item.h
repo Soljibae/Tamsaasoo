@@ -521,7 +521,7 @@ namespace InGame
 		virtual void Update(class PlayerCharacter* owner) override;
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
-		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss);
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_29
