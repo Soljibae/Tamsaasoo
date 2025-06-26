@@ -1313,15 +1313,18 @@ namespace InGame
 	{
 		id = 28;
 		name = "item_28";
-		description = "this is item_28";
+		description = "Attacks have a 20% chance to make an enemy Vulnerable for 3 seconds.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		effectTime = 3.f;
+		procChance = 0.2f;
+		tag = LUST;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_28::Use(PlayerCharacter* owner)
 	{
+
 	}
 	void Item_28::Update(PlayerCharacter* owner)
 	{
@@ -1333,6 +1336,19 @@ namespace InGame
 	{
 		return std::make_shared<Item_28>(*this);
 	}
+	void Item_28::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		if (isTargetBoss)
+		{
+			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio) / 10.f)
+				target->Stats.StatusEffectTimer[VULNERABLE] = effectTime;
+		}
+		else
+		{
+			if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
+				target->Stats.StatusEffectTimer[VULNERABLE] = effectTime;
+		}
+	}
 	//============================================= ID_29
 	Item_29::Item_29(const Item_29& other)
 		: Item(other)
@@ -1342,15 +1358,16 @@ namespace InGame
 	{
 		id = 29;
 		name = "item_29";
-		description = "this is item_29";
+		description = "Increases the activation chance of all status effects.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = LUST;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_29::Use(PlayerCharacter* owner)
 	{
+		global::additionalProcChanceRatio += 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_29::Update(PlayerCharacter* owner)
 	{
@@ -1373,7 +1390,7 @@ namespace InGame
 		name = "item_30";
 		description = "this is item_30";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = LUST;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
