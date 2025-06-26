@@ -14,11 +14,12 @@ namespace InGame
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad(object->GunData->TextureAddress.c_str());
 		Source = object;
-		AEVec2Set(&size, 40.f, 40.f);
+		AEVec2Set(&size, 80.f, 40.f);
 		RoundPerSec = Source->Stats.FireRate;
 		direction.x = 1;
 		direction.y = 0;
 		gunType = PISTOL;
+		AEVec2Set(&ArmOffset, 5.f, 18.f);
 	}
 
 
@@ -29,6 +30,7 @@ namespace InGame
 		position = Pos;
 		AEVec2Scale(&Vec, &Dir, 40.f);
 		AEVec2Add(&position, &position, &Vec);
+		AEVec2Add(&position, &position, &ArmOffset);
 		direction = Dir;
 		
 		FireTimer += global::DeltaTime;

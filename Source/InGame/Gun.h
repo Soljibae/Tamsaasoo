@@ -21,6 +21,7 @@ namespace InGame
 		f32 FireTimer = 0.f;
 		f32 RoundPerSec;
 		GunType gunType;
+		AEVec2 ArmOffset;
 		class PlayerCharacter* Source;
 	};
 
