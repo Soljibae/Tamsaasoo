@@ -301,12 +301,16 @@ namespace InGame
 	{
 		if (Stats.StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount * 1.2f, 0.0f, Stats.MaxHP);
+			Amount *= 1.2f;
 		}
-		else
+
+		if (Stats.HP / Stats.MaxHP >= 0.8f && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
+			Amount *= 1.5f * (1.f + (Utils::GetItemCount(12) - 1) * 0.1);
 		}
+
+		Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
+
 		if (Stats.HP <= 0)
 		{
 			bIsPandingKill = true;
@@ -343,26 +347,31 @@ namespace InGame
 					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[BURN] < 0)
 					Stats.StatusEffectTimer[BURN] = 0;
+				break;
 			case 1:
 				if (Stats.StatusEffectTimer[STUN] > 0)
 					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[STUN] < 0)
 					Stats.StatusEffectTimer[STUN] = 0;
+				break;
 			case 2:
 				if (Stats.StatusEffectTimer[SLOW] > 0)
 					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[SLOW] < 0)
 					Stats.StatusEffectTimer[SLOW] = 0;
+				break;
 			case 3:
 				if (Stats.StatusEffectTimer[FEAR] > 0)
 					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[FEAR] < 0)
 					Stats.StatusEffectTimer[FEAR] = 0;
+				break;
 			case 4:
 				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
 					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
 				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
 					Stats.StatusEffectTimer[VULNERABLE] = 0;
+				break;
 			default:
 				break;
 			}

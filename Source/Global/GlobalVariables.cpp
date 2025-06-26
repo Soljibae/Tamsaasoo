@@ -12,6 +12,7 @@ namespace global
 	AEGfxTexture* testTexture = nullptr;
 	AEGfxVertexList* testMesh = nullptr;
 	bool isBossBattleStarted = false;
+	s32 RecentlyDeadEnemyCount = 0;
 
 	// additionalStats =================
 	f32 additionalDamage = 0.f;
@@ -22,6 +23,7 @@ namespace global
 
 	f32 additionalExpGainedRatio = 1.f;
 	s32 additionalHitCount = 0;
+	f32 additionalMovementSpeed = 0;
 
 	f32 effectiveBurnDamage = 0.f;
 	f32 additionalBurnDamage = 0.f;

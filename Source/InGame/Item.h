@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <vector>
 
 namespace InGame
 {
@@ -228,11 +229,17 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_11
-	class Item_11 : public Item // to do change class name
+	class Item_11 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_11() = default;
 		Item_11(const Item_11& other);
+
+		f32 CoolDown;
+		bool isStarted;
+		bool isReady;
+		AEVec2 baseEffectSize;
+		f32 additionalEffectSizeRatio;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -267,7 +274,6 @@ namespace InGame
 		f32 CoolDown;
 		bool isReady;
 		bool isStarted;
-		s32 Damage;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -283,6 +289,8 @@ namespace InGame
 	public:
 		Item_14() = default;
 		Item_14(const Item_14& other);
+
+		s32 appliedStack;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -314,6 +322,8 @@ namespace InGame
 		Item_16() = default;
 		Item_16(const Item_16& other);
 
+		s32 appliedStack;
+
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
 		virtual void Update(class PlayerCharacter* owner) override;
@@ -328,6 +338,9 @@ namespace InGame
 	public:
 		Item_17() = default;
 		Item_17(const Item_17& other);
+
+		s32 targetKillCount;
+		s32 currKillCount;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -359,20 +372,25 @@ namespace InGame
 		Item_19() = default;
 		Item_19(const Item_19& other);
 
+		f32 effectTimer;
+		bool isActivated;
+
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
 		virtual void Update(class PlayerCharacter* owner) override;
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
 		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
-		virtual void OnDamaged() {}
+		virtual void OnDamaged();
 	};
 	//============================================= ID_20
-	class Item_20 : public Item // to do change class name
+	class Item_20 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_20() = default;
 		Item_20(const Item_20& other);
+
+		std::vector<std::shared_ptr<Actor>> Potions;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;

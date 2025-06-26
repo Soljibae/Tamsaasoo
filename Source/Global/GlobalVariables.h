@@ -15,6 +15,7 @@ namespace global
 	extern AEGfxTexture* testTexture;
 	extern AEGfxVertexList* testMesh;
 	extern bool isBossBattleStarted;
+	extern s32 RecentlyDeadEnemyCount;
 
 	// additionalStats =================
 	extern f32 additionalDamage;
@@ -25,6 +26,7 @@ namespace global
 
 	extern f32 additionalExpGainedRatio;
 	extern s32 additionalHitCount;
+	extern f32 additionalMovementSpeed;
 
 	extern f32 effectiveBurnDamage;
 	extern f32 additionalBurnDamage;

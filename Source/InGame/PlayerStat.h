@@ -28,5 +28,6 @@ namespace InGame
 		f32 effectiveFireRate;
 		f32 effectiveExpGained;
 		s32 effectiveHitCount;
+		f32 effectiveMovementSpeed;
 	};
 }

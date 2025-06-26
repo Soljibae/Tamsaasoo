@@ -111,11 +111,11 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[7]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[20]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[10]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[16]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
@@ -154,7 +154,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 2)
+				if (WaveCount > 100)
 				{
 					InitBossFight();
 				}
@@ -164,6 +164,7 @@ namespace Manager
 				}
 			}
 			PC->Update();
+			global::RecentlyDeadEnemyCount = 0;
 
 			for (InGame::Projectile*& PP : PPs)
 			{
@@ -276,6 +277,8 @@ namespace Manager
 
 				if (EC->bIsPandingKill)
 				{
+					global::RecentlyDeadEnemyCount++;
+
 					if (EC->Type == InGame::EnemyType::BOMBER)
 					{
 						float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);

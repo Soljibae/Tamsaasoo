@@ -50,6 +50,8 @@ namespace Utils
 
 	f32 GetRandomFloat(f32 min, f32 max);
 
+	AEVec2 GetRandomPointInEllipse(f32 collisionSize = 0);
+
 	void TestInit();
 
 	void TestDestroy();
