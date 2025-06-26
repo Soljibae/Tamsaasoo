@@ -23,7 +23,7 @@ namespace InGame
 		
 		Stats.HP = 1;
 		Stats.FireRate = 1.f;
-		Stats.BulletSpeed = 30.f;
+		Stats.ProjectileSpeed = 30.f;
 		Stats.Damage = 1;
 
 		Stats.Init();
@@ -45,14 +45,14 @@ namespace InGame
 		Stats.Damage = InData->Damage;
 		Exp = InData->Exp;
 		Stats.MovementSpeed = InData->MovementSpeed;
-		Stats.BulletSpeed = InData->BulletSpeed;
+		Stats.ProjectileSpeed = InData->BulletSpeed;
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
 		Stats.MaxHP = InData->Health;
 		Stats.HP = InData->Health;
 
-		AEVec2Set(&ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
+		AEVec2Set(&Stats.ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
 
 		/*--------DASHER--------*/
 		bHasDashed = false;

@@ -26,6 +26,7 @@ namespace InGame
 		void AddItemToInventory(std::shared_ptr<Item> item);
 
 		Gun* HoldingGun = nullptr;
+		GunStruct* GunData = nullptr;
 
 		void OnProjectileHit(InGame::EnemyCharacter* target, bool isTargetBoss);
 		void OnDamaged();
