@@ -2,6 +2,7 @@
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 #include <random>
+#include <cmath>
 namespace InGame
 {
 	void EnemyBoss::Init()
@@ -42,15 +43,16 @@ namespace InGame
 		position.x = 0;
 		position.y = 0;
 		CollisionRadius = 200;
-		AEVec2Set(&ProjectileSize, 30, 30);
+		AEVec2Set(&Stats.ProjectileSize, 30, 30);
 		ProjectileSpawnTimer = 0;
 		ProjectileChamberTimer = 5;
 		bIsWaving = false;
 
 		Stats.HP = 10;
 		Stats.FireRate = 5.f;
-		Stats.BulletSpeed = 3.f;
+		Stats.ProjectileSpeed = 3.f;
 		Stats.Damage = 1;
+		Stats.ProjectileCollisionSize = 15.f;
 	}
 	void Stage1Boss::Update()
 	{
@@ -193,48 +195,131 @@ namespace InGame
 		CollisionRadius = 150.f;
 
 		Stats.HP = 40;
-		Stats.Damage = 3;
+		Stats.Damage = 1;
 
 		dashTimer = 0.f;
 		dashSpeed = 500.f;
 		cooldownTime = 0.f;
+
+		AEVec2Set(&Stats.ProjectileSize, 30, 30);
+		Stats.ProjectileSpeed = 10.f;
+		Stats.ProjectileCollisionSize = 15.f;
 	}
 	void Stage2Boss::Update()
 	{
-		if(!bIsCharging)
+		if (!bIsJumping)
 		{
-			cooldownTime += global::DeltaTime;
-
-			if (cooldownTime > 2.f) 
+			if (!bIsCharging)
 			{
-				AEVec2Sub(&dashDirection, &global::PlayerLocation, &position);
-				AEVec2Normalize(&dashDirection, &dashDirection);
-				bIsCharging = true;
+				cooldownTime += global::DeltaTime;
+
+				if (cooldownTime > 2.f)
+				{
+					AEVec2Sub(&dashDirection, &global::PlayerLocation, &position);
+					AEVec2Normalize(&dashDirection, &dashDirection);
+					bIsCharging = true;
+				}
+			}
+			else
+			{
+				AEVec2 delta;
+				AEVec2Scale(&delta, &dashDirection, Stats.MovementSpeed * global::DeltaTime);
+
+				AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
+				float EllipseA = (global::worldMax.x - global::worldMin.x) / 2 - (size.x / 2);
+				float EllipseB = (global::worldMax.y - global::worldMin.y) / 2 - (size.y / 2);
+				float value = (newPos.x * newPos.x) / (EllipseA * EllipseA) + (newPos.y * newPos.y) / (EllipseB * EllipseB);
+				if (value <= 1.0f)
+				{
+					position = newPos;
+				}
+				else
+				{
+					bIsCharging = false;
+					cooldownTime = 0.f;
+					dashCount++;
+					if (dashCount >= 3)
+					{
+						bIsJumping = true;
+						jumpTimer = 0.f;
+						jumpStartPos = position;
+						jumpTargetPos = global::PlayerLocation;
+						dashCount = 0;
+					}
+				}
+			}
+
+			radialAttackTimer += global::DeltaTime;
+			if (radialAttackTimer >= radialAttackCooldown)
+			{
+				radialAttackTimer = 0.f;
+
+				AEVec2 toPlayer;
+				AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
+				AEVec2Normalize(&toPlayer, &toPlayer);
+
+				const int numBullets = 5;
+				const float angleSpreadDeg = 30.f; // ±15도
+				const float angleStepDeg = angleSpreadDeg / (numBullets - 1);
+				const float angleStartDeg = -angleSpreadDeg / 2.0f;
+
+				for (int i = 0; i < numBullets; ++i)
+				{
+					float angleDeg = angleStartDeg + i * angleStepDeg;
+					float angleRad = angleDeg * (3.1415926f / 180.0f);
+
+					float cosA = cosf(angleRad);
+					float sinA = sinf(angleRad);
+
+					AEVec2 rotatedDir;
+					rotatedDir.x = toPlayer.x * cosA - toPlayer.y * sinA;
+					rotatedDir.y = toPlayer.x * sinA + toPlayer.y * cosA;
+					AEVec2Neg(&rotatedDir, &rotatedDir);
+					SpawnProjectile(rotatedDir, position);
+				}
 			}
 		}
 		else
 		{
-			AEVec2 delta;
-			AEVec2Scale(&delta, &dashDirection, Stats.MovementSpeed * global::DeltaTime);
+			jumpTimer += global::DeltaTime;
 
-			AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
-			float EllipseA = (global::worldMax.x - global::worldMin.x) / 2 - (size.x / 2);
-			float EllipseB = (global::worldMax.y - global::worldMin.y) / 2 - (size.y / 2);
-			float value = (newPos.x * newPos.x) / (EllipseA * EllipseA) + (newPos.y * newPos.y) / (EllipseB * EllipseB);
-			if (value <= 1.0f)
+			// 비율 계산 (0~1)
+			float fadeOutRatio = std::fmin(jumpTimer / jumpFadeOutDuration, 1.0f);
+			float moveRatio = std::fmin(jumpTimer / jumpMoveDuration, 1.0f);
+			float fadeInRatio = std::fmax((jumpTimer - (jumpMoveDuration - jumpFadeInDuration)) / jumpFadeInDuration, 0.0f);
+
+			// Alpha 처리
+			if (jumpTimer < jumpMoveDuration - jumpFadeInDuration)
 			{
-				position = newPos;
+				// 점점 희미해짐
+				DrawAlpha = 1.0f - 0.7f * fadeOutRatio; // 1.0 → 0.3
 			}
 			else
 			{
-				bIsCharging = false;
-				cooldownTime = 0.f;
+				// 다시 뚜렷하게
+				DrawAlpha = 0.3f + 0.7f * fadeInRatio; // 0.3 → 1.0
+			}
+
+			// 위치 이동: 점프 시작점 → 착지 위치 (보간)
+			position.x = jumpStartPos.x + (jumpTargetPos.x - jumpStartPos.x) * moveRatio;
+			position.y = jumpStartPos.y + (jumpTargetPos.y - jumpStartPos.y) * moveRatio;
+
+			// 낙하 완료 처리
+			if (jumpTimer >= jumpMoveDuration)
+			{
+				DrawAlpha = 1.0f;
+				bIsJumping = false;
+
+				// 낙하 공격 판정
+				AEVec2 toPlayer;
+				AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
+				float distance = AEVec2Length(&toPlayer);
 			}
 		}
 	}
 	void Stage2Boss::Draw()
 	{
-		EnemyBoss::Draw();
+		Utils::DrawObject(*this,true,DrawAlpha);
 	}
 	void Stage2Boss::Destroy()
 	{

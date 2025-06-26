@@ -26,15 +26,22 @@ namespace InGame
 		MaxAnimationCount[MOVE] = 2;
 		MaxAnimationCount[JUMP] = 2;
 
+		Texture = AEGfxTextureLoad("Assets/Character.png");
+		GunData = new PistolStruct;
+		HoldingGun = new Gun();
+		HoldingGun->Init(this);
+
 		Stats.MaxHP = 10;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = 300;
-		Stats.FireRate = 1.0f;
-		Stats.BulletSpeed = 30.f;
-		Stats.Damage = 1.f;
+		Stats.FireRate = GunData->RoundPerSec;
+		Stats.ProjectileSpeed = GunData->ProjectileSpeed;
+		Stats.ProjectileCollisionSize = GunData->ProjectileCollisionSize;
+		AEVec2Set(&Stats.ProjectileSize, 10.f, 10.f);
+		Stats.Damage = GunData->ProjectileDamage;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
-		Stats.HitCount = 1;
+		Stats.HitCount = GunData->ProjectileHitCount;
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 8.f;
 		Stats.Money = 0;
@@ -48,9 +55,7 @@ namespace InGame
 
 		Utils::InitOffset(*this);
 
-		Texture = AEGfxTextureLoad("Assets/Character.png");
-		HoldingGun = new Gun();
-		HoldingGun->Init(this);
+		
 
 		inventory.clear();
 	}

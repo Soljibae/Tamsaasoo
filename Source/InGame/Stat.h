@@ -25,7 +25,9 @@ namespace InGame
 		f32 HP;
 		f32 MovementSpeed;
 		f32 FireRate;
-		f32 BulletSpeed;
+		AEVec2 ProjectileSize;
+		f32 ProjectileSpeed;
+		f32 ProjectileCollisionSize;
 		f32 Damage;
 	};
 }

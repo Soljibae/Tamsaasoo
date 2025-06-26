@@ -12,10 +12,9 @@ namespace InGame
 	void Gun::Init(PlayerCharacter* object)
 	{
 		Mesh = Utils::CreateMesh();
-		Texture = AEGfxTextureLoad("Assets/Pistol.png");
+		Texture = AEGfxTextureLoad(object->GunData->TextureAddress.c_str());
 		Source = object;
-		size.x = 40;
-		size.y = 40;
+		AEVec2Set(&size, 40.f, 40.f);
 		RoundPerSec = Source->Stats.FireRate;
 		direction.x = 1;
 		direction.y = 0;
@@ -75,5 +74,39 @@ namespace InGame
 		}
 		//std::cout << "ProjectileFired" << std::endl;
 	}
+	
+	PistolStruct::PistolStruct()
+	{
+		Type = GunType::PISTOL;
+		RoundPerSec = 2;
+		ProjectileSpeed = 20.f;
+		ProjectileCollisionSize = 5.f;
+		ProjectileDamage = 1.f;
+		ProjectileHitCount = 1;
+		TextureAddress = "Assets/Pistol.png";
+	}
+
+	RifleStruct::RifleStruct()
+	{
+		Type = GunType::RIFLE;
+		RoundPerSec = 5;
+		ProjectileSpeed = 45.f;
+		ProjectileCollisionSize = 5.f;
+		ProjectileDamage = 3.f;
+		ProjectileHitCount = 3;
+		TextureAddress = "Assets/Rifle.png";
+	}
+
+	ShotGunStruct::ShotGunStruct()
+	{
+		Type = GunType::SHOTGUN;
+		RoundPerSec = 1;
+		ProjectileSpeed = 15.f;
+		ProjectileCollisionSize = 10.f;
+		ProjectileDamage = 2.f;
+		ProjectileHitCount = 1;
+		TextureAddress = "Assets/ShotGun.png";
+	}
+
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "Actor.h"
 #include "Projectile.h"
+#include <string>
 namespace InGame
 {
 	enum GunType
@@ -21,5 +22,33 @@ namespace InGame
 		f32 RoundPerSec;
 		GunType gunType;
 		class PlayerCharacter* Source;
+	};
+
+	struct GunStruct
+	{
+	public:
+		GunType Type;
+		f32 RoundPerSec;
+		f32 ProjectileSpeed;
+		f32 ProjectileCollisionSize;
+		f32 ProjectileDamage;
+		s32 ProjectileHitCount;
+		std::string TextureAddress;
+	};
+
+	struct PistolStruct : public GunStruct
+	{
+	public:
+		PistolStruct();
+	};
+	struct RifleStruct : public GunStruct
+	{
+	public:
+		RifleStruct();
+	};
+	struct ShotGunStruct : public GunStruct
+	{
+	public:
+		ShotGunStruct();
 	};
 }
