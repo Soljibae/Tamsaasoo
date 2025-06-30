@@ -61,6 +61,7 @@ namespace InGame
 		f32 FireTimer;
 		AEVec2 AnimationOffset;
 		s32 AnimationCount;
+		s32 MaxAnimationCount;
 		f32 AnimationTimer;
 		AEVec2 effectPosition;
 		AEVec2 effectSize;
@@ -551,7 +552,7 @@ namespace InGame
 		virtual void Update(class PlayerCharacter* owner) override;
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
-		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss);
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_31
@@ -582,11 +583,26 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_32
-	class Item_32 : public Item // to do change class name
+	class Item_32 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_32() = default;
 		Item_32(const Item_32& other);
+
+		AEVec2 dir;
+		AEVec2 attackDir;
+		f32 distance;
+		f32 distanceMin;
+		AEVec2 explosionPosition;
+		class EnemyCharacter* closestEnemy;
+
+		f32 FireRate;
+		f32 Damage;
+		s32 HitCount;
+		f32 BulletSpeed;
+		f32 effectiveFireRate;
+		f32 effectiveDamage;
+		s32 effectiveHitCount;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -597,11 +613,21 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_33
-	class Item_33 : public Item // to do change class name
+	class Item_33 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_33() = default;
 		Item_33(const Item_33& other);
+
+		AEVec2 dir;
+		f32 angle;
+		f32 angleSpeed;
+		f32 effectiveAngleSpeed;
+		f32 Damage;
+		f32 effectiveDamage;
+		f32 CoolDown;
+		bool isReady;
+		f32 distance;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;

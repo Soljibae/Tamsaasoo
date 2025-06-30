@@ -44,7 +44,7 @@ namespace Manager
 		}
 		if (ITRM == nullptr)
 		{
-			ITRM = new InGame::ItemResourceManager();
+			ITRM = new Manager::ItemResourceManager();
 			ITRM->Init();
 		}
 		InGame::Item::StaticInit();
@@ -111,7 +111,7 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[27]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[32]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
@@ -119,7 +119,7 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_3))
 			{
-				PC->AddItemToInventory(ITDB->itemList[3]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[33]->Clone());
 			}
 			if (global::KeyInput(AEVK_4))
 			{
@@ -196,9 +196,9 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
-							PC->OnProjectileHit(EC, false);
 							EC->adjustHealth(-PP->Damage);
-							PP->OnHit();
+							PC->OnProjectileHit(EC, false);
+							PP->OnHit(EC);
 						}
 					}
 				}
@@ -210,9 +210,9 @@ namespace Manager
 						{
 							if (Utils::CheckCollision(*PP, *Boss))
 							{
-								PC->OnProjectileHit(Boss, true);
 								Boss->adjustHealth(-PP->Damage * global::additionalDamageToBossRatio);
-								PP->OnHit();
+								PC->OnProjectileHit(Boss, true);
+								PP->OnHit(Boss);
 							}
 						}
 					}
@@ -370,18 +370,18 @@ namespace Manager
 	{
 		BG->Draw();
 		PC->Draw();
-		for (InGame::Projectile* PP : PPs)
-		{
-			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)
-			{
-				PP->Draw();
-			}
-		}
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			if (abs(EC->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(EC->position.y - PC->position.y) < global::ScreenHeight / 2)
 			{
 				EC->Draw();
+			}
+		}
+		for (InGame::Projectile* PP : PPs)
+		{
+			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)
+			{
+				PP->Draw();
 			}
 		}
 		for (const auto& item_ptr : PC->inventory)

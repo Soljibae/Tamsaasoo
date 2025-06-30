@@ -29,7 +29,7 @@ namespace InGame
 	SkillEffectItem::SkillEffectItem(const SkillEffectItem& other)
 		: Item(other), FrameTime(other.FrameTime), FireTimer(other.FireTimer), AnimationOffset(other.AnimationOffset),
 		AnimationCount(other.AnimationCount), AnimationTimer(other.AnimationTimer), effectPosition(other.effectPosition), effectSize(other.effectSize),
-		effectRow(other.effectRow), effectColumn(other.effectColumn)
+		effectRow(other.effectRow), effectColumn(other.effectColumn), MaxAnimationCount(other.MaxAnimationCount)
 	{
 	}
 	//============================================= ID_1
@@ -367,6 +367,7 @@ namespace InGame
 		AnimationTimer = 0.f;
 		effectRow = 1;
 		effectColumn = 9;
+		MaxAnimationCount = 9;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -407,7 +408,7 @@ namespace InGame
 				}
 			}
 
-			if (AnimationCount == effectColumn - 1)
+			if (AnimationCount == MaxAnimationCount - 1)
 			{
 				AnimationCount = 0;
 				isStarted = false;
@@ -510,6 +511,7 @@ namespace InGame
 		effectColumn = 9;
 		tag = SLOTH;
 		effectTime = 3.f;
+		MaxAnimationCount = 9;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -586,7 +588,7 @@ namespace InGame
 				}
 			}
 
-			if (AnimationCount == effectColumn - 1)
+			if (AnimationCount == MaxAnimationCount - 1)
 			{
 				AnimationCount = 0;
 				isStarted = false;
@@ -650,6 +652,7 @@ namespace InGame
 		AnimationTimer = 0.f;
 		effectRow = 1;
 		effectColumn = 9;
+		MaxAnimationCount = 9;
 		tag = SLOTH;
 	}
 	void Item_13::Use(PlayerCharacter* owner)
@@ -715,7 +718,7 @@ namespace InGame
 				}
 			}
 
-			if (AnimationCount == effectColumn - 1)
+			if (AnimationCount == MaxAnimationCount - 1)
 			{
 				AnimationCount = 0;
 				isStarted = false;
@@ -1016,6 +1019,7 @@ namespace InGame
 		name = "item_21";
 		description = "this is item_21";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = GREED;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1044,7 +1048,7 @@ namespace InGame
 		name = "item_22";
 		description = "this is item_22";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = GREED;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1073,7 +1077,7 @@ namespace InGame
 		name = "item_23";
 		description = "this is item_23";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = GREED;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1102,7 +1106,7 @@ namespace InGame
 		name = "item_24";
 		description = "this is item_24";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = GREED;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1131,7 +1135,7 @@ namespace InGame
 		name = "item_25";
 		description = "this is item_25";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = GREED;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1219,6 +1223,7 @@ namespace InGame
 		effectColumn = 9;
 		procChance = 0.1f;
 		effectTime = 4.f;
+		MaxAnimationCount = 9;
 		tag = LUST;
 	}
 	void Item_27::Use(PlayerCharacter* owner)
@@ -1293,7 +1298,7 @@ namespace InGame
 				}
 			}
 
-			if (AnimationCount == effectColumn - 1)
+			if (AnimationCount == MaxAnimationCount - 1)
 			{
 				AnimationCount = 0;
 				isStarted = false;
@@ -1388,7 +1393,7 @@ namespace InGame
 	{
 		id = 30;
 		name = "item_30";
-		description = "this is item_30";
+		description = "Attacks execute enemies that are below 10% of their maximum health.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
 
@@ -1408,6 +1413,17 @@ namespace InGame
 	{
 		return std::make_shared<Item_30>(*this);
 	}
+	void Item_30::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		if (!isTargetBoss)
+		{
+			if (target->Stats.HP / target->Stats.MaxHP <= 0.1f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats.HP > 0.f)
+			{
+				std::cout << "HP:" << target->Stats.HP << ", MAXHP:" << target->Stats.MaxHP << std::endl;
+				target->adjustHealth(-99999999.f);
+			}
+		}
+	}
 	//============================================= ID_31
 	Item_31::Item_31(const Item_31& other)
 		: SkillEffectItem(other), dir{ other.dir }, effectPosition2{ other.effectPosition2 }, distance{ other.distance },
@@ -1419,7 +1435,7 @@ namespace InGame
 	{
 		id = 31;
 		name = "item_31";
-		description = "this is item_31";
+		description = "Summons two minions that fire bullets in the direction you are aiming.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		distance = 80.f;
 		Damage = 1;
@@ -1431,7 +1447,20 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		AEVec2Set(&AnimationOffset, 0, 0);
-		tag = EMPTY;
+		tag = ENVY;
+
+		dir = global::PlayerMouseDirection;
+		AEVec2 DirectionVector;
+		AEVec2Scale(&DirectionVector, &dir, distance);
+
+		AEMtx33 rotate;
+		AEMtx33Rot(&rotate, AEDegToRad(90.f));
+		AEMtx33MultVec(&effectPosition, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition, &effectPosition, &global::PlayerLocation);
+
+		AEMtx33Rot(&rotate, AEDegToRad(-90.f));
+		AEMtx33MultVec(&effectPosition2, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition2, &effectPosition2, &global::PlayerLocation);
 	}
 	void Item_31::Use(PlayerCharacter* owner)
 	{
@@ -1440,7 +1469,7 @@ namespace InGame
 	{
 		//s16 count = Utils::GetItemCount(3);
 
-		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
+		effectiveDamage = (Damage + global::additionalMinionDamage)* global::additionalMinionDamageRatio;
 		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
 		effectiveHitCount = HitCount + global::additionalMinionHitCount;
 
@@ -1470,11 +1499,11 @@ namespace InGame
 					{
 						Projectile* PP1 = GS->PPPool.back();
 						GS->PPPool.pop_back();
-						PP1->Spawn(dir, effectPosition, BulletSpeed, effectiveDamage, effectiveHitCount);
+						PP1->Spawn(dir, effectPosition, BulletSpeed, effectiveDamage, effectiveHitCount, false);
 						GS->PPs.push_back(PP1);
 						Projectile* PP2 = GS->PPPool.back();
 						GS->PPPool.pop_back();
-						PP2->Spawn(dir, effectPosition2, BulletSpeed, effectiveDamage, effectiveHitCount);
+						PP2->Spawn(dir, effectPosition2, BulletSpeed, effectiveDamage, effectiveHitCount, false);
 						GS->PPs.push_back(PP2);
 					}
 				}
@@ -1502,16 +1531,34 @@ namespace InGame
 	}
 	//============================================= ID_32
 	Item_32::Item_32(const Item_32& other)
-		: Item(other)
+		: SkillEffectItem(other), attackDir(other.attackDir), dir{ other.dir }, explosionPosition{ other.explosionPosition }, distance{ other.distance },
+		Damage{ other.Damage }, HitCount{ other.HitCount }, BulletSpeed{ other.BulletSpeed }, FireRate{ other.FireRate }, distanceMin(other.distanceMin),
+		effectiveFireRate{ other.effectiveFireRate }, effectiveDamage{ other.effectiveDamage }, effectiveHitCount{ other.effectiveHitCount }, closestEnemy(other.closestEnemy)
 	{
 	}
 	void Item_32::Init()
 	{
 		id = 32;
 		name = "item_32";
-		description = "this is item_32";
+		description = "Summons a minion that lobs grenades at the nearest enemy.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		distance = 80.f;
+		Damage = 3;
+		FireRate = 1.f;
+		FireTimer = 0.f;
+		HitCount = 1;
+		BulletSpeed = 15.f;
+		AEVec2Set(&effectSize, 64.f, 64.f);
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		AEVec2Set(&AnimationOffset, 0, 0);
+		tag = ENVY;
+
+		dir = global::PlayerMouseDirection;
+		AEVec2 DirectionVector;
+		AEVec2Scale(&DirectionVector, &dir, distance);
+		AEVec2Sub(&effectPosition, &global::PlayerLocation, &DirectionVector);
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1521,9 +1568,71 @@ namespace InGame
 	}
 	void Item_32::Update(PlayerCharacter* owner)
 	{
+		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
+		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+		effectiveHitCount = HitCount;
+
+		dir = global::PlayerMouseDirection;
+		AEVec2 DirectionVector;
+		AEVec2Scale(&DirectionVector, &dir, distance);
+		AEVec2Sub(&effectPosition, &global::PlayerLocation, &DirectionVector);
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ECs.size() > 0)
+				{
+					distanceMin = AEVec2Distance(&effectPosition, &GS->ECs[0]->position);
+					closestEnemy = GS->ECs[0];
+					for (size_t i = 1; i < GS->ECs.size(); i++)
+					{
+						if (distanceMin > AEVec2Distance(&effectPosition, &GS->ECs[i]->position))
+						{
+							distanceMin = AEVec2Distance(&effectPosition, &GS->ECs[i]->position);
+							closestEnemy = GS->ECs[i];
+						}
+					}
+					AEVec2Set(&attackDir, closestEnemy->position.x - effectPosition.x, closestEnemy->position.y - effectPosition.y);
+					AEVec2Normalize(&attackDir, &attackDir);
+				}
+			}
+		}
+
+		FireTimer += global::DeltaTime;
+		if (FireTimer >= 1.f / effectiveFireRate)
+		{
+			FireTimer = 0.f;
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					if (GS->PPPool.size() > 0)
+					{
+						Projectile* PP1 = GS->PPPool.back();
+						GS->PPPool.pop_back();
+						PP1->Spawn(attackDir, effectPosition, BulletSpeed, effectiveDamage, effectiveHitCount, true);
+						GS->PPs.push_back(PP1);
+					}
+				}
+			}
+		}
 	}
 	void Item_32::Draw()
 	{
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, attackDir);
+				}
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_32::Clone() const
 	{
@@ -1531,7 +1640,8 @@ namespace InGame
 	}
 	//============================================= ID_33
 	Item_33::Item_33(const Item_33& other)
-		: Item(other)
+		: SkillEffectItem(other), angle(other.angle), angleSpeed(other.angleSpeed), effectiveAngleSpeed(other.effectiveAngleSpeed), dir(other.dir),
+		Damage(other.Damage), effectiveDamage(other.effectiveDamage), CoolDown(other.CoolDown), isReady(other.isReady), distance(other.distance)
 	{
 	}
 	void Item_33::Init()
@@ -1540,7 +1650,16 @@ namespace InGame
 		name = "item_33";
 		description = "this is item_33";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		tag = EMPTY;
+		tag = ENVY;
+		Damage = 1.f;
+		angle = 0.f;
+		angleSpeed = 150.f;
+		CoolDown = 0.1f;
+		isReady = false;
+		distance = 200.f;
+		FireTimer = 0.f;
+		AEVec2Set(&dir, 0.f, 1.f);
+		AEVec2Set(&effectSize, 96.f, 96.f);
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1550,9 +1669,77 @@ namespace InGame
 	}
 	void Item_33::Update(PlayerCharacter* owner)
 	{
+		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
+		effectiveAngleSpeed = (angleSpeed + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+
+		angle -= effectiveAngleSpeed * global::DeltaTime;
+
+		while (angle <= 0.f)
+		{
+			angle += 360.f;
+		}
+
+		FireTimer += global::DeltaTime;
+		if (FireTimer >= CoolDown)
+		{
+			FireTimer = 0.f;
+			isReady = true;
+		}
+
+		AEVec2 DirectionVector;
+		AEVec2Scale(&DirectionVector, &dir, distance);
+
+		AEMtx33 rotate;
+		AEMtx33Rot(&rotate, AEDegToRad(angle));
+		AEMtx33MultVec(&effectPosition, &rotate, &DirectionVector);
+		AEVec2Add(&effectPosition, &effectPosition, &global::PlayerLocation);
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->EPs.size() > 0)
+				{
+					for (InGame::Projectile*& EP : GS->EPs)
+					{
+						if (Utils::CheckCollision(*EP, effectPosition, effectSize.x / 2.f))
+						{
+							EP->bIsPandingKill = true;
+						}
+					}
+				}
+				if (isReady)
+				{
+					if (GS->ECs.size() > 0)
+					{
+						for (size_t i = 0; i < GS->ECs.size(); i++)
+						{
+							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
+							{
+								GS->ECs[i]->adjustHealth(-effectiveDamage);
+							}
+						}
+					}
+					isReady = false;
+				}
+			}
+		}
 	}
 	void Item_33::Draw()
 	{
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObject(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh);
+				}
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_33::Clone() const
 	{

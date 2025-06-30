@@ -41,5 +41,8 @@ namespace global
 
 	f32 additionalDamageToBossRatio = 1.f;
 	f32 additionalDamageFromBossRatio = 1.f;
+
+	f32 guntypeDamageRatio;
+	f32 guntypeFireRateRatio;
 	//==================================
 }
