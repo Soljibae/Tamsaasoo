@@ -60,4 +60,5 @@
 
 ## Asset 출처
 
+- [Explosion Animations Pack](https://ansimuz.itch.io/explosion-animations-pack)
 
