@@ -41,9 +41,9 @@ namespace InGame
 		}
 	}
 
-	void Gun::Draw()
+	void Gun::Draw(f32 alpha)
 	{
-		Utils::DrawObjectWithDirection(*this);
+		Utils::DrawObjectWithDirection(*this, alpha);
 	}
 
 	void Gun::Destroy()

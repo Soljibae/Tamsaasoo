@@ -15,7 +15,7 @@ namespace InGame
 	public:
 		void Init(class PlayerCharacter* object);
 		void Update(AEVec2 Dir, AEVec2 Pos);
-		virtual void Draw() override;
+		virtual void Draw(f32 alpha = 1.f);
 		virtual void Destroy() override;
 		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos);
 		f32 FireTimer = 0.f;

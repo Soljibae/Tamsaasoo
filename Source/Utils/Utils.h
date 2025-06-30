@@ -18,7 +18,7 @@ namespace Utils
 
 	void DrawObject(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh);
 
-	void DrawObjectWithDirection(InGame::Actor& object);
+	void DrawObjectWithDirection(InGame::Actor& object, f32 alpha = 1.f);
 
 	void DrawObjectWithDirection(InGame::SkillEffectItem& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, AEVec2 Direction);
 
