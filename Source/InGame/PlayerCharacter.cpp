@@ -27,7 +27,7 @@ namespace InGame
 		MaxAnimationCount[JUMP] = 2;
 
 		Texture = AEGfxTextureLoad("Assets/Character.png");
-		GunData = new PistolStruct;
+		GunData = new ShotGunStruct;
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
@@ -167,13 +167,15 @@ namespace InGame
 	}
 	void PlayerCharacter::Draw()
 	{
-		HoldingGun->Draw();
+		
 		if (bIsInvincible)
 		{
+			HoldingGun->Draw(0.5f);
 			Utils::DrawObject(*this, true, 0.5f);
 		}
 		else
 		{
+			HoldingGun->Draw();
 			Utils::DrawObject(*this);
 		}
 		
@@ -250,6 +252,9 @@ namespace InGame
 		f32 dy = Result.y - position.y;
 		MouseDirection.x = dx / length;
 		MouseDirection.y = dy / length;
+		
+		if (size.x > 0 && MouseDirection.x < 0) size.x *= -1;
+		if (size.x < 0 && MouseDirection.x > 0) size.x *= -1;
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
@@ -292,12 +297,12 @@ namespace InGame
 		if (AEInputCheckCurr(AEVK_A))
 		{
 			MovingVec.x -= 1.f;
-			if (size.x > 0) size.x *= -1;
+			//if (size.x > 0) size.x *= -1;
 		}
 		if (AEInputCheckCurr(AEVK_D))
 		{
 			MovingVec.x += 1.f;
-			if (size.x < 0) size.x *= -1;
+			//if (size.x < 0) size.x *= -1;
 		}
 
 		if (MovingVec.x == 0 && MovingVec.y == 0)

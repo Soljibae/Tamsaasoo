@@ -163,7 +163,7 @@ void Utils::DrawObject(InGame::SkillEffectItem& object, AEGfxTexture* Texture, A
 	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
-void Utils::DrawObjectWithDirection(InGame::Actor& object)
+void Utils::DrawObjectWithDirection(InGame::Actor& object, f32 alpha)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -197,6 +197,8 @@ void Utils::DrawObjectWithDirection(InGame::Actor& object)
 	AEMtx33Concat(&transform, &rotate, &transform);
 	AEMtx33Concat(&transform, &tran, &transform);
 
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
+	
 	AEGfxSetTransform(transform.m);
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
 }

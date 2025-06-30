@@ -7,7 +7,7 @@ namespace InGame
 {
 	void EnemyBoss::Init()
 	{
-		Mesh = Utils::CreateMesh();
+		Mesh = Utils::CreateMesh(1,2);
 		bIsPandingKill = false;
 	}
 	void EnemyBoss::Update()
@@ -38,11 +38,11 @@ namespace InGame
 	{
 		EnemyBoss::Init();
 		Stats.MovementSpeed = 100.f;
-		size.x = 400;
-		size.y = 400;
+		size.x = 105;
+		size.y = 192;
 		position.x = 0;
 		position.y = 0;
-		CollisionRadius = 200;
+		CollisionRadius = 50;
 		AEVec2Set(&Stats.ProjectileSize, 30, 30);
 		ProjectileSpawnTimer = 0;
 		ProjectileChamberTimer = 5;

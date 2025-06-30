@@ -11,6 +11,7 @@ namespace InGame
 {
 	void Gun::Init(PlayerCharacter* object)
 	{
+		gunType = object->GunData->Type;
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad(object->GunData->TextureAddress.c_str());
 		Source = object;
@@ -18,7 +19,6 @@ namespace InGame
 		RoundPerSec = Source->Stats.FireRate;
 		direction.x = 1;
 		direction.y = 0;
-		gunType = PISTOL;
 		AEVec2Set(&ArmOffset, 5.f, 18.f);
 	}
 
@@ -41,9 +41,9 @@ namespace InGame
 		}
 	}
 
-	void Gun::Draw()
+	void Gun::Draw(f32 alpha)
 	{
-		Utils::DrawObjectWithDirection(*this);
+		Utils::DrawObjectWithDirection(*this, alpha);
 	}
 
 	void Gun::Destroy()
@@ -65,12 +65,45 @@ namespace InGame
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
 			if (GS)
 			{
-				if (GS->PPPool.size() > 0)
+				if (gunType == SHOTGUN)
 				{
-					Projectile* PP = GS->PPPool.back();
-					GS->PPPool.pop_back();
-					PP->Spawn(Dir, Pos, Source);
-					GS->PPs.push_back(PP);
+					const int numPellets = 5;
+					const float spreadAngleDeg = 30.0f;
+					const float spreadStep = spreadAngleDeg / (numPellets - 1);
+					const float startAngle = -spreadAngleDeg / 2.0f;
+
+					AEVec2Normalize(&Dir, &Dir);
+					float baseAngle = atan2f(Dir.y, Dir.x);
+
+					for (int i = 0; i < numPellets; ++i)
+					{
+						if (GS->PPPool.empty())
+						{
+							break;
+						}
+
+						float angleOffsetDeg = startAngle + i * spreadStep;
+						float angleOffsetRad = angleOffsetDeg * (3.1415926f / 180.0f);
+
+						float newAngle = baseAngle + angleOffsetRad;
+						AEVec2 pelletDir;
+						AEVec2Set(&pelletDir, cosf(newAngle), sinf(newAngle));
+
+						Projectile* PP = GS->PPPool.back();
+						GS->PPPool.pop_back();
+						PP->Spawn(pelletDir, Pos, Source);
+						GS->PPs.push_back(PP);
+					}
+				}
+				else
+				{
+					if (GS->PPPool.size() > 0)
+					{
+						Projectile* PP = GS->PPPool.back();
+						GS->PPPool.pop_back();
+						PP->Spawn(Dir, Pos, Source);
+						GS->PPs.push_back(PP);
+					}
 				}
 			}
 		}

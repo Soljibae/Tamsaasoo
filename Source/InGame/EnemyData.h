@@ -60,13 +60,13 @@ namespace InGame
 		virtual void Init() override
 		{
 			Type = EnemyType::MINION;
-			Texture = AEGfxTextureLoad("Assets/Minion.png");
+			Texture = AEGfxTextureLoad("Assets/Slime.png");
 			Damage = 1;
 			Exp = 1;
 			Health = 3;
-			AEVec2Set(&DrawSize, 40.f, 40.f);
-			CollisionRadius = 20;
-			MovementSpeed = 200;
+			AEVec2Set(&DrawSize, 50.f, 50.f);
+			CollisionRadius = 25;
+			MovementSpeed = 100;
 		}
 	};
 
@@ -80,8 +80,8 @@ namespace InGame
 			Damage = 1;
 			Exp = 2;
 			Health = 1;
-			AEVec2Set(&DrawSize, 30.f, 30.f);
-			CollisionRadius = 15;
+			AEVec2Set(&DrawSize, 70.f, 70.f);
+			CollisionRadius = 35.f;
 			MovementSpeed = 100;
 			BulletSpeed = 5;
 			AEVec2Set(&ProjectileSize,20.f,20.f);
