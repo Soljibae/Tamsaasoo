@@ -190,6 +190,10 @@ namespace InGame
 		{
 			AEGfxTextureUnload(Texture);
 		}
+		if (GunData)
+		{
+			delete GunData;
+		}
 		if (HoldingGun)
 		{
 			HoldingGun->Destroy();

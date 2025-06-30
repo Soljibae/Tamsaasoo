@@ -7,12 +7,17 @@ namespace InGame
 {
 	void EnemyBoss::Init()
 	{
+		row = 1;
+		column = 2;
+		AnimationCount = 0;
 		Mesh = Utils::CreateMesh(1,2);
 		bIsPandingKill = false;
+		Utils::InitOffset(*this);
+		FrameTime = 1.0f;
 	}
 	void EnemyBoss::Update()
 	{
-
+		Utils::UpdateOffset(*this);
 	}
 	void EnemyBoss::Draw()
 	{
@@ -53,9 +58,12 @@ namespace InGame
 		Stats.ProjectileSpeed = 3.f;
 		Stats.Damage = 1;
 		Stats.ProjectileCollisionSize = 15.f;
+		AnimationState = IDLE;
+		MaxAnimationCount[IDLE] = 2;
 	}
 	void Stage1Boss::Update()
 	{
+		EnemyBoss::Update();
 		UpdateEffectTime();
 
 		static bool angleOffsetToggle = false;
