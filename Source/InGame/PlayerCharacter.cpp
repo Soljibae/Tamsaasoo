@@ -34,11 +34,11 @@ namespace InGame
 		Stats.MaxHP = 10;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = 300;
-		Stats.FireRate = GunData->RoundPerSec;
+		Stats.FireRate = 2.f;
 		Stats.ProjectileSpeed = GunData->ProjectileSpeed;
 		Stats.ProjectileCollisionSize = GunData->ProjectileCollisionSize;
 		AEVec2Set(&Stats.ProjectileSize, 10.f, 10.f);
-		Stats.Damage = GunData->ProjectileDamage;
+		Stats.Damage = 1.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = GunData->ProjectileHitCount;
@@ -477,8 +477,8 @@ namespace InGame
 
 	void PlayerCharacter::UpdateStats()
 	{
-		Stats.effectiveDamage = (Stats.Damage + global::additionalDamage) * global::additionalDamageRatio;
-		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio;
+		Stats.effectiveDamage = (Stats.Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
+		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
 		Stats.effectiveExpGained = Stats.ExpGained * global::additionalExpGainedRatio;
 		Stats.effectiveHitCount = Stats.HitCount + global::additionalHitCount;
 		Stats.effectiveMovementSpeed = Stats.MovementSpeed + global::additionalMovementSpeed;

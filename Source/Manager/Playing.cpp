@@ -123,11 +123,11 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_4))
 			{
-				PC->AddItemToInventory(ITDB->itemList[4]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[13]->Clone());
 			}
 			if (global::KeyInput(AEVK_5))
 			{
-				PC->AddItemToInventory(ITDB->itemList[5]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[15]->Clone());
 			}
 			if (global::KeyInput(AEVK_6))
 			{
@@ -196,6 +196,7 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
+							std::cout << PP->Damage << std::endl;
 							EC->adjustHealth(-PP->Damage);
 							PC->OnProjectileHit(EC, false);
 							PP->OnHit(EC);

@@ -518,9 +518,13 @@ namespace InGame
 	}
 	void Item_11::Use(PlayerCharacter* owner)
 	{
-		if (owner->Stats.effectiveFireRate - owner->Stats.FireRate < 0)
+		
+	}
+	void Item_11::Update(PlayerCharacter* owner)
+	{
+		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
 		{
-			//additionalEffectSizeRatio;  to do
+			additionalEffectSizeRatio = (owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate;
 		}
 		else
 		{
@@ -568,9 +572,6 @@ namespace InGame
 		{
 			Utils::UpdateOffset(*this);
 		}
-	}
-	void Item_11::Update(PlayerCharacter* owner)
-	{
 	}
 	void Item_11::Draw()
 	{
@@ -630,16 +631,17 @@ namespace InGame
 	}
 	//============================================= ID_13
 	Item_13::Item_13(const Item_13& other)
-		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }
+		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }, 
+		additionalEffectSizeRatio(other.additionalEffectSizeRatio), baseEffectSize(other.baseEffectSize)
 	{
 	}
 	void Item_13::Init()
 	{
 		id = 13;
 		name = "item_13";
-		description = "Every 4 seconds, killing an enemy causes an explosion, damaging nearby enemies. The explosion's area increases as your fire rate decreases.";
+		description = "Reduces fire rate. A defeated enemy will explode, damaging nearby foes. This effect can only occur once every 4 seconds. The explosion's radius increases as your fire rate decreases";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		AEVec2Set(&effectSize, 400.f, 400.f);
+		AEVec2Set(&baseEffectSize, 400.f, 400.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		isReady = true;
@@ -657,9 +659,21 @@ namespace InGame
 	}
 	void Item_13::Use(PlayerCharacter* owner)
 	{
+		global::additionalFireRate -= 0.2f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_13::Update(PlayerCharacter* owner)
 	{
+		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
+		{
+			additionalEffectSizeRatio = (owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate;
+		}
+		else
+		{
+			additionalEffectSizeRatio = 1.f;
+		}
+
+		AEVec2Scale(&effectSize, &baseEffectSize, additionalEffectSizeRatio);
+
 		if (!isStarted)
 		{
 			CoolDown = 4.f * (1.f - (Utils::GetItemCount(id) - 1) * 0.05);
@@ -770,7 +784,7 @@ namespace InGame
 	{
 		id = 15;
 		name = "item_15";
-		description = "this is item_15";
+		description = "Reduces fire. The damage bonus scales inversely with your fire rate.";
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = SLOTH;
 
@@ -779,7 +793,12 @@ namespace InGame
 	}
 	void Item_15::Use(PlayerCharacter* owner)
 	{
+		global::additionalFireRateRatio -= 0.1f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 
+		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
+		{
+			global::additionalDamageRatio += ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate - 1.f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		}
 	}
 	void Item_15::Update(PlayerCharacter* owner)
 	{

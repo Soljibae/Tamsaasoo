@@ -29,11 +29,11 @@ namespace InGame
 	{
 	public:
 		GunType Type;
-		f32 RoundPerSec;
 		f32 ProjectileSpeed;
 		f32 ProjectileCollisionSize;
-		f32 ProjectileDamage;
 		s32 ProjectileHitCount;
+		f32 GuntypeDamageRatio;
+		f32 GuntypeFireRateRatio;
 		std::string TextureAddress;
 	};
 

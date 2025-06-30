@@ -275,6 +275,8 @@ namespace InGame
 		f32 CoolDown;
 		bool isReady;
 		bool isStarted;
+		f32 additionalEffectSizeRatio;
+		AEVec2 baseEffectSize;
 
 		virtual void Init() override;
 		virtual void Use(class PlayerCharacter* owner) override;

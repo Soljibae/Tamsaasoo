@@ -22,7 +22,7 @@ namespace InGame
 		void OnHit(class EnemyCharacter* target);
 		void Explode(class EnemyCharacter* target);
 
-		s32 Damage;
+		f32 Damage;
 		s32 HitCount;
 		f32 BulletSpeed;
 

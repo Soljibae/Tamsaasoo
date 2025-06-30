@@ -44,8 +44,5 @@ namespace global
 
 	extern f32 additionalDamageToBossRatio;
 	extern f32 additionalDamageFromBossRatio;
-
-	extern f32 guntypeDamageRatio;
-	extern f32 guntypeFireRateRatio;
 	//==================================
 }
