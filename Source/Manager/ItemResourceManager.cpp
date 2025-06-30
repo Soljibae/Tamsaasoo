@@ -1,7 +1,7 @@
 #include "ItemResourceManager.h"
 #include "../Utils/Utils.h"
 
-namespace InGame
+namespace Manager
 {
 	void ItemResourceManager::Init()
 	{

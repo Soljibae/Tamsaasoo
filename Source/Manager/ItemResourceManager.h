@@ -1,7 +1,7 @@
 #pragma once
 #include "AEEngine.h"
 
-namespace InGame
+namespace Manager
 {
 	class ItemResourceManager
 	{

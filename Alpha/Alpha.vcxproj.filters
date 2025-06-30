@@ -101,14 +101,14 @@
     <ClCompile Include="..\Source\Manager\HUDController.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\ItemResourceManager.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\InGame\SpawnList.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\ArealAttack.cpp">
       <Filter>소스 파일\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ItemResourceManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,9 +190,6 @@
     <ClInclude Include="..\Source\InGame\Stage.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\InGame\ItemResourceManager.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Manager\HUDController.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -201,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\InGame\ArealAttack.h">
       <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemResourceManager.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

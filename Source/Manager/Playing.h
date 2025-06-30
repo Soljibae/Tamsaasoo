@@ -12,7 +12,7 @@
 #include "../InGame/Item.h"
 #include "../InGame/ItemDatabase.h"
 #include "../InGame/Stage.h"
-#include "../InGame/ItemResourceManager.h"
+#include "ItemResourceManager.h"
 #include "../InGame/SpawnList.h"
 
 namespace Manager
@@ -34,7 +34,7 @@ namespace Manager
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
 		InGame::ItemDatabase* ITDB;
-		InGame::ItemResourceManager* ITRM;
+		ItemResourceManager* ITRM;
 		InGame::WaveManager WM;
 
 		bool bIsBossFight = false;
