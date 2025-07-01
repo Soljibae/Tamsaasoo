@@ -74,6 +74,8 @@ namespace Manager
 	void Playing::Update()
 	{
 		// Press ESCAPE to pause the game
+		ExpPanel.Update();
+
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
 		{
 			if (!gm.GamePaused)
@@ -167,7 +169,6 @@ namespace Manager
 			PC->Update();
 			global::RecentlyDeadEnemyCount = 0;
 
-			ExpPanel.Update();
 			for (InGame::Projectile*& PP : PPs)
 			{
 				PP->Update();
@@ -199,7 +200,6 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
-							std::cout << PP->Damage << std::endl;
 							EC->adjustHealth(-PP->Damage);
 							PC->OnProjectileHit(EC, false);
 							PP->OnHit(EC);

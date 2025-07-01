@@ -1438,7 +1438,6 @@ namespace InGame
 		{
 			if (target->Stats.HP / target->Stats.MaxHP <= 0.1f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats.HP > 0.f)
 			{
-				std::cout << "HP:" << target->Stats.HP << ", MAXHP:" << target->Stats.MaxHP << std::endl;
 				target->adjustHealth(-99999999.f);
 			}
 		}

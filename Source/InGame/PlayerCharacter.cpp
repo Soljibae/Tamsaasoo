@@ -157,10 +157,10 @@ namespace InGame
 		{
 			if (Stats.HP < Stats.MaxHP)
 			{
-				if (Stats.Potion >= 100)
+				if (Stats.Potion >= 50)
 				{
 					adjustHealth(1);
-					Stats.Potion = 0;
+					Stats.Potion -= 50;
 				}
 			}
 		}
@@ -238,9 +238,6 @@ namespace InGame
 		s32 MX;
 		s32 MY;
 		AEInputGetCursorPosition(&MX, &MY);
-
-		global::ScreenWidth;
-		global::ScreenHeight;
 
 		AEVec2 MP;
 		MP.x = static_cast<float>(MX) - AEGfxGetWindowWidth() / 2.0f;
