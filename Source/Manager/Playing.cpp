@@ -5,6 +5,7 @@
 #include "../Manager/LevelUpUI.h"
 #include "../Manager/HUDController.h"
 #include "PauseUI.h"
+#include "ExpUI.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -63,6 +64,7 @@ namespace Manager
 		WaveTimer = 0.;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
+		ExpPanel.Init(PC);
 		HUD.Init(PC, PC->HoldingGun);
 		gm.GamePaused = false;
 		Utils::TestInit();
@@ -165,6 +167,7 @@ namespace Manager
 			PC->Update();
 			global::RecentlyDeadEnemyCount = 0;
 
+			ExpPanel.Update();
 			for (InGame::Projectile*& PP : PPs)
 			{
 				PP->Update();
@@ -401,6 +404,7 @@ namespace Manager
 			Boss->Draw();
 		}
 		HUD.Draw();
+		ExpPanel.Draw();
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
@@ -472,6 +476,7 @@ namespace Manager
 		ITRM->Destroy();
 		delete ITRM;
 
+		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
 		HUD.Destroy();
