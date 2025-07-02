@@ -153,7 +153,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 30)
+				if (WaveCount > 1)
 				{
 					InitBossFight();
 				}
@@ -217,6 +217,22 @@ namespace Manager
 						}
 					}
 				}
+			}
+			std::vector<InGame::Character*> PCV;
+			PCV.push_back(PC);
+			for (InGame::ArealAttack*& EAA : EAAs)
+			{
+				EAA->Update(PCV);
+			}
+			std::vector<InGame::Character*> ECV;
+			for (InGame::Character* EC : ECs)
+			{
+				ECV.push_back(EC);
+			}
+			ECV.push_back(PC);
+			for (InGame::ArealAttack*& PAA : PAAs)
+			{
+				PAA->Update(ECV);
 			}
 			if (!PC->bIsDashing)
 			{
@@ -327,6 +343,41 @@ namespace Manager
 					++i;
 				}
 			}
+
+			for (auto it = EAAs.begin(); it != EAAs.end(); )
+			{
+				if (it == EAAs.end() || *it == nullptr)
+					break;
+
+				InGame::ArealAttack* attack = *it;
+				if (attack->bIsPandingKill)
+				{
+					attack->Destroy();
+					delete attack;
+					it = EAAs.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+			for (auto it = PAAs.begin(); it != PAAs.end(); )
+			{
+				if (it == PAAs.end() || *it == nullptr)
+					break;
+
+				InGame::ArealAttack* attack = *it;
+				if (attack->bIsPandingKill)
+				{
+					attack->Destroy();
+					delete attack;
+					it = PAAs.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
 			CAM->Update(*PC);
 
 			if(Boss)
@@ -394,6 +445,26 @@ namespace Manager
 			{
 				EP->Draw();
 			}
+		}
+		for (auto it = EAAs.begin(); it != EAAs.end(); )
+		{
+			if (it == EAAs.end() || *it == nullptr)
+			{
+				break;
+			}
+			InGame::ArealAttack* attack = *it;
+			(*it)->Draw();
+			++it;
+		}
+		for (auto it = PAAs.begin(); it != PAAs.end(); )
+		{
+			if (it == PAAs.end() || *it == nullptr)
+			{
+				break;
+			}
+			InGame::ArealAttack* attack = *it;
+			(*it)->Draw();
+			++it;
 		}
 		if (Boss)
 		{
@@ -567,7 +638,14 @@ namespace Manager
 			EP->bIsPandingKill = false;
 		}
 		EPs.clear();
-		
+		for (size_t i = 0; i < PPs.size(); i++)
+		{
+			InGame::Projectile*& PP = PPs[i];
+			PPPool.push_back(PP);
+			PP->bIsPandingKill = false;
+		}
+		PPs.clear();
+
 		bIsJumping = true;
 		JumpAnimationTimer = 0.f;
 		PC->AnimationState = InGame::EAnimationState::JUMP;  // 애니메이션 재생 함수 필요

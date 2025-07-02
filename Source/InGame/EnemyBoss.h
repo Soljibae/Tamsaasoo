@@ -1,6 +1,6 @@
 #pragma once
 #include "EnemyCharacter.h"
-
+#include <vector>
 namespace InGame
 {
 	class EnemyBoss : public EnemyCharacter
@@ -71,16 +71,46 @@ namespace InGame
 	class Stage3Boss : public EnemyBoss
 	{
 	public:
-		//virtual void Init() override;
-		//virtual void Update() override;
-		//virtual void Draw() override;
-		//virtual void Destroy() override;
-
-		//f32 WaveAttackSpawnTimer = 0.f;
-		//f32 WaveAttackChamberTimer = 12.f;
-		//bool bIsWaving = false;
+		virtual void Init() override;
+		virtual void Update() override;
+		virtual void Draw() override;
+		virtual void Destroy() override;
+		virtual void OnPlayerHit() override;
+		void SpawnBomb(AEVec2& pos);
+		void SpawnBlackHole(AEVec2& pos);
 	protected:
+		//Default attack
+		f32 BombTimer = 0.f;
+		f32 BombSpawnInterval = 2.f;
+		//BlackHole
+		float BlackholeTimer = 0.f;
+		float BlackholeInterval = 5.f;
+		float BlackholeDuration = 4.f;
+		AEVec2 BlackholePosition;
+		float BlackholeRadius = 300.f;
+		//Laser
+		f32 LaserTimer = 0.f;
+		f32 LaserSpawnInterval = 7.f;
+		bool bUseEightDirections = true;
+		bool bLaserRotRight = true;
+		bool bUseRotate = true;
 
+		//Projectile
+		f32 ProjectileSpawnTimer = 0.f;
+		f32 ProjectileChamberTimer = 1.5f;
+		f32 WaveAttackSpawnTimer = 0.f;
+		bool angleOffsetToggle = false;
+		f32 WaveAttackChamberTimer = 30.f;
+		bool bIsWaving = false;
+
+
+		//Movement
+		AEVec2 MoveStartPos;
+		AEVec2 MoveTargetPos;
+		bool bIsMoving = false;
+		float MoveTimer = 0.f;
+		float MoveCooldown = 5.f;
+		std::vector<AEVec2> MovePositions;
 	private:
 	};
 }

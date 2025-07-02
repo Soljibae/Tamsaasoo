@@ -11,13 +11,13 @@ namespace InGame
 	{
 		Type = StageType::TOWER;
 		MapTextureAddress = "Assets/Lv2Map.png";
-		BossTextureAddress = "Assets/test.png";
+		BossTextureAddress = "Assets/Knight.png";
 	}
 	Stage3::Stage3()
 	{
 		Type = StageType::HEAVEN;
 		MapTextureAddress = "Assets/check.jpg";
-		BossTextureAddress = "Assets/TestBlankRed.png";
+		BossTextureAddress = "Assets/Angel.png";
 	}
 	
 }
