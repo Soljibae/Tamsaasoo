@@ -29,7 +29,6 @@
     <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\Gun.cpp" />
     <ClCompile Include="..\Source\InGame\Item.cpp" />
-    <ClCompile Include="..\Source\InGame\ItemDatabase.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerStat.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
@@ -42,6 +41,8 @@
     <ClCompile Include="..\Source\Manager\GameState.cpp" />
     <ClCompile Include="..\Source\Manager\HUDController.cpp" />
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
+    <ClCompile Include="..\Source\Manager\ItemDatabase.cpp" />
+    <ClCompile Include="..\Source\Manager\ItemParser.cpp" />
     <ClCompile Include="..\Source\Manager\ItemResourceManager.cpp" />
     <ClCompile Include="..\Source\Manager\LevelUpUI.cpp" />
     <ClCompile Include="..\Source\Manager\MainMenu.cpp" />
@@ -61,7 +62,6 @@
     <ClInclude Include="..\Source\InGame\EnemyData.h" />
     <ClInclude Include="..\Source\InGame\Gun.h" />
     <ClInclude Include="..\Source\InGame\Item.h" />
-    <ClInclude Include="..\Source\InGame\ItemDatabase.h" />
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
     <ClInclude Include="..\Source\InGame\PlayerStat.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
@@ -74,6 +74,9 @@
     <ClInclude Include="..\Source\Manager\GameState.h" />
     <ClInclude Include="..\Source\Manager\HUDController.h" />
     <ClInclude Include="..\Source\Manager\Intro.h" />
+    <ClInclude Include="..\Source\Manager\ItemData.h" />
+    <ClInclude Include="..\Source\Manager\ItemDatabase.h" />
+    <ClInclude Include="..\Source\Manager\ItemParser.h" />
     <ClInclude Include="..\Source\Manager\ItemResourceManager.h" />
     <ClInclude Include="..\Source\Manager\LevelUpUI.h" />
     <ClInclude Include="..\Source\Manager\MainMenu.h" />

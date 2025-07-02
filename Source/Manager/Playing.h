@@ -10,7 +10,7 @@
 #include "../InGame/EnemyData.h"
 #include "../InGame/EnemyBoss.h"
 #include "../InGame/Item.h"
-#include "../InGame/ItemDatabase.h"
+#include "ItemDatabase.h"
 #include "../InGame/Stage.h"
 #include "ItemResourceManager.h"
 #include "../InGame/SpawnList.h"
@@ -33,7 +33,7 @@ namespace Manager
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
 		InGame::Background* BG;
-		InGame::ItemDatabase* ITDB;
+		ItemDatabase* ITDB;
 		ItemResourceManager* ITRM;
 		InGame::WaveManager WM;
 

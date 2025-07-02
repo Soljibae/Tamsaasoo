@@ -40,7 +40,7 @@ namespace Manager
 		}
 		if (ITDB == nullptr)
 		{
-			ITDB = new InGame::ItemDatabase();
+			ITDB = new ItemDatabase();
 			ITDB->Init();
 		}
 		if (ITRM == nullptr)

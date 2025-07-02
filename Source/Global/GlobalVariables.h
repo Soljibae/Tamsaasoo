@@ -17,6 +17,9 @@ namespace global
 	extern bool isBossBattleStarted;
 	extern s32 RecentlyDeadEnemyCount;
 
+	extern f32 item12TriggerRatio;
+	extern f32 item12AdditionalDamage;
+
 	// additionalStats =================
 	extern f32 additionalDamage;
 	extern f32 additionalDamageRatio;

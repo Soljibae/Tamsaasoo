@@ -15,7 +15,8 @@ namespace InGame
 
 	Item::Item(const Item& other)
 		: id(other.id), name(other.name), description(other.description), iconPosition(other.iconPosition),
-		iconOffset(other.iconOffset), tag(other.tag), effectTime(other.effectTime), procChance(other.procChance)
+		iconOffset(other.iconOffset), tag(other.tag), effectTime(other.effectTime), procChance(other.procChance),
+		CoolDown(other.CoolDown), value1(other.value1), value2(other.value2), value3(other.value3), range(other.range)
 	{
 	}
 	void Item::DrawIcon()
@@ -37,11 +38,13 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_1::Init()
+	void Item_1::Init(const Manager::ItemData& data)
 	{
 		id = 1;
-		name = "PRIDE_1";
-		description = "Your attack power is increased by an amount proportional to your missing health when you are below half health.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
 
@@ -51,9 +54,9 @@ namespace InGame
 	}
 	void Item_1::Use(PlayerCharacter* owner)
 	{
-		if (owner->Stats.HP / owner->Stats.MaxHP <= 0.5f)
+		if (owner->Stats.HP / owner->Stats.MaxHP <= value1)
 		{
-			global::additionalDamageRatio += (0.05f * (owner->Stats.MaxHP - owner->Stats.HP) * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+			global::additionalDamageRatio += (value2 * (owner->Stats.MaxHP - owner->Stats.HP) * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
 		}
 	}
 	void Item_1::Update(PlayerCharacter* owner)
@@ -72,11 +75,14 @@ namespace InGame
 		isActivated(other.isActivated), stackTimer(other.stackTimer)
 	{
 	}
-	void Item_2::Init()
+	void Item_2::Init(const Manager::ItemData& data)
 	{
 		id = 2;
-		name = "item_2";
-		description = "After standing still for 3 seconds, your fire rate increases every second. This effect stacks up to 10 times.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		CoolDown = data.cooldown;
+		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
 		if (Manager::gm.currStateREF)
@@ -102,7 +108,7 @@ namespace InGame
 			if (!isActivated)
 			{
 				triggerTimer += global::DeltaTime;
-				if (triggerTimer >= 3.f)
+				if (triggerTimer >= effectTime)
 				{
 					triggerTimer = 0.f;
 					isActivated = true;
@@ -112,7 +118,7 @@ namespace InGame
 			else
 			{
 				stackTimer += global::DeltaTime;
-				if (stackTimer >= 1.f)
+				if (stackTimer >= CoolDown)
 				{
 					stackTimer = 0.f;
 					stacks = std::clamp(stacks + 1, 0, 10);
@@ -127,7 +133,7 @@ namespace InGame
 			isActivated = false;
 		}
 
-		global::additionalFireRate += ((static_cast<f32>(stacks) * 0.05f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
+		global::additionalFireRate += ((static_cast<f32>(stacks) * value1) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f));
 
 		prev_PlayerPos = owner->position;
 	}
@@ -146,11 +152,12 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_3::Init()
+	void Item_3::Init(const Manager::ItemData& data)
 	{
 		id = 3;
-		name = "item_3";
-		description = "this is item_3";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
 
@@ -164,7 +171,7 @@ namespace InGame
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
 			if (GS)
 			{
-				global::additionalDamage += (static_cast<f32>(GS->ECs.size()) * 0.05f * ((1.f) + ((Utils::GetItemCount(id) - 1) * 0.1f)));
+				global::additionalDamage += (static_cast<f32>(GS->ECs.size()) * value1 * ((1.f) + ((Utils::GetItemCount(id) - 1) * 0.1f)));
 			}
 		}
 	}
@@ -183,11 +190,12 @@ namespace InGame
 		: SkillEffectItem(other), appliedStack(other.appliedStack)
 	{
 	}
-	void Item_4::Init()
+	void Item_4::Init(const Manager::ItemData& data)
 	{
 		id = 4;
-		name = "item_4";
-		description = "Reduces Max HP by 2. Grants one revive on death.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
 		appliedStack = 0;
@@ -201,7 +209,7 @@ namespace InGame
 		{
 			appliedStack++;
 			owner->Stats.ReviveCount++;
-			owner->Stats.MaxHP -= 2;
+			owner->Stats.MaxHP -= value1;
 		}
 		
 	}
@@ -220,11 +228,13 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_5::Init()
+	void Item_5::Init(const Manager::ItemData& data)
 	{
 		id = 5;
-		name = "item_5";
-		description = "Increases damage dealt to bosses by 50%, but you take 100% more damage from them.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
 
@@ -233,8 +243,8 @@ namespace InGame
 	}
 	void Item_5::Use(PlayerCharacter* owner)
 	{
-		global::additionalDamageToBossRatio += 0.5f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
-		global::additionalDamageFromBossRatio += 1.f;
+		global::additionalDamageToBossRatio += value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
+		global::additionalDamageFromBossRatio += value2;
 	}
 	void Item_5::Update(PlayerCharacter* owner)
 	{
@@ -251,14 +261,14 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_6::Init()
+	void Item_6::Init(const Manager::ItemData& data)
 	{
 		id = 6;
-		name = "item_6";
-		description = "Your attacks have a 30% chance to set the enemy on fire for 3 seconds.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 3.f;
-		procChance = 0.3f;
+		effectTime = data.duration;
+		procChance = data.procChance;
 		tag = WRATH;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -287,12 +297,13 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_7::Init()
+	void Item_7::Init(const Manager::ItemData& data)
 	{
 		id = 7;
-		name = "item_7";
-		description = "Increases the damage your Burn deals based on the enemy's Max Health.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		value1 = data.value1;
 		tag = WRATH;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -300,7 +311,7 @@ namespace InGame
 	}
 	void Item_7::Use(PlayerCharacter* owner)
 	{
-		global::additionalBurnDamage += 0.05f * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalBurnDamage += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
 	}
 	void Item_7::Update(PlayerCharacter* owner)
 	{
@@ -317,11 +328,12 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_8::Init()
+	void Item_8::Init(const Manager::ItemData& data)
 	{
 		id = 8;
-		name = "item_8";
-		description = "Increases the frequency of your Burn damage ticks.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = WRATH;
 
@@ -330,7 +342,7 @@ namespace InGame
 	}
 	void Item_8::Use(PlayerCharacter* owner)
 	{
-		global::additionalBurnRate = 0.2f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalBurnRate = value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_8::Update(PlayerCharacter* owner)
 	{
@@ -344,25 +356,26 @@ namespace InGame
 	}
 	//============================================= ID_9
 	Item_9::Item_9(const Item_9& other)
-		: SkillEffectItem(other), CoolDown(other.CoolDown), isStarted(other.isStarted), isReady(other.isReady)
+		: SkillEffectItem(other), isStarted(other.isStarted), isReady(other.isReady)
 	{
 	}
-	void Item_9::Init()
+	void Item_9::Init(const Manager::ItemData& data)
 	{
 		id = 9;
-		name = "item_9";
-		description = "Every 2 seconds, taking damage unleashes a fiery nova, burning nearby enemies for 30% of their max HP and applying Burn.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 5.f;
+		effectTime = data.duration;
 		tag = WRATH;
-		CoolDown = 2.f;
+		CoolDown = data.cooldown;
 		FireTimer = 0.f;
 		isStarted = false;
 		isReady = false;
 		AEVec2Set(&effectPosition, 0.f, 0.f);
 		FrameTime = 0.1f;
 		AEVec2Set(&AnimationOffset, 0.f, 0.f);
-		AEVec2Set(&effectSize, 400.f, 400.f);
+		AEVec2Set(&effectSize, data.range, data.range);
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
 		effectRow = 1;
@@ -441,11 +454,11 @@ namespace InGame
 								
 								if (global::isBossBattleStarted)
 								{
-									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) * 0.1f);
+									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f) * 0.1f);
 								}
 								else
 								{
-									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
+									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f));
 								}
 							}
 						}
@@ -459,11 +472,12 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_10::Init()
+	void Item_10::Init(const Manager::ItemData& data)
 	{
 		id = 10;
-		name = "item_10";
-		description = "Your damage multiplier increases based on the amount of Burn damage you inflict.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = WRATH;
 
@@ -472,7 +486,7 @@ namespace InGame
 	}
 	void Item_10::Use(PlayerCharacter* owner)
 	{
-		global::additionalDamageRatio += global::effectiveBurnDamage * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalDamageRatio += global::effectiveBurnDamage * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_10::Update(PlayerCharacter* owner)
 	{
@@ -486,17 +500,17 @@ namespace InGame
 	}
 	//============================================= ID_11
 	Item_11::Item_11(const Item_11& other)
-		: SkillEffectItem(other), CoolDown(other.CoolDown), isStarted(other.isStarted), isReady(other.isReady), 
+		: SkillEffectItem(other), isStarted(other.isStarted), isReady(other.isReady), 
 		additionalEffectSizeRatio(other.additionalEffectSizeRatio), baseEffectSize(other.baseEffectSize)
 	{
 	}
-	void Item_11::Init()
+	void Item_11::Init(const Manager::ItemData& data)
 	{
 		id = 11;
-		name = "item_11";
-		description = "this is item_11";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		CoolDown = 5.f;
+		CoolDown = data.cooldown;
 		isStarted = true;
 		isReady = true;
 		FireTimer = 0.f;
@@ -504,14 +518,15 @@ namespace InGame
 		AEVec2Set(&effectSize, 0.f, 0.f);
 		additionalEffectSizeRatio = 1.f;
 		AEVec2Set(&AnimationOffset, 0.f, 0.f);
-		AEVec2Set(&baseEffectSize, 400.f, 400.f);
+		AEVec2Set(&baseEffectSize, data.range, data.range);
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
 		effectRow = 1;
 		effectColumn = 9;
 		tag = SLOTH;
-		effectTime = 3.f;
+		effectTime = data.duration;
 		MaxAnimationCount = 9;
+		value1 = data.value1;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -522,15 +537,8 @@ namespace InGame
 	}
 	void Item_11::Update(PlayerCharacter* owner)
 	{
-		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
-		{
-			additionalEffectSizeRatio = (owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate;
-		}
-		else
-		{
-			additionalEffectSizeRatio = 1.f;
-		}
-
+		additionalEffectSizeRatio = value1 * (owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate;
+	
 		AEVec2Scale(&effectSize, &baseEffectSize, additionalEffectSizeRatio);
 
 		if (!isStarted)
@@ -605,19 +613,23 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_12::Init()
+	void Item_12::Init(const Manager::ItemData& data)
 	{
 		id = 12;
-		name = "item_12";
-		description = "Deal 50% more damage to enemies above 80% health.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = SLOTH;
+		value1 = data.value1;
+		value2 = data.value2;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_12::Use(PlayerCharacter* owner)
 	{
+		global::item12TriggerRatio = value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.02);
+		global::item12AdditionalDamage = value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_12::Update(PlayerCharacter* owner)
 	{
@@ -631,22 +643,23 @@ namespace InGame
 	}
 	//============================================= ID_13
 	Item_13::Item_13(const Item_13& other)
-		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }, 
+		: SkillEffectItem(other), isReady{ other.isReady }, isStarted{ other.isStarted }, 
 		additionalEffectSizeRatio(other.additionalEffectSizeRatio), baseEffectSize(other.baseEffectSize)
 	{
 	}
-	void Item_13::Init()
+	void Item_13::Init(const Manager::ItemData& data)
 	{
 		id = 13;
-		name = "item_13";
-		description = "Reduces fire rate. A defeated enemy will explode, damaging nearby foes. This effect can only occur once every 4 seconds. The explosion's radius increases as your fire rate decreases";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		AEVec2Set(&baseEffectSize, 400.f, 400.f);
+		AEVec2Set(&baseEffectSize, data.range, data.range);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		isReady = true;
 		isStarted = false;
-		CoolDown = 4.f;
+		CoolDown = data.cooldown;
 		FireTimer = 0.f;
 		FrameTime = 0.1f;
 		AEVec2Set(&AnimationOffset, 0.f, 0.f);
@@ -659,7 +672,7 @@ namespace InGame
 	}
 	void Item_13::Use(PlayerCharacter* owner)
 	{
-		global::additionalFireRate -= 0.2f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalFireRate -= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_13::Update(PlayerCharacter* owner)
 	{
@@ -676,7 +689,7 @@ namespace InGame
 
 		if (!isStarted)
 		{
-			CoolDown = 4.f * (1.f - (Utils::GetItemCount(id) - 1) * 0.05);
+			CoolDown = 4.f * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f);
 
 			FireTimer += global::DeltaTime;
 			if (FireTimer >= CoolDown)
@@ -748,11 +761,13 @@ namespace InGame
 		: Item(other) , appliedStack(other.appliedStack)
 	{
 	}
-	void Item_14::Init()
+	void Item_14::Init(const Manager::ItemData& data)
 	{
 		id = 14;
-		name = "item_14";
-		description = "Increases your attack damage but reduces your movement speed.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		appliedStack = 0;
 		tag = SLOTH;
@@ -762,8 +777,8 @@ namespace InGame
 	}
 	void Item_14::Use(PlayerCharacter* owner)
 	{
-		global::additionalMovementSpeed -= 30.f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
-		global::additionalDamage += 1.f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalMovementSpeed -= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
+		global::additionalDamage += value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_14::Update(PlayerCharacter* owner)
 	{
@@ -780,11 +795,13 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_15::Init()
+	void Item_15::Init(const Manager::ItemData& data)
 	{
 		id = 15;
-		name = "item_15";
-		description = "Reduces fire. The damage bonus scales inversely with your fire rate.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = SLOTH;
 
@@ -793,11 +810,11 @@ namespace InGame
 	}
 	void Item_15::Use(PlayerCharacter* owner)
 	{
-		global::additionalFireRateRatio -= 0.1f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalFireRateRatio -= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 
 		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
 		{
-			global::additionalDamageRatio += ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate - 1.f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+			global::additionalDamageRatio += value2 * ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate - 1.f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 		}
 	}
 	void Item_15::Update(PlayerCharacter* owner)
@@ -815,11 +832,13 @@ namespace InGame
 		: Item(other), appliedStack(other.appliedStack)
 	{
 	}
-	void Item_16::Init()
+	void Item_16::Init(const Manager::ItemData& data)
 	{
 		id = 16;
-		name = "item_16";
-		description = "Grants +2 Max Health. Decreases Movement Speed.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		appliedStack = 0;
 		tag = GLUTTONY;
@@ -831,12 +850,12 @@ namespace InGame
 	{
 		if (appliedStack != Utils::GetItemCount(id))
 		{
-			owner->Stats.MaxHP += 2;
-			owner->Stats.HP += 2;
+			owner->Stats.MaxHP += value2;
+			owner->Stats.HP += value2;
 			appliedStack++;
 		}
 
-		global::additionalMovementSpeed -= 30.f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalMovementSpeed -= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_16::Update(PlayerCharacter* owner)
 	{
@@ -853,13 +872,14 @@ namespace InGame
 		: Item(other), targetKillCount(other.targetKillCount), currKillCount(other.currKillCount)
 	{
 	}
-	void Item_17::Init()
+	void Item_17::Init(const Manager::ItemData& data)
 	{
 		id = 17;
-		name = "item_17";
-		description = "Restores 1 Health per 80 enemies slain.";
+		name = data.name;
+		description = data.description;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		targetKillCount = 8;
+		targetKillCount = data.value1;;
 		currKillCount = 0;
 		tag = GLUTTONY;
 
@@ -870,10 +890,10 @@ namespace InGame
 	{
 		currKillCount += global::RecentlyDeadEnemyCount;
 
-		if (currKillCount >= targetKillCount * (1.f + (Utils::GetItemCount(id) - 1) * 0.1))
+		if (currKillCount >= targetKillCount * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f))
 		{
-			currKillCount -= targetKillCount * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
-			owner->Stats.HP += 1;
+			currKillCount -= static_cast<s32>(targetKillCount * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f));
+			owner->Stats.HP += value2;
 		}
 	}
 	void Item_17::Update(PlayerCharacter* owner)
@@ -891,11 +911,13 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_18::Init()
+	void Item_18::Init(const Manager::ItemData& data)
 	{
 		id = 18;
-		name = "item_18";
-		description = "Increases Attack Power and decreases Movement Speed based on your Health.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GLUTTONY;
 
@@ -904,8 +926,8 @@ namespace InGame
 	}
 	void Item_18::Use(PlayerCharacter* owner)
 	{
-		global::additionalDamage += (0.08f * owner->Stats.HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
-		global::additionalMovementSpeed -= (8.f * owner->Stats.HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+		global::additionalDamage += (value1 * owner->Stats.HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+		global::additionalMovementSpeed -= (value2 * owner->Stats.HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
 	}
 	void Item_18::Update(PlayerCharacter* owner)
 	{
@@ -922,13 +944,16 @@ namespace InGame
 		: Item(other), effectTimer(other.effectTimer), isActivated(other.isActivated)
 	{
 	}
-	void Item_19::Init()
+	void Item_19::Init(const Manager::ItemData& data)
 	{
 		id = 19;
-		name = "item_19";
-		description = "On taking damage, gain increased Rate of Fire, Attack Power, and Movement Speed for 5 seconds.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 5.f;
+		value1 = data.value1;
+		value2 = data.value2;
+		value3 = data.value3;
+		effectTime = data.duration;
 		effectTimer = 0.f;
 		isActivated = false;
 		tag = GLUTTONY;
@@ -947,9 +972,9 @@ namespace InGame
 				isActivated = false;
 			}
 
-			global::additionalFireRate += 0.5f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
-			global::additionalDamage += 0.5f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
-			global::additionalMovementSpeed += 50.f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+			global::additionalFireRate += value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
+			global::additionalDamage += value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
+			global::additionalMovementSpeed += value3 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 		}
 	}
 	void Item_19::Update(PlayerCharacter* owner)
@@ -965,19 +990,21 @@ namespace InGame
 	void Item_19::OnDamaged()
 	{
 		isActivated = true;
+		effectTimer = 0.f;
 	}
 	//============================================= ID_20
 	Item_20::Item_20(const Item_20& other)
 		: SkillEffectItem(other), Potions(other.Potions)
 	{
 	}
-	void Item_20::Init()
+	void Item_20::Init(const Manager::ItemData& data)
 	{
 		id = 20;
-		name = "item_20";
-		description = "Every 30 seconds, a potion spawns in a random location. Picking it up restores 1 Health.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GLUTTONY;
+		CoolDown = data.cooldown;
 		FireTimer = 0.f;
 		AEVec2Set(&effectSize, 100.f, 100.f);
 
@@ -987,7 +1014,7 @@ namespace InGame
 	void Item_20::Use(PlayerCharacter* owner)
 	{
 		FireTimer += global::DeltaTime;
-		if (FireTimer >= 30.f * (1.f - (Utils::GetItemCount(id) - 1) * 0.05))
+		if (FireTimer >= CoolDown * (1.f - (Utils::GetItemCount(id) - 1) * 0.05))
 		{
 			FireTimer = 0;
 			std::shared_ptr<Actor> newPotion = std::make_shared<Actor>();
@@ -1032,11 +1059,11 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_21::Init()
+	void Item_21::Init(const Manager::ItemData& data)
 	{
 		id = 21;
-		name = "item_21";
-		description = "this is item_21";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1061,11 +1088,11 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_22::Init()
+	void Item_22::Init(const Manager::ItemData& data)
 	{
 		id = 22;
-		name = "item_22";
-		description = "this is item_22";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1090,11 +1117,11 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_23::Init()
+	void Item_23::Init(const Manager::ItemData& data)
 	{
 		id = 23;
-		name = "item_23";
-		description = "this is item_23";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1119,11 +1146,11 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_24::Init()
+	void Item_24::Init(const Manager::ItemData& data)
 	{
 		id = 24;
-		name = "item_24";
-		description = "this is item_24";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1148,11 +1175,11 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_25::Init()
+	void Item_25::Init(const Manager::ItemData& data)
 	{
 		id = 25;
-		name = "item_25";
-		description = "this is item_25";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1177,14 +1204,14 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_26::Init()
+	void Item_26::Init(const Manager::ItemData& data)
 	{
 		id = 26;
-		name = "item_26";
-		description = "Attacks have a 20% chance to stun enemies for 3 seconds.";
+		name = data.name;
+		description = data.description;
+		procChance = data.procChance;
+		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 3.f;
-		procChance = 0.2f;
 		tag = LUST;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -1218,16 +1245,16 @@ namespace InGame
 	}
 	//============================================= ID_27
 	Item_27::Item_27(const Item_27& other)
-		: SkillEffectItem(other), CoolDown{ other.CoolDown }, isReady{ other.isReady }, isStarted{ other.isStarted }
+		: SkillEffectItem(other), isReady{ other.isReady }, isStarted{ other.isStarted }
 	{
 	}
-	void Item_27::Init()
+	void Item_27::Init(const Manager::ItemData& data)
 	{
 		id = 27;
-		name = "item_27";
-		description = "On kill, there is a 10% chance to fear nearby enemies for 4 seconds.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		AEVec2Set(&effectSize, 500.f, 500.f);
+		AEVec2Set(&effectSize, data.range, data.range);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		isReady = true;
@@ -1240,8 +1267,8 @@ namespace InGame
 		AnimationTimer = 0.f;
 		effectRow = 1;
 		effectColumn = 9;
-		procChance = 0.1f;
-		effectTime = 4.f;
+		procChance = data.procChance;
+		effectTime = data.duration;
 		MaxAnimationCount = 9;
 		tag = LUST;
 	}
@@ -1333,14 +1360,14 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_28::Init()
+	void Item_28::Init(const Manager::ItemData& data)
 	{
 		id = 28;
-		name = "item_28";
-		description = "Attacks have a 20% chance to make an enemy Vulnerable for 3 seconds.";
+		name = data.name;
+		description = data.description;
+		procChance = data.procChance;
+		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		effectTime = 3.f;
-		procChance = 0.2f;
 		tag = LUST;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -1378,11 +1405,12 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_29::Init()
+	void Item_29::Init(const Manager::ItemData& data)
 	{
 		id = 29;
-		name = "item_29";
-		description = "Increases the activation chance of all status effects.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
 
@@ -1391,7 +1419,7 @@ namespace InGame
 	}
 	void Item_29::Use(PlayerCharacter* owner)
 	{
-		global::additionalProcChanceRatio += 0.3f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::additionalProcChanceRatio += value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_29::Update(PlayerCharacter* owner)
 	{
@@ -1408,11 +1436,12 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_30::Init()
+	void Item_30::Init(const Manager::ItemData& data)
 	{
 		id = 30;
-		name = "item_30";
-		description = "Attacks execute enemies that are below 10% of their maximum health.";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
 
@@ -1436,7 +1465,7 @@ namespace InGame
 	{
 		if (!isTargetBoss)
 		{
-			if (target->Stats.HP / target->Stats.MaxHP <= 0.1f * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats.HP > 0.f)
+			if (target->Stats.HP / target->Stats.MaxHP <= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats.HP > 0.f)
 			{
 				target->adjustHealth(-99999999.f);
 			}
@@ -1449,17 +1478,17 @@ namespace InGame
 		effectiveFireRate{ other.effectiveFireRate }, effectiveDamage{ other.effectiveDamage }, effectiveHitCount{ other.effectiveHitCount }
 	{
 	}
-	void Item_31::Init()
+	void Item_31::Init(const Manager::ItemData& data)
 	{
 		id = 31;
-		name = "item_31";
-		description = "Summons two minions that fire bullets in the direction you are aiming.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		distance = 80.f;
-		Damage = 1;
-		FireRate = 5.f;
+		Damage = data.value1;;
+		FireRate = data.value2;
 		FireTimer = 0.f;
-		HitCount = 1;
+		HitCount = data.value3;
 		BulletSpeed = 15.f;
 		AEVec2Set(&effectSize, 128.f, 45.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -1554,16 +1583,16 @@ namespace InGame
 		effectiveFireRate{ other.effectiveFireRate }, effectiveDamage{ other.effectiveDamage }, effectiveHitCount{ other.effectiveHitCount }, closestEnemy(other.closestEnemy)
 	{
 	}
-	void Item_32::Init()
+	void Item_32::Init(const Manager::ItemData& data)
 	{
 		id = 32;
-		name = "item_32";
-		description = "Summons a minion that lobs grenades at the nearest enemy.";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		distance = 80.f;
-		Damage = 3;
-		FireRate = 1.f;
+		Damage = data.value1;
+		FireRate = data.value2;
 		FireTimer = 0.f;
 		HitCount = 1;
 		BulletSpeed = 15.f;
@@ -1659,19 +1688,19 @@ namespace InGame
 	//============================================= ID_33
 	Item_33::Item_33(const Item_33& other)
 		: SkillEffectItem(other), angle(other.angle), angleSpeed(other.angleSpeed), effectiveAngleSpeed(other.effectiveAngleSpeed), dir(other.dir),
-		Damage(other.Damage), effectiveDamage(other.effectiveDamage), CoolDown(other.CoolDown), isReady(other.isReady), distance(other.distance)
+		Damage(other.Damage), effectiveDamage(other.effectiveDamage), isReady(other.isReady), distance(other.distance)
 	{
 	}
-	void Item_33::Init()
+	void Item_33::Init(const Manager::ItemData& data)
 	{
 		id = 33;
-		name = "item_33";
-		description = "this is item_33";
+		name = data.name;
+		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = ENVY;
-		Damage = 1.f;
+		Damage = data.value1;
 		angle = 0.f;
-		angleSpeed = 150.f;
+		angleSpeed = data.value2;
 		CoolDown = 0.1f;
 		isReady = false;
 		distance = 200.f;
@@ -1768,11 +1797,13 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_34::Init()
+	void Item_34::Init(const Manager::ItemData& data)
 	{
 		id = 34;
-		name = "item_34";
-		description = "summoner attack speed faster";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1780,7 +1811,8 @@ namespace InGame
 	}
 	void Item_34::Use(PlayerCharacter* owner)
 	{
-		global::additionalMinionDamage += 1.f * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalMinionDamage += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalMinionHitCount += value2;
 	}
 	void Item_34::Update(PlayerCharacter* owner)
 	{
@@ -1797,11 +1829,12 @@ namespace InGame
 		: Item(other)
 	{
 	}
-	void Item_35::Init()
+	void Item_35::Init(const Manager::ItemData& data)
 	{
 		id = 35;
-		name = "item_35";
-		description = "summoner attack speed faster";
+		name = data.name;
+		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1809,7 +1842,7 @@ namespace InGame
 	}
 	void Item_35::Use(PlayerCharacter* owner)
 	{
-		global::additionalMinionFireRate += 5.f * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalMinionFireRate += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
 	}
 	void Item_35::Update(PlayerCharacter* owner)
 	{
