@@ -5,6 +5,7 @@
 #include "../Manager/LevelUpUI.h"
 #include "../Manager/HUDController.h"
 #include "PauseUI.h"
+#include "ExpUI.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -39,7 +40,7 @@ namespace Manager
 		}
 		if (ITDB == nullptr)
 		{
-			ITDB = new InGame::ItemDatabase();
+			ITDB = new ItemDatabase();
 			ITDB->Init();
 		}
 		if (ITRM == nullptr)
@@ -63,6 +64,7 @@ namespace Manager
 		WaveTimer = 0.;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
+		ExpPanel.Init(PC);
 		HUD.Init(PC, PC->HoldingGun);
 		gm.GamePaused = false;
 		Utils::TestInit();
@@ -72,6 +74,8 @@ namespace Manager
 	void Playing::Update()
 	{
 		// Press ESCAPE to pause the game
+		ExpPanel.Update();
+
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
 		{
 			if (!gm.GamePaused)
@@ -123,11 +127,11 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_4))
 			{
-				PC->AddItemToInventory(ITDB->itemList[4]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[13]->Clone());
 			}
 			if (global::KeyInput(AEVK_5))
 			{
-				PC->AddItemToInventory(ITDB->itemList[5]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[15]->Clone());
 			}
 			if (global::KeyInput(AEVK_6))
 			{
@@ -471,6 +475,7 @@ namespace Manager
 			Boss->Draw();
 		}
 		HUD.Draw();
+		ExpPanel.Draw();
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
@@ -542,6 +547,7 @@ namespace Manager
 		ITRM->Destroy();
 		delete ITRM;
 
+		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
 		HUD.Destroy();

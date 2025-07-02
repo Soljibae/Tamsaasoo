@@ -17,6 +17,9 @@ namespace global
 	extern bool isBossBattleStarted;
 	extern s32 RecentlyDeadEnemyCount;
 
+	extern f32 item12TriggerRatio;
+	extern f32 item12AdditionalDamage;
+
 	// additionalStats =================
 	extern f32 additionalDamage;
 	extern f32 additionalDamageRatio;
@@ -44,8 +47,5 @@ namespace global
 
 	extern f32 additionalDamageToBossRatio;
 	extern f32 additionalDamageFromBossRatio;
-
-	extern f32 guntypeDamageRatio;
-	extern f32 guntypeFireRateRatio;
 	//==================================
 }

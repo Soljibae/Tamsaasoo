@@ -1,0 +1,23 @@
+#pragma once
+#include "../InGame/Actor.h"
+#include "../InGame/PlayerCharacter.h"
+
+namespace Manager
+{
+	class ExpUI
+	{
+	public:
+		void Init(InGame::PlayerCharacter* InPC);
+		void Update();
+		void Draw();
+		void Destroy();
+
+		InGame::Actor xpBarBackground;
+		InGame::Actor xpBarEmpty;
+		InGame::Actor xpBarFill;
+
+	private:
+		InGame::PlayerCharacter* PC;
+	};
+	extern ExpUI ExpPanel;
+}

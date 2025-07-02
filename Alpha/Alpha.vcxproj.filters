@@ -86,9 +86,6 @@
     <ClCompile Include="..\Source\InGame\Item.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\ItemDatabase.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\InGame\EnemyBoss.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
@@ -108,6 +105,15 @@
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Manager\ItemResourceManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ExpUI.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ItemDatabase.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ItemParser.cpp">
       <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -178,9 +184,6 @@
     <ClInclude Include="..\Source\InGame\EnemyData.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\InGame\ItemDatabase.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\InGame\EnemyBoss.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
@@ -200,6 +203,18 @@
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Manager\ItemResourceManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ExpUI.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemDatabase.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemParser.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemData.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>

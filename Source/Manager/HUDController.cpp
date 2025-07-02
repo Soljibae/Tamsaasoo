@@ -105,24 +105,6 @@ namespace Manager
 	}
 	void HUDController::Update()
 	{
-		if (global::KeyInput(AEVK_F))
-		{
-			switch (GUN->gunType)
-			{
-			case InGame::GunType::PISTOL:
-				ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
-				GUN->gunType = InGame::GunType::RIFLE;
-				break;
-			case InGame::GunType::RIFLE:
-				ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
-				GUN->gunType = InGame::GunType::SHOTGUN;
-				break;
-			case InGame::GunType::SHOTGUN:
-				ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
-				GUN->gunType = InGame::GunType::PISTOL;
-				break;
-			}
-		}
 
 		if (prevMaxHP != PC->Stats.MaxHP)
 		{
@@ -214,10 +196,9 @@ namespace Manager
 		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		//DEBUG
-		if (global::KeyInput(AEVK_P))
-		{
-			PC->Stats.Potion += 100;
-		}
+
+		PC->Stats.Potion += global::RecentlyDeadEnemyCount;
+	
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
 		{

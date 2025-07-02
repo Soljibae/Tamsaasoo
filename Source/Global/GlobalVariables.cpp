@@ -14,6 +14,9 @@ namespace global
 	bool isBossBattleStarted = false;
 	s32 RecentlyDeadEnemyCount = 0;
 
+	f32 item12TriggerRatio;
+	f32 item12AdditionalDamage;
+
 	// additionalStats =================
 	f32 additionalDamage = 0.f;
 	f32 additionalDamageRatio = 1.f;
@@ -41,8 +44,5 @@ namespace global
 
 	f32 additionalDamageToBossRatio = 1.f;
 	f32 additionalDamageFromBossRatio = 1.f;
-
-	f32 guntypeDamageRatio;
-	f32 guntypeFireRateRatio;
 	//==================================
 }

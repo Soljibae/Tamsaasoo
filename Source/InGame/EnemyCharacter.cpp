@@ -305,9 +305,9 @@ namespace InGame
 			Amount *= 1.2f;
 		}
 
-		if (Stats.HP / Stats.MaxHP >= 0.8f && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
+		if (Stats.HP / Stats.MaxHP >= global::item12TriggerRatio && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
 		{
-			Amount *= 1.5f * (1.f + (Utils::GetItemCount(12) - 1) * 0.1);
+			Amount *= global::item12AdditionalDamage;
 		}
 
 		Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
