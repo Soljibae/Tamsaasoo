@@ -60,6 +60,7 @@ namespace InGame
 		bIsWaving = false;
 
 		Stats.HP = 10;
+		Stats.MaxHP = 10;
 		Stats.FireRate = 5.f;
 		Stats.ProjectileSpeed = 3.f;
 		Stats.Damage = 1;
@@ -209,6 +210,7 @@ namespace InGame
 		CollisionRadius = 150.f;
 
 		Stats.HP = 40;
+		Stats.MaxHP = 40;
 		Stats.Damage = 1;
 
 		dashTimer = 0.f;
@@ -372,6 +374,7 @@ namespace InGame
 		CollisionRadius = 150.f;
 
 		Stats.HP = 40;
+		Stats.MaxHP = 40;
 		Stats.Damage = 1;
 		Stats.MovementSpeed = 100.f;
 		AnimationState = IDLE;
