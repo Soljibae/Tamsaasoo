@@ -483,6 +483,117 @@ namespace InGame
 
 	void PlayerCharacter::UpdateStats()
 	{
+		std::map<ItemTag, s32> itemTagCount;
+
+		for (int i = static_cast<int>(ENVY); i <= static_cast<int>(PRIDE); ++i)
+		{
+			itemTagCount[static_cast<ItemTag>(i)] = 0;
+		}
+
+		for (const auto& item_ptr : inventory)
+		{
+			itemTagCount[item_ptr.first->tag] += item_ptr.second;
+		}
+
+		if (itemTagCount[PRIDE] >= 7)
+		{
+			global::additionalFireRate += 0.8;
+		}
+		else if (6 >= itemTagCount[PRIDE] && itemTagCount[PRIDE] >= 5)
+		{
+			global::additionalFireRate += 0.5;
+		}
+		else if (4 >= itemTagCount[PRIDE] && itemTagCount[PRIDE] >= 3)
+		{
+			global::additionalFireRate += 0.2;
+		}
+
+		if (itemTagCount[WRATH] >= 7)
+		{
+			global::additionalBurnDamage += 0.08;
+		}
+		else if (6 >= itemTagCount[WRATH] && itemTagCount[WRATH] >= 5)
+		{
+			global::additionalBurnDamage += 0.05;
+		}
+		else if (4 >= itemTagCount[WRATH] && itemTagCount[WRATH] >= 3)
+		{
+			global::additionalBurnDamage += 0.02;
+		}
+
+		if (itemTagCount[SLOTH] >= 7)
+		{
+			global::additionalHitCount += 3;
+		}
+		else if (6 >= itemTagCount[SLOTH] && itemTagCount[SLOTH] >= 5)
+		{
+			global::additionalHitCount += 2;
+		}
+		else if (4 >= itemTagCount[SLOTH] && itemTagCount[SLOTH] >= 3)
+		{
+			global::additionalHitCount += 1;
+		}
+
+		static s16 healthUpByTagCount = 0;
+
+		if (itemTagCount[GLUTTONY] >= 3 && healthUpByTagCount == 0)
+		{
+			healthUpByTagCount++;
+			Stats.MaxHP++;
+			Stats.HP++;
+		}
+		if (itemTagCount[GLUTTONY] >= 5 && healthUpByTagCount == 1)
+		{
+			healthUpByTagCount++;
+			Stats.MaxHP++;
+			Stats.HP++;
+		}
+		if (itemTagCount[GLUTTONY] >= 7 && healthUpByTagCount == 2)
+		{
+			healthUpByTagCount++;
+			Stats.MaxHP++;
+			Stats.HP++;
+		}
+
+		if (itemTagCount[GREED] >= 7)
+		{
+			
+		}
+		else if (6 >= itemTagCount[GREED] && itemTagCount[GREED] >= 5)
+		{
+			
+		}
+		else if (4 >= itemTagCount[GREED] && itemTagCount[GREED] >= 3)
+		{
+			
+		}
+
+		if (itemTagCount[LUST] >= 7)
+		{
+			global::additionalProcChanceRatio += 0.20;
+		}
+		else if (6 >= itemTagCount[LUST] && itemTagCount[LUST] >= 5)
+		{
+			global::additionalProcChanceRatio += 0.15;
+		}
+		else if (4 >= itemTagCount[LUST] && itemTagCount[LUST] >= 3)
+		{
+			global::additionalProcChanceRatio += 0.07;
+		}
+
+		if (itemTagCount[ENVY] >= 7)
+		{
+			global::additionalMovementSpeed += 60;
+		}
+		else if (6 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 5)
+		{
+			global::additionalMovementSpeed += 35;
+		}
+		else if (4 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 3)
+		{
+			global::additionalMovementSpeed += 20;
+		}
+
 		Stats.effectiveDamage = (Stats.Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
 		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
 		Stats.effectiveExpGained = Stats.ExpGained * global::additionalExpGainedRatio;

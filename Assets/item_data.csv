@@ -216,11 +216,11 @@ Summons two minions that fire bullets in the direction you are aiming.
 1.0, 3.0, 1.0, -1, -1, -1, -1
 
 32
-//32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 (기본 데미지 value1, 연사 value2)
+//32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 폭발 반경 range (기본 데미지 value1, 연사 value2)
 item_32
 Summons a minion that lobs grenades at the nearest enemy.
 //value1, value2, value3, cooldown, duration, procchance, range
-3.0, 1.0, -1, -1, -1, -1, -1
+3.0, 1.0, -1, -1, -1, -1, 300.0
 
 33
 //33 - 플레이어 주변을 회전하며 탄환을 막아주고, 충돌 데미지를 주는 소환수 1개 소환 (기본 데미지 value1, 기본 각속도 value2)

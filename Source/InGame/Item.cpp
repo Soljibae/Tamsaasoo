@@ -1601,6 +1601,7 @@ namespace InGame
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		AEVec2Set(&AnimationOffset, 0, 0);
 		tag = ENVY;
+		global::item32ExplosionSize = data.range;
 
 		dir = global::PlayerMouseDirection;
 		AEVec2 DirectionVector;

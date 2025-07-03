@@ -20,7 +20,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
 	CollisionRadius = object->Stats.ProjectileCollisionSize;
 	bIsPandingKill = false;
 	isExplosive = false;
-	AEVec2Set(&ExplosionSize, 300.f, 300.f);
+	AEVec2Set(&ExplosionSize, global::item32ExplosionSize, global::item32ExplosionSize);
 	AEVec2Set(&ExplosionOffset, 0.f, 0.f);
 	
 	BulletSpeed = object->Stats.ProjectileSpeed;
