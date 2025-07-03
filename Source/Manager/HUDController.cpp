@@ -275,7 +275,7 @@ namespace Manager
 			Utils::DrawObject(fireTimeBar, false);
 		}
 		Utils::DrawObject(Coin, false);
-		std::string pText = std::to_string(PC->Stats.Money);
+		std::string pText = std::to_string(static_cast<s32>(PC->Stats.Money));
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
