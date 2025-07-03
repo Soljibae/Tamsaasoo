@@ -20,7 +20,7 @@ namespace Manager
 		{
 			CurrentStage = new InGame::Stage1();
 		}
-		CurrentStageType = InGame::StageType::LAND;
+		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
 		{
 			PC = new InGame::PlayerCharacter();
@@ -153,11 +153,12 @@ namespace Manager
 				std::cout << global::DeltaTime << std::endl;
 			}
 			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
+			
 			if (WaveTimer > 3.f)
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 1)
+				if (WaveCount > 10)
 				{
 					InitBossFight();
 				}
@@ -526,6 +527,19 @@ namespace Manager
 			delete EP;
 		}
 		EPPool.clear();
+		for (InGame::ArealAttack* PAA : PAAs)
+		{
+			PAA->Destroy();
+			delete PAA;
+		}
+		PAAs.clear();
+		for (InGame::ArealAttack* EAA : EAAs)
+		{
+			EAA->Destroy();
+			delete EAA;
+		}
+		EAAs.clear();
+
 		delete CAM;
 		CAM = nullptr;
 		BG->Destroy();

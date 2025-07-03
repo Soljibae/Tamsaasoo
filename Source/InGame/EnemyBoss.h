@@ -6,6 +6,7 @@ namespace InGame
 	class EnemyBoss : public EnemyCharacter
 	{
 	public:
+		virtual ~EnemyBoss() {};
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void Draw() override;
@@ -71,6 +72,7 @@ namespace InGame
 	class Stage3Boss : public EnemyBoss
 	{
 	public:
+		virtual ~Stage3Boss() {};
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void Draw() override;

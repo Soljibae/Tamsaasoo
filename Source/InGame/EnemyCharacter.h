@@ -7,6 +7,7 @@ namespace InGame
 	class EnemyCharacter : public Character
 	{
 	public:
+		virtual ~EnemyCharacter() {};
 		virtual void Init() override;
 		void Spawn(AEVec2 Pos, EnemyData* InData);
 		virtual void Update() override;
