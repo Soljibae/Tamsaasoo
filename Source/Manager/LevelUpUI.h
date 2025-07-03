@@ -36,7 +36,7 @@ namespace Manager
 		static AEGfxVertexList* rerollMesh;
 		static AEGfxTexture* rerollTexture;
 
-		s32 rerollCost;
+		std::array<s32, 3> rerollCost;
 		std::array<Button, 3> ItemSlot;
 	};
 	extern LevelUpUI pickPanel;

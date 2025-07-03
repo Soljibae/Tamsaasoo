@@ -490,6 +490,7 @@ namespace Manager
 	}
 	void Playing::Destroy()
 	{
+		HUD.Destroy();
 		for (InGame::Projectile* PP : PPs)
 		{
 			PP->Destroy();

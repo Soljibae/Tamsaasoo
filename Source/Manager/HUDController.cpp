@@ -552,9 +552,9 @@ namespace Manager
 		HP.clear();
 
 		AEGfxMeshFree(ChamberTimeBar.Mesh);
-		AEGfxMeshFree(fireTimeBar.Mesh);
-
 		AEGfxTextureUnload(ChamberTimeBar.Texture);
+
+		AEGfxMeshFree(fireTimeBar.Mesh);
 		AEGfxTextureUnload(fireTimeBar.Texture);
 
 		AEGfxMeshFree(Coin.Mesh);

@@ -21,6 +21,7 @@ namespace InGame
 		u32 Money;
 		s16 Potion;
 		s32 ReviveCount;
+		f32 rerollCostRatio;
 		std::array<f32, 3> StageExpGainedRatio;
 
 		f32 BurnDamage;
