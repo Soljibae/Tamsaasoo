@@ -43,13 +43,16 @@ namespace InGame
 		Stats.ExpGained = 1.f;
 		Stats.HitCount = GunData->ProjectileHitCount;
 		Stats.ExpCount = 0.f;
-		Stats.TargetExp = 8.f;
+		Stats.TargetExp = 20.f;
 		Stats.Money = 0;
 		Stats.Potion = 0;
 		Stats.BurnDamage = 0.1f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
 		Stats.ReviveCount = 0;
+		Stats.StageExpGainedRatio[0] = 1.f;
+		Stats.StageExpGainedRatio[1] = 2.5f;
+		Stats.StageExpGainedRatio[2] = 6.f;
 
 		Stats.Init();
 
@@ -264,11 +267,11 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		Stats.ExpCount += Exp * Stats.effectiveExpGained;
+		Stats.ExpCount += Exp * Stats.effectiveExpGained * Stats.StageExpGainedRatio[global::CurrentStageNumber - 1];
 		if (Stats.ExpCount >= Stats.TargetExp)
 		{
 			Stats.ExpCount -= Stats.TargetExp;
-			Stats.TargetExp *= 2;
+			Stats.TargetExp *= 1.45f;
 			Stats.Level++;
 			std::cout << "Level Up : " << Stats.Level << " Next : Target Exp : " << Stats.TargetExp << std::endl;
 			Manager::pickPanel.Show();

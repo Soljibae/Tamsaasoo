@@ -16,6 +16,7 @@ namespace global
 	extern AEGfxVertexList* testMesh;
 	extern bool isBossBattleStarted;
 	extern s32 RecentlyDeadEnemyCount;
+	extern s32 CurrentStageNumber;
 
 	extern f32 item12TriggerRatio;
 	extern f32 item12AdditionalDamage;
