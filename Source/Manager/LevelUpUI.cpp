@@ -84,6 +84,9 @@ namespace Manager
 			Utils::DrawObject(ItemWindow[i], windowTexture, windowMesh, 1.f);
 			Utils::DrawObject(rerollButton[i], rerollTexture, rerollMesh, 1.f);
 			Utils::DrawItem(*currentOptions[i]);
+		}
+		for (int i = 0; i < ItemWindow.size(); i++)
+		{
 			if (ItemSlot[i].IsHovered())
 			{
 				HUD.ShowTooltip(*currentOptions[i]);

@@ -488,9 +488,6 @@ namespace Manager
 	}
 	void Playing::Destroy()
 	{
-		PC->Destroy();
-		delete PC;
-		PC = nullptr;
 		for (InGame::Projectile* PP : PPs)
 		{
 			PP->Destroy();
@@ -564,9 +561,12 @@ namespace Manager
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
-		HUD.Destroy();
 		Utils::TestDestroy();
 		WM.Destroy();
+
+		PC->Destroy();
+		delete PC;
+		PC = nullptr;
 	}
 	void Playing::SpawnWave()
 	{
