@@ -525,7 +525,10 @@ namespace Manager
 		
 		for (int i = 0; i < Patches.size(); i++)
 		{
-			AEGfxMeshFree(tooltip.WindowMesh[i]);
+			if (tooltip.WindowMesh[i])
+			{
+				AEGfxMeshFree(tooltip.WindowMesh[i]);
+			}
 		}
 		AEGfxTextureUnload(tooltip.Window.Texture);
 
