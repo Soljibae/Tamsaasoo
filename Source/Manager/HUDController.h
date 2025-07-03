@@ -4,7 +4,7 @@
 #include <array>
 namespace Manager
 {
-	class HUDController : public InGame::Actor
+	class HUDController
 	{
 	public:
 		void Init(InGame::PlayerCharacter* InPC, InGame::Gun* InGUN);
@@ -41,8 +41,6 @@ namespace Manager
 		static InGame::Item* prevItem;
 		s8 pFont;
 		std::vector<std::string> itemDesc;
-		struct P { f32 x, y, u0, v0, u1, v1; };
-		std::vector<P> Patches;
 	};
 
 	static struct Tooltip

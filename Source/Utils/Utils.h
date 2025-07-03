@@ -7,6 +7,8 @@ namespace Utils
 {
 
 	AEGfxVertexList* CreateMesh(s32 row = 1, s32 column = 1);
+
+	std::array<AEGfxVertexList*, 9> CreateNinePatchMesh();
 	
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
