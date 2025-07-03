@@ -91,8 +91,8 @@ namespace Manager
 		ss << "Damage: " << std::fixed << std::setprecision(2) << PC->Stats.effectiveDamage;
 		statsString.push_back(ss.str());
 		ss.str("");
-		
-		ss <<  " / " << PC->Stats.Damage * PC->GunData->GuntypeDamageRatio;
+
+		ss << " / " << PC->Stats.Damage * PC->GunData->GuntypeDamageRatio;
 		baseStatsString.push_back(ss.str());
 		ss.str("");
 
@@ -116,7 +116,7 @@ namespace Manager
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Burn Rate: " <<  global::effectiveBurnRate;
+		ss << "Burn Rate: " << global::effectiveBurnRate;
 		statsString.push_back(ss.str());
 		ss.str("");
 
@@ -171,7 +171,7 @@ namespace Manager
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
-						
+
 					break;
 				case 2:
 					ss << "GLUTTONY+";
@@ -276,7 +276,7 @@ namespace Manager
 					}
 					break;
 				case 5:
-					ss << "SLOTH+" ;
+					ss << "SLOTH+";
 					if (count >= 3)
 					{
 						if (count >= 7)
@@ -382,10 +382,11 @@ namespace Manager
 				}
 			}
 
-		for (size_t i = 0; i < PC->inventory.size(); i++)
-		{
-			if(ItemSlot[i].IsHovered())
-				HUD.TooltipUpdate(*PC->inventory[i].first);
+			for (size_t i = 0; i < PC->inventory.size(); i++)
+			{
+				if (ItemSlot[i].IsHovered())
+					HUD.TooltipUpdate(*PC->inventory[i].first);
+			}
 		}
 	}
 
