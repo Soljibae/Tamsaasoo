@@ -17,6 +17,8 @@ namespace global
 	f32 item12TriggerRatio;
 	f32 item12AdditionalDamage;
 
+	f32 item32ExplosionSize = 0.f;
+
 	// additionalStats =================
 	f32 additionalDamage = 0.f;
 	f32 additionalDamageRatio = 1.f;

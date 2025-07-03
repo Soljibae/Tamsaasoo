@@ -20,6 +20,8 @@ namespace global
 	extern f32 item12TriggerRatio;
 	extern f32 item12AdditionalDamage;
 
+	extern f32 item32ExplosionSize;
+
 	// additionalStats =================
 	extern f32 additionalDamage;
 	extern f32 additionalDamageRatio;

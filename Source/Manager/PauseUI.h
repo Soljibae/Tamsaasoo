@@ -7,7 +7,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../InGame/PlayerCharacter.h"
 #include <array>
-#include <map>
+#include <unordered_map>
 namespace Manager
 {
 	// Pause menu
@@ -25,8 +25,11 @@ namespace Manager
 		Button mainmenuButton;
 		//pause screen black background image
 		InGame::Actor pauseDimmer;
+		InGame::Actor tagUI;
 		InGame::Actor statsUI;
 		std::vector<std::string> statsString;
+		std::vector<std::string> baseStatsString;
+		std::unordered_map<InGame::ItemTag, std::string> tagString;
 		//pointer to PC in playing
 		InGame::PlayerCharacter* PC;
 		std::array<Button, 16> ItemSlot;

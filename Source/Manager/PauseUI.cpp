@@ -58,8 +58,13 @@ namespace Manager
 
 		statsUI.Mesh = Utils::CreateMesh();
 		statsUI.Texture = AEGfxTextureLoad("Assets/black.png");
-		statsUI.size = { 320.f, 430.f };
+		statsUI.size = { 430.f, 430.f };
 		statsUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, - statsUI.size.y / 2.f + 50.f };
+
+		tagUI.Mesh = Utils::CreateMesh();
+		tagUI.Texture = AEGfxTextureLoad("Assets/black.png");
+		tagUI.size = { 430.f, 320.f };
+		tagUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, tagUI.size.y / 2.f + 60.f };
 
 		slotWhite.Mesh = Utils::CreateMesh();
 		slotWhite.Texture = AEGfxTextureLoad("Assets/white.png");
@@ -78,13 +83,22 @@ namespace Manager
 		std::stringstream ss;
 
 		statsString.clear();
+		baseStatsString.clear();
 
 		ss << "Damage: " << std::fixed << std::setprecision(2) << PC->Stats.effectiveDamage;
 		statsString.push_back(ss.str());
 		ss.str("");
 		
+		ss <<  " / " << PC->Stats.Damage * PC->GunData->GuntypeDamageRatio;
+		baseStatsString.push_back(ss.str());
+		ss.str("");
+
 		ss << "Fire Rate: " << PC->Stats.effectiveFireRate;
 		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << " / " << PC->Stats.FireRate * PC->GunData->GuntypeFireRateRatio;
+		baseStatsString.push_back(ss.str());
 		ss.str("");
 
 		ss << "Movement Speed: " << static_cast<s32>(PC->Stats.effectiveMovementSpeed);
@@ -102,6 +116,269 @@ namespace Manager
 		ss << "Burn Rate: " <<  global::effectiveBurnRate;
 		statsString.push_back(ss.str());
 		ss.str("");
+
+		std::map<InGame::ItemTag, s32> itemTagCount;
+		tagString.clear();
+
+
+		for (int i = static_cast<int>(InGame::ENVY); i <= static_cast<int>(InGame::PRIDE); ++i)
+		{
+			itemTagCount[static_cast<InGame::ItemTag>(i)] = 0;
+		}
+		for (const auto& item_ptr : PC->inventory)
+		{
+			itemTagCount[item_ptr.first->tag] += item_ptr.second;
+		}
+		for (int i = static_cast<int>(InGame::ENVY); i <= static_cast<int>(InGame::PRIDE); ++i)
+		{
+			if (itemTagCount[static_cast<InGame::ItemTag>(i)] > 0)
+			{
+				s32 count = itemTagCount[static_cast<InGame::ItemTag>(i)];
+				switch (i) {
+				case 1:
+					ss << "ENVY+";
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << "Movement speed + ";
+						if (count >= 7)
+						{
+							ss << "60";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "35";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "20";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+						
+					break;
+				case 2:
+					ss << "GLUTTONY+";
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << "HP + ";
+						if (count >= 7)
+						{
+							ss << "3";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "2";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "1";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+					break;
+				case 3:
+					ss << "GREED+";
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << " + ";
+						if (count >= 7)
+						{
+							ss << "";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+					break;
+				case 4:
+					ss << "LUST+";
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << "ProcChance + ";
+						if (count >= 7)
+						{
+							ss << "20%";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "15%";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "7%";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+					break;
+				case 5:
+					ss << "SLOTH+" ;
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << "Hit Count + ";
+						if (count >= 7)
+						{
+							ss << "3";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "2";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "1";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+					break;
+				case 6:
+					ss << "WRATH+";
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << "Burn Damage + ";
+						if (count >= 7)
+						{
+							ss << "0.08";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "0.05";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "0.02";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+					break;
+				case 7:
+					ss << "PRIDE+";
+					if (count >= 3)
+					{
+						if (count >= 7)
+						{
+							ss << "7";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "3";
+						}
+						ss << " (" << "Fire Rate + ";
+						if (count >= 7)
+						{
+							ss << "0.8";
+						}
+						else if (6 >= count && count >= 5)
+						{
+							ss << "0.5";
+						}
+						else if (4 >= count && count >= 3)
+						{
+							ss << "0.2";
+						}
+						ss << ")";
+						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
+						ss.str("");
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 
 	void PauseUI::Draw()
@@ -111,6 +388,7 @@ namespace Manager
 		//background fading
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
 		Utils::DrawObject(statsUI, false, 0.5f);
+		Utils::DrawObject(tagUI, false, 0.5f);
 
 		for (size_t i = 0; i < ItemSlot.size(); i++)
 		{
@@ -137,11 +415,30 @@ namespace Manager
 
 		for (size_t i = 0; i < statsString.size(); i++)
 		{
-			f32 space = 10.f;
+			f32 spaceX = 10.f;
+			f32 spaceY = 20.f;
 			f32 textW, textH;
 			AEGfxGetPrintSize(pFont, statsString[i].c_str(), 0.22f, &textW, &textH);
-			AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + space) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - space * (i + 1)) / (h / 2.f)) - textH * (i + 1)), 0.22f, 1, 1, 1, 1);
-			
+			AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY  * i) / (h / 2.f)) - textH * (i + 1)), 0.22f, 1, 1, 1, 1);
+
+			if (i <= 1)
+			{
+				AEGfxPrint(pFont, baseStatsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f) + textW), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY * i) / (h / 2.f)) - textH * (i + 1)), 0.22f, 0.5f, 0.5f, 0.5f, 1);
+			}
+		}
+
+		s32 count = 0;
+
+		for (int i = static_cast<int>(InGame::ENVY); i <= static_cast<int>(InGame::PRIDE); ++i)
+		{
+			if (tagString[static_cast<InGame::ItemTag>(i)] != "")
+			{
+				f32 space = 15.f;
+				f32 textW, textH;
+				AEGfxGetPrintSize(pFont, tagString[static_cast<InGame::ItemTag>(i)].c_str(), 0.2f, &textW, &textH);
+				AEGfxPrint(pFont, tagString[static_cast<InGame::ItemTag>(i)].c_str(), ((tagUI.position.x - tagUI.size.x / 2.f + space) / (w / 2.f)), (((tagUI.position.y + tagUI.size.y / 2.f - space * (count + 1)) / (h / 2.f)) - textH * (count + 1)), 0.2f, 1, 1, 1, 1);
+				count++;
+			}	
 		}
 
 		//buttons
@@ -162,6 +459,9 @@ namespace Manager
 
 		AEGfxMeshFree(statsUI.Mesh);
 		AEGfxTextureUnload(statsUI.Texture);
+
+		AEGfxMeshFree(tagUI.Mesh);
+		AEGfxTextureUnload(tagUI.Texture);
 
 		AEGfxMeshFree(slotMesh);
 		AEGfxTextureUnload(slotTexture);
