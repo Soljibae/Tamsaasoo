@@ -8,13 +8,14 @@ namespace InGame
 {
 	void InGame::EnemyCharacter::Init()
 	{
-		row = 4;
+		row = 6;
 		column = 2;
 		FrameTime = 0.2f;
 		AnimationState = IDLE;
 		AnimationCount = 0;
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
+		MaxAnimationCount[ATTACK] = 2;
 		Mesh = Utils::CreateMesh(row,column);
 		MovementSpeed = 100.f;
 		size.x = 40;

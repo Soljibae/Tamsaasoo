@@ -150,7 +150,11 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-
+		for (const auto& item_ptr : inventory)
+		{
+			item_ptr.first->Use(this);
+		}
+		/*----- Heal Potion -----*/
 		if (Stats.Potion > 100)
 			Stats.Potion = 100;
 		if (global::KeyInput(AEVK_Q))
@@ -164,6 +168,7 @@ namespace InGame
 				}
 			}
 		}
+		/*----- Heal Potion -----*/
 	}
 	void PlayerCharacter::Draw()
 	{
@@ -266,7 +271,7 @@ namespace InGame
 			Stats.TargetExp *= 2;
 			Stats.Level++;
 			std::cout << "Level Up : " << Stats.Level << " Next : Target Exp : " << Stats.TargetExp << std::endl;
-			Manager::pickPanel.Show(Manager::pickPanel.GenerateRandomRewards());
+			Manager::pickPanel.Show();
 		}
 	}
 	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)

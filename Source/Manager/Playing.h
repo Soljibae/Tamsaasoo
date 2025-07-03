@@ -7,6 +7,7 @@
 #include "../InGame/Background.h"
 #include "../Utils/Camera.h"
 #include <vector>
+#include <list>
 #include "../InGame/EnemyData.h"
 #include "../InGame/EnemyBoss.h"
 #include "../InGame/Item.h"
@@ -14,7 +15,7 @@
 #include "../InGame/Stage.h"
 #include "ItemResourceManager.h"
 #include "../InGame/SpawnList.h"
-
+#include "../InGame/ArealAttack.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -32,6 +33,8 @@ namespace Manager
 		std::vector<InGame::Projectile*> PPs;
 		std::vector<InGame::EnemyCharacter*> ECs;
 		std::vector<InGame::Projectile*> EPs;
+		std::list<InGame::ArealAttack*> PAAs;
+		std::list<InGame::ArealAttack*> EAAs;
 		InGame::Background* BG;
 		ItemDatabase* ITDB;
 		ItemResourceManager* ITRM;

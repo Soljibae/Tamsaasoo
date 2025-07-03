@@ -49,5 +49,6 @@ namespace global
 
 	extern f32 additionalDamageToBossRatio;
 	extern f32 additionalDamageFromBossRatio;
+	extern s32 mouseX, mouseY;
 	//==================================
 }

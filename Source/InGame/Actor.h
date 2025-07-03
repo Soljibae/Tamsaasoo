@@ -16,6 +16,7 @@ namespace InGame
 	class Actor
 	{
 	public:
+		virtual ~Actor() {};
 		virtual void Init();
 		virtual void Update();
 		virtual void Draw();
