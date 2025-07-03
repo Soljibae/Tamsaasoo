@@ -11,6 +11,7 @@ namespace Manager
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
 	AEGfxTexture* HUDController::HPBGTex = nullptr;
+	InGame::Item* HUDController::prevItem{ nullptr };
 	const f32 HPWidth = 40.f;
 	const f32 HPHeight = 50.f;
 	const f32 textDrawSize = 0.2f;
@@ -400,16 +401,19 @@ namespace Manager
 			{ 0.5f, 0.5f, 0.25f, 0.00f, 0.75f, 0.25f },  // BottomCenter
 			{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f }   // BottomRight
 		};
-
-		s8 i = 0;
-		for (auto p : Patches)
+		if (prevItem != &item)
 		{
-			if (tooltip.WindowMesh[i])
+			prevItem = &item;
+			s8 i = 0;
+			for (auto p : Patches)
 			{
-				AEGfxMeshFree(tooltip.WindowMesh[i]);
+				if (tooltip.WindowMesh[i])
+				{
+					AEGfxMeshFree(tooltip.WindowMesh[i]);
+				}
+				tooltip.WindowMesh[i] = CreateQuadMesh(p.x, p.y, p.u0, p.v0, p.u1, p.v1);
+				i++;
 			}
-			tooltip.WindowMesh[i] = CreateQuadMesh(p.x, p.y, p.u0, p.v0, p.u1, p.v1);
-			i++;
 		}
 	}
 
@@ -548,9 +552,9 @@ namespace Manager
 		HP.clear();
 
 		AEGfxMeshFree(ChamberTimeBar.Mesh);
-		AEGfxMeshFree(fireTimeBar.Mesh);
-
 		AEGfxTextureUnload(ChamberTimeBar.Texture);
+
+		AEGfxMeshFree(fireTimeBar.Mesh);
 		AEGfxTextureUnload(fireTimeBar.Texture);
 
 		AEGfxMeshFree(Coin.Mesh);

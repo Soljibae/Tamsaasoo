@@ -38,6 +38,7 @@ namespace Manager
 		s32 prevMaxHP;
 		f32 prevCurrentHP;
 		f32 prevFireRate;
+		static InGame::Item* prevItem;
 		s8 pFont;
 		std::vector<std::string> itemDesc;
 		struct P { f32 x, y, u0, v0, u1, v1; };

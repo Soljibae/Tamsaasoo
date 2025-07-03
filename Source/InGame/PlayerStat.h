@@ -20,7 +20,7 @@ namespace InGame
 		u32 Money;
 		s16 Potion;
 		s32 ReviveCount;
-
+		f32 rerollCostRatio;
 		f32 BurnDamage;
 		f32 BurnRate;
 

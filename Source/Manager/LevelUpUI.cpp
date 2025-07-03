@@ -32,7 +32,15 @@ namespace Manager
 			};
 
 			ItemWindow[i].size = { windowWidth, windowHeight };
-			ItemWindow[i].SetCallback([this, i]() {PC->AddItemToInventory(currentOptions[i]->Clone()); this->isActive = false; gm.Resume(); });
+			ItemWindow[i].SetCallback([this, i]() 
+				{
+					PC->AddItemToInventory(currentOptions[i]->Clone());
+					this->isActive = false; gm.Resume();
+					for (auto& cost : rerollCost)
+					{
+						cost = 100;
+					}
+				});
 			rerollButton[i].position = ItemWindow[i].position;
 			rerollButton[i].position.y -= windowHeight / 2;
 			rerollButton[i].size = { rerollSize, rerollSize };
@@ -46,7 +54,10 @@ namespace Manager
 		pauseDimmer.Texture = AEGfxTextureLoad("Assets/black.png");
 		pauseDimmer.position = { 0, 0 };
 		pauseDimmer.size = { static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight) };
-		rerollCost = 100;
+		for (auto& cost : rerollCost)
+		{
+			cost = 100;
+		}
 	}
 
 	void LevelUpUI::Update()
@@ -107,14 +118,15 @@ namespace Manager
 	
 	void LevelUpUI::Reroll(s8 thisbutton)
 	{
-		if (PC->Stats.Money < rerollCost)
+		// implement here!!!
+		rerollCost[thisbutton] = rerollCost[thisbutton] * PC->Stats.rerollCostRatio;
+		
+		if (PC->Stats.Money < rerollCost[thisbutton])
 		{
 			return;
 		}
-		else
-		{
-			PC->Stats.Money -= rerollCost;
-		}
+		PC->Stats.Money -= rerollCost[thisbutton];
+
 		std::shared_ptr<InGame::Item> option;
 
 		const Playing* game = static_cast<Playing*>(gm.currStateREF);
@@ -149,7 +161,7 @@ namespace Manager
 
 		currentOptions[thisbutton] = game->ITDB->itemList[idx];
 		currentOptions[thisbutton]->iconPosition = ItemWindow[thisbutton].position;
-		std::cout << "Rerolled!!" << std::endl;
+		rerollCost[thisbutton] *= 1.7f;
 	}
 
 	std::vector<std::shared_ptr<InGame::Item>> LevelUpUI::GenerateRandomRewards()

@@ -45,6 +45,7 @@ namespace InGame
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 20.f;
 		Stats.Money = 0;
+		Stats.rerollCostRatio = 1.f;
 		Stats.Potion = 0;
 		Stats.BurnDamage = 0.1f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
