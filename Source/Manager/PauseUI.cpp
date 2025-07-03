@@ -139,9 +139,9 @@ namespace Manager
 				s32 count = itemTagCount[static_cast<InGame::ItemTag>(i)];
 				switch (i) {
 				case 1:
-					ss << "ENVY+";
 					if (count >= 3)
 					{
+						ss << "ENVY+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -174,9 +174,9 @@ namespace Manager
 
 					break;
 				case 2:
-					ss << "GLUTTONY+";
 					if (count >= 3)
 					{
+						ss << "GLUTTONY+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -208,9 +208,9 @@ namespace Manager
 					}
 					break;
 				case 3:
-					ss << "GREED+";
 					if (count >= 3)
 					{
+						ss << "GREED+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -242,9 +242,9 @@ namespace Manager
 					}
 					break;
 				case 4:
-					ss << "LUST+";
 					if (count >= 3)
 					{
+						ss << "LUST+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -276,9 +276,9 @@ namespace Manager
 					}
 					break;
 				case 5:
-					ss << "SLOTH+";
 					if (count >= 3)
 					{
+						ss << "SLOTH+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -310,9 +310,9 @@ namespace Manager
 					}
 					break;
 				case 6:
-					ss << "WRATH+";
 					if (count >= 3)
 					{
+						ss << "WRATH+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -344,9 +344,9 @@ namespace Manager
 					}
 					break;
 				case 7:
-					ss << "PRIDE+";
 					if (count >= 3)
 					{
+						ss << "PRIDE+";
 						if (count >= 7)
 						{
 							ss << "7";

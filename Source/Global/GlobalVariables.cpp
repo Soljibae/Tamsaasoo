@@ -13,7 +13,7 @@ namespace global
 	AEGfxVertexList* testMesh = nullptr;
 	bool isBossBattleStarted = false;
 	s32 RecentlyDeadEnemyCount = 0;
-
+	s32 CurrentStageNumber = 0;
 	f32 item12TriggerRatio;
 	f32 item12AdditionalDamage;
 
