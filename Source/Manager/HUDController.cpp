@@ -15,7 +15,7 @@ namespace Manager
 	const f32 HPHeight = 50.f;
 	const f32 textDrawSize = 0.2f;
 	const f32 fontSize = 72.f;
-	const f32 maxTextW = 300.0f;
+	const f32 maxTextW = 400.0f;
 	const f32 padding = 20.f;
 	Tooltip tooltip;
 	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
@@ -475,7 +475,7 @@ namespace Manager
 
 		f32 tmp, lh;
 		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &tmp, &lh);
-		//lh *= global::ScreenHeight;
+		lh *= global::ScreenHeight;
 		f32 px = tooltip.Window.position.x - tooltip.Window.size.x / 2.f;
 		f32 py = tooltip.Window.position.y - tooltip.Window.size.y / 2.f;
 		f32 boxW = tooltip.Window.size.x;
