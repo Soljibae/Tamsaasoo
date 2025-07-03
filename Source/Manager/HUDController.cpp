@@ -293,8 +293,10 @@ namespace Manager
 			f32 spaceWidth, spaceHeight;
 			AEGfxGetPrintSize(pFont, " ", textDrawSize, &spaceWidth, &spaceHeight);
 			spaceWidth *= global::ScreenWidth/2.f;
+			
 			while (wordStream >> word)
 			{
+				
 				f32 w, h;
 				AEGfxGetPrintSize(pFont, word.c_str(), textDrawSize, &w, &h);
 				w *= global::ScreenWidth/2.f;
@@ -342,7 +344,34 @@ namespace Manager
 	void HUDController::TooltipUpdate(InGame::Item& item)
 	{
 		itemDesc = SplitTextIntoLines(item.description, maxTextW);
-
+		switch (item.tag)
+		{
+		case InGame::ItemTag::ENVY:
+			itemDesc.insert(itemDesc.begin(), "ENVY");
+			break;
+		case InGame::ItemTag::GLUTTONY:
+			itemDesc.insert(itemDesc.begin(), "GLUTTONY");
+			break;
+		case InGame::ItemTag::GREED:
+			itemDesc.insert(itemDesc.begin(), "GREED");
+			break;
+		case InGame::ItemTag::LUST:
+			itemDesc.insert(itemDesc.begin(), "LUST");
+			break;
+		case InGame::ItemTag::SLOTH:
+			itemDesc.insert(itemDesc.begin(), "SLOTH");
+			break;
+		case InGame::ItemTag::WRATH:
+			itemDesc.insert(itemDesc.begin(), "WRATH");
+			break;
+		case InGame::ItemTag::PRIDE:
+			itemDesc.insert(itemDesc.begin(), "PRIDE");
+			break;
+		default:
+			itemDesc.insert(itemDesc.begin(), "NONE");
+			break;
+		}
+		itemDesc.insert(itemDesc.begin(), item.name);
 		s32 mouseX, mouseY;
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 		AEVec2 MP;
@@ -483,19 +512,29 @@ namespace Manager
 		f32 halfW = AEGfxGetWindowWidth() * 0.5f;
 		f32 halfH = AEGfxGetWindowHeight() * 0.5f;
 		f32 baseX = px;
-		f32 baseY = py + boxH - lh/2;
+		f32 baseY = py + boxH - lh/1.5f;
 		s32 mouseX, mouseY;
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 		AEVec2 MP;
 		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
 		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
+		f32 r{ 1.f }, g{ 1.f }, b{ 1.f };
 		for (int i = 0; i < itemDesc.size(); i++)
 		{
+
 			float xPix = baseX;
 			float yPix = baseY - lh * i;
 			float xN = xPix / halfW;
 			float yN = yPix / halfH;
-			AEGfxPrint(pFont, itemDesc[i].c_str(), xN, yN, textDrawSize, 1.f, 1.f, 1.f, 1.f);
+			if (i == 1)
+			{
+				r = 0.5f, g = 0.5f, b = 0.5f;
+			}
+			else
+			{
+				r = 1.f, g = 1.f, b = 1.f;
+			}
+			AEGfxPrint(pFont, itemDesc[i].c_str(), xN, yN, textDrawSize, r, g, b, 1.f);
 		}
 	}
 
