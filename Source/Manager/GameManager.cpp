@@ -20,6 +20,7 @@ namespace Manager
 	{
 		AESysFrameStart();
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
+
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 		if (currState != nextState)

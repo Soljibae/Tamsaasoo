@@ -150,20 +150,25 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-
+		for (const auto& item_ptr : inventory)
+		{
+			item_ptr.first->Use(this);
+		}
+		/*----- Heal Potion -----*/
 		if (Stats.Potion > 100)
 			Stats.Potion = 100;
 		if (global::KeyInput(AEVK_Q))
 		{
-			if (Stats.HP < Stats.MaxHP)
+			if (Stats.Potion >= 100)
 			{
-				if (Stats.Potion >= 100)
+				if (Stats.HP < Stats.MaxHP)
 				{
 					adjustHealth(1);
 					Stats.Potion = 0;
 				}
 			}
 		}
+		/*----- Heal Potion -----*/
 	}
 	void PlayerCharacter::Draw()
 	{
@@ -265,7 +270,7 @@ namespace InGame
 			Stats.TargetExp *= 2;
 			Stats.Level++;
 			std::cout << "Level Up : " << Stats.Level << " Next : Target Exp : " << Stats.TargetExp << std::endl;
-			Manager::pickPanel.Show(Manager::pickPanel.GenerateRandomRewards());
+			Manager::pickPanel.Show();
 		}
 	}
 	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)
@@ -479,6 +484,8 @@ namespace InGame
 	{
 		Stats.effectiveDamage = (Stats.Damage + global::additionalDamage) * global::additionalDamageRatio;
 		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio;
+		std::cout << Stats.effectiveFireRate << " " << Stats.FireRate << " " << global::additionalFireRate << " " << global::additionalFireRateRatio << " " << std::endl;
+		std::cout << global::DeltaTime << std::endl;
 		Stats.effectiveExpGained = Stats.ExpGained * global::additionalExpGainedRatio;
 		Stats.effectiveHitCount = Stats.HitCount + global::additionalHitCount;
 		Stats.effectiveMovementSpeed = Stats.MovementSpeed + global::additionalMovementSpeed;

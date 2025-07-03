@@ -2,9 +2,7 @@
 #include "../InGame/Actor.h"
 #include "Button.h"
 #include "Playing.h"
-#include "GameManager.h"
 #include "../Utils/Utils.h"
-#include "../Global/GlobalVariables.h"
 #include "../InGame/PlayerCharacter.h"
 #include <array>
 namespace Manager

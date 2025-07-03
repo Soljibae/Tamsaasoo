@@ -13,7 +13,7 @@ namespace global
 	AEGfxVertexList* testMesh = nullptr;
 	bool isBossBattleStarted = false;
 	s32 RecentlyDeadEnemyCount = 0;
-
+	s32 mouseX, mouseY;
 	// additionalStats =================
 	f32 additionalDamage = 0.f;
 	f32 additionalDamageRatio = 1.f;
