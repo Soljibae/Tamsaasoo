@@ -89,17 +89,17 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
-			// Á¡ÇÁ ¾Ö´Ï¸ÞÀÌ¼Ç ÁøÇà Áß
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 			if (bIsJumping)
 			{
 				JumpAnimationTimer += global::DeltaTime;
 				Utils::UpdateOffset(*PC);
-				if (JumpAnimationTimer >= 1.5f) // ¾Ö´Ï¸ÞÀÌ¼Ç Áö¼Ó ½Ã°£
+				if (JumpAnimationTimer >= 1.5f) // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
 				{
 					bIsJumping = false;
-					ChangeStage();  // ½ºÅ×ÀÌÁö ÀüÈ¯
+					ChangeStage();  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 				}
-				return; // ´Ù¸¥ ¾÷µ¥ÀÌÆ® ¹«½Ã
+				return; // ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 			}
 			if (global::IsEnemyRecentlyDied)
 			{
@@ -649,7 +649,7 @@ namespace Manager
 	void Playing::FinishBossFight()
 	{
 		//TODO : Select Item
-		pickPanel.Show(pickPanel.GenerateRandomRewards());
+		pickPanel.Show();
 		//TODO : Play Jump Animation
 		for (size_t i = 0; i < EPs.size(); i++)
 		{
@@ -668,7 +668,7 @@ namespace Manager
 
 		bIsJumping = true;
 		JumpAnimationTimer = 0.f;
-		PC->AnimationState = InGame::EAnimationState::JUMP;  // ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý ÇÔ¼ö ÇÊ¿ä
+		PC->AnimationState = InGame::EAnimationState::JUMP;  // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½Ê¿ï¿½
 		PC->AnimationCount = 0;
 	}
 	void Playing::ChangeStage()

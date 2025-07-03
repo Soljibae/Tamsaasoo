@@ -4,16 +4,20 @@
 #include "../Global/GlobalVariables.h"
 #include <iostream>
 #include <algorithm>
-
+#include <sstream>
 namespace Manager
 {
 	HUDController HUD;
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
 	AEGfxTexture* HUDController::HPBGTex = nullptr;
-	const float HPWidth = 40.f;
-	const float HPHeight = 50.f;
-
+	const f32 HPWidth = 40.f;
+	const f32 HPHeight = 50.f;
+	const f32 textDrawSize = 0.2f;
+	const f32 fontSize = 72.f;
+	const f32 maxTextW = 400.0f;
+	const f32 padding = 20.f;
+	Tooltip tooltip;
 	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
 	{
 		f32 fill = std::clamp(fillPercent, 0.f, 1.f);
@@ -48,9 +52,9 @@ namespace Manager
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
 		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2 };
 		Coin.size = { 30.f, 30.f };
-		const float spacingX = 10.0f; // 가로 간격
-		const float startX = -(w / 2) + 200.f;
-		const float Y = (h / 2) - 100.f;
+		float spacingX = 10.0f; // 가로 간격
+		float startX = -(w / 2) + 200.f;
+		float Y = (h / 2) - 100.f;
 		
 		HPMesh = Utils::CreateMesh();
 		HPTex = AEGfxTextureLoad("Assets/HPBG.png");
@@ -101,10 +105,39 @@ namespace Manager
 		PotionBG.Mesh = Utils::CreateMesh();
 		PotionBG.Texture = AEGfxTextureLoad("Assets/PotionBG.png");
 		prevPotion = PC->Stats.Potion;
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", 72.f);
+		prevFireRate = GUN->RoundPerSec;
+		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		tooltip.Window.size = { maxTextW ,200 };
+		tooltip.Window.position = { 0, 0 };
+		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltip.png");
 	}
+
 	void HUDController::Update()
 	{
+		/*-----*DEBUG* --------------- *DEBUG*-----*/
+		if (global::KeyInput(AEVK_M))
+		{
+			PC->Stats.Money += 1000;
+		}
+		if (global::KeyInput(AEVK_P))
+		{
+			PC->Stats.Potion += 100;
+		}
+		if (global::KeyInput(AEVK_F))
+		{
+			switch (GUN->gunType)
+			{
+			case InGame::GunType::PISTOL:
+				GUN->gunType = InGame::GunType::RIFLE;
+				break;
+			case InGame::GunType::RIFLE:
+				GUN->gunType = InGame::GunType::SHOTGUN;
+				break;
+			case InGame::GunType::SHOTGUN:
+				GUN->gunType = InGame::GunType::PISTOL;
+				break;
+			}
+		}
 
 		if (prevMaxHP != PC->Stats.MaxHP)
 		{
@@ -144,6 +177,10 @@ namespace Manager
 		prevCurrentHP = PC->Stats.HP;
 
 		/*--------Centered can fire UI--------*/
+		if (prevFireRate != GUN->RoundPerSec)
+		{
+			ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
+		}
 		if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)
 		{
 			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
@@ -187,6 +224,7 @@ namespace Manager
 		{
 			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		}
+		prevFireRate = GUN->RoundPerSec;
 		/*--------Centered can fire UI--------*/
 
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
@@ -218,6 +256,7 @@ namespace Manager
 
 		}
 	}
+
 	void HUDController::Draw()
 	{
 		f32 w = static_cast<f32>(global::ScreenWidth);
@@ -237,9 +276,229 @@ namespace Manager
 		Utils::DrawObject(Coin, false);
 		std::string pText = std::to_string(PC->Stats.Money);
 		f32 textW, textH;
-		AEGfxGetPrintSize(pFont, pText.c_str(), 1.f, &textW, &textH);
-		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x / (w / 2))+0.03f, (Coin.position.y / (h / 2))-0.025f, 0.3f, 1, 1, 1, 1);
+		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
+		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x/1.5f) / (w / 2), (Coin.position.y - Coin.size.y/2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
 	}
+
+	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
+	{
+		std::vector<std::string> lines;
+		std::istringstream paraStream(text);
+		std::string paragraph;
+		while (std::getline(paraStream, paragraph))
+		{
+			std::istringstream wordStream(paragraph);
+			std::string word, currentLine;
+			f32 lineWidth = 0;
+			f32 spaceWidth, spaceHeight;
+			AEGfxGetPrintSize(pFont, " ", textDrawSize, &spaceWidth, &spaceHeight);
+			spaceWidth *= global::ScreenWidth/2.f;
+			while (wordStream >> word)
+			{
+				f32 w, h;
+				AEGfxGetPrintSize(pFont, word.c_str(), textDrawSize, &w, &h);
+				w *= global::ScreenWidth/2.f;
+				if (lineWidth + (currentLine.empty() ? 0 : spaceWidth) + w <= maxWidth)
+				{
+					if (!currentLine.empty())
+					{
+						currentLine += " ";
+						lineWidth += spaceWidth;
+					}
+					currentLine += word;
+					lineWidth += w;
+				}
+				else
+				{
+					lines.push_back(currentLine);
+					currentLine = word;
+					lineWidth = w;
+				}
+			}
+			if (!currentLine.empty())
+			{
+				lines.push_back(currentLine);
+			}
+		}
+		return lines;
+	}
+
+	AEGfxVertexList* CreateQuadMesh(f32 x, f32 y, f32 u0, f32 v0, f32 u1, f32 v1)
+	{
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-x, -y, 0xFFFFFFFF, u0, v0,
+			x, -y, 0xFFFFFFFF, u1, v0,
+			-x, y, 0xFFFFFFFF, u0, v1
+		);
+		AEGfxTriAdd(
+			x, -y, 0xFFFFFFFF, u1, v0,
+			x, y, 0xFFFFFFFF, u1, v1,
+			-x, y, 0xFFFFFFFF, u0, v1
+		);
+		return AEGfxMeshEnd();
+	}
+
+	void HUDController::TooltipUpdate(InGame::Item& item)
+	{
+		itemDesc = SplitTextIntoLines(item.description, maxTextW);
+
+		s32 mouseX, mouseY;
+		AEInputGetCursorPosition(&mouseX, &mouseY);
+		AEVec2 MP;
+		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
+		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
+
+		f32 lw, lh;
+		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &lw, &lh);
+		lh *= global::ScreenHeight;
+
+		tooltip.Window.position = { MP.x + (tooltip.Window.size.x / 2.f)+padding, MP.y + (tooltip.Window.size.y / 2.f) + padding };
+		tooltip.Window.size.y = lh * itemDesc.size();
+		Patches = {
+			//Top row (v0=0.75, v1=1.0)
+			{ 0.5f, 0.5f, 0.00f, 0.75f, 0.25f, 1.00f },  // TopLeft
+			{ 0.5f, 0.5f, 0.25f, 0.75f, 0.75f, 1.00f },  // TopCenter
+			{ 0.5f, 0.5f, 0.75f, 0.75f, 1.00f, 1.00f },  // TopRight
+
+			//Middle row (v0=0.25, v1=0.75)
+			{ 0.5f, 0.5f, 0.00f, 0.25f, 0.25f, 0.75f },  // CenterLeft
+			{ 0.5f, 0.5f, 0.25f, 0.25f, 0.75f, 0.75f },  // Center
+			{ 0.5f, 0.5f, 0.75f, 0.25f, 1.00f, 0.75f },  // CenterRight
+
+			//Bottom row (v0=0.00, v1=0.25)
+			{ 0.5f, 0.5f, 0.00f, 0.00f, 0.25f, 0.25f },  // BottomLeft
+			{ 0.5f, 0.5f, 0.25f, 0.00f, 0.75f, 0.25f },  // BottomCenter
+			{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f }   // BottomRight
+		};
+
+		s8 i = 0;
+		for (auto p : Patches)
+		{
+			if (tooltip.WindowMesh[i])
+			{
+				AEGfxMeshFree(tooltip.WindowMesh[i]);
+			}
+			tooltip.WindowMesh[i] = CreateQuadMesh(p.x, p.y, p.u0, p.v0, p.u1, p.v1);
+			i++;
+		}
+	}
+
+	void HUDController::ShowTooltip(InGame::Item& item)
+	{
+		//s32 mx, my;
+		//AEInputGetCursorPosition(&mx, &my);
+		//f32 px = mx - AEGfxGetWindowWidth() * 0.5f;     // x ∈ [-W/2, +W/2]
+		//f32 py = AEGfxGetWindowHeight() * 0.5f - my;    // y ∈ [-H/2, +H/2]
+		AEMtx33 scale;
+		AEMtx33 tran;
+		AEMtx33 transform;
+		int i = 1;
+		AEGfxTextureSet(tooltip.Window.Texture, 0.f, 0.f);
+
+		for (auto mesh : tooltip.WindowMesh)
+		{
+			float x_trans_offset = 0;
+			float y_trans_offset = 0;
+			float x_scale = 0;
+			float y_scale = 0;
+			switch (i)
+			{
+			case 2:
+				x_scale = tooltip.Window.size.x;
+				y_scale = padding;
+				x_trans_offset = 0;
+				y_trans_offset = (tooltip.Window.size.y + padding) / 2.f;
+				break;
+			case 8:
+				x_scale = tooltip.Window.size.x;
+				y_scale = padding;
+				x_trans_offset = 0;
+				y_trans_offset = -(tooltip.Window.size.y + padding) / 2.f;
+				break;
+			case 4:
+				x_scale = padding;
+				y_scale = tooltip.Window.size.y;
+				x_trans_offset = -(tooltip.Window.size.x + padding) / 2.f;
+				y_trans_offset = 0;
+				break;
+			case 6:
+				x_scale = padding;
+				y_scale = tooltip.Window.size.y;
+				x_trans_offset = (tooltip.Window.size.x + padding) / 2.f;
+				y_trans_offset = 0;
+				break;
+			case 5:
+				x_scale = tooltip.Window.size.x;
+				y_scale = tooltip.Window.size.y;
+				x_trans_offset = 0;
+				y_trans_offset = 0;
+				break;
+			case 1:
+				x_scale = padding;
+				y_scale = padding;
+				x_trans_offset = -(tooltip.Window.size.x + padding) / 2.f;
+				y_trans_offset = (tooltip.Window.size.y + padding) / 2.f;
+				break;
+			case 3:
+				x_scale = padding;
+				y_scale = padding;
+				x_trans_offset = (tooltip.Window.size.x + padding) / 2.f;
+				y_trans_offset = (tooltip.Window.size.y + padding) / 2.f;
+				break;
+			case 7:
+				x_scale = padding;
+				y_scale = padding;
+				x_trans_offset = -(tooltip.Window.size.x + padding) / 2.f;
+				y_trans_offset = -(tooltip.Window.size.y + padding) / 2.f;
+				break;
+			case 9:
+				x_scale = padding;
+				y_scale = padding;
+				x_trans_offset = (tooltip.Window.size.x + padding) / 2.f;
+				y_trans_offset = -(tooltip.Window.size.y + padding) / 2.f;
+				break;
+			}
+
+			AEMtx33Scale(&scale,
+				x_scale,
+				y_scale);
+			AEMtx33Trans(&tran,
+				tooltip.Window.position.x + x_trans_offset,
+				tooltip.Window.position.y + y_trans_offset);
+			AEMtx33Concat(&transform, &tran, &scale);
+			AEGfxSetTransform(transform.m);
+			AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+			i++;
+		}
+
+
+		f32 tmp, lh;
+		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &tmp, &lh);
+		lh *= global::ScreenHeight;
+		f32 px = tooltip.Window.position.x - tooltip.Window.size.x / 2.f;
+		f32 py = tooltip.Window.position.y - tooltip.Window.size.y / 2.f;
+		f32 boxW = tooltip.Window.size.x;
+		f32 boxH = tooltip.Window.size.y;
+		f32 halfW = AEGfxGetWindowWidth() * 0.5f;
+		f32 halfH = AEGfxGetWindowHeight() * 0.5f;
+		f32 baseX = px;
+		f32 baseY = py + boxH - lh/2;
+		s32 mouseX, mouseY;
+		AEInputGetCursorPosition(&mouseX, &mouseY);
+		AEVec2 MP;
+		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
+		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
+		for (int i = 0; i < itemDesc.size(); i++)
+		{
+			float xPix = baseX;
+			float yPix = baseY - lh * i;
+			float xN = xPix / halfW;
+			float yN = yPix / halfH;
+			AEGfxPrint(pFont, itemDesc[i].c_str(), xN, yN, textDrawSize, 1.f, 1.f, 1.f, 1.f);
+		}
+	}
+
 	void HUDController::Destroy()
 	{
 		AEGfxMeshFree(HPMesh);
@@ -257,13 +516,23 @@ namespace Manager
 
 		AEGfxMeshFree(Coin.Mesh);
 		AEGfxTextureUnload(Coin.Texture);
-		AEGfxDestroyFont(pFont);
 
 		AEGfxMeshFree(Potion.Mesh);
 		AEGfxTextureUnload(Potion.Texture);
 
 		AEGfxMeshFree(PotionBG.Mesh);
 		AEGfxTextureUnload(PotionBG.Texture);
+		
+		for (int i = 0; i < Patches.size(); i++)
+		{
+			if (tooltip.WindowMesh[i])
+			{
+				AEGfxMeshFree(tooltip.WindowMesh[i]);
+			}
+		}
+		AEGfxTextureUnload(tooltip.Window.Texture);
 
+		AEGfxDestroyFont(pFont);
 	}
+
 }

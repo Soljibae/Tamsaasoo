@@ -1,4 +1,7 @@
 #include "PauseUI.h"
+#include "HUDController.h"
+#include "../Global/GlobalVariables.h"
+#include "GameManager.h"
 #include <sstream>
 #include <iomanip>
 
@@ -102,6 +105,12 @@ namespace Manager
 		ss << "Burn Rate: " <<  global::effectiveBurnRate;
 		statsString.push_back(ss.str());
 		ss.str("");
+
+		for (size_t i = 0; i < PC->inventory.size(); i++)
+		{
+			if(ItemSlot[i].IsHovered())
+				HUD.TooltipUpdate(*PC->inventory[i].first);
+		}
 	}
 
 	void PauseUI::Draw()
@@ -133,6 +142,8 @@ namespace Manager
 			f32 textW, textH;
 			AEGfxGetPrintSize(pFont, pText.c_str(), 1.f, &textW, &textH);
 			AEGfxPrint(pFont, pText.c_str(),(ItemSlot[i].position.x / (w/2)),(ItemSlot[i].position.y / (h/2))-textH/1.8f, 0.2f, 1, 1, 1, 1);
+
+
 		}
 
 		for (size_t i = 0; i < statsString.size(); i++)
@@ -147,6 +158,13 @@ namespace Manager
 		//buttons
 		Utils::DrawObject(resumeButton, false);
 		Utils::DrawObject(mainmenuButton, false);
+		for (int i = 0; i < PC->inventory.size(); i++)
+		{
+			if (ItemSlot[i].IsHovered())
+			{
+				HUD.ShowTooltip(*PC->inventory[i].first);
+			}
+		}
 	}
 
 	void PauseUI::Destroy()

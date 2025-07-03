@@ -24,7 +24,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	AEInputShowCursor(1);
 
 	//_CrtSetBreakAlloc(433);
-
+	
 	Manager::gm.Init();
 
 	while (gGameRunning)
