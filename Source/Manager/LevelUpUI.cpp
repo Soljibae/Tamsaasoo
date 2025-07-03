@@ -119,7 +119,7 @@ namespace Manager
 	void LevelUpUI::Reroll(s8 thisbutton)
 	{
 		// implement here!!!
-		rerollCost[thisbutton] = rerollCost[thisbutton] * PC->Stats.rerollCostRatio;
+		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		
 		if (PC->Stats.Money < rerollCost[thisbutton])
 		{

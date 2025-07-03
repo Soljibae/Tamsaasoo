@@ -56,5 +56,7 @@ namespace global
 	extern s32 mouseX, mouseY;
 
 	extern std::array<f32, 3> StageExpGainedRatio;
+	extern std::array<f32, 3> StageGoldGainedRatio;
+	extern std::array<f32, 3> StageRerollCostRatio;
 	//==================================
 }

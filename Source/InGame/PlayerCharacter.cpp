@@ -31,7 +31,7 @@ namespace InGame
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
-		Stats.MaxHP = 10;
+		Stats.MaxHP = 5;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = 300;
 		Stats.FireRate = 2.f;
@@ -45,7 +45,6 @@ namespace InGame
 		Stats.ExpCount = 0.f;
 		Stats.TargetExp = 20.f;
 		Stats.Money = 0;
-		Stats.rerollCostRatio = 1.f;
 		Stats.Potion = 0;
 		Stats.BurnDamage = 0.1f;
 		global::effectiveBurnDamage = Stats.BurnDamage;
@@ -151,10 +150,6 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-		for (const auto& item_ptr : inventory)
-		{
-			item_ptr.first->Use(this);
-		}
 		/*----- Heal Potion -----*/
 		if (Stats.Potion > 100)
 			Stats.Potion = 100;
@@ -276,7 +271,7 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		Stats.Money += 1;
+		Stats.Money += 1.f * global::StageGoldGainedRatio[global::CurrentStageNumber - 1] * global::additionalGoldGainedRatio;
 		Stats.ExpCount += Exp * Stats.effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
 		if (Stats.ExpCount >= Stats.TargetExp)
 		{
@@ -571,15 +566,15 @@ namespace InGame
 
 		if (itemTagCount[GREED] >= 7)
 		{
-			
+			global::additionalGoldGainedRatio += 0.4;
 		}
 		else if (6 >= itemTagCount[GREED] && itemTagCount[GREED] >= 5)
 		{
-			
+			global::additionalGoldGainedRatio += 0.25;
 		}
 		else if (4 >= itemTagCount[GREED] && itemTagCount[GREED] >= 3)
 		{
-			
+			global::additionalGoldGainedRatio += 0.1;
 		}
 
 		if (itemTagCount[LUST] >= 7)

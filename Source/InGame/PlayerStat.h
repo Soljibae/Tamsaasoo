@@ -17,10 +17,9 @@ namespace InGame
 		f32 ExpGained;
 		s32 HitCount;
 		u32 TargetExp;
-		u32 Money;
+		f32 Money;
 		s16 Potion;
 		s32 ReviveCount;
-		f32 rerollCostRatio;
 		f32 BurnDamage;
 		f32 BurnRate;
 
