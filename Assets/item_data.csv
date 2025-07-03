@@ -139,39 +139,39 @@ Every 30 seconds, a potion spawns in a random location. Picking it up restores 1
 -1, -1, -1, 30.0, -1, -1, -1
 
 21
-//21 -
-item_3
-Increases damage for each enemy alive.
+//21 - 보스 공격시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 보스 체력의 value2 만큼 데미지
+item_21
+Attacks against bosses spend gold to deal damage equal to a percentage of their health.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, -1, -1
+50.0, 0.01, -1, -1, -1, -1, -1
 
 22
-//22 -
-item_3
-Increases damage for each enemy alive.
+//22 - 피격 시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 데미지 방지 및 무적 부여
+item_22
+When hit, automatically consume gold to negate all incoming damage.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, -1, -1
+500.0, -1, -1, -1, -1, -1, -1
 
 23
-//23 -
-item_3
-Increases damage for each enemy alive.
+//23 - 즉시 현재 돈의 value1 만큼 얻고 이후 아이템 리롤의 가격이 value2 만큼 올라감
+item_23
+Grants an immediate cash infusion based on your current wealth, but permanently inflates the price of all future rerolls.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, -1, -1
+0.3, 0.5, -1, -1, -1, -1, -1
 
 24
-//24 -
-item_3
-Increases damage for each enemy alive.
+//24 - 포션 사용 시 체력이 회복되지 않는 대신에 돈을 value1만큼 얻음
+item_24
+Potions no longer restore health. Instead, they grant a large amount of gold.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, -1, -1
+200.0, -1, -1, -1, -1, -1, -1
 
 25
-//25 -
-item_3
-Increases damage for each enemy alive.
+//25 - 골드 획득량이 value1 만큼 증가하지만, 피격 시 가진 돈의 value2 만큼 잃는다.
+item_25
+Dramatically increases all Gold Gain. However, you lose a percentage of your current gold whenever you take damage.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, -1, -1
+0.3, 0.05, -1, -1, -1, -1, -1
 
 26
 //26 - 적 공격 시 procchance 확률로 duration초간 스턴

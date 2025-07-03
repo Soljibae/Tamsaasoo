@@ -1,5 +1,6 @@
 #pragma once
 #include "AEEngine.h"
+#include <array>
 namespace global
 {
 	static s32 ScreenWidth = 1600;
@@ -20,7 +21,8 @@ namespace global
 
 	extern f32 item12TriggerRatio;
 	extern f32 item12AdditionalDamage;
-
+	extern f32 item23RerollCostRatio;
+	extern f32 item24GoldGained;
 	extern f32 item32ExplosionSize;
 
 	// additionalStats =================
@@ -31,6 +33,7 @@ namespace global
 	extern f32 additionalFireRateRatio;
 
 	extern f32 additionalExpGainedRatio;
+	extern f32 additionalGoldGainedRatio;
 	extern s32 additionalHitCount;
 	extern f32 additionalMovementSpeed;
 
@@ -51,5 +54,7 @@ namespace global
 	extern f32 additionalDamageToBossRatio;
 	extern f32 additionalDamageFromBossRatio;
 	extern s32 mouseX, mouseY;
+
+	extern std::array<f32, 3> StageExpGainedRatio;
 	//==================================
 }

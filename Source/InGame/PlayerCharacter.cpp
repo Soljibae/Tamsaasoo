@@ -50,9 +50,6 @@ namespace InGame
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
 		Stats.ReviveCount = 0;
-		Stats.StageExpGainedRatio[0] = 1.f;
-		Stats.StageExpGainedRatio[1] = 2.5f;
-		Stats.StageExpGainedRatio[2] = 6.f;
 
 		Stats.Init();
 
@@ -162,12 +159,23 @@ namespace InGame
 			Stats.Potion = 100;
 		if (global::KeyInput(AEVK_Q))
 		{
-			if (Stats.HP < Stats.MaxHP)
+			if (Utils::GetItemCount(24))
 			{
-				if (Stats.Potion >= 50)
+				if (Stats.Potion >= 100)
 				{
-					adjustHealth(1);
-					Stats.Potion -= 50;
+					Stats.Money += global::item24GoldGained;
+					Stats.Potion -= 100;
+				}
+			}
+			else
+			{
+				if (Stats.HP < Stats.MaxHP)
+				{
+					if (Stats.Potion >= 100)
+					{
+						adjustHealth(1);
+						Stats.Potion -= 100;
+					}
 				}
 			}
 		}
@@ -267,7 +275,8 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		Stats.ExpCount += Exp * Stats.effectiveExpGained * Stats.StageExpGainedRatio[global::CurrentStageNumber - 1];
+		Stats.Money += 1;
+		Stats.ExpCount += Exp * Stats.effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
 		if (Stats.ExpCount >= Stats.TargetExp)
 		{
 			Stats.ExpCount -= Stats.TargetExp;
@@ -466,6 +475,7 @@ namespace InGame
 		global::additionalFireRate = 0.f;
 		global::additionalFireRateRatio = 1.f;
 		global::additionalExpGainedRatio = 1.f;
+		global::additionalGoldGainedRatio = 1.f;
 		global::additionalHitCount = 0;
 		global::additionalMovementSpeed = 0;
 
@@ -615,5 +625,15 @@ namespace InGame
 			return true;
 		}
 		return false;
+	}
+
+	bool PlayerCharacter::IsPlayerInvincible()
+	{
+		return bIsInvincible;
+	}
+
+	void PlayerCharacter::SetPlayerInvincible()
+	{
+		bIsInvincible = true;
 	}
 }

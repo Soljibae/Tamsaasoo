@@ -117,11 +117,11 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[32]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[25]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[24]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
@@ -160,7 +160,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 10)
+				if (WaveCount > 100)
 				{
 					InitBossFight();
 				}

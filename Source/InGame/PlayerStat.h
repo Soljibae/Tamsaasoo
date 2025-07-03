@@ -1,7 +1,6 @@
 #pragma once
 #include "AEEngine.h"
 #include "Stat.h"
-#include <array>
 
 namespace InGame
 {
@@ -21,7 +20,6 @@ namespace InGame
 		u32 Money;
 		s16 Potion;
 		s32 ReviveCount;
-		std::array<f32, 3> StageExpGainedRatio;
 
 		f32 BurnDamage;
 		f32 BurnRate;

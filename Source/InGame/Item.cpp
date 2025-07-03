@@ -1064,6 +1064,8 @@ namespace InGame
 		id = 21;
 		name = data.name;
 		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1083,6 +1085,35 @@ namespace InGame
 	{
 		return std::make_shared<Item_21>(*this);
 	}
+	void Item_21::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		InGame::PlayerCharacter* InPC = nullptr;
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->PC)
+				{
+					InPC = GS->PC;
+				}
+			}
+		}
+
+		if (isTargetBoss)
+		{
+			if (InPC)
+			{
+				if (InPC->Stats.Money >= value1)
+				{
+					InPC->Stats.Money -= value1;
+					target->adjustHealth(-target->Stats.MaxHP * value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
+
+				}
+			}
+		}
+	}
 	//============================================= ID_22
 	Item_22::Item_22(const Item_22& other)
 		: Item(other)
@@ -1094,6 +1125,7 @@ namespace InGame
 		name = data.name;
 		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
+		value1 = data.value1;
 		tag = GREED;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -1112,9 +1144,35 @@ namespace InGame
 	{
 		return std::make_shared<Item_22>(*this);
 	}
+	void Item_22::OnDamaged()
+	{
+		InGame::PlayerCharacter* InPC = nullptr;
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->PC)
+				{
+					InPC = GS->PC;
+				}
+			}
+		}
+
+		if (InPC)
+		{
+			if ((InPC->Stats.Money >= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05)) && !InPC->IsPlayerInvincible())
+			{
+				InPC->Stats.Money -= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05);
+				InPC->SetPlayerInvincible();
+
+			}
+		}
+	}
 	//============================================= ID_23
 	Item_23::Item_23(const Item_23& other)
-		: Item(other)
+		: Item(other), appliedStack(other.appliedStack)
 	{
 	}
 	void Item_23::Init(const Manager::ItemData& data)
@@ -1122,14 +1180,24 @@ namespace InGame
 		id = 23;
 		name = data.name;
 		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
+		appliedStack = 0;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 	}
 	void Item_23::Use(PlayerCharacter* owner)
 	{
+		if (Utils::GetItemCount(id) != appliedStack)
+		{
+			appliedStack++;
+			owner->Stats.Money += owner->Stats.Money * value1;
+		}
+
+		global::item23RerollCostRatio += value2 * appliedStack;
 	}
 	void Item_23::Update(PlayerCharacter* owner)
 	{
@@ -1151,6 +1219,7 @@ namespace InGame
 		id = 24;
 		name = data.name;
 		description = data.description;
+		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1159,6 +1228,7 @@ namespace InGame
 	}
 	void Item_24::Use(PlayerCharacter* owner)
 	{
+		global::item24GoldGained = value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_24::Update(PlayerCharacter* owner)
 	{
@@ -1180,6 +1250,8 @@ namespace InGame
 		id = 25;
 		name = data.name;
 		description = data.description;
+		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 
@@ -1188,6 +1260,7 @@ namespace InGame
 	}
 	void Item_25::Use(PlayerCharacter* owner)
 	{
+		global::additionalGoldGainedRatio += value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
 	}
 	void Item_25::Update(PlayerCharacter* owner)
 	{
@@ -1198,6 +1271,29 @@ namespace InGame
 	std::shared_ptr<Item> Item_25::Clone() const
 	{
 		return std::make_shared<Item_25>(*this);
+	}
+	void Item_25::OnDamaged()
+	{
+		InGame::PlayerCharacter* InPC = nullptr;
+
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->PC)
+				{
+					InPC = GS->PC;
+				}
+			}
+		}
+
+		if (InPC)
+		{
+			
+			InPC->Stats.Money -= InPC->Stats.Money * value2 * (1.f - (Utils::GetItemCount(id) - 1) * 0.1);
+	
+		}
 	}
 	//============================================= ID_26
 	Item_26::Item_26(const Item_26& other)
