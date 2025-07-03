@@ -113,10 +113,10 @@ namespace InGame
 	PistolStruct::PistolStruct()
 	{
 		Type = GunType::PISTOL;
-		RoundPerSec = 2;
+		GuntypeDamageRatio = 1.f;
+		GuntypeFireRateRatio = 1.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 5.f;
-		ProjectileDamage = 1.f;
 		ProjectileHitCount = 1;
 		TextureAddress = "Assets/Pistol.png";
 	}
@@ -124,10 +124,10 @@ namespace InGame
 	RifleStruct::RifleStruct()
 	{
 		Type = GunType::RIFLE;
-		RoundPerSec = 5;
+		GuntypeDamageRatio = 3.f;
+		GuntypeFireRateRatio = 2.5f;
 		ProjectileSpeed = 45.f;
 		ProjectileCollisionSize = 5.f;
-		ProjectileDamage = 3.f;
 		ProjectileHitCount = 3;
 		TextureAddress = "Assets/Rifle.png";
 	}
@@ -135,10 +135,10 @@ namespace InGame
 	ShotGunStruct::ShotGunStruct()
 	{
 		Type = GunType::SHOTGUN;
-		RoundPerSec = 1;
+		GuntypeDamageRatio = 2.f;
+		GuntypeFireRateRatio = 0.5f;
 		ProjectileSpeed = 15.f;
 		ProjectileCollisionSize = 10.f;
-		ProjectileDamage = 2.f;
 		ProjectileHitCount = 1;
 		TextureAddress = "Assets/ShotGun.png";
 	}

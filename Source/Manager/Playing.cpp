@@ -5,6 +5,7 @@
 #include "../Manager/LevelUpUI.h"
 #include "../Manager/HUDController.h"
 #include "PauseUI.h"
+#include "ExpUI.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -39,12 +40,12 @@ namespace Manager
 		}
 		if (ITDB == nullptr)
 		{
-			ITDB = new InGame::ItemDatabase();
+			ITDB = new ItemDatabase();
 			ITDB->Init();
 		}
 		if (ITRM == nullptr)
 		{
-			ITRM = new InGame::ItemResourceManager();
+			ITRM = new Manager::ItemResourceManager();
 			ITRM->Init();
 		}
 		InGame::Item::StaticInit();
@@ -63,6 +64,7 @@ namespace Manager
 		WaveTimer = 0.;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
+		ExpPanel.Init(PC);
 		HUD.Init(PC, PC->HoldingGun);
 		gm.GamePaused = false;
 		Utils::TestInit();
@@ -72,6 +74,8 @@ namespace Manager
 	void Playing::Update()
 	{
 		// Press ESCAPE to pause the game
+		ExpPanel.Update();
+
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
 		{
 			if (!gm.GamePaused)
@@ -111,7 +115,7 @@ namespace Manager
 			//
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[27]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[32]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
@@ -119,15 +123,15 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_3))
 			{
-				PC->AddItemToInventory(ITDB->itemList[3]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[33]->Clone());
 			}
 			if (global::KeyInput(AEVK_4))
 			{
-				PC->AddItemToInventory(ITDB->itemList[4]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[13]->Clone());
 			}
 			if (global::KeyInput(AEVK_5))
 			{
-				PC->AddItemToInventory(ITDB->itemList[5]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[15]->Clone());
 			}
 			if (global::KeyInput(AEVK_6))
 			{
@@ -153,7 +157,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 30)
+				if (WaveCount > 1)
 				{
 					InitBossFight();
 				}
@@ -196,9 +200,9 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
-							PC->OnProjectileHit(EC, false);
 							EC->adjustHealth(-PP->Damage);
-							PP->OnHit();
+							PC->OnProjectileHit(EC, false);
+							PP->OnHit(EC);
 						}
 					}
 				}
@@ -210,13 +214,29 @@ namespace Manager
 						{
 							if (Utils::CheckCollision(*PP, *Boss))
 							{
-								PC->OnProjectileHit(Boss, true);
 								Boss->adjustHealth(-PP->Damage * global::additionalDamageToBossRatio);
-								PP->OnHit();
+								PC->OnProjectileHit(Boss, true);
+								PP->OnHit(Boss);
 							}
 						}
 					}
 				}
+			}
+			std::vector<InGame::Character*> PCV;
+			PCV.push_back(PC);
+			for (InGame::ArealAttack*& EAA : EAAs)
+			{
+				EAA->Update(PCV);
+			}
+			std::vector<InGame::Character*> ECV;
+			for (InGame::Character* EC : ECs)
+			{
+				ECV.push_back(EC);
+			}
+			ECV.push_back(PC);
+			for (InGame::ArealAttack*& PAA : PAAs)
+			{
+				PAA->Update(ECV);
 			}
 			if (!PC->bIsDashing)
 			{
@@ -327,6 +347,41 @@ namespace Manager
 					++i;
 				}
 			}
+
+			for (auto it = EAAs.begin(); it != EAAs.end(); )
+			{
+				if (it == EAAs.end() || *it == nullptr)
+					break;
+
+				InGame::ArealAttack* attack = *it;
+				if (attack->bIsPandingKill)
+				{
+					attack->Destroy();
+					delete attack;
+					it = EAAs.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+			for (auto it = PAAs.begin(); it != PAAs.end(); )
+			{
+				if (it == PAAs.end() || *it == nullptr)
+					break;
+
+				InGame::ArealAttack* attack = *it;
+				if (attack->bIsPandingKill)
+				{
+					attack->Destroy();
+					delete attack;
+					it = PAAs.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
 			CAM->Update(*PC);
 
 			if(Boss)
@@ -370,18 +425,18 @@ namespace Manager
 	{
 		BG->Draw();
 		PC->Draw();
-		for (InGame::Projectile* PP : PPs)
-		{
-			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)
-			{
-				PP->Draw();
-			}
-		}
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			if (abs(EC->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(EC->position.y - PC->position.y) < global::ScreenHeight / 2)
 			{
 				EC->Draw();
+			}
+		}
+		for (InGame::Projectile* PP : PPs)
+		{
+			if (abs(PP->position.x - PC->position.x) < global::ScreenWidth / 2 || abs(PP->position.y - PC->position.y) < global::ScreenHeight / 2)
+			{
+				PP->Draw();
 			}
 		}
 		for (const auto& item_ptr : PC->inventory)
@@ -395,11 +450,32 @@ namespace Manager
 				EP->Draw();
 			}
 		}
+		for (auto it = EAAs.begin(); it != EAAs.end(); )
+		{
+			if (it == EAAs.end() || *it == nullptr)
+			{
+				break;
+			}
+			InGame::ArealAttack* attack = *it;
+			(*it)->Draw();
+			++it;
+		}
+		for (auto it = PAAs.begin(); it != PAAs.end(); )
+		{
+			if (it == PAAs.end() || *it == nullptr)
+			{
+				break;
+			}
+			InGame::ArealAttack* attack = *it;
+			(*it)->Draw();
+			++it;
+		}
 		if (Boss)
 		{
 			Boss->Draw();
 		}
 		HUD.Draw();
+		ExpPanel.Draw();
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
@@ -471,6 +547,7 @@ namespace Manager
 		ITRM->Destroy();
 		delete ITRM;
 
+		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
 		HUD.Destroy();
@@ -567,7 +644,14 @@ namespace Manager
 			EP->bIsPandingKill = false;
 		}
 		EPs.clear();
-		
+		for (size_t i = 0; i < PPs.size(); i++)
+		{
+			InGame::Projectile*& PP = PPs[i];
+			PPPool.push_back(PP);
+			PP->bIsPandingKill = false;
+		}
+		PPs.clear();
+
 		bIsJumping = true;
 		JumpAnimationTimer = 0.f;
 		PC->AnimationState = InGame::EAnimationState::JUMP;  // �ִϸ��̼� ��� �Լ� �ʿ�

@@ -227,6 +227,17 @@ namespace Manager
 		prevFireRate = GUN->RoundPerSec;
 		/*--------Centered can fire UI--------*/
 
+		/*-----*DEBUG* show me the money *DEBUG*-----*/
+		if (global::KeyInput(AEVK_M))
+		{
+			PC->Stats.Money += 1000;
+		}
+		/*-----*DEBUG* show me the money *DEBUG*-----*/
+		//DEBUG
+
+		PC->Stats.Potion += global::RecentlyDeadEnemyCount;
+	
+		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
 		{
 			f32 fillPercent = static_cast<f32>(prevPotion) / 100.f;

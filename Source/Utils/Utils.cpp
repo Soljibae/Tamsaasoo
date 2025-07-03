@@ -362,7 +362,7 @@ void Utils::UpdateOffset(InGame::SkillEffectItem& object)
 	if (object.AnimationTimer >= object.FrameTime)
 	{
 		object.AnimationTimer = 0;
-		object.AnimationCount = (object.AnimationCount + 1) % 9;
+		object.AnimationCount = (object.AnimationCount + 1) % object.MaxAnimationCount;
 	}
 	object.AnimationOffset.x = 1.f / object.effectColumn * static_cast<f32>(object.AnimationCount);
 	object.AnimationOffset.y = 1.f / object.effectRow * static_cast<f32>(object.AnimationCount / object.effectColumn);

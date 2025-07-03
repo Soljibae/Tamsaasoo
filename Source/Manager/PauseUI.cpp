@@ -2,6 +2,8 @@
 #include "HUDController.h"
 #include "../Global/GlobalVariables.h"
 #include "GameManager.h"
+#include <sstream>
+#include <iomanip>
 
 namespace Manager
 {
@@ -53,6 +55,15 @@ namespace Manager
 
 			ItemSlot[i].size = { slotWidth, slotHeight };
 		}
+
+		float gridRightEdgeX = startX + (columns - 1) * (slotWidth + spacingX) + (slotWidth / 2.0f);
+		float screenRightEdgeX = w / 2.0f;
+
+		statsUI.Mesh = Utils::CreateMesh();
+		statsUI.Texture = AEGfxTextureLoad("Assets/black.png");
+		statsUI.size = { 320.f, 430.f };
+		statsUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, - statsUI.size.y / 2.f + 50.f };
+
 		slotWhite.Mesh = Utils::CreateMesh();
 		slotWhite.Texture = AEGfxTextureLoad("Assets/white.png");
 		slotWhite.size = { slotWidth, slotHeight };
@@ -67,6 +78,34 @@ namespace Manager
 		resumeButton.Update();
 		mainmenuButton.Update();
 
+		std::stringstream ss;
+
+		statsString.clear();
+
+		ss << "Damage: " << std::fixed << std::setprecision(2) << PC->Stats.effectiveDamage;
+		statsString.push_back(ss.str());
+		ss.str("");
+		
+		ss << "Fire Rate: " << PC->Stats.effectiveFireRate;
+		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << "Movement Speed: " << static_cast<s32>(PC->Stats.effectiveMovementSpeed);
+		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << "Hit Count: " << static_cast<s32>(PC->Stats.effectiveHitCount);
+		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << "Burn Damage: " << std::fixed << std::setprecision(2) << global::effectiveBurnDamage;
+		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << "Burn Rate: " <<  global::effectiveBurnRate;
+		statsString.push_back(ss.str());
+		ss.str("");
+
 		for (size_t i = 0; i < PC->inventory.size(); i++)
 		{
 			if(ItemSlot[i].IsHovered())
@@ -80,6 +119,7 @@ namespace Manager
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		//background fading
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
+		Utils::DrawObject(statsUI, false, 0.5f);
 
 		for (size_t i = 0; i < ItemSlot.size(); i++)
 		{
@@ -106,6 +146,14 @@ namespace Manager
 
 		}
 
+		for (size_t i = 0; i < statsString.size(); i++)
+		{
+			f32 space = 10.f;
+			f32 textW, textH;
+			AEGfxGetPrintSize(pFont, statsString[i].c_str(), 0.22f, &textW, &textH);
+			AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + space) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - space * (i + 1)) / (h / 2.f)) - textH * (i + 1)), 0.22f, 1, 1, 1, 1);
+			
+		}
 
 		//buttons
 		Utils::DrawObject(resumeButton, false);
@@ -130,6 +178,9 @@ namespace Manager
 		AEGfxMeshFree(pauseDimmer.Mesh);
 		AEGfxTextureUnload(pauseDimmer.Texture);
 
+		AEGfxMeshFree(statsUI.Mesh);
+		AEGfxTextureUnload(statsUI.Texture);
+
 		AEGfxMeshFree(slotMesh);
 		AEGfxTextureUnload(slotTexture);
 
@@ -137,5 +188,7 @@ namespace Manager
 		AEGfxTextureUnload(slotWhite.Texture);
 
 		AEGfxDestroyFont(pFont);
+
+		statsString.clear();
 	}
 }

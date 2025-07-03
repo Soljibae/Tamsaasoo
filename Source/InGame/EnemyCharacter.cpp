@@ -8,13 +8,14 @@ namespace InGame
 {
 	void InGame::EnemyCharacter::Init()
 	{
-		row = 4;
+		row = 6;
 		column = 2;
 		FrameTime = 0.2f;
 		AnimationState = IDLE;
 		AnimationCount = 0;
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
+		MaxAnimationCount[ATTACK] = 2;
 		Mesh = Utils::CreateMesh(row,column);
 		MovementSpeed = 100.f;
 		size.x = 40;
@@ -304,9 +305,9 @@ namespace InGame
 			Amount *= 1.2f;
 		}
 
-		if (Stats.HP / Stats.MaxHP >= 0.8f && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
+		if (Stats.HP / Stats.MaxHP >= global::item12TriggerRatio && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
 		{
-			Amount *= 1.5f * (1.f + (Utils::GetItemCount(12) - 1) * 0.1);
+			Amount *= global::item12AdditionalDamage;
 		}
 
 		Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
