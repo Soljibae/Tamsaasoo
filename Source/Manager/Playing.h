@@ -16,6 +16,7 @@
 #include "ItemResourceManager.h"
 #include "../InGame/SpawnList.h"
 #include "../InGame/ArealAttack.h"
+#include "../InGame/SoulOrb.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -35,6 +36,7 @@ namespace Manager
 		std::vector<InGame::Projectile*> EPs;
 		std::list<InGame::ArealAttack*> PAAs;
 		std::list<InGame::ArealAttack*> EAAs;
+		std::vector<InGame::SoulOrb*> SOs;
 		InGame::Background* BG;
 		ItemDatabase* ITDB;
 		ItemResourceManager* ITRM;

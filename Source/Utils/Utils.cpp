@@ -61,6 +61,7 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 			-p.x, p.y, 0xFFFFFFFF, p.u0, p.v1
 		);
 		PatchArr[i] = AEGfxMeshEnd();
+
 		i++;
 	}
 	return PatchArr;

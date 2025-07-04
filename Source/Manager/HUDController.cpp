@@ -55,7 +55,7 @@ namespace Manager
 		Coin.size = { 30.f, 30.f };
 		float spacingX = 10.0f; // 가로 간격
 		float startX = -(w / 2) + 200.f;
-		float Y = (h / 2) - 100.f;
+		float Y = (h / 2) - 90.f;
 
 		HPMesh = Utils::CreateMesh();
 		HPTex = AEGfxTextureLoad("Assets/HPBG.png");
@@ -111,6 +111,11 @@ namespace Manager
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
 		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltip.png");
+
+		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
+		{
+			std::cout << " WID " << tooltip.WindowMesh[i] << std::endl;
+		}
 	}
 
 	void HUDController::Update()
@@ -235,8 +240,6 @@ namespace Manager
 		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		//DEBUG
-
-		PC->Stats.Potion += global::RecentlyDeadEnemyCount;
 
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
@@ -539,6 +542,7 @@ namespace Manager
 			if (tooltip.WindowMesh[i])
 			{
 				AEGfxMeshFree(tooltip.WindowMesh[i]);
+				tooltip.WindowMesh[i] = nullptr;
 			}
 		}
 		AEGfxTextureUnload(tooltip.Window.Texture);

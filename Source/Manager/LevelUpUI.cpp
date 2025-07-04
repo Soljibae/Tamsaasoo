@@ -121,34 +121,44 @@ namespace Manager
 			AEGfxGetPrintSize(pFont, currentOptions[i]->name.c_str(), textDrawSize, &lw, &lh);
 			AEGfxPrint(pFont, currentOptions[i]->name.c_str(), (baseX + pSizeX) / halfW, baseY / halfH + (lh / 1.5f), textDrawSize, 1.f, 1.f, 1.f, 1.f);
 			const char* tag;
+			f32 r{ 0.f }, g{ 0.f }, b{ 0.f };
 			switch (currentOptions[i]->tag)
 			{
 			case InGame::ItemTag::ENVY:
 				tag = "ENVY";
+				r = 0.5f;
+				b = 0.5f;
 				break;
 			case InGame::ItemTag::GLUTTONY:
 				tag = "GLUTTONY";
+				g = 0.5f;
 				break;
 			case InGame::ItemTag::GREED:
 				tag = "GREED";
+				b = 1.f;
 				break;
 			case InGame::ItemTag::LUST:
 				tag = "LUST";
+				b = 0.5f;
 				break;
 			case InGame::ItemTag::SLOTH:
 				tag = "SLOTH";
+				r = 1.f;
+				g = 1.f;
 				break;
 			case InGame::ItemTag::WRATH:
 				tag = "WRATH";
+				r = 1.f;
+				g = 0.5f;
 				break;
 			case InGame::ItemTag::PRIDE:
 				tag = "PRIDE";
+				r = 1.f;
 				break;
 			default:
 				tag = "NONE";
 				break;
 			}
-			f32 r{ 0.5f }, g{ 0.5f }, b{ 0.5f };
 			AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.3f), textDrawSize, r, g, b, 1.f);
 			std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth - padding);
 			AEVec2 windowPos{ ItemWindow[i].position };

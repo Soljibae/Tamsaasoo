@@ -49,6 +49,7 @@ namespace Manager
 			ITRM->Init();
 		}
 		InGame::Item::StaticInit();
+		InGame::SoulOrb::StaticInit();
 		for (int i = 0; i < 1000; i++)
 		{
 			InGame::Projectile* PP = new InGame::Projectile();
@@ -225,6 +226,10 @@ namespace Manager
 					}
 				}
 			}
+			for (InGame::SoulOrb*& SO : SOs)
+			{
+				SO->Update();
+			}
 			std::vector<InGame::Character*> PCV;
 			PCV.push_back(PC);
 			for (InGame::ArealAttack*& EAA : EAAs)
@@ -297,9 +302,14 @@ namespace Manager
 			{
 				InGame::EnemyCharacter*& EC = ECs[i];
 
+
 				if (EC->bIsPandingKill)
 				{
 					global::RecentlyDeadEnemyCount++;
+
+					InGame::SoulOrb* orb = new InGame::SoulOrb;
+					orb->Init(EC);
+					SOs.push_back(orb);
 
 					if (EC->Type == InGame::EnemyType::BOMBER)
 					{
@@ -383,6 +393,19 @@ namespace Manager
 				else
 				{
 					++it;
+				}
+			}
+			for (size_t i = 0; i < SOs.size();)
+			{
+				if (SOs[i]->bIsPandingKill)
+				{
+					delete SOs[i];
+
+					SOs.erase(SOs.begin() + i);
+				}
+				else
+				{
+					++i;
 				}
 			}
 			CAM->Update(*PC);
@@ -479,6 +502,10 @@ namespace Manager
 		}
 		HUD.Draw();
 		ExpPanel.Draw();
+		for (InGame::SoulOrb* SO : SOs)
+		{
+			SO->Draw();
+		}
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
@@ -538,6 +565,11 @@ namespace Manager
 			EAA->Destroy();
 			delete EAA;
 		}
+		for (InGame::SoulOrb* SO : SOs)
+		{
+			SO->Destroy();
+			delete SO;
+		}
 		EAAs.clear();
 
 		delete CAM;
@@ -566,6 +598,7 @@ namespace Manager
 		pickPanel.Destroy();
 		Utils::TestDestroy();
 		WM.Destroy();
+		InGame::SoulOrb::StaticDestroy();
 
 		PC->Destroy();
 		delete PC;

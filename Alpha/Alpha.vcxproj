@@ -32,6 +32,7 @@
     <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp" />
     <ClCompile Include="..\Source\InGame\PlayerStat.cpp" />
     <ClCompile Include="..\Source\InGame\Projectile.cpp" />
+    <ClCompile Include="..\Source\InGame\SoulOrb.cpp" />
     <ClCompile Include="..\Source\InGame\SpawnList.cpp" />
     <ClCompile Include="..\Source\InGame\Stage.cpp" />
     <ClCompile Include="..\Source\Manager\Button.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="..\Source\InGame\PlayerCharacter.h" />
     <ClInclude Include="..\Source\InGame\PlayerStat.h" />
     <ClInclude Include="..\Source\InGame\Projectile.h" />
+    <ClInclude Include="..\Source\InGame\SoulOrb.h" />
     <ClInclude Include="..\Source\InGame\SpawnList.h" />
     <ClInclude Include="..\Source\InGame\Stage.h" />
     <ClInclude Include="..\Source\Manager\Button.h" />
