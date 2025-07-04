@@ -59,7 +59,7 @@ namespace InGame
 		ProjectileChamberTimer = 5;
 		bIsWaving = false;
 
-		Stats.HP = 10;
+		Stats.HP = 100;
 		Stats.MaxHP = 10;
 		Stats.FireRate = 5.f;
 		Stats.ProjectileSpeed = 3.f;
@@ -209,7 +209,7 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats.HP = 40;
+		Stats.HP = 400;
 		Stats.MaxHP = 40;
 		Stats.Damage = 1;
 
@@ -373,7 +373,7 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats.HP = 40;
+		Stats.HP = 400;
 		Stats.MaxHP = 40;
 		Stats.Damage = 1;
 		Stats.MovementSpeed = 100.f;
