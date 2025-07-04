@@ -35,6 +35,8 @@ namespace InGame
 		void UpdateStats();
 		
 		bool IsRevivable();
+		bool IsPlayerInvincible();
+		void SetPlayerInvincible();
 
 		bool bIsDashing = false;
 	protected:

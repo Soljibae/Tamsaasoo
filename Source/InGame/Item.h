@@ -418,7 +418,7 @@ namespace InGame
 		virtual void Update(class PlayerCharacter* owner) override;
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
-		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss);
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_22
@@ -434,7 +434,7 @@ namespace InGame
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
 		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
-		virtual void OnDamaged() {}
+		virtual void OnDamaged();
 	};
 	//============================================= ID_23
 	class Item_23 : public Item // to do change class name
@@ -442,6 +442,8 @@ namespace InGame
 	public:
 		Item_23() = default;
 		Item_23(const Item_23& other);
+
+		s32 appliedStack;
 
 		virtual void Init(const Manager::ItemData& data) override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -479,7 +481,7 @@ namespace InGame
 		virtual void Draw() override;
 		virtual std::shared_ptr<Item> Clone() const override;
 		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
-		virtual void OnDamaged() {}
+		virtual void OnDamaged();
 	};
 	//============================================= ID_26
 	class Item_26 : public Item // to do change class name

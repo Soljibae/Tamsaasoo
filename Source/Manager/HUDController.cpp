@@ -56,7 +56,7 @@ namespace Manager
 		float spacingX = 10.0f; // 가로 간격
 		float startX = -(w / 2) + 200.f;
 		float Y = (h / 2) - 100.f;
-		
+
 		HPMesh = Utils::CreateMesh();
 		HPTex = AEGfxTextureLoad("Assets/HPBG.png");
 		//HPBG HUD init
@@ -97,7 +97,7 @@ namespace Manager
 		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
 		fireTimeBar.MovementSpeed = 0.000016f * (barEndX - barStartX) * global::DeltaTime;
 
-		Potion.position = { -(w/2) + 100.f, h/2 - 100.f };
+		Potion.position = { -(w / 2) + 100.f, h / 2 - 100.f };
 		Potion.size = { 90.f, 90.f };
 		Potion.Mesh = FillingMeshUpside(0);
 		Potion.Texture = AEGfxTextureLoad("Assets/Potion.png");
@@ -237,7 +237,7 @@ namespace Manager
 		//DEBUG
 
 		PC->Stats.Potion += global::RecentlyDeadEnemyCount;
-	
+
 		//DEBUG
 		if (PC->Stats.Potion != prevPotion)
 		{
@@ -246,7 +246,7 @@ namespace Manager
 			Potion.Mesh = FillingMeshUpside(fillPercent);
 			if (prevPotion > PC->Stats.Potion)
 			{
-				prevPotion-=3;
+				prevPotion -= 3;
 				if (prevPotion < PC->Stats.Potion)
 					prevPotion = PC->Stats.Potion;
 			}
@@ -263,7 +263,7 @@ namespace Manager
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 
-		for(int i = 0; i < HPBG.size(); i++)
+		for (int i = 0; i < HPBG.size(); i++)
 			Utils::DrawObject(HPBG[i], false);
 		for (int i = 0; i < HP.size(); i++)
 			Utils::DrawObject(HP[i], false);
@@ -275,10 +275,10 @@ namespace Manager
 			Utils::DrawObject(fireTimeBar, false);
 		}
 		Utils::DrawObject(Coin, false);
-		std::string pText = std::to_string(PC->Stats.Money);
+		std::string pText = std::to_string(static_cast<s32>(PC->Stats.Money));
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
-		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x/1.5f) / (w / 2), (Coin.position.y - Coin.size.y/2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
+		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
 	}
 
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
@@ -293,14 +293,14 @@ namespace Manager
 			f32 lineWidth = 0;
 			f32 spaceWidth, spaceHeight;
 			AEGfxGetPrintSize(pFont, " ", textDrawSize, &spaceWidth, &spaceHeight);
-			spaceWidth *= global::ScreenWidth/2.f;
-			
+			spaceWidth *= global::ScreenWidth / 2.f;
+
 			while (wordStream >> word)
 			{
-				
+
 				f32 w, h;
 				AEGfxGetPrintSize(pFont, word.c_str(), textDrawSize, &w, &h);
-				w *= global::ScreenWidth/2.f;
+				w *= global::ScreenWidth / 2.f;
 				if (lineWidth + (currentLine.empty() ? 0 : spaceWidth) + w <= maxWidth)
 				{
 					if (!currentLine.empty())
@@ -324,22 +324,6 @@ namespace Manager
 			}
 		}
 		return lines;
-	}
-
-	AEGfxVertexList* CreateQuadMesh(f32 x, f32 y, f32 u0, f32 v0, f32 u1, f32 v1)
-	{
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			-x, -y, 0xFFFFFFFF, u0, v0,
-			x, -y, 0xFFFFFFFF, u1, v0,
-			-x, y, 0xFFFFFFFF, u0, v1
-		);
-		AEGfxTriAdd(
-			x, -y, 0xFFFFFFFF, u1, v0,
-			x, y, 0xFFFFFFFF, u1, v1,
-			-x, y, 0xFFFFFFFF, u0, v1
-		);
-		return AEGfxMeshEnd();
 	}
 
 	void HUDController::TooltipUpdate(InGame::Item& item)
@@ -383,37 +367,21 @@ namespace Manager
 		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &lw, &lh);
 		lh *= global::ScreenHeight;
 
-		tooltip.Window.position = { MP.x + (tooltip.Window.size.x / 2.f)+padding, MP.y + (tooltip.Window.size.y / 2.f) + padding };
+		tooltip.Window.position = { MP.x + (tooltip.Window.size.x / 2.f) + padding, MP.y + (tooltip.Window.size.y / 2.f) + padding };
 		tooltip.Window.size.y = lh * itemDesc.size();
-		Patches = {
-			//Top row (v0=0.75, v1=1.0)
-			{ 0.5f, 0.5f, 0.00f, 0.75f, 0.25f, 1.00f },  // TopLeft
-			{ 0.5f, 0.5f, 0.25f, 0.75f, 0.75f, 1.00f },  // TopCenter
-			{ 0.5f, 0.5f, 0.75f, 0.75f, 1.00f, 1.00f },  // TopRight
 
-			//Middle row (v0=0.25, v1=0.75)
-			{ 0.5f, 0.5f, 0.00f, 0.25f, 0.25f, 0.75f },  // CenterLeft
-			{ 0.5f, 0.5f, 0.25f, 0.25f, 0.75f, 0.75f },  // Center
-			{ 0.5f, 0.5f, 0.75f, 0.25f, 1.00f, 0.75f },  // CenterRight
-
-			//Bottom row (v0=0.00, v1=0.25)
-			{ 0.5f, 0.5f, 0.00f, 0.00f, 0.25f, 0.25f },  // BottomLeft
-			{ 0.5f, 0.5f, 0.25f, 0.00f, 0.75f, 0.25f },  // BottomCenter
-			{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f }   // BottomRight
-		};
 		if (prevItem != &item)
 		{
 			prevItem = &item;
 			s8 i = 0;
-			for (auto p : Patches)
+			for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 			{
 				if (tooltip.WindowMesh[i])
 				{
 					AEGfxMeshFree(tooltip.WindowMesh[i]);
 				}
-				tooltip.WindowMesh[i] = CreateQuadMesh(p.x, p.y, p.u0, p.v0, p.u1, p.v1);
-				i++;
 			}
+			tooltip.WindowMesh = Utils::CreateNinePatchMesh();
 		}
 	}
 
@@ -516,7 +484,7 @@ namespace Manager
 		f32 halfW = AEGfxGetWindowWidth() * 0.5f;
 		f32 halfH = AEGfxGetWindowHeight() * 0.5f;
 		f32 baseX = px;
-		f32 baseY = py + boxH - lh/1.5f;
+		f32 baseY = py + boxH - lh / 1.5f;
 		s32 mouseX, mouseY;
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 		AEVec2 MP;
@@ -552,9 +520,9 @@ namespace Manager
 		HP.clear();
 
 		AEGfxMeshFree(ChamberTimeBar.Mesh);
-		AEGfxMeshFree(fireTimeBar.Mesh);
-
 		AEGfxTextureUnload(ChamberTimeBar.Texture);
+
+		AEGfxMeshFree(fireTimeBar.Mesh);
 		AEGfxTextureUnload(fireTimeBar.Texture);
 
 		AEGfxMeshFree(Coin.Mesh);
@@ -565,8 +533,8 @@ namespace Manager
 
 		AEGfxMeshFree(PotionBG.Mesh);
 		AEGfxTextureUnload(PotionBG.Texture);
-		
-		for (int i = 0; i < Patches.size(); i++)
+
+		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 		{
 			if (tooltip.WindowMesh[i])
 			{

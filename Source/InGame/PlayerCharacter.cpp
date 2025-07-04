@@ -31,7 +31,7 @@ namespace InGame
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
-		Stats.MaxHP = 10;
+		Stats.MaxHP = 5;
 		Stats.HP = Stats.MaxHP;
 		Stats.MovementSpeed = 300;
 		Stats.FireRate = 2.f;
@@ -50,9 +50,6 @@ namespace InGame
 		global::effectiveBurnDamage = Stats.BurnDamage;
 		Stats.BurnRate = 1.f;
 		Stats.ReviveCount = 0;
-		Stats.StageExpGainedRatio[0] = 1.f;
-		Stats.StageExpGainedRatio[1] = 2.5f;
-		Stats.StageExpGainedRatio[2] = 6.f;
 
 		Stats.Init();
 
@@ -153,21 +150,28 @@ namespace InGame
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
-		for (const auto& item_ptr : inventory)
-		{
-			item_ptr.first->Use(this);
-		}
 		/*----- Heal Potion -----*/
 		if (Stats.Potion > 100)
 			Stats.Potion = 100;
 		if (global::KeyInput(AEVK_Q))
 		{
-			if (Stats.HP < Stats.MaxHP)
+			if (Utils::GetItemCount(24))
 			{
-				if (Stats.Potion >= 50)
+				if (Stats.Potion >= 100)
 				{
-					adjustHealth(1);
-					Stats.Potion -= 50;
+					Stats.Money += global::item24GoldGained;
+					Stats.Potion -= 100;
+				}
+			}
+			else
+			{
+				if (Stats.HP < Stats.MaxHP)
+				{
+					if (Stats.Potion >= 100)
+					{
+						adjustHealth(1);
+						Stats.Potion -= 100;
+					}
 				}
 			}
 		}
@@ -267,7 +271,8 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		Stats.ExpCount += Exp * Stats.effectiveExpGained * Stats.StageExpGainedRatio[global::CurrentStageNumber - 1];
+		Stats.Money += 1.f * global::StageGoldGainedRatio[global::CurrentStageNumber - 1] * global::additionalGoldGainedRatio;
+		Stats.ExpCount += Exp * Stats.effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
 		if (Stats.ExpCount >= Stats.TargetExp)
 		{
 			Stats.ExpCount -= Stats.TargetExp;
@@ -466,6 +471,7 @@ namespace InGame
 		global::additionalFireRate = 0.f;
 		global::additionalFireRateRatio = 1.f;
 		global::additionalExpGainedRatio = 1.f;
+		global::additionalGoldGainedRatio = 1.f;
 		global::additionalHitCount = 0;
 		global::additionalMovementSpeed = 0;
 
@@ -560,15 +566,15 @@ namespace InGame
 
 		if (itemTagCount[GREED] >= 7)
 		{
-			
+			global::additionalGoldGainedRatio += 0.4;
 		}
 		else if (6 >= itemTagCount[GREED] && itemTagCount[GREED] >= 5)
 		{
-			
+			global::additionalGoldGainedRatio += 0.25;
 		}
 		else if (4 >= itemTagCount[GREED] && itemTagCount[GREED] >= 3)
 		{
-			
+			global::additionalGoldGainedRatio += 0.1;
 		}
 
 		if (itemTagCount[LUST] >= 7)
@@ -615,5 +621,15 @@ namespace InGame
 			return true;
 		}
 		return false;
+	}
+
+	bool PlayerCharacter::IsPlayerInvincible()
+	{
+		return bIsInvincible;
+	}
+
+	void PlayerCharacter::SetPlayerInvincible()
+	{
+		bIsInvincible = true;
 	}
 }

@@ -120,6 +120,18 @@ namespace Manager
 		statsString.push_back(ss.str());
 		ss.str("");
 
+		ss << "Exp Gained: " << global::additionalExpGainedRatio * global::StageExpGainedRatio[global::CurrentStageNumber -1];
+		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << "Gold Gained: " << global::additionalGoldGainedRatio * global::StageGoldGainedRatio[global::CurrentStageNumber - 1];
+		statsString.push_back(ss.str());
+		ss.str("");
+
+		ss << "Additional ProcChance: " << global::additionalProcChanceRatio;
+		statsString.push_back(ss.str());
+		ss.str("");
+
 		std::map<InGame::ItemTag, s32> itemTagCount;
 		tagString.clear();
 
@@ -223,18 +235,18 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << " + ";
+						ss << " (" << "Gold Gained + ";
 						if (count >= 7)
 						{
-							ss << "";
+							ss << "0.4";
 						}
 						else if (6 >= count && count >= 5)
 						{
-							ss << "";
+							ss << "0.25";
 						}
 						else if (4 >= count && count >= 3)
 						{
-							ss << "";
+							ss << "0.1";
 						}
 						ss << ")";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
@@ -429,12 +441,12 @@ namespace Manager
 			f32 spaceX = 10.f;
 			f32 spaceY = 20.f;
 			f32 textW, textH;
-			AEGfxGetPrintSize(pFont, statsString[i].c_str(), 0.22f, &textW, &textH);
-			AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY  * i) / (h / 2.f)) - textH * (i + 1)), 0.22f, 1, 1, 1, 1);
+			AEGfxGetPrintSize(pFont, statsString[i].c_str(), 0.2f, &textW, &textH);
+			AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY  * i) / (h / 2.f)) - textH * (i + 1)), 0.2f, 1, 1, 1, 1);
 
 			if (i <= 1)
 			{
-				AEGfxPrint(pFont, baseStatsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f) + textW), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY * i) / (h / 2.f)) - textH * (i + 1)), 0.22f, 0.5f, 0.5f, 0.5f, 1);
+				AEGfxPrint(pFont, baseStatsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f) + textW), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY * i) / (h / 2.f)) - textH * (i + 1)), 0.2f, 0.5f, 0.5f, 0.5f, 1);
 			}
 		}
 

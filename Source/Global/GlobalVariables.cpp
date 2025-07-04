@@ -16,7 +16,8 @@ namespace global
 	s32 CurrentStageNumber = 0;
 	f32 item12TriggerRatio;
 	f32 item12AdditionalDamage;
-
+	f32 item23RerollCostRatio = 1.f;
+	f32 item24GoldGained;
 	f32 item32ExplosionSize = 0.f;
 
 	// additionalStats =================
@@ -27,6 +28,7 @@ namespace global
 	f32 additionalFireRateRatio = 1.f;
 
 	f32 additionalExpGainedRatio = 1.f;
+	f32 additionalGoldGainedRatio = 1.f;
 	s32 additionalHitCount = 0;
 	f32 additionalMovementSpeed = 0;
 
@@ -46,5 +48,9 @@ namespace global
 
 	f32 additionalDamageToBossRatio = 1.f;
 	f32 additionalDamageFromBossRatio = 1.f;
+
+	std::array<f32, 3> StageExpGainedRatio = { 1.f , 2.5f, 6.f };
+	std::array<f32, 3> StageGoldGainedRatio = { 1.f , 2.0f, 4.f };
+	std::array<f32, 3> StageRerollCostRatio = { 1.f , 2.5f, 4.5f };
 	//==================================
 }
