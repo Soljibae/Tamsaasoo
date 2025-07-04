@@ -76,7 +76,10 @@ namespace Manager
 	{
 		// Press ESCAPE to pause the game
 		ExpPanel.Update();
-
+		if (global::KeyInput(AEVK_G))
+		{
+			pickPanel.Show();
+		}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
@@ -92,17 +95,16 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
-			// ���� �ִϸ��̼� ���� ��
 			if (bIsJumping)
 			{
 				JumpAnimationTimer += global::DeltaTime;
 				Utils::UpdateOffset(*PC);
-				if (JumpAnimationTimer >= 1.5f) // �ִϸ��̼� ���� �ð�
+				if (JumpAnimationTimer >= 0.4f)
 				{
 					bIsJumping = false;
-					ChangeStage();  // �������� ��ȯ
+					ChangeStage();
 				}
-				return; // �ٸ� ������Ʈ ����
+				return;
 			}
 			if (global::IsEnemyRecentlyDied)
 			{
@@ -161,7 +163,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 100)
+				if (WaveCount > 60)
 				{
 					InitBossFight();
 				}
@@ -704,7 +706,7 @@ namespace Manager
 
 		bIsJumping = true;
 		JumpAnimationTimer = 0.f;
-		PC->AnimationState = InGame::EAnimationState::JUMP;  // �ִϸ��̼� ��� �Լ� �ʿ�
+		PC->AnimationState = InGame::EAnimationState::JUMP;
 		PC->AnimationCount = 0;
 	}
 	void Playing::ChangeStage()

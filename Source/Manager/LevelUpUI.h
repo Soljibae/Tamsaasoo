@@ -20,6 +20,8 @@ namespace Manager
 		void Reroll(s8 thisbutton);
 		std::vector<std::shared_ptr<InGame::Item>> GenerateRandomRewards();
 	private:
+		f32 pickDelay{ 2.f };
+		f32 delayTime{ 0.f };
 		std::vector<std::shared_ptr<InGame::Item>> currentOptions;
 
 		bool isActive = false;
@@ -27,8 +29,12 @@ namespace Manager
 		InGame::PlayerCharacter* PC;
 
 		std::array<Button, 3> ItemWindow;
-		static AEGfxVertexList* windowMesh;
+		std::array<AEGfxVertexList*, 9> windowMesh;
 		static AEGfxTexture* windowTexture;
+
+		std::array<InGame::Actor, 3> ItemSlot;
+		std::array<AEGfxVertexList*, 9> ItemSlotMesh;
+		static AEGfxTexture* ItemSlotTexture;
 
 		InGame::Actor pauseDimmer;
 
@@ -36,8 +42,10 @@ namespace Manager
 		static AEGfxVertexList* rerollMesh;
 		static AEGfxTexture* rerollTexture;
 
+		std::array<InGame::Actor, 3> rerollCostIcon;
+		AEGfxVertexList* rerollCostMesh;
+		AEGfxTexture* rerollCostTexture;
 		std::array<s32, 3> rerollCost;
-		std::array<Button, 3> ItemSlot;
 		s8 pFont;
 	};
 	extern LevelUpUI pickPanel;
