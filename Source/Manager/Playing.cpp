@@ -75,7 +75,10 @@ namespace Manager
 	{
 		// Press ESCAPE to pause the game
 		ExpPanel.Update();
-
+		if (global::KeyInput(AEVK_G))
+		{
+			pickPanel.Show();
+		}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
@@ -160,7 +163,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 100)
+				if (WaveCount > 60)
 				{
 					InitBossFight();
 				}

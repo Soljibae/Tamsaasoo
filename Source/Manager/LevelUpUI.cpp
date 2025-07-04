@@ -72,9 +72,6 @@ namespace Manager
 		}
 		for (s8 i = 0; i < ItemWindow.size(); i++)
 		{
-
-			ItemSlot[i].position = currentOptions[i]->iconPosition;
-			ItemSlot[i].size = currentOptions[i]->size;
 			if (ItemWindow[i].IsClicked() && !rerollButton[i].IsHovered())
 			{
 				ItemWindow[i].OnClick();
@@ -83,10 +80,6 @@ namespace Manager
 			if (rerollButton[i].IsClicked())
 			{
 				rerollButton[i].OnClick();
-			}
-			if (ItemSlot[i].IsHovered())
-			{
-				HUD.TooltipUpdate(*currentOptions[i]);
 			}
 		}
 	}

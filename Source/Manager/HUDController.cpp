@@ -379,6 +379,7 @@ namespace Manager
 				if (tooltip.WindowMesh[i])
 				{
 					AEGfxMeshFree(tooltip.WindowMesh[i]);
+					tooltip.WindowMesh[i] = nullptr;
 				}
 			}
 			tooltip.WindowMesh = Utils::CreateNinePatchMesh();
