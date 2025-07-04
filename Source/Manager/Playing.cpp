@@ -91,17 +91,16 @@ namespace Manager
 		}
 		if (!gm.GamePaused)
 		{
-			// ���� �ִϸ��̼� ���� ��
 			if (bIsJumping)
 			{
 				JumpAnimationTimer += global::DeltaTime;
 				Utils::UpdateOffset(*PC);
-				if (JumpAnimationTimer >= 1.5f) // �ִϸ��̼� ���� �ð�
+				if (JumpAnimationTimer >= 0.4f)
 				{
 					bIsJumping = false;
-					ChangeStage();  // �������� ��ȯ
+					ChangeStage();
 				}
-				return; // �ٸ� ������Ʈ ����
+				return;
 			}
 			if (global::IsEnemyRecentlyDied)
 			{
@@ -670,7 +669,7 @@ namespace Manager
 
 		bIsJumping = true;
 		JumpAnimationTimer = 0.f;
-		PC->AnimationState = InGame::EAnimationState::JUMP;  // �ִϸ��̼� ��� �Լ� �ʿ�
+		PC->AnimationState = InGame::EAnimationState::JUMP;
 		PC->AnimationCount = 0;
 	}
 	void Playing::ChangeStage()

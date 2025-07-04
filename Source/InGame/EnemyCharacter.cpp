@@ -16,6 +16,7 @@ namespace InGame
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
 		MaxAnimationCount[ATTACK] = 2;
+		MaxAnimationCount[DASH] = 2;
 		Mesh = Utils::CreateMesh(row,column);
 		MovementSpeed = 100.f;
 		size.x = 40;
@@ -177,6 +178,7 @@ namespace InGame
 								dashDirection = direction;
 								dashStartPos = position;
 								bIsDashing = true;
+								AnimationState = DASH;
 							}
 
 							// 현재 위치에서 얼마나 이동했는지 측정
@@ -203,10 +205,12 @@ namespace InGame
 								bIsDashing = false;
 								bHasDashed = true;
 								recoverTimer = 0.f;
+								AnimationState = IDLE;
 							}
 						}
 						else
 						{
+							AnimationState = MOVE;
 							// 사정거리 밖 → 천천히 추적
 							f32 effectiveMovementSpeed = walkSpeed;
 
@@ -221,6 +225,7 @@ namespace InGame
 					}
 					else
 					{
+						AnimationState = IDLE;
 						recoverTimer += global::DeltaTime;
 						if (recoverTimer >= recoveryTime)
 						{
