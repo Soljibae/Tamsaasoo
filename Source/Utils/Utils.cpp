@@ -65,7 +65,97 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 	}
 	return PatchArr;
 }
+void Utils::DrawNinePatchMesh(InGame::Actor object, AEGfxTexture* texture, std::array<AEGfxVertexList*, 9> patches, f32 padding)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxTextureSet(texture, 0.f, 0.f);
+	AEMtx33 scale;
+	AEMtx33 tran;
+	AEMtx33 transform;
+	int i = 1;
+	for (auto mesh : patches)
+	{
+		float x_trans_offset = 0;
+		float y_trans_offset = 0;
+		float x_scale = 0;
+		float y_scale = 0;
+		switch (i)
+		{
+		case 2:
+			x_scale = object.size.x;
+			y_scale = padding;
+			x_trans_offset = 0;
+			y_trans_offset = (object.size.y + padding) / 2.f;
+			break;
+		case 8:
+			x_scale = object.size.x;
+			y_scale = padding;
+			x_trans_offset = 0;
+			y_trans_offset = -(object.size.y + padding) / 2.f;
+			break;
+		case 4:
+			x_scale = padding;
+			y_scale = object.size.y;
+			x_trans_offset = -(object.size.x + padding) / 2.f;
+			y_trans_offset = 0;
+			break;
+		case 6:
+			x_scale = padding;
+			y_scale = object.size.y;
+			x_trans_offset = (object.size.x + padding) / 2.f;
+			y_trans_offset = 0;
+			break;
+		case 5:
+			x_scale = object.size.x;
+			y_scale = object.size.y;
+			x_trans_offset = 0;
+			y_trans_offset = 0;
+			break;
+		case 1:
+			x_scale = padding;
+			y_scale = padding;
+			x_trans_offset = -(object.size.x + padding) / 2.f;
+			y_trans_offset = (object.size.y + padding) / 2.f;
+			break;
+		case 3:
+			x_scale = padding;
+			y_scale = padding;
+			x_trans_offset = (object.size.x + padding) / 2.f;
+			y_trans_offset = (object.size.y + padding) / 2.f;
+			break;
+		case 7:
+			x_scale = padding;
+			y_scale = padding;
+			x_trans_offset = -(object.size.x + padding) / 2.f;
+			y_trans_offset = -(object.size.y + padding) / 2.f;
+			break;
+		case 9:
+			x_scale = padding;
+			y_scale = padding;
+			x_trans_offset = (object.size.x + padding) / 2.f;
+			y_trans_offset = -(object.size.y + padding) / 2.f;
+			break;
+		}
+
+		AEMtx33Scale(&scale,
+			x_scale,
+			y_scale);
+		AEMtx33Trans(&tran,
+			object.position.x + x_trans_offset,
+			object.position.y + y_trans_offset);
+		AEMtx33Concat(&transform, &tran, &scale);
+		AEGfxSetTransform(transform.m);
+		AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+		i++;
+	}
+}
 void Utils::DestroyMesh(AEGfxVertexList* Mesh)
 {
 	if (Mesh != nullptr)

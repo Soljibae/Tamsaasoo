@@ -51,7 +51,7 @@ namespace Manager
 
 		Coin.Mesh = Utils::CreateMesh();
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
-		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2 };
+		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2.35f };
 		Coin.size = { 30.f, 30.f };
 		float spacingX = 10.0f; // 가로 간격
 		float startX = -(w / 2) + 200.f;
@@ -110,7 +110,7 @@ namespace Manager
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
-		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltip.png");
+		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltipBorder.png");
 	}
 
 	void HUDController::Update()
@@ -388,93 +388,8 @@ namespace Manager
 
 	void HUDController::ShowTooltip(InGame::Item& item)
 	{
-		//s32 mx, my;
-		//AEInputGetCursorPosition(&mx, &my);
-		//f32 px = mx - AEGfxGetWindowWidth() * 0.5f;     // x ∈ [-W/2, +W/2]
-		//f32 py = AEGfxGetWindowHeight() * 0.5f - my;    // y ∈ [-H/2, +H/2]
-		AEMtx33 scale;
-		AEMtx33 tran;
-		AEMtx33 transform;
-		int i = 1;
-		AEGfxTextureSet(tooltip.Window.Texture, 0.f, 0.f);
-
-		for (auto mesh : tooltip.WindowMesh)
-		{
-			float x_trans_offset = 0;
-			float y_trans_offset = 0;
-			float x_scale = 0;
-			float y_scale = 0;
-			switch (i)
-			{
-			case 2:
-				x_scale = tooltip.Window.size.x;
-				y_scale = padding;
-				x_trans_offset = 0;
-				y_trans_offset = (tooltip.Window.size.y + padding) / 2.f;
-				break;
-			case 8:
-				x_scale = tooltip.Window.size.x;
-				y_scale = padding;
-				x_trans_offset = 0;
-				y_trans_offset = -(tooltip.Window.size.y + padding) / 2.f;
-				break;
-			case 4:
-				x_scale = padding;
-				y_scale = tooltip.Window.size.y;
-				x_trans_offset = -(tooltip.Window.size.x + padding) / 2.f;
-				y_trans_offset = 0;
-				break;
-			case 6:
-				x_scale = padding;
-				y_scale = tooltip.Window.size.y;
-				x_trans_offset = (tooltip.Window.size.x + padding) / 2.f;
-				y_trans_offset = 0;
-				break;
-			case 5:
-				x_scale = tooltip.Window.size.x;
-				y_scale = tooltip.Window.size.y;
-				x_trans_offset = 0;
-				y_trans_offset = 0;
-				break;
-			case 1:
-				x_scale = padding;
-				y_scale = padding;
-				x_trans_offset = -(tooltip.Window.size.x + padding) / 2.f;
-				y_trans_offset = (tooltip.Window.size.y + padding) / 2.f;
-				break;
-			case 3:
-				x_scale = padding;
-				y_scale = padding;
-				x_trans_offset = (tooltip.Window.size.x + padding) / 2.f;
-				y_trans_offset = (tooltip.Window.size.y + padding) / 2.f;
-				break;
-			case 7:
-				x_scale = padding;
-				y_scale = padding;
-				x_trans_offset = -(tooltip.Window.size.x + padding) / 2.f;
-				y_trans_offset = -(tooltip.Window.size.y + padding) / 2.f;
-				break;
-			case 9:
-				x_scale = padding;
-				y_scale = padding;
-				x_trans_offset = (tooltip.Window.size.x + padding) / 2.f;
-				y_trans_offset = -(tooltip.Window.size.y + padding) / 2.f;
-				break;
-			}
-
-			AEMtx33Scale(&scale,
-				x_scale,
-				y_scale);
-			AEMtx33Trans(&tran,
-				tooltip.Window.position.x + x_trans_offset,
-				tooltip.Window.position.y + y_trans_offset);
-			AEMtx33Concat(&transform, &tran, &scale);
-			AEGfxSetTransform(transform.m);
-			AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
-			i++;
-		}
-
-
+		
+		Utils::DrawNinePatchMesh(tooltip.Window, tooltip.Window.Texture, tooltip.WindowMesh, padding);
 		f32 tmp, lh;
 		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &tmp, &lh);
 		lh *= global::ScreenHeight;
@@ -494,11 +409,10 @@ namespace Manager
 		f32 r{ 1.f }, g{ 1.f }, b{ 1.f };
 		for (int i = 0; i < itemDesc.size(); i++)
 		{
-
-			float xPix = baseX;
-			float yPix = baseY - lh * i;
-			float xN = xPix / halfW;
-			float yN = yPix / halfH;
+			f32 xPix = baseX;
+			f32 yPix = baseY - lh * i;
+			f32 xN = xPix / halfW;
+			f32 yN = yPix / halfH;
 			if (i == 1)
 			{
 				r = 0.5f, g = 0.5f, b = 0.5f;
@@ -540,6 +454,7 @@ namespace Manager
 			if (tooltip.WindowMesh[i])
 			{
 				AEGfxMeshFree(tooltip.WindowMesh[i]);
+				tooltip.WindowMesh[i] = nullptr;
 			}
 		}
 		AEGfxTextureUnload(tooltip.Window.Texture);
