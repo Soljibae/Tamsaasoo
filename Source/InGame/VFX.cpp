@@ -57,6 +57,14 @@ namespace InGame
 	void VFXManager::Destroy()
 	{
 		Actor::Destroy();
+		if (Mesh)
+		{
+			Utils::DestroyMesh(Mesh);
+		}
+		if (Texture)
+		{
+			AEGfxTextureUnload(Texture);
+		}
 	}
 	void VFXManager::AddNewVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, f32 Duration)
 	{
