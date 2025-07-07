@@ -6,9 +6,10 @@ namespace InGame
 {
 	enum GunType
 	{
-		PISTOL,
-		RIFLE,
-		SHOTGUN,
+		PISTOL = 0,
+		RIFLE = 1,
+		SHOTGUN = 2,
+		LAST = SHOTGUN
 	};
 	class Gun : public Actor
 	{

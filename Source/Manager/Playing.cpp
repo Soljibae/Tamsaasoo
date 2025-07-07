@@ -6,6 +6,7 @@
 #include "../Manager/HUDController.h"
 #include "PauseUI.h"
 #include "ExpUI.h"
+#include "GunPickUI.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -67,6 +68,7 @@ namespace Manager
 		pickPanel.Init(PC);
 		ExpPanel.Init(PC);
 		HUD.Init(PC, PC->HoldingGun);
+		gunPickPanel.Init(PC);
 		gm.GamePaused = false;
 		Utils::TestInit();
 		WM.Init();
@@ -78,11 +80,11 @@ namespace Manager
 		ExpPanel.Update();
 		if (global::KeyInput(AEVK_G))
 		{
-			pickPanel.Show();
+			gunPickPanel.Show();
 		}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 
-		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
+		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive() && !gunPickPanel.IsActive())
 		{
 			if (!gm.GamePaused)
 			{
@@ -444,6 +446,10 @@ namespace Manager
 		{
 			pickPanel.Update();
 		}
+		else if (gunPickPanel.IsActive())
+		{
+			gunPickPanel.Update();
+		}
 		else
 		{
 			pausePanel.Update();
@@ -511,6 +517,10 @@ namespace Manager
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
+		}
+		else if (gunPickPanel.IsActive())
+		{
+			gunPickPanel.Draw();
 		}
 		else if (gm.GamePaused)
 		{
@@ -598,6 +608,7 @@ namespace Manager
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
+		gunPickPanel.Destory();
 		Utils::TestDestroy();
 		WM.Destroy();
 		InGame::SoulOrb::StaticDestroy();
@@ -686,8 +697,8 @@ namespace Manager
 	}
 	void Playing::FinishBossFight()
 	{
-		//TODO : Select Item
-		pickPanel.Show();
+		//TODO : Select Gun
+		gunPickPanel.Show();
 		//TODO : Play Jump Animation
 		for (size_t i = 0; i < EPs.size(); i++)
 		{

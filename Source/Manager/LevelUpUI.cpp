@@ -23,13 +23,12 @@ namespace Manager
 		f32 totalWidth = 3 * windowWidth + 2 * spacingX;
 		f32 margin = (global::ScreenWidth - totalWidth) * 0.5f;
 		f32 startX = -global::ScreenWidth * 0.5f + margin + windowWidth * 0.5f;
-		const f32 startY = 0;
 		f32 rerollSize = 100.f;
 		for (s8 i = 0; i < ItemWindow.size(); ++i)
 		{
 			ItemWindow[i].position = {
 				startX + i * (windowWidth + spacingX),
-				startY
+				0
 			};
 
 			ItemWindow[i].size = { windowWidth, windowHeight };
