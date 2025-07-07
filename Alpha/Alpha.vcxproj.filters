@@ -117,6 +117,8 @@
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\VFX.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\SoulOrb.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,6 +223,8 @@
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\VFX.h">
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\SoulOrb.h">
       <Filter>소스 파일\InGame</Filter>
     </ClInclude>
   </ItemGroup>

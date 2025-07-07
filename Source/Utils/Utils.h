@@ -9,6 +9,8 @@ namespace Utils
 	AEGfxVertexList* CreateMesh(s32 row = 1, s32 column = 1);
 
 	std::array<AEGfxVertexList*, 9> CreateNinePatchMesh();
+
+	void DrawNinePatchMesh(InGame::Actor object, AEGfxTexture* texture, std::array<AEGfxVertexList*, 9> patches, f32 padding);
 	
 	void DestroyMesh(AEGfxVertexList* Mesh);
 
@@ -58,3 +60,4 @@ namespace Utils
 
 	void TestDestroy();
 }
+

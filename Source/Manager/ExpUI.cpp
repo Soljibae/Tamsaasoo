@@ -10,22 +10,22 @@ namespace Manager
 	{
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
-		f32 space = 2.f;
+		f32 space = 3.f;
 
 		xpBarBackground.Mesh = Utils::CreateMesh();
 		xpBarBackground.Texture = AEGfxTextureLoad("Assets/black.png");
-		xpBarBackground.size = { w , 10.f};
-		xpBarBackground.position = { 0.f , - h / 2.f + xpBarBackground.size.y / 2.f};
+		xpBarBackground.size = { 240.f , 40.f};
+		xpBarBackground.position = { -(w / 2) + 180.f + 120.f , (h / 2) - 90.f - xpBarBackground.size.y};
 
 		xpBarEmpty.Mesh = Utils::CreateMesh();
 		xpBarEmpty.Texture = AEGfxTextureLoad("Assets/white.png");
-		xpBarEmpty.size = { w - space * 2, 10.f - space };
-		xpBarEmpty.position = { 0.f , -h / 2.f + xpBarBackground.size.y / 2.f - space};
+		xpBarEmpty.size = { xpBarBackground.size.x - space * 2, xpBarBackground.size.y - space * 2 };
+		xpBarEmpty.position = { xpBarBackground.position.x , xpBarBackground.position.y};
 
 		xpBarFill.Mesh = Utils::CreateMesh();
 		xpBarFill.Texture = AEGfxTextureLoad("Assets/green.png");
-		xpBarFill.size = { 0, 10.f - space };
-		xpBarFill.position = { 0.f , -h / 2.f + xpBarBackground.size.y / 2.f - space };
+		xpBarFill.size = { 0, xpBarBackground.size.y - space * 2 };
+		xpBarFill.position = { 0.f , xpBarBackground.position.y };
 
 		PC = InPC;
 	}
@@ -35,7 +35,7 @@ namespace Manager
 		f32 space = 2.f;
 
 		xpBarFill.size.x = xpBarEmpty.size.x * PC->Stats.ExpCount / PC->Stats.TargetExp;
-		xpBarFill.position.x = -w / 2 + space + xpBarFill.size.x / 2.f;
+		xpBarFill.position.x = xpBarBackground.position.x - xpBarEmpty.size.x / 2.f + xpBarFill.size.x / 2.f;
 	}
 	void ExpUI::Draw()
 	{
