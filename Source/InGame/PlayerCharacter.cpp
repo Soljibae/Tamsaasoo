@@ -12,7 +12,7 @@ namespace InGame
 	{
 		position.x = 0;
 		position.y = 0;
-		CollisionRadius = 50;
+		CollisionRadius = 25;
 		size.x = 100;
 		size.y = 100;
 		row = 4;
@@ -37,7 +37,7 @@ namespace InGame
 		Stats.FireRate = 2.f;
 		Stats.ProjectileSpeed = GunData->ProjectileSpeed;
 		Stats.ProjectileCollisionSize = GunData->ProjectileCollisionSize;
-		AEVec2Set(&Stats.ProjectileSize, 10.f, 10.f);
+		AEVec2Set(&Stats.ProjectileSize, 20.f, 20.f);
 		Stats.Damage = 1.f;
 		Stats.Level = 1;
 		Stats.ExpGained = 1.f;
@@ -141,7 +141,7 @@ namespace InGame
 		if (bIsInvincible)
 		{
 			InvincibleTimer += global::DeltaTime;
-			if (InvincibleTimer > 0.5f)
+			if (InvincibleTimer > 1.0f)
 			{
 				bIsInvincible = false;
 				InvincibleTimer = 0.f;
@@ -224,7 +224,7 @@ namespace InGame
 			return;
 		}
 
-		if (!bIsInvincible)
+		if (!bIsInvincible && !bIsDashing)
 		{
 			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
 			if (Stats.HP <= 0)

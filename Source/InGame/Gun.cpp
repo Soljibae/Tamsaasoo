@@ -116,7 +116,7 @@ namespace InGame
 		GuntypeDamageRatio = 1.f;
 		GuntypeFireRateRatio = 1.f;
 		ProjectileSpeed = 20.f;
-		ProjectileCollisionSize = 5.f;
+		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
 		TextureAddress = "Assets/Pistol.png";
 	}
@@ -127,7 +127,7 @@ namespace InGame
 		GuntypeDamageRatio = 3.f;
 		GuntypeFireRateRatio = 2.5f;
 		ProjectileSpeed = 45.f;
-		ProjectileCollisionSize = 5.f;
+		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 3;
 		TextureAddress = "Assets/Rifle.png";
 	}

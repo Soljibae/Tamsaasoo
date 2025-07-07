@@ -3,6 +3,8 @@
 #include "ArealAttack.h"
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
+#include "../Manager/GameManager.h"
+#include "../Manager/Playing.h"
 namespace InGame
 {
 	void InGame::ArealAttack::Init()
@@ -105,10 +107,16 @@ namespace InGame
 
 		if (!bDidExplode && timer >= lifeTime)
 		{
-			// 폭발 효과
-			//Utils::SpawnEffect(position, "Explosion");
-
-			// 피해 처리
+			if (Manager::gm.currStateREF)
+			{
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					AEVec2 DrawSize;
+					AEVec2Set(&DrawSize, radius*2, radius * 2);
+					GS->VFXManager.AddNewVFX(VFXType::Explosion, position, DrawSize, 3.f);
+				}
+			}
 			for (Character* InCharacter : InCharacters)
 			{
 				AEVec2 toPlayer;

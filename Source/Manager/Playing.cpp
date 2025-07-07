@@ -18,7 +18,7 @@ namespace Manager
 	{
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage1();
+			CurrentStage = new InGame::Stage3();
 		}
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
@@ -70,6 +70,7 @@ namespace Manager
 		Utils::TestInit();
 		WM.Init();
 		bIsJumping = false;
+		VFXManager.Init();
 	}
 	void Playing::Update()
 	{
@@ -77,7 +78,7 @@ namespace Manager
 		ExpPanel.Update();
 
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
-
+		
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive())
 		{
 			if (!gm.GamePaused)
@@ -159,7 +160,7 @@ namespace Manager
 			{
 				WaveCount++;
 				WaveTimer = 0;
-				if (WaveCount > 100)
+				if ((WaveCount > 60 && CurrentStageType == InGame::StageType::LAND)|| (WaveCount > 100 && CurrentStageType == InGame::StageType::TOWER) || (WaveCount > 140 && CurrentStageType == InGame::StageType::HEAVEN))
 				{
 					InitBossFight();
 				}
@@ -422,6 +423,7 @@ namespace Manager
 		{
 			pausePanel.Update();
 		}
+		VFXManager.Update();
 	}
 	void Playing::Draw()
 	{
@@ -486,9 +488,11 @@ namespace Manager
 		{
 			pausePanel.Draw();
 		}
+		VFXManager.Draw();
 	}
 	void Playing::Destroy()
 	{
+		VFXManager.Destroy();
 		HUD.Destroy();
 		for (InGame::Projectile* PP : PPs)
 		{

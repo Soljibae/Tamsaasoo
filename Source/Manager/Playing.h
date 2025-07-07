@@ -16,6 +16,7 @@
 #include "ItemResourceManager.h"
 #include "../InGame/SpawnList.h"
 #include "../InGame/ArealAttack.h"
+#include "../InGame/VFX.h"
 namespace Manager
 {
 	class Playing : public AGameState
@@ -62,6 +63,7 @@ namespace Manager
 
 		bool bIsJumping = false;
 		float JumpAnimationTimer = 0.f;
+		InGame::VFXManager VFXManager;
 	};
 	extern Utils::Camera* CAM;
 	

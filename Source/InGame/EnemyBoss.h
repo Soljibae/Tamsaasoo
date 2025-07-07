@@ -87,7 +87,7 @@ namespace InGame
 		//BlackHole
 		float BlackholeTimer = 0.f;
 		float BlackholeInterval = 5.f;
-		float BlackholeDuration = 4.f;
+		float BlackholeDuration = 10.f;
 		AEVec2 BlackholePosition;
 		float BlackholeRadius = 300.f;
 		//Laser
