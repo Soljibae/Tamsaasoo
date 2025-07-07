@@ -42,6 +42,7 @@ namespace InGame
 		{
 			InData->Init();
 		}
+		AnimationState = IDLE;
 		Type = InData->Type;
 		Texture = InData->Texture;
 		Stats.Damage = InData->Damage;
@@ -272,6 +273,7 @@ namespace InGame
 					}
 					else
 					{
+						
 						f32 effectiveDetonationDelay = detonationDelay;
 
 						if (Stats.StatusEffectTimer[SLOW] > 0)
@@ -283,6 +285,16 @@ namespace InGame
 						if (detonationTimer >= effectiveDetonationDelay)
 						{
 							this->adjustHealth(-9999);
+							if (Manager::gm.currStateREF)
+							{
+								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+								if (GS)
+								{
+									AEVec2 DrawSize;
+									AEVec2Set(&DrawSize, explosionRadius*2, explosionRadius * 2);
+									GS->VFXManager.AddNewVFX(VFXType::Explosion, position, DrawSize, 3.f);
+								}
+							}
 						}
 					}
 					break;

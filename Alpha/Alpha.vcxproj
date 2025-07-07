@@ -35,6 +35,7 @@
     <ClCompile Include="..\Source\InGame\SoulOrb.cpp" />
     <ClCompile Include="..\Source\InGame\SpawnList.cpp" />
     <ClCompile Include="..\Source\InGame\Stage.cpp" />
+    <ClCompile Include="..\Source\InGame\VFX.cpp" />
     <ClCompile Include="..\Source\Manager\Button.cpp" />
     <ClCompile Include="..\Source\InGame\Stat.cpp" />
     <ClCompile Include="..\Source\Manager\ExpUI.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="..\Source\InGame\SoulOrb.h" />
     <ClInclude Include="..\Source\InGame\SpawnList.h" />
     <ClInclude Include="..\Source\InGame\Stage.h" />
+    <ClInclude Include="..\Source\InGame\VFX.h" />
     <ClInclude Include="..\Source\Manager\Button.h" />
     <ClInclude Include="..\Source\InGame\Stat.h" />
     <ClInclude Include="..\Source\Manager\ExpUI.h" />
