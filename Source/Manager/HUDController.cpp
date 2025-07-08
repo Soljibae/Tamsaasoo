@@ -115,31 +115,6 @@ namespace Manager
 
 	void HUDController::Update()
 	{
-		/*-----*DEBUG* --------------- *DEBUG*-----*/
-		if (global::KeyInput(AEVK_M))
-		{
-			PC->PS->Money += 1000;
-		}
-		if (global::KeyInput(AEVK_P))
-		{
-			PC->PS->Potion += 100;
-		}
-		if (global::KeyInput(AEVK_F))
-		{
-			switch (GUN->gunType)
-			{
-			case InGame::GunType::PISTOL:
-				GUN->gunType = InGame::GunType::RIFLE;
-				break;
-			case InGame::GunType::RIFLE:
-				GUN->gunType = InGame::GunType::SHOTGUN;
-				break;
-			case InGame::GunType::SHOTGUN:
-				GUN->gunType = InGame::GunType::PISTOL;
-				break;
-			}
-		}
-
 		if (prevMaxHP != PC->Stats->MaxHP)
 		{
 			HPBG.clear();
@@ -177,25 +152,12 @@ namespace Manager
 		prevMaxHP = PC->Stats->MaxHP;
 		prevCurrentHP = PC->Stats->HP;
 
-		/*--------Centered can fire UI--------*/
-		if (prevFireRate != GUN->RoundPerSec)
-		{
-			ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
-		}
-		if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)
-		{
-			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
-		}
 
-		f32 fireDelay = 1.0f / GUN->RoundPerSec;
-		f32 fillPercent = GUN->FireTimer / fireDelay;
-		if (fillPercent > 1.f) fillPercent = 1.f;
-		f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
-		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
-		fireTimeBar.MovementSpeed = fillPercent * (barEndX - barStartX) * global::DeltaTime;
 		if (GUN->gunType != prevGunType)
 		{
 			AEGfxTextureUnload(fireTimeBar.Texture);
+			fireTimeBar.Texture = nullptr;
+			GUN = PC->HoldingGun;
 			prevGunType = GUN->gunType;
 
 			switch (prevGunType)
@@ -214,6 +176,22 @@ namespace Manager
 				break;
 			}
 		}
+		/*--------Centered can fire UI--------*/
+		if (prevFireRate != GUN->RoundPerSec)
+		{
+			ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
+		}
+		if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)
+		{
+			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+		}
+
+		f32 fireDelay = 1.0f / GUN->RoundPerSec;
+		f32 fillPercent = GUN->FireTimer / fireDelay;
+		if (fillPercent > 1.f) fillPercent = 1.f;
+		f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
+		fireTimeBar.MovementSpeed = fillPercent * (barEndX - barStartX) * global::DeltaTime;
 
 		//can't fire
 		if (GUN->FireTimer > 0 && GUN->FireTimer < fireDelay)

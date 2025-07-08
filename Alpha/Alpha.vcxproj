@@ -41,6 +41,7 @@
     <ClCompile Include="..\Source\Manager\ExpUI.cpp" />
     <ClCompile Include="..\Source\Manager\GameManager.cpp" />
     <ClCompile Include="..\Source\Manager\GameState.cpp" />
+    <ClCompile Include="..\Source\Manager\GunPickUI.cpp" />
     <ClCompile Include="..\Source\Manager\HUDController.cpp" />
     <ClCompile Include="..\Source\Manager\Intro.cpp" />
     <ClCompile Include="..\Source\Manager\ItemDatabase.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="..\Source\Manager\ExpUI.h" />
     <ClInclude Include="..\Source\Manager\GameManager.h" />
     <ClInclude Include="..\Source\Manager\GameState.h" />
+    <ClInclude Include="..\Source\Manager\GunPickUI.h" />
     <ClInclude Include="..\Source\Manager\HUDController.h" />
     <ClInclude Include="..\Source\Manager\Intro.h" />
     <ClInclude Include="..\Source\Manager\ItemData.h" />

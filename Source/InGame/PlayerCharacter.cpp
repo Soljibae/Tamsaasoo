@@ -28,7 +28,7 @@ namespace InGame
 		PS = new PlayerStat;
 		Stats = PS;
 		Texture = AEGfxTextureLoad("Assets/Character.png");
-		GunData = new ShotGunStruct;
+		GunData = new PistolStruct;
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 

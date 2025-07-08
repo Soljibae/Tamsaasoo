@@ -20,7 +20,7 @@ namespace Manager
 		void Reroll(s8 thisbutton);
 		std::vector<std::shared_ptr<InGame::Item>> GenerateRandomRewards();
 	private:
-		f32 pickDelay{ 2.f };
+		f32 pickDelay{ 1.f };
 		f32 delayTime{ 0.f };
 		std::vector<std::shared_ptr<InGame::Item>> currentOptions;
 
