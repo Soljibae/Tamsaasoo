@@ -4,6 +4,7 @@
 #include "../Manager/GameManager.h"
 #include "../Manager/Playing.h"
 #include <algorithm>
+#include <random>
 namespace InGame
 {
 	void InGame::EnemyCharacter::Init()
@@ -56,7 +57,7 @@ namespace InGame
 		Stats->HP = InData->Health;
 
 		AEVec2Set(&Stats->ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
-
+		
 		/*--------DASHER--------*/
 		bHasDashed = false;
 		bIsDashing = false;
@@ -65,7 +66,7 @@ namespace InGame
 		dashDirection = direction;
 		dashStartPos = position;
 		/*--------DASHER--------*/
-
+		
 		/*--------BOMBER--------*/
 		isDetonating = false;
 		detonationTimer = 0.f;
@@ -73,6 +74,27 @@ namespace InGame
 		explosionRadius = 150.f;
 		explosionDamage = 4;
 		/*--------BOMBER--------*/
+		/*--------ZIGZAG--------*/
+		bIsZigzagMoving = false;
+		bZigZagLeft = true;
+		/*--------ZIGZAG--------*/
+		/*--------ORBITER--------*/
+		std::random_device rd;
+		std::mt19937 gen(rd()); // 랜덤 엔진
+		std::bernoulli_distribution dist(0.5); // true 확률: 50%
+
+		bRotRight = dist(gen);
+		OrbitAngle = 0.f;
+		OrbitSpeed = 1.0f + static_cast<float>(rand() % 200) / 100.0f; // 1.0~3.0 rad/s
+		OrbitRadius = 300.f;
+		OrbitShootTimer = 0.f;
+		OrbitShootInterval = 2.0f;
+		/*--------ORBITER--------*/
+		/*--------SNIPER--------*/
+		sniperState = SniperState::APPROACHING;
+		SniperShootTimer = 0.f;
+		bRetreatDirInitialized = false;
+		/*--------SNIPER--------*/
 	}
 
 	void InGame::EnemyCharacter::Update()
@@ -175,34 +197,30 @@ namespace InGame
 						{
 							if (!bIsDashing)
 							{
-								// 돌진 시작
 								dashDirection = direction;
 								dashStartPos = position;
 								bIsDashing = true;
 								AnimationState = DASH;
 							}
 
-							// 현재 위치에서 얼마나 이동했는지 측정
 							AEVec2 moved;
 							AEVec2Sub(&moved, &position, &dashStartPos);
 							float dashMoved = AEVec2Length(&moved);
 
 							if (dashMoved < dashRange)
 							{
-								// 계속 돌진
 								f32 effectiveDashSpeed = dashSpeed;
 
 								if (Stats->StatusEffectTimer[SLOW] > 0)
 								{
 									effectiveDashSpeed *= 0.5f;
 								}
-							
+
 								position.x -= dashDirection.x * effectiveDashSpeed * global::DeltaTime;
 								position.y -= dashDirection.y * effectiveDashSpeed * global::DeltaTime;
 							}
 							else
 							{
-								// 돌진 완료
 								bIsDashing = false;
 								bHasDashed = true;
 								recoverTimer = 0.f;
@@ -212,7 +230,6 @@ namespace InGame
 						else
 						{
 							AnimationState = MOVE;
-							// 사정거리 밖 → 천천히 추적
 							f32 effectiveMovementSpeed = walkSpeed;
 
 							if (Stats->StatusEffectTimer[SLOW] > 0)
@@ -250,15 +267,93 @@ namespace InGame
 					break;
 				}
 				case EnemyType::BOMBER:
+			{
+				if (!isDetonating)
 				{
-					if (!isDetonating)
+					if (len <= 200.f)
 					{
-						if (len <= 200.f)
+						isDetonating = true;
+						detonationTimer = 0.f;
+					}
+					else
+					{
+						f32 effectiveMovementSpeed = Stats->MovementSpeed;
+
+						if (Stats->StatusEffectTimer[SLOW] > 0)
 						{
-							isDetonating = true;
-							detonationTimer = 0.f;
+							effectiveMovementSpeed *= 0.5f;
+						}
+
+						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+					}
+				}
+				else
+				{
+
+					f32 effectiveDetonationDelay = detonationDelay;
+
+					if (Stats->StatusEffectTimer[SLOW] > 0)
+					{
+						effectiveDetonationDelay *= 1.5f;
+					}
+
+					detonationTimer += global::DeltaTime;
+					if (detonationTimer >= effectiveDetonationDelay)
+					{
+						this->adjustHealth(-9999);
+						if (Manager::gm.currStateREF)
+						{
+							Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+							if (GS)
+							{
+								AEVec2 DrawSize;
+								AEVec2Set(&DrawSize, explosionRadius * 2, explosionRadius * 2);
+								GS->VFXManager.AddNewVFX(VFXType::Explosion, position, DrawSize, 3.f);
+							}
+						}
+					}
+				}
+				break;
+			}
+				case EnemyType::ZIGZAG:
+				{
+					if (!bIsZigzagMoving)
+					{
+						AEVec2Sub(&MoveTargetDir, &global::PlayerLocation, &position);
+						AEVec2Normalize(&MoveTargetDir, &MoveTargetDir);
+						std::random_device rd;
+						std::mt19937 gen(rd());
+						std::uniform_real_distribution<float> dist(15, 60);
+
+						float angleDeg = dist(gen);
+						float angleRad = angleDeg * 3.14159265f / 180.0f;
+
+						std::uniform_real_distribution<float> distSpeed(0.5f, 2.5f);
+						ZigZagMaxTime = distSpeed(gen);
+						if (bZigZagLeft)
+						{
+							AEVec2 leftRotated;
+							leftRotated.x = direction.x * cosf(angleRad) - direction.y * sinf(angleRad);
+							leftRotated.y = direction.x * sinf(angleRad) + direction.y * cosf(angleRad);
+							MoveTargetDir = leftRotated;
+							bZigZagLeft = !bZigZagLeft;
 						}
 						else
+						{
+							AEVec2 rightRotated;
+							rightRotated.x = direction.x * cosf(-angleRad) - direction.y * sinf(-angleRad);
+							rightRotated.y = direction.x * sinf(-angleRad) + direction.y * cosf(-angleRad);
+							MoveTargetDir = rightRotated;
+							bZigZagLeft = !bZigZagLeft;
+						}
+						ZigZagTimer = 0.f;
+						bIsZigzagMoving = true;
+					}
+					else
+					{
+						ZigZagTimer += global::DeltaTime;
+						if (ZigZagTimer < ZigZagMaxTime)
 						{
 							f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
@@ -266,36 +361,155 @@ namespace InGame
 							{
 								effectiveMovementSpeed *= 0.5f;
 							}
+							position.x -= MoveTargetDir.x * global::DeltaTime * effectiveMovementSpeed;
+							position.y -= MoveTargetDir.y * global::DeltaTime * effectiveMovementSpeed;
 
-							position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-							position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						}
+						else
+						{
+							bIsZigzagMoving = false;
 						}
 					}
-					else
+					break;
+				}
+				case EnemyType::ORBITER:
+				{
+					float lenToPlayer = AEVec2Distance(&position, &global::PlayerLocation);
+
+					// 적 → 플레이어 방향 계산
+					AEVec2 dirToPlayer;
+					AEVec2Sub(&dirToPlayer, &global::PlayerLocation, &position);
+					AEVec2Normalize(&dirToPlayer, &dirToPlayer);
+
+					direction = dirToPlayer; // 탄 발사 및 시선용
+
+
+					// 기본 회전 각도 설정
+					float angleDeg = 0.f;
+
+					if (lenToPlayer < 450.f && lenToPlayer > 300.f)
 					{
-						
-						f32 effectiveDetonationDelay = detonationDelay;
-
-						if (Stats->StatusEffectTimer[SLOW] > 0)
+						if (bRotRight)
 						{
-							effectiveDetonationDelay *= 1.5f;
+							angleDeg = 60.f;  // 더 가까이 붙음
+						}
+						else
+						{
+							angleDeg = -60.f;  // 더 가까이 붙음
+						}
+					}
+					else if (lenToPlayer < 250.f)
+					{
+						if (bRotRight)
+						{
+							angleDeg = 120.f;  // 더 가까이 붙음
+						}
+						else
+						{
+							angleDeg = -120.f;  // 더 가까이 붙음
+						}
+					}
+					else if(lenToPlayer > 250.f && lenToPlayer < 350.f)
+					{
+						if (bRotRight)
+						{
+							angleDeg = 90.f;  // 더 가까이 붙음
+						}
+						else
+						{
+							angleDeg = -90.f;  // 더 가까이 붙음
+						}
+					}
+					float angleRad = angleDeg * 3.14159265f / 180.0f;
+
+					// 방향을 angleRad 만큼 회전 (시계 방향)
+					AEVec2 moveDir;
+					moveDir.x = dirToPlayer.x * cosf(angleRad) + dirToPlayer.y * sinf(angleRad);
+					moveDir.y = -dirToPlayer.x * sinf(angleRad) + dirToPlayer.y * cosf(angleRad);
+					AEVec2Normalize(&moveDir, &moveDir);
+					
+					// 이동
+					float speed = Stats->MovementSpeed * OrbitSpeed;
+					if (Stats->StatusEffectTimer[SLOW] > 0)
+						speed *= 0.5f;
+
+					position.x += moveDir.x * speed * global::DeltaTime;
+					position.y += moveDir.y * speed * global::DeltaTime;
+
+					// 탄 발사
+					OrbitShootTimer += global::DeltaTime;
+					if (OrbitShootTimer >= OrbitShootInterval)
+					{
+						OrbitShootTimer = 0.f;
+						AEVec2 FireDir = {-dirToPlayer.x,-dirToPlayer.y};
+						SpawnProjectile(FireDir, position);
+					}
+
+					break;
+				}
+				case EnemyType::SNIPER:
+				{
+					float lenToPlayer = AEVec2Distance(&position, &global::PlayerLocation);
+
+					// 플레이어 방향
+					AEVec2 dirToPlayer;
+					AEVec2Sub(&dirToPlayer, &global::PlayerLocation, &position);
+					AEVec2Normalize(&dirToPlayer, &dirToPlayer);
+
+					direction = dirToPlayer;
+
+					float speed = Stats->MovementSpeed;
+					if (Stats->StatusEffectTimer[SLOW] > 0)
+						speed *= 0.5f;
+
+					switch (sniperState)
+					{
+					case SniperState::APPROACHING:
+						if (lenToPlayer > SniperApproachDistance)
+						{
+							position.x += dirToPlayer.x * speed * global::DeltaTime;
+							position.y += dirToPlayer.y * speed * global::DeltaTime;
+							//AnimationState = MOVE;
+						}
+						else
+						{
+							sniperState = SniperState::RETREATING;
+							bRetreatDirInitialized = false;
+						}
+						break;
+
+					case SniperState::RETREATING:
+						if (!bRetreatDirInitialized)
+						{
+							// 플레이어 반대 방향으로 후퇴 방향 설정
+							SniperRetreatDir.x = -dirToPlayer.x;
+							SniperRetreatDir.y = -dirToPlayer.y;
+							bRetreatDirInitialized = true;
+							SniperRetreatStartPos = position;
 						}
 
-						detonationTimer += global::DeltaTime;
-						if (detonationTimer >= effectiveDetonationDelay)
+						if (AEVec2Distance(&position, &SniperRetreatStartPos) < SniperRetreatDistance)
 						{
-							this->adjustHealth(-9999);
-							if (Manager::gm.currStateREF)
-							{
-								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-								if (GS)
-								{
-									AEVec2 DrawSize;
-									AEVec2Set(&DrawSize, explosionRadius*2, explosionRadius * 2);
-									GS->VFXManager.AddNewVFX(VFXType::Explosion, position, DrawSize, 3.f);
-								}
-							}
+							position.x += SniperRetreatDir.x * speed * global::DeltaTime;
+							position.y += SniperRetreatDir.y * speed * global::DeltaTime;
+							//AnimationState = MOVE;
 						}
+						else
+						{
+							sniperState = SniperState::SHOOTING;
+						}
+						break;
+
+					case SniperState::SHOOTING:
+						SniperShootTimer += global::DeltaTime;
+						if (SniperShootTimer >= SniperShootInterval)
+						{
+							SniperShootTimer = 0.f;
+							AEVec2 FireDir = { -dirToPlayer.x,-dirToPlayer.y };
+							SpawnProjectile(FireDir, position); // 플레이어 방향 사격
+						}
+						//AnimationState = ATTACK;
+						break;
 					}
 					break;
 				}

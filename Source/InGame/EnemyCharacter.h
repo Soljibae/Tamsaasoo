@@ -4,6 +4,11 @@
 #include "EnemyData.h"
 namespace InGame
 {
+	enum class SniperState {
+		APPROACHING,
+		RETREATING,
+		SHOOTING
+	};
 	class EnemyCharacter : public Character
 	{
 	public:
@@ -39,6 +44,38 @@ namespace InGame
 		float explosionRadius = 150.f;
 		int explosionDamage = 4;
 		/*--------BOMBER--------*/
+
+		/*--------ZIGZAG--------*/
+		bool bIsZigzagMoving = false;
+		AEVec2 MoveTargetDir;
+		f32 ZigZagMaxTime = 0.f;
+		f32 ZigZagTimer = 0.f;
+		bool bZigZagLeft = true;
+		/*--------ZIGZAG--------*/
+
+		/*--------ORBITER--------*/
+		bool bRotRight = true;
+		float OrbitAngle = 0.f;
+		float OrbitSpeed = 1.0f;
+		float OrbitRadius = 300.f;
+		const float OrbitIdealDistance = 250.f; // 완충 거리
+		const float AngleAdjustDeg = 10.f; // 각도 보정 (inward angle)
+		float OrbitShootTimer = 0.f;
+		float OrbitShootInterval = 1.5f;
+		/*--------ORBITER--------*/
+		/*--------SNIPER--------*/
+		SniperState sniperState = SniperState::APPROACHING;
+		float SniperApproachDistance = 250.f;
+		float SniperRetreatDistance = 600.f;
+
+		float SniperShootTimer = 0.f;
+		float SniperShootInterval = 2.5f;
+
+		AEVec2 SniperRetreatDir;
+		AEVec2 SniperRetreatStartPos;
+		bool bRetreatDirInitialized = false;
+
+		/*--------SNIPER--------*/
 	protected:
 	private:
 	};

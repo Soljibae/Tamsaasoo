@@ -13,6 +13,9 @@ namespace InGame
 		std::string DasherNum;
 		std::string TankerNum;
 		std::string BomberNum;
+		std::string ZigZagNum;
+		std::string OrbiterNum;
+		std::string SniperNum;
 	};
 
 	class WaveManager
