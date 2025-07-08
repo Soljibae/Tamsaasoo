@@ -4,20 +4,24 @@
 
 namespace Manager
 {
+    Button* Button::activeButton{ nullptr };
     // Mouse over, click checking func to mouse callback
     void Button::Update()
     {
-        if (IsHovered() && !wasHovered)
+        if (activeButton && activeButton != this)
+            return;
+        bool shouldScale = IsHovered() || isSelected;
+        if (shouldScale && !wasScaled)
         {
             this->size.x *= 1.1f;
             this->size.y *= 1.1f;
-            wasHovered = true;
+            wasScaled = true;
         }
-        else if (!IsHovered() && wasHovered)
+        else if (!shouldScale && wasScaled)
         {
             this->size.x /= 1.1f;
             this->size.y /= 1.1f;
-            wasHovered = false;
+            wasScaled = false;
         }
 
         if (IsClicked())
@@ -35,6 +39,11 @@ namespace Manager
     // Invoke callback on clicked
     void Button::OnClick()
     {
+        this->size.x /= 1.1f;
+        this->size.y /= 1.1f;
+        this->wasScaled = false;
+        isSelected = false;
+        activeButton = nullptr;
         if (callback)
             callback();
     }
@@ -48,6 +57,28 @@ namespace Manager
     // Return true if mouse click on button
     bool Button::IsClicked()
     {
-        return IsHovered() && global::KeyInput(AEVK_LBUTTON);
+        if (AEInputCheckTriggered(AEVK_LBUTTON) && IsHovered())
+        {
+            isSelected = true;
+            activeButton = this;
+        }
+        if (isSelected && AEInputCheckReleased(AEVK_LBUTTON) && IsHovered())
+        {
+            return true;
+        }
+        if (!AEInputCheckCurr(AEVK_LBUTTON))
+        {
+            isSelected = false;
+            activeButton = nullptr;
+        }
+        return false;
+    }
+    bool Button::IsSelected()
+    {
+        if (isSelected && AEInputCheckCurr(AEVK_LBUTTON))
+        {
+            return true;
+        }
+        return false;
     }
 }

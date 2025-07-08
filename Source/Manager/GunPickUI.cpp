@@ -2,6 +2,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Utils/Utils.h"
 #include "GameManager.h"
+#include "GameOver.h"
 #include <random>
 #include <unordered_set>
 namespace Manager
@@ -50,8 +51,10 @@ namespace Manager
 					PC->HoldingGun->Init(PC);
 					break;
 				}
+				isActive = false;
+				gm.Resume();
 				});
-			gunIcons[i].size = {200, 200};
+			gunIcons[i].size = {buttonWidth/5.f, buttonHeight};
 		}
 		iconMesh = Utils::CreateMesh();
 		ButtonMesh = Utils::CreateNinePatchMesh();
@@ -59,22 +62,17 @@ namespace Manager
 	}
 	void GunPickUI::Update()
 	{
-		if (!isActive)
+		if (!isActive || gameOverScreen.isGameOver)
 			return;
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
-			if (weaponOptionButtons[i].IsClicked())
-			{
-				weaponOptionButtons[i].OnClick();
-				isActive = false;
-				gm.Resume();
-				break;
-			}
+			weaponOptionButtons[i].Update();
+			gunIcons[i].size = { weaponOptionButtons[i].size.x/5.f, weaponOptionButtons[i].size.y/2.f };
 		}
 	}
 	void GunPickUI::Draw()
 	{
-		if (!isActive)
+		if (!isActive || gameOverScreen.isGameOver)
 			return;
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
@@ -88,8 +86,11 @@ namespace Manager
 		weaponOptions = GenerateRandomGun();
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
-			if(gunIcons[i].Texture)
+			if (gunIcons[i].Texture)
+			{
 				AEGfxTextureUnload(gunIcons[i].Texture);
+				gunIcons[i].Texture = nullptr;
+			}
 
 			switch (weaponOptions[i])
 			{

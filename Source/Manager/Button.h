@@ -9,10 +9,13 @@ namespace Manager
 		void Update();
 		bool IsHovered();
 		bool IsClicked();
+		bool IsSelected();
 		void SetCallback(std::function<void()> func);
 		void OnClick();
+		static Button* activeButton;
 	private:
 		std::function<void()> callback;
-		bool wasHovered = false;
+		bool wasScaled = false;
+		bool isSelected = false;
 	};
 }

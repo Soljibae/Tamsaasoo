@@ -2,6 +2,7 @@
 #include "../InGame/Gun.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
+#include "GameOver.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -236,6 +237,10 @@ namespace Manager
 
 	void HUDController::Draw()
 	{
+		if (gameOverScreen.isGameOver)
+		{
+			return;
+		}
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 

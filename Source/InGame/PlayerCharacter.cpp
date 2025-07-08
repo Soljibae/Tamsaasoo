@@ -3,6 +3,7 @@
 #include "../Utils/Utils.h"
 #include "../Manager/Playing.h"
 #include "../Manager/LevelUpUI.h"
+#include "../Manager/GameOver.h"
 #include <iostream>
 #include <algorithm>
 
@@ -59,6 +60,10 @@ namespace InGame
 	}
 	void PlayerCharacter::Update()
 	{
+		if (Manager::gameOverScreen.isGameOver)
+		{
+			return;
+		}
 		if (Stats->MaxHP <= 0)
 		{
 			bIsPandingKill = true;

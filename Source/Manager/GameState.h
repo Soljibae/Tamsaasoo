@@ -8,6 +8,7 @@ namespace Manager
 		INTRO,
 		MAINMENU,
 		PLAYING,
+		GAMEOVER,
 	};
 
 	class AGameState

@@ -7,6 +7,7 @@
 #include "PauseUI.h"
 #include "ExpUI.h"
 #include "GunPickUI.h"
+#include "GameOver.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -70,6 +71,7 @@ namespace Manager
 		HUD.Init(PC, PC->HoldingGun);
 		gunPickPanel.Init(PC);
 		gm.GamePaused = false;
+		gameOverScreen.Init();
 		Utils::TestInit();
 		WM.Init();
 		bIsJumping = false;
@@ -160,18 +162,20 @@ namespace Manager
 				std::cout << global::DeltaTime << std::endl;
 			}
 			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
-			
-			if (WaveTimer > 3.f)
+			if (!gameOverScreen.isGameOver)
 			{
-				WaveCount++;
-				WaveTimer = 0;
-				if ((WaveCount > 60 && CurrentStageType == InGame::StageType::LAND)|| (WaveCount > 100 && CurrentStageType == InGame::StageType::TOWER) || (WaveCount > 140 && CurrentStageType == InGame::StageType::HEAVEN))
+				if (WaveTimer > 3.f)
 				{
-					InitBossFight();
-				}
-				else
-				{
-					SpawnWave();
+					WaveCount++;
+					WaveTimer = 0;
+					if ((WaveCount > 60 && CurrentStageType == InGame::StageType::LAND) || (WaveCount > 100 && CurrentStageType == InGame::StageType::TOWER) || (WaveCount > 140 && CurrentStageType == InGame::StageType::HEAVEN))
+					{//60, 100, 140
+						InitBossFight();
+					}
+					else
+					{
+						SpawnWave();
+					}
 				}
 			}
 			PC->Update();
@@ -438,9 +442,11 @@ namespace Manager
 
 			if (PC->bIsPandingKill)
 			{
-				Manager::gm.nextState = EGameState::MAINMENU;
+				gameOverScreen.isGameOver = true;
 			}
 			HUD.Update();
+			VFXManager.Update();
+			gameOverScreen.Update();
 		}
 		else if (pickPanel.IsActive())
 		{
@@ -454,7 +460,6 @@ namespace Manager
 		{
 			pausePanel.Update();
 		}
-		VFXManager.Update();
 	}
 	void Playing::Draw()
 	{
@@ -509,6 +514,7 @@ namespace Manager
 		{
 			Boss->Draw();
 		}
+		VFXManager.Draw();
 		HUD.Draw();
 		ExpPanel.Draw();
 		for (InGame::SoulOrb* SO : SOs)
@@ -527,12 +533,13 @@ namespace Manager
 		{
 			pausePanel.Draw();
 		}
-		VFXManager.Draw();
+		gameOverScreen.Draw();
 	}
 	void Playing::Destroy()
 	{
 		VFXManager.Destroy();
 		HUD.Destroy();
+		gameOverScreen.Destroy();
 		for (InGame::Projectile* PP : PPs)
 		{
 			PP->Destroy();

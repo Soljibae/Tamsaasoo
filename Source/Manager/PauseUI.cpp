@@ -2,6 +2,7 @@
 #include "HUDController.h"
 #include "../Global/GlobalVariables.h"
 #include "GameManager.h"
+#include "GameOver.h"
 #include <sstream>
 #include <iomanip>
 
@@ -17,13 +18,13 @@ namespace Manager
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		f32 BW{300}, BH{120}; // button width, button height
 		resumeButton.Mesh = Utils::CreateMesh();
-		resumeButton.Texture = AEGfxTextureLoad("Assets/ResumeButton.png");
+		resumeButton.Texture = AEGfxTextureLoad("Assets/Buttons/ResumeButton.png");
 		resumeButton.position = {-600, 300};
 		resumeButton.size = { BW , BH };
 		resumeButton.SetCallback([]() { gm.Resume(); });
 
 		mainmenuButton.Mesh = Utils::CreateMesh();
-		mainmenuButton.Texture = AEGfxTextureLoad("Assets/MainMenuButton.png");
+		mainmenuButton.Texture = AEGfxTextureLoad("Assets/Buttons/MainMenuButton.png");
 		mainmenuButton.position = {-600, 150};
 		mainmenuButton.size = { BW , BH };
 		mainmenuButton.SetCallback([]() { gm.SetNextGameState(EGameState::MAINMENU); });
@@ -80,6 +81,8 @@ namespace Manager
 
 	void PauseUI::Update()
 	{
+		if (gameOverScreen.isGameOver)
+			return;
 		resumeButton.Update();
 		mainmenuButton.Update();
 
@@ -404,6 +407,8 @@ namespace Manager
 
 	void PauseUI::Draw()
 	{
+		if (gameOverScreen.isGameOver)
+			return;
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		//background fading
@@ -500,7 +505,7 @@ namespace Manager
 		AEGfxTextureUnload(slotWhite.Texture);
 
 		AEGfxDestroyFont(pFont);
-
 		statsString.clear();
+		std::vector<std::string>().swap(statsString);
 	}
 }

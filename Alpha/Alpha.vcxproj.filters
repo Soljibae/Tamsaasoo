@@ -121,6 +121,12 @@
     <ClCompile Include="..\Source\InGame\SoulOrb.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Manager\GunPickUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\GameOver.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -226,6 +232,10 @@
     </ClInclude>
     <ClInclude Include="..\Source\InGame\SoulOrb.h">
       <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\GunPickUI.h" />
+    <ClInclude Include="..\Source\Manager\GameOver.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "LevelUpUI.h"
 #include "HUDController.h"
+#include "GameOver.h"
 #include <random>
 #include <unordered_set>
 namespace Manager
@@ -40,6 +41,7 @@ namespace Manager
 					{
 						cost = 100;
 					}
+					delayTime = 0.f;
 					gm.Resume();
 				});
 			f32 winHalfW{ windowWidth / 2.f }, winHalfH{ windowHeight / 2.f };
@@ -77,7 +79,7 @@ namespace Manager
 
 	void LevelUpUI::Update()
 	{
-		if (!IsActive())
+		if (!IsActive() || gameOverScreen.isGameOver)
 		{
 			return;
 		}
@@ -88,21 +90,14 @@ namespace Manager
 		}
 		for (s8 i = 0; i < ItemWindow.size(); i++)
 		{
-			if (ItemWindow[i].IsClicked() && !rerollButton[i].IsHovered())
-			{
-				ItemWindow[i].OnClick();
-				delayTime = 0.f;
-			}
-			if (rerollButton[i].IsClicked())
-			{
-				rerollButton[i].OnClick();
-
-			}
+			ItemWindow[i].Update();
 		}
 	}
 
 	void LevelUpUI::Show()
 	{
+		if (gameOverScreen.isGameOver)
+			return;
 		currentOptions = GenerateRandomRewards();
 		for (int i = 0; i < currentOptions.size(); i++)
 		{
@@ -120,6 +115,8 @@ namespace Manager
 
 	void LevelUpUI::Draw()
 	{
+		if (gameOverScreen.isGameOver)
+			return;
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
 		for (int i = 0; i < ItemWindow.size(); i++)
 		{
@@ -195,15 +192,14 @@ namespace Manager
 
 	void LevelUpUI::Reroll(s8 thisbutton)
 	{
-		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		
 		if (PC->PS->Money < rerollCost[thisbutton])
 		{
 			return;
 		}
+		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		PC->PS->Money -= rerollCost[thisbutton];
 
-		rerollCost[thisbutton] *= 1.7f;
 
 		std::shared_ptr<InGame::Item> option;
 

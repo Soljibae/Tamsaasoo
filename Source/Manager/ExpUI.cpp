@@ -1,7 +1,7 @@
 #include "ExpUI.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
-
+#include "GameOver.h"
 namespace Manager
 {
 	ExpUI ExpPanel;
@@ -31,6 +31,8 @@ namespace Manager
 	}
 	void ExpUI::Update()
 	{
+		if (gameOverScreen.isGameOver)
+			return;
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 space = 2.f;
 
@@ -39,6 +41,8 @@ namespace Manager
 	}
 	void ExpUI::Draw()
 	{
+		if (gameOverScreen.isGameOver)
+			return;
 		Utils::DrawObject(xpBarBackground, false);
 		Utils::DrawObject(xpBarEmpty, false, 0.5f);
 		Utils::DrawObject(xpBarFill, false);

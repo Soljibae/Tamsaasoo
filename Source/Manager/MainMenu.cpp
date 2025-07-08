@@ -21,7 +21,7 @@ namespace Manager
 		Black.size = { w, h };
 
 		startButton.Mesh = Utils::CreateMesh();
-		startButton.Texture = AEGfxTextureLoad("Assets/StartButton.png");
+		startButton.Texture = AEGfxTextureLoad("Assets/Buttons/StartButton.png");
 		startButton.position = { 0.f, 100.f };
 		startButton.size = { 300, 120 };
 		startButton.SetCallback([]() {gm.SetNextGameState(EGameState::PLAYING); });

@@ -23,7 +23,7 @@ namespace Manager
 
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
-		if (currState != nextState)
+		if (currState != nextState || forceRestart)
 		{
 			currStateREF->Destroy();
 			delete currStateREF;
@@ -43,6 +43,7 @@ namespace Manager
 				currStateREF->Init();
 				break;
 			}
+			forceRestart = false;
 		}
 		currStateREF->Update();
 	}

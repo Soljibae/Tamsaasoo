@@ -21,6 +21,7 @@ namespace Manager
 		EGameState currState;
 		EGameState nextState;
 		bool GamePaused{ false };
+		bool forceRestart{ false };
 	};
 	extern GameManager gm;
 }
