@@ -624,7 +624,7 @@ namespace Manager
 	{
 		std::cout << "Spawn Wave" << std::endl;
 		WM.GetNextList();
-		if (ECPool.size() >= std::stoi(WM.CurrList.MinionNum) + std::stoi(WM.CurrList.ArcherNum) + std::stoi(WM.CurrList.DasherNum) + std::stoi(WM.CurrList.TankerNum) + std::stoi(WM.CurrList.BomberNum))
+		if (ECPool.size() >= std::stoi(WM.CurrList.MinionNum) + std::stoi(WM.CurrList.ArcherNum) + std::stoi(WM.CurrList.DasherNum) + std::stoi(WM.CurrList.TankerNum) + std::stoi(WM.CurrList.BomberNum) + std::stoi(WM.CurrList.ZigZagNum))
 		{
 			for (int i = 0; i < std::stoi(WM.CurrList.MinionNum);i++)
 			{
@@ -659,6 +659,27 @@ namespace Manager
 				InGame::EnemyCharacter* EC = ECPool.back();
 				ECPool.pop_back();
 				EC->Spawn(GetSpawnLocation(), &BomberStruct);
+				ECs.push_back(EC);
+			}
+			for (int i = 0; i < std::stoi(WM.CurrList.ZigZagNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &ZigZagStruct);
+				ECs.push_back(EC);
+			}
+			for (int i = 0; i < std::stoi(WM.CurrList.OrbiterNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &OrbiterStruct);
+				ECs.push_back(EC);
+			}
+			for (int i = 0; i < std::stoi(WM.CurrList.SniperNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &SniperStruct);
 				ECs.push_back(EC);
 			}
 		}

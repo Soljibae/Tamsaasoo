@@ -52,6 +52,9 @@ namespace Manager
 		InGame::DasherData DasherStruct;
 		InGame::TankerData TankerStruct;
 		InGame::BomberData BomberStruct;
+		InGame::ZigZagData ZigZagStruct;
+		InGame::OrbiterData OrbiterStruct;
+		InGame::SniperData SniperStruct;
 		void SpawnWave();
 		void ClearWave();
 		void InitBossFight();

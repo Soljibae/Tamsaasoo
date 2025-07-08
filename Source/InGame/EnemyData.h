@@ -8,6 +8,9 @@ namespace InGame
 		DASHER = 2,
 		TANKER = 3,
 		BOMBER = 4,
+		ZIGZAG = 5,
+		ORBITER = 6,
+		SNIPER = 7,
 	};
 
 	static EnemyType GetNextEnemyType(EnemyType InEnemyType)
@@ -22,6 +25,12 @@ namespace InGame
 			return EnemyType::TANKER;
 		case EnemyType::TANKER:
 			return BOMBER;
+		case EnemyType::BOMBER:
+			return ZIGZAG;
+		case EnemyType::ZIGZAG:
+			return ORBITER;
+		case EnemyType::ORBITER:
+			return SNIPER;
 		}
 		return EnemyType::MINION;
 	}
@@ -130,6 +139,55 @@ namespace InGame
 			AEVec2Set(&DrawSize, 50.f, 50.f);
 			CollisionRadius = 25;
 			MovementSpeed = 30;
+		}
+	};
+	struct ZigZagData : EnemyData
+	{
+	public:
+		virtual void Init() override
+		{
+			Type = EnemyType::ZIGZAG;
+			Texture = AEGfxTextureLoad("Assets/ZigZag.png");
+			Damage = 1;
+			Exp = 1;
+			Health = 3;
+			AEVec2Set(&DrawSize, 70.f, 70.f);
+			CollisionRadius = 35;
+			MovementSpeed = 200;
+		}
+	};
+	struct OrbiterData : EnemyData
+	{
+	public:
+		virtual void Init() override
+		{
+			Type = EnemyType::ORBITER;
+			Texture = AEGfxTextureLoad("Assets/Orbiter.png");
+			Damage = 1;
+			Exp = 1;
+			Health = 3;
+			AEVec2Set(&DrawSize, 70.f, 70.f);
+			CollisionRadius = 35;
+			MovementSpeed = 200;
+			BulletSpeed = 5;
+			AEVec2Set(&ProjectileSize, 20.f, 20.f);
+		}
+	};
+	struct SniperData : EnemyData
+	{
+	public:
+		virtual void Init() override
+		{
+			Type = EnemyType::SNIPER;
+			Texture = AEGfxTextureLoad("Assets/Sniper.png");
+			Damage = 1;
+			Exp = 2;
+			Health = 1;
+			AEVec2Set(&DrawSize, 70.f, 70.f);
+			CollisionRadius = 35.f;
+			MovementSpeed = 300;
+			BulletSpeed = 5;
+			AEVec2Set(&ProjectileSize, 20.f, 20.f);
 		}
 	};
 }
