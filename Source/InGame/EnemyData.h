@@ -31,9 +31,9 @@ namespace InGame
 	public:
 		EnemyType Type;
 		AEGfxTexture* Texture = nullptr;
-		s32 Damage = 0;
+		f32 Damage = 0.f;
 		u32 Exp = 0;
-		s32 Health = 0;
+		f32 Health = 0.f;
 		AEVec2 DrawSize;
 		f32 CollisionRadius = 0.f;
 		f32 MovementSpeed = 0.f;

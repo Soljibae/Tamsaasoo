@@ -16,7 +16,6 @@ namespace InGame
 		virtual void adjustHealth(f32 Amount) override;
 		void UpdateEffectTime();
 
-		Stat Stats;
 		EnemyType Type;
 		u32 Exp = 1;
 		f32 ProjectileSpawnTimer = 0.f;

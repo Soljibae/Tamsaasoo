@@ -199,6 +199,61 @@ void Utils::DrawObject(InGame::Actor& object, bool is_camera_enabled, f32 alpha)
 	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
   }
 
+void Utils::DrawObject(InGame::Character& object, bool is_camera_enabled, f32 alpha)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	AEGfxTextureSet(object.Texture, object.offset.x, object.offset.y);
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.size.x, object.size.y);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, object.position.x, object.position.y);
+	AEMtx33 transform;
+
+	if (is_camera_enabled)
+	{
+		AEVec2 translated_pos;
+		AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.position);
+		AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+	}
+
+	AEMtx33Concat(&transform, &tran, &scale);
+	if (object.Stats->StatusEffectTimer[InGame::EStatusEffect::BURN] > 0.f)
+	{
+		AEGfxSetColorToMultiply(1.f, 0.f, 0.f, 0.3f);
+	}
+	else if (object.Stats->StatusEffectTimer[InGame::EStatusEffect::STUN] > 0.f)
+	{
+		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.3f);
+	}
+	else if (object.Stats->StatusEffectTimer[InGame::EStatusEffect::SLOW] > 0.f)
+	{
+		AEGfxSetColorToMultiply(0.f, 1.f, 0.f, 0.3f);
+	}
+	else if (object.Stats->StatusEffectTimer[InGame::EStatusEffect::FEAR] > 0.f)
+	{
+		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.3f);
+	}
+	else if (object.Stats->StatusEffectTimer[InGame::EStatusEffect::VULNERABLE] > 0.f)
+	{
+		AEGfxSetColorToMultiply(1.f, 1.f, 0.f, 0.3f);
+	}
+	else
+	{
+		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+	}
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(object.Mesh, AE_GFX_MDM_TRIANGLES);
+}
 void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

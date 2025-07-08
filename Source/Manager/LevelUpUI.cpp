@@ -198,11 +198,11 @@ namespace Manager
 	{
 		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		
-		if (PC->Stats.Money < rerollCost[thisbutton])
+		if (PC->PS->Money < rerollCost[thisbutton])
 		{
 			return;
 		}
-		PC->Stats.Money -= rerollCost[thisbutton];
+		PC->PS->Money -= rerollCost[thisbutton];
 
 		rerollCost[thisbutton] *= 1.7f;
 

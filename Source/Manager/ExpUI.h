@@ -17,7 +17,7 @@ namespace Manager
 		InGame::Actor xpBarFill;
 
 	private:
-		InGame::PlayerCharacter* PC;
+		InGame::PlayerCharacter* PC = nullptr;
 	};
 	extern ExpUI ExpPanel;
 }

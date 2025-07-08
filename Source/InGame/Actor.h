@@ -28,13 +28,14 @@ namespace InGame
 		f32 CollisionRadius = 0.f;
 		AEVec2 direction;
 		f32 MovementSpeed = 0.f; 
-		s32 row, column;
-		f32 FrameTime;
+		s32 row = 0;
+		s32 column = 0;
+		f32 FrameTime = 0.f;
 		f32 TimeAcc = 0.f;
 		AEVec2 offset;
 		bool bIsPandingKill = false;
-		EAnimationState AnimationState;
-		s32 AnimationCount;
+		EAnimationState AnimationState = EAnimationState::IDLE;
+		s32 AnimationCount = 0;
 		std::map<EAnimationState, s32> MaxAnimationCount;
 	};
 }

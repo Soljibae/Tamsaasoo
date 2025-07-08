@@ -12,21 +12,21 @@ namespace InGame
 		virtual void Draw() override;
 		virtual void Destroy() override;
 
-		u32 Level;
-		u32 ExpCount;
-		f32 ExpGained;
-		s32 HitCount;
-		u32 TargetExp;
-		f32 Money;
-		s16 Potion;
-		s32 ReviveCount;
-		f32 BurnDamage;
-		f32 BurnRate;
+		u32 Level = 0;
+		u32 ExpCount = 0;
+		f32 ExpGained = 0.f;
+		s32 HitCount = 0;
+		u32 TargetExp = 0;
+		f32 Money = 0.f;
+		s16 Potion = 0;
+		s32 ReviveCount = 0;
+		f32 BurnDamage = 0.f;
+		f32 BurnRate = 0.f;
 
-		f32 effectiveDamage;
-		f32 effectiveFireRate;
-		f32 effectiveExpGained;
-		s32 effectiveHitCount;
-		f32 effectiveMovementSpeed;
+		f32 effectiveDamage = 0.f;
+		f32 effectiveFireRate = 0.f;
+		f32 effectiveExpGained = 0.f;
+		s32 effectiveHitCount = 0;
+		f32 effectiveMovementSpeed = 0.f;
 	};
 }

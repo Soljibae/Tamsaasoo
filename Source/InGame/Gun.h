@@ -19,7 +19,7 @@ namespace InGame
 		virtual void Destroy() override;
 		virtual void FireProjectile(AEVec2 Dir, AEVec2 Pos);
 		f32 FireTimer = 0.f;
-		f32 RoundPerSec;
+		f32 RoundPerSec = 0.f;
 		GunType gunType;
 		AEVec2 ArmOffset;
 		class PlayerCharacter* Source;

@@ -16,7 +16,7 @@ namespace InGame
 		Texture = AEGfxTextureLoad(object->GunData->TextureAddress.c_str());
 		Source = object;
 		AEVec2Set(&size, 80.f, 40.f);
-		RoundPerSec = Source->Stats.FireRate;
+		RoundPerSec = Source->Stats->FireRate;
 		direction.x = 1;
 		direction.y = 0;
 		AEVec2Set(&ArmOffset, 5.f, 18.f);
@@ -25,7 +25,7 @@ namespace InGame
 
 	void Gun::Update(AEVec2 Dir, AEVec2 Pos)
 	{
-		RoundPerSec = Source->Stats.effectiveFireRate;
+		RoundPerSec = dynamic_cast<PlayerStat*>(Source->Stats)->effectiveFireRate;
 		AEVec2 Vec;
 		position = Pos;
 		AEVec2Scale(&Vec, &Dir, 40.f);

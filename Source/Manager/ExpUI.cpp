@@ -34,7 +34,7 @@ namespace Manager
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 space = 2.f;
 
-		xpBarFill.size.x = xpBarEmpty.size.x * PC->Stats.ExpCount / PC->Stats.TargetExp;
+		xpBarFill.size.x = xpBarEmpty.size.x * PC->PS->ExpCount / PC->PS->TargetExp;
 		xpBarFill.position.x = xpBarBackground.position.x - xpBarEmpty.size.x / 2.f + xpBarFill.size.x / 2.f;
 	}
 	void ExpUI::Draw()

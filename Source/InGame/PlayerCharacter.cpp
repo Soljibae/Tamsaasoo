@@ -25,40 +25,41 @@ namespace InGame
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
 		MaxAnimationCount[JUMP] = 2;
-
+		PS = new PlayerStat;
+		Stats = PS;
 		Texture = AEGfxTextureLoad("Assets/Character.png");
 		GunData = new ShotGunStruct;
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
-		Stats.MaxHP = 5;
-		Stats.HP = Stats.MaxHP;
-		Stats.MovementSpeed = 300;
-		Stats.FireRate = 2.f;
-		Stats.ProjectileSpeed = GunData->ProjectileSpeed;
-		Stats.ProjectileCollisionSize = GunData->ProjectileCollisionSize;
-		AEVec2Set(&Stats.ProjectileSize, 20.f, 20.f);
-		Stats.Damage = 1.f;
-		Stats.Level = 1;
-		Stats.ExpGained = 1.f;
-		Stats.HitCount = GunData->ProjectileHitCount;
-		Stats.ExpCount = 0.f;
-		Stats.TargetExp = 20.f;
-		Stats.Money = 0;
-		Stats.Potion = 0;
-		Stats.BurnDamage = 0.1f;
-		global::effectiveBurnDamage = Stats.BurnDamage;
-		Stats.BurnRate = 1.f;
-		Stats.ReviveCount = 0;
+		Stats->MaxHP = 5;
+		Stats->HP = Stats->MaxHP;
+		Stats->MovementSpeed = 300;
+		Stats->FireRate = 2.f;
+		Stats->ProjectileSpeed = GunData->ProjectileSpeed;
+		Stats->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
+		AEVec2Set(&Stats->ProjectileSize, 20.f, 20.f);
+		Stats->Damage = 1.f;
+		PS->Level = 1;
+		PS->ExpGained = 1.f;
+		PS->HitCount = GunData->ProjectileHitCount;
+		PS->ExpCount = 0;
+		PS->TargetExp = 20;
+		PS->Money = 0;
+		PS->Potion = 0;
+		PS->BurnDamage = 0.1f;
+		global::effectiveBurnDamage = PS->BurnDamage;
+		PS->BurnRate = 1.f;
+		PS->ReviveCount = 0;
 
-		Stats.Init();
+		Stats->Init();
 
 		Utils::InitOffset(*this);
 		inventory.clear();
 	}
 	void PlayerCharacter::Update()
 	{
-		if (Stats.MaxHP <= 0)
+		if (Stats->MaxHP <= 0)
 		{
 			bIsPandingKill = true;
 		}
@@ -74,8 +75,8 @@ namespace InGame
 
 		UpdateStats();
 
-		Stats.HP = std::clamp(Stats.HP, 0.f, Stats.MaxHP);
-		Stats.effectiveMovementSpeed = std::clamp(Stats.effectiveMovementSpeed, 30.f, 600.f); // to do
+		Stats->HP = std::clamp(Stats->HP, 0.f, Stats->MaxHP);
+		PS->effectiveMovementSpeed = std::clamp(PS->effectiveMovementSpeed, 30.f, 600.f); // to do
 
 		for (const auto& item_ptr : inventory)
 		{
@@ -117,7 +118,7 @@ namespace InGame
 				}
 			}
 
-			if (Stats.HP > 0)
+			if (Stats->HP > 0)
 			{
 				UpdateMovement();
 			}
@@ -151,26 +152,26 @@ namespace InGame
 		global::PlayerMouseDirection = MouseDirection;
 		Utils::UpdateOffset(*this);
 		/*----- Heal Potion -----*/
-		if (Stats.Potion > 100)
-			Stats.Potion = 100;
+		if (PS->Potion > 100)
+			PS->Potion = 100;
 		if (global::KeyInput(AEVK_Q))
 		{
 			if (Utils::GetItemCount(24))
 			{
-				if (Stats.Potion >= 100)
+				if (PS->Potion >= 100)
 				{
-					Stats.Money += global::item24GoldGained;
-					Stats.Potion -= 100;
+					PS->Money += global::item24GoldGained;
+					PS->Potion -= 100;
 				}
 			}
 			else
 			{
-				if (Stats.HP < Stats.MaxHP)
+				if (Stats->HP < Stats->MaxHP)
 				{
-					if (Stats.Potion >= 100)
+					if (PS->Potion >= 100)
 					{
 						adjustHealth(1);
-						Stats.Potion -= 100;
+						PS->Potion -= 100;
 					}
 				}
 			}
@@ -212,6 +213,12 @@ namespace InGame
 			delete HoldingGun;
 			HoldingGun = nullptr;
 		}
+		if (PS)
+		{
+			delete PS;
+			PS = nullptr;
+			Stats = nullptr;
+		}
 	}
 	void PlayerCharacter::adjustHealth(f32 Amount)
 	{
@@ -219,20 +226,20 @@ namespace InGame
 
 		if (Amount >= 0)
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
+			Stats->HP = std::clamp(Stats->HP + Amount, 0.f, Stats->MaxHP);
 
 			return;
 		}
 
 		if (!bIsInvincible && !bIsDashing)
 		{
-			Stats.HP = std::clamp(Stats.HP + Amount, 0.f, Stats.MaxHP);
-			if (Stats.HP <= 0)
+			Stats->HP = std::clamp(Stats->HP + Amount, 0.f, Stats->MaxHP);
+			if (Stats->HP <= 0)
 			{
 				if (IsRevivable())
 				{
 					bIsInvincible = true;
-					Stats.HP = Stats.MaxHP; // to do
+					Stats->HP = Stats->MaxHP; // to do
 				}
 				else
 				{
@@ -271,14 +278,14 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateKill(u32 Exp)
 	{
-		Stats.Money += 1.f * global::StageGoldGainedRatio[global::CurrentStageNumber - 1] * global::additionalGoldGainedRatio;
-		Stats.ExpCount += Exp * Stats.effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
-		if (Stats.ExpCount >= Stats.TargetExp)
+		PS->Money += 1.f * global::StageGoldGainedRatio[global::CurrentStageNumber - 1] * global::additionalGoldGainedRatio;
+		PS->ExpCount += Exp * PS->effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
+		if (PS->ExpCount >= PS->TargetExp)
 		{
-			Stats.ExpCount -= Stats.TargetExp;
-			Stats.TargetExp *= 1.45f;
-			Stats.Level++;
-			std::cout << "Level Up : " << Stats.Level << " Next : Target Exp : " << Stats.TargetExp << std::endl;
+			PS->ExpCount -= PS->TargetExp;
+			PS->TargetExp *= 1.45f;
+			PS->Level++;
+			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
 			Manager::pickPanel.Show();
 		}
 	}
@@ -342,7 +349,7 @@ namespace InGame
 		}
 
 		AEVec2 delta;
-		AEVec2Scale(&delta, &MovingVec, Stats.effectiveMovementSpeed * global::DeltaTime);
+		AEVec2Scale(&delta, &MovingVec, PS->effectiveMovementSpeed * global::DeltaTime);
 
 		AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
 
@@ -425,39 +432,39 @@ namespace InGame
 	}
 	void PlayerCharacter::UpdateEffectTime()
 	{
-		for (size_t i = 0; i < Stats.StatusEffectTimer.size(); i++)
+		for (size_t i = 0; i < Stats->StatusEffectTimer.size(); i++)
 		{
 			switch (i)
 			{
 			case 0:
-				if (Stats.StatusEffectTimer[BURN] > 0)
-					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[BURN] < 0)
-					Stats.StatusEffectTimer[BURN] = 0;
+				if (Stats->StatusEffectTimer[BURN] > 0)
+					Stats->StatusEffectTimer[BURN] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[BURN] < 0)
+					Stats->StatusEffectTimer[BURN] = 0;
 				break;
 			case 1:
-				if (Stats.StatusEffectTimer[STUN] > 0)
-					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[STUN] < 0)
-					Stats.StatusEffectTimer[STUN] = 0;
+				if (Stats->StatusEffectTimer[STUN] > 0)
+					Stats->StatusEffectTimer[STUN] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[STUN] < 0)
+					Stats->StatusEffectTimer[STUN] = 0;
 				break;
 			case 2:
-				if (Stats.StatusEffectTimer[SLOW] > 0)
-					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[SLOW] < 0)
-					Stats.StatusEffectTimer[SLOW] = 0;
+				if (Stats->StatusEffectTimer[SLOW] > 0)
+					Stats->StatusEffectTimer[SLOW] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[SLOW] < 0)
+					Stats->StatusEffectTimer[SLOW] = 0;
 				break;
 			case 3:
-				if (Stats.StatusEffectTimer[FEAR] > 0)
-					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[FEAR] < 0)
-					Stats.StatusEffectTimer[FEAR] = 0;
+				if (Stats->StatusEffectTimer[FEAR] > 0)
+					Stats->StatusEffectTimer[FEAR] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[FEAR] < 0)
+					Stats->StatusEffectTimer[FEAR] = 0;
 				break;
 			case 4:
-				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
-					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
-					Stats.StatusEffectTimer[VULNERABLE] = 0;
+				if (Stats->StatusEffectTimer[VULNERABLE] > 0)
+					Stats->StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[VULNERABLE] < 0)
+					Stats->StatusEffectTimer[VULNERABLE] = 0;
 				break;
 			default:
 				break;
@@ -506,28 +513,28 @@ namespace InGame
 
 		if (itemTagCount[PRIDE] >= 7)
 		{
-			global::additionalFireRate += 0.8;
+			global::additionalFireRate += 0.8f;
 		}
 		else if (6 >= itemTagCount[PRIDE] && itemTagCount[PRIDE] >= 5)
 		{
-			global::additionalFireRate += 0.5;
+			global::additionalFireRate += 0.5f;
 		}
 		else if (4 >= itemTagCount[PRIDE] && itemTagCount[PRIDE] >= 3)
 		{
-			global::additionalFireRate += 0.2;
+			global::additionalFireRate += 0.2f;
 		}
 
 		if (itemTagCount[WRATH] >= 7)
 		{
-			global::additionalBurnDamage += 0.08;
+			global::additionalBurnDamage += 0.08f;
 		}
 		else if (6 >= itemTagCount[WRATH] && itemTagCount[WRATH] >= 5)
 		{
-			global::additionalBurnDamage += 0.05;
+			global::additionalBurnDamage += 0.05f;
 		}
 		else if (4 >= itemTagCount[WRATH] && itemTagCount[WRATH] >= 3)
 		{
-			global::additionalBurnDamage += 0.02;
+			global::additionalBurnDamage += 0.02f;
 		}
 
 		if (itemTagCount[SLOTH] >= 7)
@@ -548,25 +555,25 @@ namespace InGame
 		if (itemTagCount[GLUTTONY] >= 3 && healthUpByTagCount == 0)
 		{
 			healthUpByTagCount++;
-			Stats.MaxHP++;
-			Stats.HP++;
+			Stats->MaxHP++;
+			Stats->HP++;
 		}
 		if (itemTagCount[GLUTTONY] >= 5 && healthUpByTagCount == 1)
 		{
 			healthUpByTagCount++;
-			Stats.MaxHP++;
-			Stats.HP++;
+			Stats->MaxHP++;
+			Stats->HP++;
 		}
 		if (itemTagCount[GLUTTONY] >= 7 && healthUpByTagCount == 2)
 		{
 			healthUpByTagCount++;
-			Stats.MaxHP++;
-			Stats.HP++;
+			Stats->MaxHP++;
+			Stats->HP++;
 		}
 
 		if (itemTagCount[GREED] >= 7)
 		{
-			global::additionalGoldGainedRatio += 0.4;
+			global::additionalGoldGainedRatio += 0.4f;
 		}
 		else if (6 >= itemTagCount[GREED] && itemTagCount[GREED] >= 5)
 		{
@@ -574,20 +581,20 @@ namespace InGame
 		}
 		else if (4 >= itemTagCount[GREED] && itemTagCount[GREED] >= 3)
 		{
-			global::additionalGoldGainedRatio += 0.1;
+			global::additionalGoldGainedRatio += 0.1f;
 		}
 
 		if (itemTagCount[LUST] >= 7)
 		{
-			global::additionalProcChanceRatio += 0.20;
+			global::additionalProcChanceRatio += 0.20f;
 		}
 		else if (6 >= itemTagCount[LUST] && itemTagCount[LUST] >= 5)
 		{
-			global::additionalProcChanceRatio += 0.15;
+			global::additionalProcChanceRatio += 0.15f;
 		}
 		else if (4 >= itemTagCount[LUST] && itemTagCount[LUST] >= 3)
 		{
-			global::additionalProcChanceRatio += 0.07;
+			global::additionalProcChanceRatio += 0.07f;
 		}
 
 		if (itemTagCount[ENVY] >= 7)
@@ -603,21 +610,21 @@ namespace InGame
 			global::additionalMovementSpeed += 20;
 		}
 
-		Stats.effectiveDamage = (Stats.Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
-		Stats.effectiveFireRate = (Stats.FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
-		Stats.effectiveExpGained = Stats.ExpGained * global::additionalExpGainedRatio;
-		Stats.effectiveHitCount = Stats.HitCount + global::additionalHitCount;
-		Stats.effectiveMovementSpeed = Stats.MovementSpeed + global::additionalMovementSpeed;
+		PS->effectiveDamage = (Stats->Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
+		PS->effectiveFireRate = (Stats->FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
+		PS->effectiveExpGained = PS->ExpGained * global::additionalExpGainedRatio;
+		PS->effectiveHitCount = PS->HitCount + global::additionalHitCount;
+		PS->effectiveMovementSpeed = Stats->MovementSpeed + global::additionalMovementSpeed;
 
-		global::effectiveBurnDamage = Stats.BurnDamage + global::additionalBurnDamage;
-		global::effectiveBurnRate = Stats.BurnRate - global::additionalBurnRate;
+		global::effectiveBurnDamage = PS->BurnDamage + global::additionalBurnDamage;
+		global::effectiveBurnRate = PS->BurnRate - global::additionalBurnRate;
 	}
 
 	bool PlayerCharacter::IsRevivable()
 	{
-		if (Stats.ReviveCount > 0)
+		if (PS->ReviveCount > 0)
 		{
-			Stats.ReviveCount--;
+			PS->ReviveCount--;
 			return true;
 		}
 		return false;

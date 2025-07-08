@@ -19,7 +19,7 @@ namespace InGame
 		void GetMouseDir();
 		void UpdateMovement();
 		void UpdateDash();
-		PlayerStat Stats;
+		PlayerStat* PS = nullptr;
 		void UpdateKill(u32 Exp);
 		// first: item / second: count
 		std::vector<std::pair<std::shared_ptr<Item>, s16>> inventory;

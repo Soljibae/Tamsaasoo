@@ -13,6 +13,7 @@ namespace InGame
 {
 	void EnemyBoss::Init()
 	{
+		Stats = new Stat;
 		row = 6;
 		column = 2;
 		AnimationCount = 0;
@@ -41,6 +42,11 @@ namespace InGame
 			AEGfxTextureUnload(Texture);
 			Texture = nullptr;
 		}
+		if (Stats)
+		{
+			delete Stats;
+			Stats = nullptr;
+		}
 	}
 	void EnemyBoss::OnPlayerHit()
 	{
@@ -48,23 +54,23 @@ namespace InGame
 	void Stage1Boss::Init()
 	{
 		EnemyBoss::Init();
-		Stats.MovementSpeed = 100.f;
+		Stats->MovementSpeed = 100.f;
 		size.x = 105;
 		size.y = 192;
 		position.x = 0;
 		position.y = 0;
 		CollisionRadius = 50;
-		AEVec2Set(&Stats.ProjectileSize, 30, 30);
+		AEVec2Set(&Stats->ProjectileSize, 30, 30);
 		ProjectileSpawnTimer = 0;
 		ProjectileChamberTimer = 5;
 		bIsWaving = false;
 
-		Stats.HP = 100;
-		Stats.MaxHP = 100;
-		Stats.FireRate = 5.f;
-		Stats.ProjectileSpeed = 3.f;
-		Stats.Damage = 1;
-		Stats.ProjectileCollisionSize = 15.f;
+		Stats->HP = 100;
+		Stats->MaxHP = 100;
+		Stats->FireRate = 5.f;
+		Stats->ProjectileSpeed = 3.f;
+		Stats->Damage = 1;
+		Stats->ProjectileCollisionSize = 15.f;
 		AnimationState = IDLE;
 		MaxAnimationCount[IDLE] = 2;
 	}
@@ -75,17 +81,17 @@ namespace InGame
 
 		static bool angleOffsetToggle = false;
 
-		if (Stats.StatusEffectTimer[BURN] > 0)
+		if (Stats->StatusEffectTimer[BURN] > 0)
 		{
 			BurnTimer += global::DeltaTime;
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats.MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
 			}
 		}
 
-		if (!(Stats.StatusEffectTimer[STUN] > 0))
+		if (!(Stats->StatusEffectTimer[STUN] > 0))
 		{
 			ProjectileSpawnTimer += global::DeltaTime;
 			WaveAttackSpawnTimer += global::DeltaTime;
@@ -204,22 +210,22 @@ namespace InGame
 	{
 		EnemyBoss::Init();
 
-		Stats.MovementSpeed = 1200.f;
+		Stats->MovementSpeed = 1200.f;
 		size = { 300.f, 300.f };
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats.HP = 400;
-		Stats.MaxHP = 400;
-		Stats.Damage = 1;
+		Stats->HP = 400;
+		Stats->MaxHP = 400;
+		Stats->Damage = 1;
 
 		dashTimer = 0.f;
 		dashSpeed = 500.f;
 		cooldownTime = 0.f;
 
-		AEVec2Set(&Stats.ProjectileSize, 30, 30);
-		Stats.ProjectileSpeed = 10.f;
-		Stats.ProjectileCollisionSize = 15.f;
+		AEVec2Set(&Stats->ProjectileSize, 30, 30);
+		Stats->ProjectileSpeed = 10.f;
+		Stats->ProjectileCollisionSize = 15.f;
 		AnimationState = IDLE;
 		MaxAnimationCount[IDLE] = 2;
 		MaxAnimationCount[MOVE] = 2;
@@ -246,7 +252,7 @@ namespace InGame
 			else
 			{
 				AEVec2 delta;
-				AEVec2Scale(&delta, &dashDirection, Stats.MovementSpeed * global::DeltaTime);
+				AEVec2Scale(&delta, &dashDirection, Stats->MovementSpeed * global::DeltaTime);
 
 				if (dashDirection.x < 0.0f && size.x > 0.0f)
 				{
@@ -373,21 +379,21 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats.HP = 400;
-		Stats.MaxHP = 400;
-		Stats.Damage = 1;
-		Stats.MovementSpeed = 100.f;
+		Stats->HP = 400;
+		Stats->MaxHP = 400;
+		Stats->Damage = 1;
+		Stats->MovementSpeed = 100.f;
 		AnimationState = IDLE;
 		MaxAnimationCount[IDLE] = 2;
 
-		AEVec2Set(&Stats.ProjectileSize, 30, 30);
+		AEVec2Set(&Stats->ProjectileSize, 30, 30);
 		ProjectileSpawnTimer = 0;
 		ProjectileChamberTimer = 1.5f;
 		bIsWaving = false;
 
-		Stats.ProjectileSpeed = 3.f;
-		Stats.Damage = 1;
-		Stats.ProjectileCollisionSize = 15.f;
+		Stats->ProjectileSpeed = 3.f;
+		Stats->Damage = 1;
+		Stats->ProjectileCollisionSize = 15.f;
 
 		MovePositions = {
 		{ 0.f, 0.f },
@@ -439,7 +445,7 @@ namespace InGame
 				AEVec2Normalize(&dir, &toTarget);
 
 				AEVec2 delta;
-				AEVec2Scale(&delta, &dir, Stats.MovementSpeed * global::DeltaTime);
+				AEVec2Scale(&delta, &dir, Stats->MovementSpeed * global::DeltaTime);
 				AEVec2Add(&position, &position, &delta);
 			}
 		}

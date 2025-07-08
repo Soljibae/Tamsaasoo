@@ -88,27 +88,27 @@ namespace Manager
 		statsString.clear();
 		baseStatsString.clear();
 
-		ss << "Damage: " << std::fixed << std::setprecision(2) << PC->Stats.effectiveDamage;
+		ss << "Damage: " << std::fixed << std::setprecision(2) << PC->PS->effectiveDamage;
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << " / " << PC->Stats.Damage * PC->GunData->GuntypeDamageRatio;
+		ss << " / " << PC->Stats->Damage * PC->GunData->GuntypeDamageRatio;
 		baseStatsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Fire Rate: " << PC->Stats.effectiveFireRate;
+		ss << "Fire Rate: " << PC->PS->effectiveFireRate;
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << " / " << PC->Stats.FireRate * PC->GunData->GuntypeFireRateRatio;
+		ss << " / " << PC->Stats->FireRate * PC->GunData->GuntypeFireRateRatio;
 		baseStatsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Movement Speed: " << static_cast<s32>(PC->Stats.effectiveMovementSpeed);
+		ss << "Movement Speed: " << static_cast<s32>(PC->PS->effectiveMovementSpeed);
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Hit Count: " << static_cast<s32>(PC->Stats.effectiveHitCount);
+		ss << "Hit Count: " << static_cast<s32>(PC->PS->effectiveHitCount);
 		statsString.push_back(ss.str());
 		ss.str("");
 

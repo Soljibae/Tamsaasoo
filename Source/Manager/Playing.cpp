@@ -145,8 +145,8 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_O))
 			{
-				PC->Stats.MaxHP += 2;
-				PC->Stats.HP += 3;
+				PC->Stats->MaxHP += 2;
+				PC->Stats->HP += 3;
 			}
 			//
 			if (!bIsBossFight)
@@ -258,11 +258,11 @@ namespace Manager
 						PC->OnDamaged();
 						if (global::isBossBattleStarted)
 						{
-							PC->adjustHealth(-EC->Stats.Damage * global::additionalDamageFromBossRatio);
+							PC->adjustHealth(-EC->Stats->Damage * global::additionalDamageFromBossRatio);
 						}
 						else
 						{
-							PC->adjustHealth(-EC->Stats.Damage);
+							PC->adjustHealth(-EC->Stats->Damage);
 						}
 						
 					}
@@ -429,7 +429,7 @@ namespace Manager
 					Boss->Update();
 					if (Utils::CheckCollision(*Boss, *PC))
 					{
-						PC->adjustHealth(-Boss->Stats.Damage);
+						PC->adjustHealth(-Boss->Stats->Damage);
 						Boss->OnPlayerHit();
 					}
 				}

@@ -54,9 +54,9 @@ namespace InGame
 	}
 	void Item_1::Use(PlayerCharacter* owner)
 	{
-		if (owner->Stats.HP / owner->Stats.MaxHP <= value1)
+		if (owner->Stats->HP / owner->Stats->MaxHP <= value1)
 		{
-			global::additionalDamageRatio += (value2 * (owner->Stats.MaxHP - owner->Stats.HP) * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+			global::additionalDamageRatio += (value2 * (owner->Stats->MaxHP - owner->Stats->HP) * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
 		}
 	}
 	void Item_1::Update(PlayerCharacter* owner)
@@ -208,8 +208,8 @@ namespace InGame
 		if (Utils::GetItemCount(id) != appliedStack)
 		{
 			appliedStack++;
-			owner->Stats.ReviveCount++;
-			owner->Stats.MaxHP -= value1;
+			owner->PS->ReviveCount++;
+			owner->Stats->MaxHP -= value1;
 		}
 		
 	}
@@ -290,7 +290,7 @@ namespace InGame
 	void Item_6::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
 	{
 		if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
-			target->Stats.StatusEffectTimer[BURN] = effectTime;
+			target->Stats->StatusEffectTimer[BURN] = effectTime;
 	}
 	//============================================= ID_7
 	Item_7::Item_7(const Item_7& other)
@@ -450,15 +450,15 @@ namespace InGame
 						{
 							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
 							{
-								GS->ECs[i]->Stats.StatusEffectTimer[BURN] = effectTime;
+								GS->ECs[i]->Stats->StatusEffectTimer[BURN] = effectTime;
 								
 								if (global::isBossBattleStarted)
 								{
-									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f) * 0.1f);
+									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats->MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f) * 0.1f);
 								}
 								else
 								{
-									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats.MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f));
+									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats->MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f));
 								}
 							}
 						}
@@ -537,7 +537,7 @@ namespace InGame
 	}
 	void Item_11::Update(PlayerCharacter* owner)
 	{
-		additionalEffectSizeRatio = value1 * (owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate;
+		additionalEffectSizeRatio = value1 * (owner->Stats->FireRate * owner->GunData->GuntypeFireRateRatio) / owner->PS->effectiveFireRate;
 	
 		AEVec2Scale(&effectSize, &baseEffectSize, additionalEffectSizeRatio);
 
@@ -568,7 +568,7 @@ namespace InGame
 						{
 							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
 							{
-								GS->ECs[i]->Stats.StatusEffectTimer[STUN] = effectTime;
+								GS->ECs[i]->Stats->StatusEffectTimer[STUN] = effectTime;
 							}
 						}
 					}
@@ -628,8 +628,8 @@ namespace InGame
 	}
 	void Item_12::Use(PlayerCharacter* owner)
 	{
-		global::item12TriggerRatio = value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.02);
-		global::item12AdditionalDamage = value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1);
+		global::item12TriggerRatio = value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.02f);
+		global::item12AdditionalDamage = value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_12::Update(PlayerCharacter* owner)
 	{
@@ -676,9 +676,9 @@ namespace InGame
 	}
 	void Item_13::Update(PlayerCharacter* owner)
 	{
-		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
+		if ((owner->Stats->FireRate * owner->GunData->GuntypeFireRateRatio) / owner->PS->effectiveFireRate > 1)
 		{
-			additionalEffectSizeRatio = (owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate;
+			additionalEffectSizeRatio = (owner->Stats->FireRate * owner->GunData->GuntypeFireRateRatio) / owner->PS->effectiveFireRate;
 		}
 		else
 		{
@@ -716,7 +716,7 @@ namespace InGame
 						{
 							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
 							{
-								GS->ECs[i]->adjustHealth(-owner->Stats.effectiveDamage);
+								GS->ECs[i]->adjustHealth(-owner->PS->effectiveDamage);
 							}
 						}
 					}
@@ -812,9 +812,9 @@ namespace InGame
 	{
 		global::additionalFireRateRatio -= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 
-		if ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate > 1)
+		if ((owner->Stats->FireRate * owner->GunData->GuntypeFireRateRatio) / owner->PS->effectiveFireRate > 1)
 		{
-			global::additionalDamageRatio += value2 * ((owner->Stats.FireRate * owner->GunData->GuntypeFireRateRatio) / owner->Stats.effectiveFireRate - 1.f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
+			global::additionalDamageRatio += value2 * ((owner->Stats->FireRate * owner->GunData->GuntypeFireRateRatio) / owner->PS->effectiveFireRate - 1.f) * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 		}
 	}
 	void Item_15::Update(PlayerCharacter* owner)
@@ -850,8 +850,8 @@ namespace InGame
 	{
 		if (appliedStack != Utils::GetItemCount(id))
 		{
-			owner->Stats.MaxHP += value2;
-			owner->Stats.HP += value2;
+			owner->Stats->MaxHP += value2;
+			owner->Stats->HP += value2;
 			appliedStack++;
 		}
 
@@ -893,7 +893,7 @@ namespace InGame
 		if (currKillCount >= targetKillCount * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f))
 		{
 			currKillCount -= static_cast<s32>(targetKillCount * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f));
-			owner->Stats.HP += value2;
+			owner->Stats->HP += value2;
 		}
 	}
 	void Item_17::Update(PlayerCharacter* owner)
@@ -926,8 +926,8 @@ namespace InGame
 	}
 	void Item_18::Use(PlayerCharacter* owner)
 	{
-		global::additionalDamage += (value1 * owner->Stats.HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
-		global::additionalMovementSpeed -= (value2 * owner->Stats.HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+		global::additionalDamage += (value1 * owner->Stats->HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
+		global::additionalMovementSpeed -= (value2 * owner->Stats->HP * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f));
 	}
 	void Item_18::Update(PlayerCharacter* owner)
 	{
@@ -1105,10 +1105,10 @@ namespace InGame
 		{
 			if (InPC)
 			{
-				if (InPC->Stats.Money >= value1)
+				if (InPC->PS->Money >= value1)
 				{
-					InPC->Stats.Money -= value1;
-					target->adjustHealth(-target->Stats.MaxHP * value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
+					InPC->PS->Money -= value1;
+					target->adjustHealth(-target->Stats->MaxHP * value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1));
 
 				}
 			}
@@ -1162,9 +1162,9 @@ namespace InGame
 
 		if (InPC)
 		{
-			if ((InPC->Stats.Money >= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05)) && !InPC->IsPlayerInvincible())
+			if ((InPC->PS->Money >= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05)) && !InPC->IsPlayerInvincible())
 			{
-				InPC->Stats.Money -= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05);
+				InPC->PS->Money -= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05);
 				InPC->SetPlayerInvincible();
 
 			}
@@ -1194,7 +1194,7 @@ namespace InGame
 		if (Utils::GetItemCount(id) != appliedStack)
 		{
 			appliedStack++;
-			owner->Stats.Money += owner->Stats.Money * value1;
+			owner->PS->Money += owner->PS->Money * value1;
 		}
 
 		global::item23RerollCostRatio += value2 * appliedStack;
@@ -1291,7 +1291,7 @@ namespace InGame
 		if (InPC)
 		{
 			
-			InPC->Stats.Money -= InPC->Stats.Money * value2 * (1.f - (Utils::GetItemCount(id) - 1) * 0.1);
+			InPC->PS->Money -= InPC->PS->Money * value2 * (1.f - (Utils::GetItemCount(id) - 1) * 0.1);
 	
 		}
 	}
@@ -1331,12 +1331,12 @@ namespace InGame
 		if (isTargetBoss)
 		{
 			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio) / 10.f)
-				target->Stats.StatusEffectTimer[STUN] = effectTime / 10.f;
+				target->Stats->StatusEffectTimer[STUN] = effectTime / 10.f;
 		}
 		else 
 		{
 			if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
-				target->Stats.StatusEffectTimer[STUN] = effectTime;
+				target->Stats->StatusEffectTimer[STUN] = effectTime;
 		}
 	}
 	//============================================= ID_27
@@ -1406,7 +1406,7 @@ namespace InGame
 							{
 								if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
 								{
-									GS->ECs[i]->Stats.StatusEffectTimer[FEAR] = effectTime;
+									GS->ECs[i]->Stats->StatusEffectTimer[FEAR] = effectTime;
 								}
 							}
 						}
@@ -1488,12 +1488,12 @@ namespace InGame
 		if (isTargetBoss)
 		{
 			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio) / 10.f)
-				target->Stats.StatusEffectTimer[VULNERABLE] = effectTime;
+				target->Stats->StatusEffectTimer[VULNERABLE] = effectTime;
 		}
 		else
 		{
 			if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
-				target->Stats.StatusEffectTimer[VULNERABLE] = effectTime;
+				target->Stats->StatusEffectTimer[VULNERABLE] = effectTime;
 		}
 	}
 	//============================================= ID_29
@@ -1561,7 +1561,7 @@ namespace InGame
 	{
 		if (!isTargetBoss)
 		{
-			if (target->Stats.HP / target->Stats.MaxHP <= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats.HP > 0.f)
+			if (target->Stats->HP / target->Stats->MaxHP <= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats->HP > 0.f)
 			{
 				target->adjustHealth(-99999999.f);
 			}

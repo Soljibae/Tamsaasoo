@@ -46,8 +46,8 @@ namespace Manager
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		PC = InPC;
 		GUN = InGUN;
-		prevMaxHP = PC->Stats.MaxHP;
-		prevCurrentHP = PC->Stats.HP;
+		prevMaxHP = PC->Stats->MaxHP;
+		prevCurrentHP = PC->Stats->HP;
 
 		Coin.Mesh = Utils::CreateMesh();
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
@@ -105,7 +105,7 @@ namespace Manager
 		PotionBG.size = { 100.f, 100.f };
 		PotionBG.Mesh = Utils::CreateMesh();
 		PotionBG.Texture = AEGfxTextureLoad("Assets/PotionBG.png");
-		prevPotion = PC->Stats.Potion;
+		prevPotion = PC->PS->Potion;
 		prevFireRate = GUN->RoundPerSec;
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
 		tooltip.Window.size = { maxTextW ,200 };
@@ -118,11 +118,11 @@ namespace Manager
 		/*-----*DEBUG* --------------- *DEBUG*-----*/
 		if (global::KeyInput(AEVK_M))
 		{
-			PC->Stats.Money += 1000;
+			PC->PS->Money += 1000;
 		}
 		if (global::KeyInput(AEVK_P))
 		{
-			PC->Stats.Potion += 100;
+			PC->PS->Potion += 100;
 		}
 		if (global::KeyInput(AEVK_F))
 		{
@@ -140,7 +140,7 @@ namespace Manager
 			}
 		}
 
-		if (prevMaxHP != PC->Stats.MaxHP)
+		if (prevMaxHP != PC->Stats->MaxHP)
 		{
 			HPBG.clear();
 			const float spacingX = 10.0f; // 가로 간격
@@ -150,7 +150,7 @@ namespace Manager
 			InGame::Actor bgobj;
 			bgobj.Texture = HPTex;
 			bgobj.Mesh = HPMesh;
-			for (int i = 0; i < PC->Stats.MaxHP; ++i)
+			for (int i = 0; i < PC->Stats->MaxHP; ++i)
 			{
 				int row = i;
 				int col = i;
@@ -160,13 +160,13 @@ namespace Manager
 			}
 		}
 
-		if (prevCurrentHP != PC->Stats.HP)
+		if (prevCurrentHP != PC->Stats->HP)
 		{
 			HP.clear();
 			InGame::Actor hpobj;
 			hpobj.Texture = HPBGTex;
 			hpobj.Mesh = HPMesh;
-			for (int i = 0; i < PC->Stats.HP; i++)
+			for (int i = 0; i < PC->Stats->HP; i++)
 			{
 				hpobj.position = HPBG[i].position;
 				hpobj.size = { HPWidth, HPHeight };
@@ -174,8 +174,8 @@ namespace Manager
 			}
 		}
 
-		prevMaxHP = PC->Stats.MaxHP;
-		prevCurrentHP = PC->Stats.HP;
+		prevMaxHP = PC->Stats->MaxHP;
+		prevCurrentHP = PC->Stats->HP;
 
 		/*--------Centered can fire UI--------*/
 		if (prevFireRate != GUN->RoundPerSec)
@@ -231,24 +231,24 @@ namespace Manager
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (global::KeyInput(AEVK_M))
 		{
-			PC->Stats.Money += 1000;
+			PC->PS->Money += 1000;
 		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		//DEBUG
 
 		//DEBUG
-		if (PC->Stats.Potion != prevPotion)
+		if (PC->PS->Potion != prevPotion)
 		{
 			f32 fillPercent = static_cast<f32>(prevPotion) / 100.f;
 			AEGfxMeshFree(Potion.Mesh);
 			Potion.Mesh = FillingMeshUpside(fillPercent);
-			if (prevPotion > PC->Stats.Potion)
+			if (prevPotion > PC->PS->Potion)
 			{
 				prevPotion -= 3;
-				if (prevPotion < PC->Stats.Potion)
-					prevPotion = PC->Stats.Potion;
+				if (prevPotion < PC->PS->Potion)
+					prevPotion = PC->PS->Potion;
 			}
-			else if (prevPotion < PC->Stats.Potion)
+			else if (prevPotion < PC->PS->Potion)
 			{
 				prevPotion++;
 			}
@@ -273,7 +273,7 @@ namespace Manager
 			Utils::DrawObject(fireTimeBar, false);
 		}
 		Utils::DrawObject(Coin, false);
-		std::string pText = std::to_string(static_cast<s32>(PC->Stats.Money));
+		std::string pText = std::to_string(static_cast<s32>(PC->PS->Money));
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);

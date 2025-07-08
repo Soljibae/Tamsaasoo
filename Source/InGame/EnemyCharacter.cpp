@@ -22,13 +22,13 @@ namespace InGame
 		size.x = 40;
 		size.y = 40;
 		CollisionRadius = 20;
-		
-		Stats.HP = 1;
-		Stats.FireRate = 1.f;
-		Stats.ProjectileSpeed = 30.f;
-		Stats.Damage = 1;
+		Stats = new Stat;
+		Stats->HP = 1;
+		Stats->FireRate = 1.f;
+		Stats->ProjectileSpeed = 30.f;
+		Stats->Damage = 1;
 
-		Stats.Init();
+		Stats->Init();
 
 		bHasDashed = false;
 		dashDuration = 0.f;
@@ -45,17 +45,17 @@ namespace InGame
 		AnimationState = IDLE;
 		Type = InData->Type;
 		Texture = InData->Texture;
-		Stats.Damage = InData->Damage;
+		Stats->Damage = InData->Damage;
 		Exp = InData->Exp;
-		Stats.MovementSpeed = InData->MovementSpeed;
-		Stats.ProjectileSpeed = InData->BulletSpeed;
+		Stats->MovementSpeed = InData->MovementSpeed;
+		Stats->ProjectileSpeed = InData->BulletSpeed;
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
-		Stats.MaxHP = InData->Health;
-		Stats.HP = InData->Health;
+		Stats->MaxHP = InData->Health;
+		Stats->HP = InData->Health;
 
-		AEVec2Set(&Stats.ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
+		AEVec2Set(&Stats->ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
 
 		/*--------DASHER--------*/
 		bHasDashed = false;
@@ -79,7 +79,7 @@ namespace InGame
 	{
 		UpdateEffectTime();
 		Utils::UpdateOffset(*this);
-		if (Stats.StatusEffectTimer[SLOW] > 0)
+		if (Stats->StatusEffectTimer[SLOW] > 0)
 		{
 			FrameTime = 0.6f;
 		}
@@ -87,17 +87,17 @@ namespace InGame
 		{
 			FrameTime = 0.2f;
 		}
-		if (Stats.StatusEffectTimer[BURN] > 0)
+		if (Stats->StatusEffectTimer[BURN] > 0)
 		{
 			BurnTimer += global::DeltaTime;
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats.MaxHP * global::effectiveBurnDamage);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage);
 			}
 		}
 
-		if (!(Stats.StatusEffectTimer[STUN] > 0))
+		if (!(Stats->StatusEffectTimer[STUN] > 0))
 		{
 			f32 len = AEVec2Distance(&global::PlayerLocation, &position);
 			f32 dx = position.x - global::PlayerLocation.x;
@@ -109,16 +109,16 @@ namespace InGame
 			}
 			direction.y = dy / len;
 			
-			if (Stats.StatusEffectTimer[FEAR] > 0)
+			if (Stats->StatusEffectTimer[FEAR] > 0)
 				AEVec2Scale(&direction, &direction, -1.f);
 
 			switch (Type)
 			{
 				case EnemyType::MINION:
 				{
-					f32 effectiveMovementSpeed = Stats.MovementSpeed;
+					f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
-					if (Stats.StatusEffectTimer[SLOW] > 0)
+					if (Stats->StatusEffectTimer[SLOW] > 0)
 					{
 						effectiveMovementSpeed *= 0.5f;
 					}
@@ -132,9 +132,9 @@ namespace InGame
 					ProjectileSpawnTimer += global::DeltaTime;
 					if (len > 500)
 					{
-						f32 effectiveMovementSpeed = Stats.MovementSpeed;
+						f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
-						if (Stats.StatusEffectTimer[SLOW] > 0)
+						if (Stats->StatusEffectTimer[SLOW] > 0)
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
@@ -146,7 +146,7 @@ namespace InGame
 					{
 						f32 effectiveChamberTimer = ProjectileChamberTimer;
 
-						if (Stats.StatusEffectTimer[SLOW] > 0)
+						if (Stats->StatusEffectTimer[SLOW] > 0)
 						{
 							effectiveChamberTimer *= 1.5f;
 						}
@@ -192,7 +192,7 @@ namespace InGame
 								// 계속 돌진
 								f32 effectiveDashSpeed = dashSpeed;
 
-								if (Stats.StatusEffectTimer[SLOW] > 0)
+								if (Stats->StatusEffectTimer[SLOW] > 0)
 								{
 									effectiveDashSpeed *= 0.5f;
 								}
@@ -215,7 +215,7 @@ namespace InGame
 							// 사정거리 밖 → 천천히 추적
 							f32 effectiveMovementSpeed = walkSpeed;
 
-							if (Stats.StatusEffectTimer[SLOW] > 0)
+							if (Stats->StatusEffectTimer[SLOW] > 0)
 							{
 								effectiveMovementSpeed *= 0.5f;
 							}
@@ -238,9 +238,9 @@ namespace InGame
 				}
 				case EnemyType::TANKER:
 				{
-					f32 effectiveMovementSpeed = Stats.MovementSpeed;
+					f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
-					if (Stats.StatusEffectTimer[SLOW] > 0)
+					if (Stats->StatusEffectTimer[SLOW] > 0)
 					{
 						effectiveMovementSpeed *= 0.5f;
 					}
@@ -260,9 +260,9 @@ namespace InGame
 						}
 						else
 						{
-							f32 effectiveMovementSpeed = Stats.MovementSpeed;
+							f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
-							if (Stats.StatusEffectTimer[SLOW] > 0)
+							if (Stats->StatusEffectTimer[SLOW] > 0)
 							{
 								effectiveMovementSpeed *= 0.5f;
 							}
@@ -276,7 +276,7 @@ namespace InGame
 						
 						f32 effectiveDetonationDelay = detonationDelay;
 
-						if (Stats.StatusEffectTimer[SLOW] > 0)
+						if (Stats->StatusEffectTimer[SLOW] > 0)
 						{
 							effectiveDetonationDelay *= 1.5f;
 						}
@@ -308,6 +308,11 @@ namespace InGame
 	}
 	void EnemyCharacter::Destroy()
 	{
+		if (Stats)
+		{
+			delete Stats;
+			Stats = nullptr;
+		}
 		if (Mesh)
 		{
 			Utils::DestroyMesh(Mesh);
@@ -317,19 +322,19 @@ namespace InGame
 	}
 	void EnemyCharacter::adjustHealth(f32 Amount)
 	{
-		if (Stats.StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
+		if (Stats->StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)
 		{
 			Amount *= 1.2f;
 		}
 
-		if (Stats.HP / Stats.MaxHP >= global::item12TriggerRatio && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
+		if (Stats->HP / Stats->MaxHP >= global::item12TriggerRatio && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
 		{
 			Amount *= global::item12AdditionalDamage;
 		}
 
-		Stats.HP = std::clamp(Stats.HP + Amount, 0.0f, Stats.MaxHP);
+		Stats->HP = std::clamp(Stats->HP + Amount, 0.0f, Stats->MaxHP);
 
-		if (Stats.HP <= 0)
+		if (Stats->HP <= 0)
 		{
 			bIsPandingKill = true;
 		}
@@ -356,39 +361,39 @@ namespace InGame
 	}
 	void EnemyCharacter::UpdateEffectTime()
 	{
-		for (size_t i = 0; i < Stats.StatusEffectTimer.size(); i++)
+		for (size_t i = 0; i < Stats->StatusEffectTimer.size(); i++)
 		{
 			switch (i)
 			{
 			case 0:
-				if (Stats.StatusEffectTimer[BURN] > 0)
-					Stats.StatusEffectTimer[BURN] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[BURN] < 0)
-					Stats.StatusEffectTimer[BURN] = 0;
+				if (Stats->StatusEffectTimer[BURN] > 0)
+					Stats->StatusEffectTimer[BURN] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[BURN] < 0)
+					Stats->StatusEffectTimer[BURN] = 0;
 				break;
 			case 1:
-				if (Stats.StatusEffectTimer[STUN] > 0)
-					Stats.StatusEffectTimer[STUN] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[STUN] < 0)
-					Stats.StatusEffectTimer[STUN] = 0;
+				if (Stats->StatusEffectTimer[STUN] > 0)
+					Stats->StatusEffectTimer[STUN] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[STUN] < 0)
+					Stats->StatusEffectTimer[STUN] = 0;
 				break;
 			case 2:
-				if (Stats.StatusEffectTimer[SLOW] > 0)
-					Stats.StatusEffectTimer[SLOW] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[SLOW] < 0)
-					Stats.StatusEffectTimer[SLOW] = 0;
+				if (Stats->StatusEffectTimer[SLOW] > 0)
+					Stats->StatusEffectTimer[SLOW] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[SLOW] < 0)
+					Stats->StatusEffectTimer[SLOW] = 0;
 				break;
 			case 3:
-				if (Stats.StatusEffectTimer[FEAR] > 0)
-					Stats.StatusEffectTimer[FEAR] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[FEAR] < 0)
-					Stats.StatusEffectTimer[FEAR] = 0;
+				if (Stats->StatusEffectTimer[FEAR] > 0)
+					Stats->StatusEffectTimer[FEAR] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[FEAR] < 0)
+					Stats->StatusEffectTimer[FEAR] = 0;
 				break;
 			case 4:
-				if (Stats.StatusEffectTimer[VULNERABLE] > 0)
-					Stats.StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
-				if (Stats.StatusEffectTimer[VULNERABLE] < 0)
-					Stats.StatusEffectTimer[VULNERABLE] = 0;
+				if (Stats->StatusEffectTimer[VULNERABLE] > 0)
+					Stats->StatusEffectTimer[VULNERABLE] -= global::DeltaTime;
+				if (Stats->StatusEffectTimer[VULNERABLE] < 0)
+					Stats->StatusEffectTimer[VULNERABLE] = 0;
 				break;
 			default:
 				break;

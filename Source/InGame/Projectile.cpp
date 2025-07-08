@@ -14,32 +14,32 @@ void InGame::Projectile::Init()
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
 {
-	size = object->Stats.ProjectileSize;
+	size = object->Stats->ProjectileSize;
 	direction = Dir;
 	position = Pos;
-	CollisionRadius = object->Stats.ProjectileCollisionSize;
+	CollisionRadius = object->Stats->ProjectileCollisionSize;
 	bIsPandingKill = false;
 	isExplosive = false;
 	AEVec2Set(&ExplosionSize, global::item32ExplosionSize, global::item32ExplosionSize);
 	AEVec2Set(&ExplosionOffset, 0.f, 0.f);
 	
-	BulletSpeed = object->Stats.ProjectileSpeed;
-	HitCount = object->Stats.effectiveHitCount ;
-	Damage = object->Stats.effectiveDamage;
+	BulletSpeed = object->Stats->ProjectileSpeed;
+	HitCount = object->PS->effectiveHitCount ;
+	Damage = object->PS->effectiveDamage;
 
 }
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 {
-	size = object->Stats.ProjectileSize;
+	size = object->Stats->ProjectileSize;
 	direction = Dir;
 	position = Pos;
-	CollisionRadius = object->Stats.ProjectileCollisionSize;
+	CollisionRadius = object->Stats->ProjectileCollisionSize;
 	bIsPandingKill = false;
 	isExplosive = false;
 
-	BulletSpeed = object->Stats.ProjectileSpeed;
-	Damage = object->Stats.Damage;
+	BulletSpeed = object->Stats->ProjectileSpeed;
+	Damage = object->Stats->Damage;
 }
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Damage, s32 HitCount, bool isExplosive)

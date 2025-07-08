@@ -1,6 +1,7 @@
 #pragma once
 #include "AEEngine.h"
 #include "../InGame/Actor.h"
+#include "../InGame/Character.h"
 #include "../InGame/Item.h"
 
 namespace Utils
@@ -16,6 +17,8 @@ namespace Utils
 
 	void DrawObject(InGame::Actor& object, bool is_camera_enabled = true, f32 alpha = 1.f);
 
+	void DrawObject(InGame::Character& object, bool is_camera_enabled = true, f32 alpha = 1.f);
+	
 	void DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha = 1.f);
 
 	void DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha = 1.f);

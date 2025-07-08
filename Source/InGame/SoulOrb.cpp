@@ -48,7 +48,7 @@ namespace InGame
 				{
 					if (GS->PC)
 					{
-						GS->PC->Stats.Potion += 1;
+						GS->PC->PS->Potion += 1;
 					}
 				}
 			}
