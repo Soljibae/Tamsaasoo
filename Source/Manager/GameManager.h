@@ -16,12 +16,13 @@ namespace Manager
 		void Draw();
 		void Destroy();
 		void SetNextGameState(EGameState state);
-
+		
 		AGameState* currStateREF;
 		EGameState currState;
 		EGameState nextState;
 		bool GamePaused{ false };
 		bool forceRestart{ false };
+		bool shouldExit{ false };
 	};
 	extern GameManager gm;
 }

@@ -25,6 +25,12 @@ namespace Manager
 		startButton.position = { 0.f, 100.f };
 		startButton.size = { 300, 120 };
 		startButton.SetCallback([]() {gm.SetNextGameState(EGameState::PLAYING); });
+
+		exitButton.Mesh = Utils::CreateMesh();
+		exitButton.Texture = AEGfxTextureLoad("Assets/Buttons/ExitButton.png");
+		exitButton.position = { 0.f, -100.f };
+		exitButton.size = { 300, 120 };
+		exitButton.SetCallback([]() {gm.shouldExit = true; });
 	}
 	void MainMenu::Update()
 	{
@@ -37,12 +43,14 @@ namespace Manager
 		{
 			alpha = 0;
 			startButton.Update();
+			exitButton.Update();
 		}
 	}
 	void MainMenu::Draw()
 	{
 		Utils::DrawObject(Illust, false);
 		Utils::DrawObject(startButton, false);
+		Utils::DrawObject(exitButton, false);
 		if (alpha != 0)
 		{
 			Utils::DrawObject(Black, false, alpha);
@@ -58,5 +66,8 @@ namespace Manager
 
 		AEGfxMeshFree(startButton.Mesh);
 		AEGfxTextureUnload(startButton.Texture);
+
+		AEGfxMeshFree(exitButton.Mesh);
+		AEGfxTextureUnload(exitButton.Texture);
 	}
 }

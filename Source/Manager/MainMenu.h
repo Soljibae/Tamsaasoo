@@ -20,5 +20,6 @@ namespace Manager
 		const f32 fadeInDuration{ 1.f };
 		static f32 alpha;
 		Button startButton;
+		Button exitButton;
 	};
 }

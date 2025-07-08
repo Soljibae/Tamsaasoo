@@ -31,7 +31,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	{
 		Manager::gm.Update();
 		Manager::gm.Draw();
-		if (0 == AESysDoesWindowExist())
+		if (0 == AESysDoesWindowExist()|| Manager::gm.shouldExit)
 			gGameRunning = 0;
 	}
 	Manager::gm.Destroy();
