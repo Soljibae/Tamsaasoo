@@ -94,6 +94,7 @@ namespace InGame
 		sniperState = SniperState::APPROACHING;
 		SniperShootTimer = 0.f;
 		bRetreatDirInitialized = false;
+		bIsWarned = false;
 		/*--------SNIPER--------*/
 		/*--------BURNER--------*/
 		float FlameZoneTimer = 0.f;
@@ -445,8 +446,6 @@ namespace InGame
 				}
 				case EnemyType::SNIPER:
 				{
-					float lenToPlayer = AEVec2Distance(&position, &global::PlayerLocation);
-
 					// 플레이어 방향
 					AEVec2 dirToPlayer;
 					AEVec2Sub(&dirToPlayer, &global::PlayerLocation, &position);
@@ -461,7 +460,7 @@ namespace InGame
 					switch (sniperState)
 					{
 					case SniperState::APPROACHING:
-						if (lenToPlayer > SniperApproachDistance)
+						if (len > SniperApproachDistance)
 						{
 							position.x += dirToPlayer.x * speed * global::DeltaTime;
 							position.y += dirToPlayer.y * speed * global::DeltaTime;
@@ -498,12 +497,13 @@ namespace InGame
 
 					case SniperState::SHOOTING:
 						SniperShootTimer += global::DeltaTime;
+						
 						if (SniperShootTimer >= SniperShootInterval)
 						{
 							SniperShootTimer = 0.f;
 							LaserAttack* laser = new LaserAttack;
 							laser->Init(position, dirToPlayer, this, 3200.f, 1.f, 0.f, false);
-
+							bIsWarned = false;
 							if (Manager::gm.currStateREF)
 							{
 								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
@@ -512,6 +512,23 @@ namespace InGame
 									GS->EAAs.push_back(laser);
 								}
 							}
+						}
+						else if (SniperShootTimer >= SniperShootInterval-1.f)
+						{
+							if (!bIsWarned)
+							{
+								if (Manager::gm.currStateREF)
+								{
+									Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+									if (GS)
+									{
+										AEVec2 WarningDraw = { 3200.f, 30.f };
+										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer, this);
+										bIsWarned = true;
+									}
+								}
+							}
+
 						}
 						//AnimationState = ATTACK;
 						break;

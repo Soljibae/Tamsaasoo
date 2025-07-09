@@ -250,7 +250,7 @@ namespace InGame
 
 		for (Character* InCharacter : InCharacters)
 		{
-			if (CheckCollision(InCharacter->position))
+			if (CheckCollision(InCharacter->position) && InCharacter!=Owner)
 			{
 				InCharacter->adjustHealth(-Damage);
 			}

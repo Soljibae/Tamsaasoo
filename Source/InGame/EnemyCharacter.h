@@ -75,7 +75,7 @@ namespace InGame
 		AEVec2 SniperRetreatDir;
 		AEVec2 SniperRetreatStartPos;
 		bool bRetreatDirInitialized = false;
-
+		bool bIsWarned = false;
 		/*--------SNIPER--------*/
 		/*--------BURNER--------*/
 		float FlameZoneTimer = 0.f;
