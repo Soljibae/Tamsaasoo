@@ -112,6 +112,10 @@ namespace Manager
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
 		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltipBorder.png");
+		Vignetting.position = { 0,0 };
+		Vignetting.size = { w,h };
+		Vignetting.Mesh = Utils::CreateMesh();
+		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
 	}
 
 	void HUDController::Update()
@@ -122,7 +126,6 @@ namespace Manager
 			const float spacingX = 10.0f; // 가로 간격
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
 			const float Y = (global::ScreenHeight / 2) - 100.f;
-
 			InGame::Actor bgobj;
 			bgobj.Texture = HPTex;
 			bgobj.Mesh = HPMesh;
@@ -234,9 +237,40 @@ namespace Manager
 
 		}
 	}
-
 	void HUDController::Draw()
 	{
+		// Set color to red and reset to origin color
+		if (PC->Stats->HP > 0 && PC->Stats->HP < 2)
+		{
+			f32 r = 0.5f;
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+			AEGfxSetTransparency(1.0f);
+
+			AEGfxTextureSet(Vignetting.Texture, 0.f, 0.f);
+
+			AEMtx33 scale;
+			AEMtx33Scale(&scale, Vignetting.size.x, Vignetting.size.y);
+			AEMtx33 tran;
+			AEMtx33Trans(&tran, Vignetting.position.x, Vignetting.position.y);
+			AEMtx33 transform;
+
+			AEMtx33Concat(&transform, &tran, &scale);
+
+			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
+
+			AEGfxSetColorToAdd(r, 0.f, 0.f, 0.5f);
+
+			AEGfxSetTransform(transform.m);
+
+			AEGfxMeshDraw(Vignetting.Mesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
+
+			AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
+		}
 		if (gameOverScreen.isGameOver)
 		{
 			return;
@@ -260,6 +294,7 @@ namespace Manager
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
+
 	}
 
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
@@ -441,6 +476,9 @@ namespace Manager
 		AEGfxTextureUnload(tooltip.Window.Texture);
 
 		AEGfxDestroyFont(pFont);
+
+		AEGfxMeshFree(Vignetting.Mesh);
+		AEGfxTextureUnload(Vignetting.Texture);
 	}
 
 }

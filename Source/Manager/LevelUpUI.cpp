@@ -53,6 +53,8 @@ namespace Manager
 			rerollCostIcon[i].position.x = baseX + rerollSize;
 			rerollCostIcon[i].position.y = baseY;
 			rerollCostIcon[i].size = { rerollSize / 2.f,rerollSize / 2.f };
+			rerollButton[i].Init();
+			ItemWindow[i].Init();
 		}
 		windowMesh = Utils::CreateNinePatchMesh();
 		windowTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
@@ -90,6 +92,7 @@ namespace Manager
 		}
 		for (s8 i = 0; i < ItemWindow.size(); i++)
 		{
+			rerollButton[i].Update();
 			ItemWindow[i].Update();
 		}
 	}
@@ -199,7 +202,7 @@ namespace Manager
 		}
 		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		PC->PS->Money -= rerollCost[thisbutton];
-
+		rerollCost[thisbutton] *= 1.7f;
 
 		std::shared_ptr<InGame::Item> option;
 

@@ -25,12 +25,14 @@ namespace Manager
 		startButton.position = { 0.f, 100.f };
 		startButton.size = { 300, 120 };
 		startButton.SetCallback([]() {gm.SetNextGameState(EGameState::PLAYING); });
+		startButton.Init();
 
 		exitButton.Mesh = Utils::CreateMesh();
 		exitButton.Texture = AEGfxTextureLoad("Assets/Buttons/ExitButton.png");
 		exitButton.position = { 0.f, -100.f };
 		exitButton.size = { 300, 120 };
 		exitButton.SetCallback([]() {gm.shouldExit = true; });
+		exitButton.Init();
 	}
 	void MainMenu::Update()
 	{

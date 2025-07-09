@@ -26,6 +26,8 @@ namespace Manager
 			isGameOver = false;
 			gm.SetNextGameState(EGameState::MAINMENU);
 			});
+		buttons.MainMenu.Init();
+
 		buttons.Retry.size = { 300.f, 100.f };
 		buttons.Retry.position = { startX + buttonOffset, startY };
 		buttons.Retry.Mesh = Utils::CreateMesh();
@@ -34,6 +36,7 @@ namespace Manager
 			isGameOver = false;
 			gm.forceRestart = true;
 			});
+		buttons.Retry.Init();
 		BGalpha = 0.f;
 		fadeoutTime = 0.f;
 		fadeoutDuration = 3.f;

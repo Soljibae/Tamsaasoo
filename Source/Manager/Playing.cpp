@@ -83,7 +83,7 @@ namespace Manager
 		ExpPanel.Update();
 		if (global::KeyInput(AEVK_G))
 		{
-			gunPickPanel.Show();
+			pickPanel.Show();
 		}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive() && !gunPickPanel.IsActive())

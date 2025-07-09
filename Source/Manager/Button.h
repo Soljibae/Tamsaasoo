@@ -6,6 +6,7 @@ namespace Manager
 	class Button : public InGame::Actor
 	{
 	public:
+		void Init();
 		void Update();
 		bool IsHovered();
 		bool IsClicked();
@@ -17,5 +18,6 @@ namespace Manager
 		std::function<void()> callback;
 		bool wasScaled = false;
 		bool isSelected = false;
+		AEVec2 originSize;
 	};
 }

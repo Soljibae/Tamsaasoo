@@ -22,12 +22,14 @@ namespace Manager
 		resumeButton.position = {-600, 300};
 		resumeButton.size = { BW , BH };
 		resumeButton.SetCallback([]() { gm.Resume(); });
+		resumeButton.Init();
 
 		mainmenuButton.Mesh = Utils::CreateMesh();
 		mainmenuButton.Texture = AEGfxTextureLoad("Assets/Buttons/MainMenuButton.png");
 		mainmenuButton.position = {-600, 150};
 		mainmenuButton.size = { BW , BH };
 		mainmenuButton.SetCallback([]() { gm.SetNextGameState(EGameState::MAINMENU); });
+		mainmenuButton.Init();
 
 		pauseDimmer.Mesh = Utils::CreateMesh();
 		pauseDimmer.Texture = AEGfxTextureLoad("Assets/black.png");
