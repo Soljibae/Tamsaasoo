@@ -59,9 +59,14 @@ namespace InGame
 			if (timer < lifeTime)
 			{
 				AEVec2 toCenter;
-				AEVec2Sub(&toCenter, &position, &global::PlayerLocation);
+				AEVec2Sub(&toCenter, &position, &InCharacter->position);
 				float dist = AEVec2Length(&toCenter);
-				if (dist < radius)
+				if (dist == 0.f)
+				{
+					continue;
+					//a
+				}
+				else if (dist < radius)
 				{
 					AEVec2 dir;
 					AEVec2Normalize(&dir, &toCenter);
@@ -71,6 +76,7 @@ namespace InGame
 
 					InCharacter->position.x += pull.x;
 					InCharacter->position.y += pull.y;
+					
 				}
 			}
 		}
@@ -142,11 +148,12 @@ namespace InGame
 		ArealAttack::Destroy();
 	}
 
-	void BurningAreaAttack::Init(AEVec2 SpawnLocation, f32 InRadius, f32 InLifeTime, float damageInterval)
+	void BurningAreaAttack::Init(AEVec2 SpawnLocation, f32 InRadius, f32 InLifeTime, f32 damageInterval)
 	{
 		ArealAttack::Init();
 		position = SpawnLocation;
 		radius = InRadius;
+		AEVec2Set(&size, radius*2.f, radius*2.f);
 		lifeTime = InLifeTime;
 		tickInterval = damageInterval;
 		timer = 0.f;
@@ -164,7 +171,7 @@ namespace InGame
 			for (Character* InCharacter : InCharacters)
 			{
 				AEVec2 toPlayer;
-				AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
+				AEVec2Sub(&toPlayer, &InCharacter->position, &position);
 				if (AEVec2Length(&toPlayer) <= radius)
 				{
 					InCharacter->adjustHealth(-damagePerTick);
@@ -176,13 +183,9 @@ namespace InGame
 
 	void BurningAreaAttack::Draw()
 	{
-		float alpha = 0.3f + 0.2f * sinf(timer * 6.f); // ºÒ²É ±ôºýÀÓ
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetTransparency(alpha);
-		AEGfxTextureSet(Texture, 0, 0);
-		AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
-		AEGfxSetTransparency(1.0f);
+		float alpha = 0.3f + 0.1f * sinf(timer * 6.f); // ºÒ²É ±ôºýÀÓ
+		ArealAttack::Draw();
+		Utils::DrawObject(*this,true, alpha);
 	}
 
 	void BurningAreaAttack::Destroy()
@@ -196,7 +199,7 @@ namespace InGame
 		column = 1;
 		Mesh = Utils::CreateMesh();
 		Utils::InitOffset(*this);
-		MaxAnimationCount[NONE] = 1;
+		MaxAnimationCount[IDLE] = 1;
 		Pivot = InPivot;
 		direction = dir;
 		length = InLength;

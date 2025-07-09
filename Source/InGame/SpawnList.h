@@ -16,6 +16,8 @@ namespace InGame
 		std::string ZigZagNum;
 		std::string OrbiterNum;
 		std::string SniperNum;
+		std::string BurnerNum;
+		std::string HolerNum;
 	};
 
 	class WaveManager

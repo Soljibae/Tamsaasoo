@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Stat.h"
 #include "EnemyData.h"
+#include "ArealAttack.h"
 namespace InGame
 {
 	enum class SniperState {
@@ -76,6 +77,20 @@ namespace InGame
 		bool bRetreatDirInitialized = false;
 
 		/*--------SNIPER--------*/
+		/*--------BURNER--------*/
+		float FlameZoneTimer = 0.f;
+		float FlameZoneInterval = 4.0f;
+		float FlameZoneDuration = 3.0f;
+		AEVec2 FlameZonePos;
+		float FlameZoneRadius = 200.f;
+		/*--------BURNER--------*/
+		/*--------HOLER--------*/
+		float BlackHoleSpawnTimer = 0.f;
+		float BlackHoleSpawnInterval = 10.0f;
+		float BlackHoleDuration = 13.0f;
+		AEVec2 BlackHolePos;
+		float BlackHoleRadius = 400.f;
+		/*--------HOLER--------*/
 	protected:
 	private:
 	};

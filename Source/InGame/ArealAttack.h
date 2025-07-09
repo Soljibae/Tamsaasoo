@@ -51,7 +51,7 @@ namespace InGame
 	class BurningAreaAttack : public ArealAttack
 	{
 	public:
-		virtual void Init(AEVec2 SpawnLocation, f32 InRadius, f32 lifeTime, float damageInterval);
+		virtual void Init(AEVec2 SpawnLocation, f32 InRadius, f32 lifeTime, f32 damageInterval);
 		virtual void Update(std::vector<Character*>InCharacters) override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
