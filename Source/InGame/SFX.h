@@ -17,6 +17,8 @@ namespace InGame
 	public:
 		void Update(f32 DeltaTime);
 		SFXType Type;
+
+		AEAudioGroup ag = AEAudioCreateGroup();
 	};
 
 	class SFXManager : public Actor
