@@ -129,6 +129,12 @@ namespace Manager
 				AEGfxTextureUnload(ItemSlot[i].Texture);
 				ItemSlot[i].Texture = nullptr;
 			}
+
+			if (ItemWindow[i].Texture)
+			{
+				AEGfxTextureUnload(ItemWindow[i].Texture);
+				ItemWindow[i].Texture = nullptr;
+			}
 			switch (currentOptions[i]->grade)
 			{
 			case InGame::ItemGrade::COMMON:

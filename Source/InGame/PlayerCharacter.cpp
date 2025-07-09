@@ -60,7 +60,6 @@ namespace InGame
 	}
 	void PlayerCharacter::Update()
 	{
-		Stats->HP++;
 		if (Manager::gameOverScreen.isGameOver)
 		{
 			return;
