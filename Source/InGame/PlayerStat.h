@@ -17,7 +17,7 @@ namespace InGame
 		f32 ExpGained = 0.f;
 		s32 HitCount = 0;
 		u32 TargetExp = 0;
-		f32 Money = 0.f;
+		f64 Money = 0.f;
 		s16 Potion = 0;
 		s32 ReviveCount = 0;
 		f32 BurnDamage = 0.f;
