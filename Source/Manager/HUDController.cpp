@@ -213,7 +213,7 @@ namespace Manager
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (global::KeyInput(AEVK_M))
 		{
-			PC->PS->Money += 100000;
+			PC->PS->Money += 1000000000;
 		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		//DEBUG

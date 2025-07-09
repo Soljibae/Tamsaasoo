@@ -155,6 +155,7 @@ namespace InGame
 		}
 		global::PlayerLocation = position;
 		global::PlayerMouseDirection = MouseDirection;
+		
 		Utils::UpdateOffset(*this);
 		/*----- Heal Potion -----*/
 		if (PS->Potion > 100)

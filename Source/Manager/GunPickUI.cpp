@@ -8,15 +8,15 @@
 namespace Manager
 {
 	GunPickUI gunPickPanel;
-	const f32 w = static_cast<f32>(global::ScreenWidth);
-	const f32 h = static_cast<f32>(global::ScreenHeight);
-	f32 buttonWidth = w / 2.f;
-	f32 buttonHeight = h / 5.f;
-	f32 spacingY = 50.f;
-	f32 totalHeight = 3 * buttonHeight + 2 * spacingY;
-	f32 margin = 60.f;
-	f32 padding = 15.f;
-	f32 startY = -(h / 2.f) + margin + (buttonHeight / 2.f);
+	static const f32 w = static_cast<f32>(global::ScreenWidth);
+	static const f32 h = static_cast<f32>(global::ScreenHeight);
+	static f32 buttonWidth = w / 2.f;
+	static f32 buttonHeight = h / 5.f;
+	static f32 spacingY = 50.f;
+	static f32 totalHeight = 3 * buttonHeight + 2 * spacingY;
+	static f32 margin = 60.f;
+	static f32 padding = 15.f;
+	static f32 startY = -(h / 2.f) + margin + (buttonHeight / 2.f);
 
 	void GunPickUI::Init(InGame::PlayerCharacter* InPC)
 	{
@@ -24,6 +24,7 @@ namespace Manager
 		for (int i = 0; i < weaponOptionButtons.size(); i++)
 		{
 			weaponOptionButtons[i].size = { buttonWidth, buttonHeight };
+			weaponOptionButtons[i].Init();
 			weaponOptionButtons[i].position = {
 				0,
 				startY + i * (buttonHeight + spacingY)

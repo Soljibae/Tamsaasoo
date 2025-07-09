@@ -65,7 +65,6 @@ namespace Manager
 		}
 		ItemSlotMesh = Utils::CreateNinePatchMesh();
 		windowMesh = Utils::CreateNinePatchMesh();
-		windowTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
 
 		epicWhite.Mesh = Utils::CreateMesh();
 		epicWhite.Texture = AEGfxTextureLoad("Assets/white.png");
@@ -130,19 +129,29 @@ namespace Manager
 				AEGfxTextureUnload(ItemSlot[i].Texture);
 				ItemSlot[i].Texture = nullptr;
 			}
+
+			if (ItemWindow[i].Texture)
+			{
+				AEGfxTextureUnload(ItemWindow[i].Texture);
+				ItemWindow[i].Texture = nullptr;
+			}
 			switch (currentOptions[i]->grade)
 			{
 			case InGame::ItemGrade::COMMON:
 				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotW.png");
+				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotW.png");
 				break;
 			case InGame::ItemGrade::UNCOMMON:
 				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotB.png");
+				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotB.png");
 				break;
 			case InGame::ItemGrade::RARE:
 				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotY.png");
+				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotY.png");
 				break;
 			case InGame::ItemGrade::EPIC:
 				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
+				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				gotEpic = true;
 				break;
 			}
@@ -158,7 +167,7 @@ namespace Manager
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
 		for (int i = 0; i < ItemWindow.size(); i++)
 		{
-			Utils::DrawNinePatchMesh(ItemWindow[i], windowTexture, windowMesh, 30.f);
+			Utils::DrawNinePatchMesh(ItemWindow[i], ItemWindow[i].Texture, windowMesh, 30.f);
 			Utils::DrawNinePatchMesh(ItemSlot[i], ItemSlot[i].Texture, ItemSlotMesh, 20.f);
 			Utils::DrawItem(*currentOptions[i]);
 			Utils::DrawObject(rerollButton[i], rerollTexture, rerollMesh, 1.f);
@@ -281,19 +290,28 @@ namespace Manager
 			AEGfxTextureUnload(ItemSlot[thisbutton].Texture);
 			ItemSlot[thisbutton].Texture = nullptr;
 		}
+		if (ItemWindow[thisbutton].Texture)
+		{
+			AEGfxTextureUnload(ItemWindow[thisbutton].Texture);
+			ItemWindow[thisbutton].Texture = nullptr;
+		}
 		switch (currentOptions[thisbutton]->grade)
 		{
 		case InGame::ItemGrade::COMMON:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotW.png");
+			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotW.png");
 			break;
 		case InGame::ItemGrade::UNCOMMON:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotB.png");
+			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotB.png");
 			break;
 		case InGame::ItemGrade::RARE:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotY.png");
+			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotY.png");
 			break;
 		case InGame::ItemGrade::EPIC:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
+			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 			gotEpic = true;
 			break;
 		}
@@ -344,7 +362,11 @@ namespace Manager
 			if(mesh)
 				AEGfxMeshFree(mesh);
 		}
-		AEGfxTextureUnload(windowTexture);
+		for (auto obj : ItemWindow)
+		{
+			if (obj.Texture)
+				AEGfxTextureUnload(obj.Texture);
+		}
 
 		AEGfxMeshFree(epicWhite.Mesh);
 		AEGfxTextureUnload(epicWhite.Texture);
