@@ -47,7 +47,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
-
+		grade = EPIC;
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
@@ -85,6 +85,7 @@ namespace InGame
 		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
+		grade = RARE;
 		if (Manager::gm.currStateREF)
 		{
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
@@ -160,6 +161,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
+		grade = UNCOMMON;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -198,6 +200,8 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
+		grade = COMMON;
+
 		appliedStack = 0;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);

@@ -11,6 +11,7 @@ namespace Manager
 	class LevelUpUI : public InGame::Actor
 	{
 	public:
+		void ResetGotEpic();
 		void Init(InGame::PlayerCharacter* InPC);
 		void Update() override;
 		void Draw() override;
@@ -25,7 +26,10 @@ namespace Manager
 		std::vector<std::shared_ptr<InGame::Item>> currentOptions;
 
 		bool isActive = false;
-
+		
+		bool gotEpic = false;
+		InGame::Actor epicWhite;
+		f32 epicAlpha{ 1.f };
 		InGame::PlayerCharacter* PC;
 
 		std::array<Button, 3> ItemWindow;
