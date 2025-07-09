@@ -11,6 +11,8 @@ namespace InGame
 		ZIGZAG = 5,
 		ORBITER = 6,
 		SNIPER = 7,
+		BURNER = 8,
+		HOLER = 9,
 	};
 
 	static EnemyType GetNextEnemyType(EnemyType InEnemyType)
@@ -31,6 +33,8 @@ namespace InGame
 			return ORBITER;
 		case EnemyType::ORBITER:
 			return SNIPER;
+		case EnemyType::SNIPER:
+			return BURNER;
 		}
 		return EnemyType::MINION;
 	}
@@ -188,6 +192,36 @@ namespace InGame
 			MovementSpeed = 300;
 			BulletSpeed = 5;
 			AEVec2Set(&ProjectileSize, 20.f, 20.f);
+		}
+	};
+	struct BurnerData : EnemyData
+	{
+	public:
+		virtual void Init() override
+		{
+			Type = EnemyType::BURNER;
+			Texture = AEGfxTextureLoad("Assets/Burner.png");
+			Damage = 1;
+			Exp = 2;
+			Health = 1;
+			AEVec2Set(&DrawSize, 100.f, 100.f);
+			CollisionRadius = 50.f;
+			MovementSpeed = 100;
+		}
+	};
+	struct HolerData : EnemyData
+	{
+	public:
+		virtual void Init() override
+		{
+			Type = EnemyType::HOLER;
+			Texture = AEGfxTextureLoad("Assets/Holer.png");
+			Damage = 1;
+			Exp = 2;
+			Health = 1;
+			AEVec2Set(&DrawSize, 100.f, 100.f);
+			CollisionRadius = 50.f;
+			MovementSpeed = 100;
 		}
 	};
 }

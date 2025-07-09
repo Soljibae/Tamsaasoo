@@ -8,7 +8,11 @@ namespace InGame
 	enum VFXType
 	{
 		Explosion = 0,
-		Burn = 1,
+		WarningExplosion = 1,
+		Burn = 2,
+		WarningBurn = 3,
+		Lazer = 4,
+		WarningLazer = 5,
 	};
 	struct VFXData
 	{
@@ -35,3 +39,4 @@ namespace InGame
 		std::list<VFXData*> DrawItemList;
 	};
 }
+//a

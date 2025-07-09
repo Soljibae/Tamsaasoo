@@ -25,6 +25,8 @@ namespace InGame
 		std::getline(ss, CurrList.ZigZagNum, ',');
 		std::getline(ss, CurrList.OrbiterNum, ',');
 		std::getline(ss, CurrList.SniperNum, ',');
+		std::getline(ss, CurrList.BurnerNum, ',');
+		std::getline(ss, CurrList.HolerNum, ',');
 	}
 
 	void WaveManager::Destroy()

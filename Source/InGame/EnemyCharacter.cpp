@@ -95,6 +95,12 @@ namespace InGame
 		SniperShootTimer = 0.f;
 		bRetreatDirInitialized = false;
 		/*--------SNIPER--------*/
+		/*--------BURNER--------*/
+		float FlameZoneTimer = 0.f;
+		/*--------BURNER--------*/
+		/*--------HOLER--------*/
+		float BlackHoleSpawnTimer = 0.f;
+		/*--------HOLER--------*/
 	}
 
 	void InGame::EnemyCharacter::Update()
@@ -302,16 +308,6 @@ namespace InGame
 					if (detonationTimer >= effectiveDetonationDelay)
 					{
 						this->adjustHealth(-9999);
-						if (Manager::gm.currStateREF)
-						{
-							Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-							if (GS)
-							{
-								AEVec2 DrawSize;
-								AEVec2Set(&DrawSize, explosionRadius * 2, explosionRadius * 2);
-								GS->VFXManager.AddNewVFX(VFXType::Explosion, position, DrawSize, 3.f);
-							}
-						}
 					}
 				}
 				break;
@@ -505,11 +501,105 @@ namespace InGame
 						if (SniperShootTimer >= SniperShootInterval)
 						{
 							SniperShootTimer = 0.f;
-							AEVec2 FireDir = { -dirToPlayer.x,-dirToPlayer.y };
-							SpawnProjectile(FireDir, position); // 플레이어 방향 사격
+							LaserAttack* laser = new LaserAttack;
+							laser->Init(position, dirToPlayer, this, 3200.f, 1.f, 0.f, false);
+
+							if (Manager::gm.currStateREF)
+							{
+								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+								if (GS)
+								{
+									GS->EAAs.push_back(laser);
+								}
+							}
 						}
 						//AnimationState = ATTACK;
 						break;
+					}
+					break;
+				}
+				case EnemyType::BURNER:
+				{
+					FlameZoneTimer += global::DeltaTime;
+					if (len > 500)
+					{
+						f32 effectiveMovementSpeed = Stats->MovementSpeed;
+
+						if (Stats->StatusEffectTimer[SLOW] > 0)
+						{
+							effectiveMovementSpeed *= 0.5f;
+						}
+
+						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+					}
+					else
+					{
+						if (FlameZoneTimer >= FlameZoneInterval)
+						{
+							FlameZoneTimer = 0.f;
+
+							BurningAreaAttack* BurningArea = new BurningAreaAttack;
+							BurningArea->Init(global::PlayerLocation, FlameZoneRadius, FlameZoneDuration, 1.f);
+
+							if (Manager::gm.currStateREF)
+							{
+								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+								if (GS)
+								{
+									GS->EAAs.push_back(BurningArea);
+								}
+							}
+						}
+					}
+					break;
+				}
+				case EnemyType::HOLER:
+				{
+					BlackHoleSpawnTimer += global::DeltaTime;
+					if (len > 500)
+					{
+						f32 effectiveMovementSpeed = Stats->MovementSpeed;
+
+						if (Stats->StatusEffectTimer[SLOW] > 0)
+						{
+							effectiveMovementSpeed *= 0.5f;
+						}
+
+						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
+						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+					}
+					else
+					{
+						if (BlackHoleSpawnTimer >= BlackHoleSpawnInterval)
+						{
+							BlackHoleSpawnTimer = 0.f;
+
+							BlackholeAttack* BlackHole = new BlackholeAttack;
+							AEVec2 Size = { BlackHoleRadius * 2.f,BlackHoleRadius * 2.f };
+							std::random_device rd;
+							std::mt19937 gen(rd());
+							std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
+							std::uniform_real_distribution<float> radiusDist(0.0f, BlackHoleRadius); 
+
+							float angle = angleDist(gen);
+							float radius = radiusDist(gen);
+
+							AEVec2 spawnOffset = {cosf(angle) * radius, sinf(angle) * radius};
+
+							AEVec2 spawnPos = {global::PlayerLocation.x + spawnOffset.x,global::PlayerLocation.y + spawnOffset.y};
+
+							BlackHole->Init(spawnPos, Size, BlackHoleRadius, BlackHoleDuration);
+
+							if (Manager::gm.currStateREF)
+							{
+								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+								if (GS)
+								{
+									GS->EAAs.push_back(BlackHole);
+								}
+							}
+						}
 					}
 					break;
 				}

@@ -57,6 +57,10 @@ namespace InGame
 	void VFXManager::Destroy()
 	{
 		Actor::Destroy();
+		for (VFXData* DrawItem : DrawItemList)
+		{
+			delete DrawItem;
+		}
 		if (Mesh)
 		{
 			Utils::DestroyMesh(Mesh);

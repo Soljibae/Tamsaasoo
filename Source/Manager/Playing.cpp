@@ -250,6 +250,10 @@ namespace Manager
 				ECV.push_back(EC);
 			}
 			ECV.push_back(PC);
+			for (InGame::ArealAttack*& EAA : EAAs)
+			{
+				EAA->Update(ECV);
+			}
 			for (InGame::ArealAttack*& PAA : PAAs)
 			{
 				PAA->Update(ECV);
@@ -338,6 +342,9 @@ namespace Manager
 								}
 							}
 						}
+						AEVec2 DrawSize;
+						AEVec2Set(&DrawSize, EC->explosionRadius * 2, EC->explosionRadius * 2);
+						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 3.f);
 					}
 					global::IsEnemyRecentlyDied = true;
 					global::RecentlyDeadEnemyPosition = EC->position;
@@ -687,6 +694,20 @@ namespace Manager
 				InGame::EnemyCharacter* EC = ECPool.back();
 				ECPool.pop_back();
 				EC->Spawn(GetSpawnLocation(), &SniperStruct);
+				ECs.push_back(EC);
+			}
+			for (int i = 0; i < std::stoi(WM.CurrList.BurnerNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &BurnerStruct);
+				ECs.push_back(EC);
+			}
+			for (int i = 0; i < std::stoi(WM.CurrList.HolerNum);i++)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn(GetSpawnLocation(), &HolerStruct);
 				ECs.push_back(EC);
 			}
 		}

@@ -55,6 +55,8 @@ namespace Manager
 		InGame::ZigZagData ZigZagStruct;
 		InGame::OrbiterData OrbiterStruct;
 		InGame::SniperData SniperStruct;
+		InGame::BurnerData BurnerStruct;
+		InGame::HolerData HolerStruct;
 		void SpawnWave();
 		void ClearWave();
 		void InitBossFight();
