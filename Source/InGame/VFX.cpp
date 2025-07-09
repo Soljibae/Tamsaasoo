@@ -8,15 +8,32 @@ namespace InGame
 		Timer += DeltaTime;
 		s32 CurrentFrame = static_cast<int>((Timer / MaxTimer) * MaxFrameCount);
 		Animationoffset = static_cast<float>(CurrentFrame) / MaxFrameCount;
+		if (Type == VFXType::Lazer || Type == VFXType::WarningSquare)
+		{
+			if (Owner)
+			{
+				Pivot = Owner->position;
+			}
+			AEVec2 dirToPlayer;
+			AEVec2Sub(&dirToPlayer, &global::PlayerLocation, &Pivot);
+			AEVec2Normalize(&dirToPlayer, &dirToPlayer);
+			Direction = dirToPlayer;
+
+			position.x = Pivot.x + Direction.x * size.x / 2;
+			position.y = Pivot.y + Direction.y * size.x / 2;
+		}
 	}
 	void VFXManager::Init()
 	{
 		Actor::Init();
 		Texture = AEGfxTextureLoad("Assets/VFX.png");
-		Mesh = Utils::CreateMesh(2,9);
+		Mesh = Utils::CreateMesh(6,9);
+		MaxAnimationCount[WarningCircle] = 9;
+		MaxAnimationCount[WarningSquare] = 9;
 		MaxAnimationCount[Explosion] = 9;
 		MaxAnimationCount[Burn] = 9;
-
+		MaxAnimationCount[Lazer] = 9;
+		MaxAnimationCount[BlackHole] = 9;
 	}
 	void VFXManager::Update()
 	{
@@ -47,11 +64,24 @@ namespace InGame
 		Actor::Draw();
 		for (VFXData* DataItem : DrawItemList)
 		{
-			AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
-			AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
-			offset.x = DataItem->Animationoffset;
-			offset.y = DataItem->Type;
-			Utils::DrawObject(*this);
+			if (DataItem->Type == VFXType::Lazer || DataItem->Type == VFXType::WarningSquare)
+			{
+				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
+				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
+				offset.x = DataItem->Animationoffset;
+				offset.y = DataItem->Type/6.f;
+				direction = DataItem->Direction;
+				Utils::DrawObjectWithDirection(*this, 1.f);
+			}
+			else
+			{
+				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
+				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
+				offset.x = DataItem->Animationoffset;
+				offset.y = DataItem->Type / 6.f;
+				Utils::DrawObject(*this);
+			}
+			
 		}
 	}
 	void VFXManager::Destroy()
@@ -88,6 +118,33 @@ namespace InGame
 			case VFXType::Burn:
 			{
 				NewData->MaxTimer = Duration;
+				AEVec2Set(&NewData->size, InSize.x, InSize.y);
+				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
+				break;
+			}
+		}
+		DrawItemList.push_back(NewData);
+	}
+
+	void VFXManager::AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, Actor* InOwner)
+	{
+		VFXData* NewData = new VFXData;
+		NewData->Animationoffset = 0;
+		NewData->Timer = 0;
+		NewData->MaxTimer = 1.f;
+		NewData->Type = NewVFXType;
+		NewData->Direction = InDirection;
+		NewData->Owner = InOwner;
+		switch (NewVFXType)
+		{
+			case VFXType::WarningCircle:
+			{
+				AEVec2Set(&NewData->size, InSize.x, InSize.y);
+				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
+				break;
+			}
+			case VFXType::WarningSquare:
+			{
 				AEVec2Set(&NewData->size, InSize.x, InSize.y);
 				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
 				break;
