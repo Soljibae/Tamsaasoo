@@ -16,6 +16,12 @@ namespace Manager
 	const f32 windowHeight = 600.f;
 	const f32 spacingX = 80.0f;
 	const f32 padding = 30.f;
+	static f32 w{ static_cast<f32>(global::ScreenWidth) }, h{ static_cast<f32>(global::ScreenHeight) };
+	void LevelUpUI::ResetGotEpic()
+	{
+		epicAlpha = 1.f;
+		gotEpic = false;
+	}
 	void LevelUpUI::Init(InGame::PlayerCharacter* InPC)
 	{
 		currentOptions.reserve(3);
@@ -42,6 +48,7 @@ namespace Manager
 						cost = 100;
 					}
 					delayTime = 0.f;
+					ResetGotEpic();
 					gm.Resume();
 				});
 			f32 winHalfW{ windowWidth / 2.f }, winHalfH{ windowHeight / 2.f };
@@ -53,12 +60,17 @@ namespace Manager
 			rerollCostIcon[i].position.x = baseX + rerollSize;
 			rerollCostIcon[i].position.y = baseY;
 			rerollCostIcon[i].size = { rerollSize / 2.f,rerollSize / 2.f };
+			rerollButton[i].Init();
+			ItemWindow[i].Init();
 		}
+		ItemSlotMesh = Utils::CreateNinePatchMesh();
 		windowMesh = Utils::CreateNinePatchMesh();
 		windowTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
 
-		ItemSlotMesh = Utils::CreateNinePatchMesh();
-		ItemSlotTexture = AEGfxTextureLoad("Assets/ItemSlotTexture.png"); 
+		epicWhite.Mesh = Utils::CreateMesh();
+		epicWhite.Texture = AEGfxTextureLoad("Assets/white.png");
+		epicWhite.size = { w, h };
+		epicWhite.position = { 0.f, 0.f };
 
 		rerollMesh = Utils::CreateMesh();
 		rerollTexture = AEGfxTextureLoad("Assets/dice.png");
@@ -84,13 +96,16 @@ namespace Manager
 			return;
 		}
 		delayTime += global::DeltaTime;
+		epicAlpha -= global::DeltaTime/2.f;
 		if (delayTime < pickDelay)
 		{
 			return;
 		}
 		for (s8 i = 0; i < ItemWindow.size(); i++)
 		{
-			ItemWindow[i].Update();
+			rerollButton[i].Update();
+			if(!rerollButton[i].IsHovered() || !rerollButton[i].IsSelected())
+				ItemWindow[i].Update();
 		}
 	}
 
@@ -98,6 +113,7 @@ namespace Manager
 	{
 		if (gameOverScreen.isGameOver)
 			return;
+		ResetGotEpic();
 		currentOptions = GenerateRandomRewards();
 		for (int i = 0; i < currentOptions.size(); i++)
 		{
@@ -108,6 +124,28 @@ namespace Manager
 			ItemSlot[i].position = currentOptions[i]->iconPosition;
 			ItemSlot[i].size.x = currentOptions[i]->size.x * 0.8f;
 			ItemSlot[i].size.y = currentOptions[i]->size.y * 0.8f;
+
+			if (ItemSlot[i].Texture)
+			{
+				AEGfxTextureUnload(ItemSlot[i].Texture);
+				ItemSlot[i].Texture = nullptr;
+			}
+			switch (currentOptions[i]->grade)
+			{
+			case InGame::ItemGrade::COMMON:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotW.png");
+				break;
+			case InGame::ItemGrade::UNCOMMON:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotB.png");
+				break;
+			case InGame::ItemGrade::RARE:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotY.png");
+				break;
+			case InGame::ItemGrade::EPIC:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
+				gotEpic = true;
+				break;
+			}
 		}
 		isActive = true;
 		gm.Pause();
@@ -121,7 +159,7 @@ namespace Manager
 		for (int i = 0; i < ItemWindow.size(); i++)
 		{
 			Utils::DrawNinePatchMesh(ItemWindow[i], windowTexture, windowMesh, 30.f);
-			Utils::DrawNinePatchMesh(ItemSlot[i], ItemSlotTexture, ItemSlotMesh, 20.f);
+			Utils::DrawNinePatchMesh(ItemSlot[i], ItemSlot[i].Texture, ItemSlotMesh, 20.f);
 			Utils::DrawItem(*currentOptions[i]);
 			Utils::DrawObject(rerollButton[i], rerollTexture, rerollMesh, 1.f);
 			Utils::DrawObject(rerollCostIcon[i], rerollCostTexture, rerollCostMesh, 1.f);
@@ -188,18 +226,21 @@ namespace Manager
 				AEGfxPrint(pFont, ItemDesc[j].c_str(), lx, ly, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 			}
 		}
+		if(gotEpic)
+			Utils::DrawObject(epicWhite, false, epicAlpha);
 	}
 
 	void LevelUpUI::Reroll(s8 thisbutton)
 	{
-		
 		if (PC->PS->Money < rerollCost[thisbutton])
 		{
 			return;
 		}
 		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		PC->PS->Money -= rerollCost[thisbutton];
+		rerollCost[thisbutton] *= 1.7f;
 
+		ResetGotEpic();
 
 		std::shared_ptr<InGame::Item> option;
 
@@ -235,6 +276,27 @@ namespace Manager
 		AEVec2 originPos = currentOptions[thisbutton]->iconPosition;
 		currentOptions[thisbutton] = game->ITDB->itemList[idx];
 		currentOptions[thisbutton]->iconPosition = originPos;
+		if (ItemSlot[thisbutton].Texture)
+		{
+			AEGfxTextureUnload(ItemSlot[thisbutton].Texture);
+			ItemSlot[thisbutton].Texture = nullptr;
+		}
+		switch (currentOptions[thisbutton]->grade)
+		{
+		case InGame::ItemGrade::COMMON:
+			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotW.png");
+			break;
+		case InGame::ItemGrade::UNCOMMON:
+			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotB.png");
+			break;
+		case InGame::ItemGrade::RARE:
+			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotY.png");
+			break;
+		case InGame::ItemGrade::EPIC:
+			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
+			gotEpic = true;
+			break;
+		}
 	}
 
 	std::vector<std::shared_ptr<InGame::Item>> LevelUpUI::GenerateRandomRewards()
@@ -279,9 +341,13 @@ namespace Manager
 	{
 		for (auto mesh : windowMesh)
 		{
-			AEGfxMeshFree(mesh);
+			if(mesh)
+				AEGfxMeshFree(mesh);
 		}
 		AEGfxTextureUnload(windowTexture);
+
+		AEGfxMeshFree(epicWhite.Mesh);
+		AEGfxTextureUnload(epicWhite.Texture);
 
 		AEGfxMeshFree(pauseDimmer.Mesh);
 		AEGfxTextureUnload(pauseDimmer.Texture);
@@ -295,11 +361,13 @@ namespace Manager
 		for (auto mesh : ItemSlotMesh)
 		{
 			if (mesh)
-			{
 				AEGfxMeshFree(mesh);
-			}
 		}
-		AEGfxTextureUnload(ItemSlotTexture);
+		for (auto slot : ItemSlot)
+		{
+			if(slot.Texture)
+				AEGfxTextureUnload(slot.Texture);
+		}
 		AEGfxDestroyFont(pFont);
 	}
 

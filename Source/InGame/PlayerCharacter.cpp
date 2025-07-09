@@ -159,6 +159,7 @@ namespace InGame
 		/*----- Heal Potion -----*/
 		if (PS->Potion > 100)
 			PS->Potion = 100;
+		if (global::KeyInput(AEVK_P)) PS->Potion += 100;
 		if (global::KeyInput(AEVK_Q))
 		{
 			if (Utils::GetItemCount(24))

@@ -6,25 +6,28 @@ namespace Manager
 {
     Button* Button::activeButton{ nullptr };
     // Mouse over, click checking func to mouse callback
+    void Button::Init()
+    {
+        originSize = this->size;
+    }
     void Button::Update()
     {
-        if (activeButton && activeButton != this)
-            return;
-        bool shouldScale = IsHovered() || isSelected;
-        if (shouldScale && !wasScaled)
+        if(IsHovered() || isSelected)
+            activeButton = this;
+        bool shouldScale = (IsHovered() || isSelected) && this == activeButton;
+
+        if (shouldScale)
         {
-            this->size.x *= 1.1f;
-            this->size.y *= 1.1f;
-            wasScaled = true;
+            size.x = originSize.x * 1.05f;
+            size.y = originSize.y * 1.05f;
         }
-        else if (!shouldScale && wasScaled)
+        else if (!isSelected)
         {
-            this->size.x /= 1.1f;
-            this->size.y /= 1.1f;
-            wasScaled = false;
+            size = originSize;
+            activeButton = nullptr;
         }
 
-        if (IsClicked())
+        if (IsClicked() && activeButton == this)
         {
             OnClick();
         }
@@ -39,8 +42,7 @@ namespace Manager
     // Invoke callback on clicked
     void Button::OnClick()
     {
-        this->size.x /= 1.1f;
-        this->size.y /= 1.1f;
+        this->size = originSize;
         this->wasScaled = false;
         isSelected = false;
         activeButton = nullptr;

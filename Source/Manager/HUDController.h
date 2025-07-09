@@ -41,6 +41,8 @@ namespace Manager
 		static InGame::Item* prevItem;
 		s8 pFont;
 		std::vector<std::string> itemDesc;
+
+		InGame::Actor Vignetting;
 	};
 
 	static struct Tooltip

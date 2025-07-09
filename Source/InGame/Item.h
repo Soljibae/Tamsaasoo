@@ -21,6 +21,13 @@ namespace InGame
 		WRATH,
 		PRIDE,
 	};
+	enum ItemGrade
+	{
+		COMMON,
+		UNCOMMON,
+		RARE,
+		EPIC
+	};
 	class Item
 	{
 	public:
@@ -47,6 +54,7 @@ namespace InGame
 		AEVec2 iconPosition;
 		AEVec2 iconOffset;
 		ItemTag tag;
+		ItemGrade grade;
 		f32 effectTime;
 		f32 procChance;
 		f32 CoolDown;
