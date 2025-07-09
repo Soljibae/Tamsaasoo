@@ -93,7 +93,8 @@ namespace Manager
 		for (s8 i = 0; i < ItemWindow.size(); i++)
 		{
 			rerollButton[i].Update();
-			ItemWindow[i].Update();
+			if(!rerollButton[i].IsHovered() || !rerollButton[i].IsSelected())
+				ItemWindow[i].Update();
 		}
 	}
 

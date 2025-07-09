@@ -12,34 +12,22 @@ namespace Manager
     }
     void Button::Update()
     {
-        bool hovered = IsHovered() || isSelected;
-
-        // 1) Hovered && (아직 누가 차지 안 했거나 내가 이미 차지 중)
-        if (hovered && (!activeButton || activeButton == this))
+        if(IsHovered() || isSelected)
             activeButton = this;
+        bool shouldScale = (IsHovered() || isSelected) && this == activeButton;
 
-        // 2) activeButton 확인 후 크기 조정
-        if (activeButton == this)
+        if (shouldScale)
         {
-            // 마우스가 아직 안 떠났으면 스케일, 아니면 리셋
-            if (hovered)
-            {
-                size.x = originSize.x * 1.05f;
-                size.y = originSize.y * 1.05f;
-            }
-            else
-            {
-                size = originSize;
-                activeButton = nullptr;
-            }
+            size.x = originSize.x * 1.05f;
+            size.y = originSize.y * 1.05f;
         }
-        else
+        else if (!isSelected)
         {
-            // 다른 버튼이 활성화됐으면 항상 원상 복구
             size = originSize;
+            activeButton = nullptr;
         }
 
-        if (IsClicked())
+        if (IsClicked() && activeButton == this)
         {
             OnClick();
         }
@@ -54,8 +42,7 @@ namespace Manager
     // Invoke callback on clicked
     void Button::OnClick()
     {
-        this->size.x /= 1.1f;
-        this->size.y /= 1.1f;
+        this->size = originSize;
         this->wasScaled = false;
         isSelected = false;
         activeButton = nullptr;
