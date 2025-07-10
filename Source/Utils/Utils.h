@@ -59,6 +59,8 @@ namespace Utils
 
 	AEVec2 GetRandomPointInEllipse(f32 collisionSize = 0);
 
+	void ClampActorPosition(InGame::Actor* InActor, AEVec2 NewPos);
+
 	void TestInit();
 
 	void TestDestroy();

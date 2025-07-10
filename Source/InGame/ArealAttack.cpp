@@ -39,7 +39,7 @@ namespace InGame
 		}
 	}
 
-	void BlackholeAttack::Init(AEVec2 SpawnLocation, AEVec2 DrawSize, f32 InRadius, f32 InlifeTime)
+	void BlackholeAttack::Init(AEVec2 SpawnLocation, AEVec2 DrawSize, f32 InRadius, f32 InlifeTime, Actor* InOwner, bool bInOwnerEffectable)
 	{
 		ArealAttack::Init();
 		AEVec2Set(&position, SpawnLocation.x, SpawnLocation.y);
@@ -48,6 +48,8 @@ namespace InGame
 		radius = InRadius;
 		lifeTime = InlifeTime;
 		timer = 0.f;
+		Owner = InOwner;
+		bOwnerEffectable = bInOwnerEffectable;
 	}
 
 	void BlackholeAttack::Update(std::vector<Character*>InCharacters)
@@ -56,6 +58,10 @@ namespace InGame
 		timer += global::DeltaTime;
 		for (Character* InCharacter : InCharacters)
 		{
+			if (!bOwnerEffectable && Owner == InCharacter)
+			{
+				continue;
+			}
 			if (timer < lifeTime)
 			{
 				AEVec2 toCenter;
@@ -101,6 +107,7 @@ namespace InGame
 	{
 		ArealAttack::Init();
 		AEVec2Set(&position, SpawnLocation.x, SpawnLocation.y);
+		AEVec2Set(&size, InRadius / 2.f, InRadius / 2.f);
 		radius = InRadius;
 		lifeTime = InLifeTime;
 		timer = 0.f;
@@ -148,7 +155,7 @@ namespace InGame
 		ArealAttack::Destroy();
 	}
 
-	void BurningAreaAttack::Init(AEVec2 SpawnLocation, f32 InRadius, f32 InLifeTime, f32 damageInterval)
+	void BurningAreaAttack::Init(AEVec2 SpawnLocation, f32 InRadius, f32 InLifeTime, f32 damageInterval, Actor* InOwner, bool bInOwnerDamageAble)
 	{
 		ArealAttack::Init();
 		position = SpawnLocation;
@@ -157,6 +164,8 @@ namespace InGame
 		lifeTime = InLifeTime;
 		tickInterval = damageInterval;
 		timer = 0.f;
+		Owner = InOwner;
+		bOwnerDamageAble = bInOwnerDamageAble;
 		Texture = AEGfxTextureLoad("Assets/BurningArea.png");
 	}
 
@@ -170,6 +179,10 @@ namespace InGame
 		{
 			for (Character* InCharacter : InCharacters)
 			{
+				if (!bOwnerDamageAble && InCharacter == Owner)
+				{
+					continue;
+				}
 				AEVec2 toPlayer;
 				AEVec2Sub(&toPlayer, &InCharacter->position, &position);
 				if (AEVec2Length(&toPlayer) <= radius)

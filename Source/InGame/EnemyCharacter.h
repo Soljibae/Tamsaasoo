@@ -83,6 +83,7 @@ namespace InGame
 		float FlameZoneDuration = 3.0f;
 		AEVec2 FlameZonePos;
 		float FlameZoneRadius = 200.f;
+		bool bFlameWarned = false;
 		/*--------BURNER--------*/
 		/*--------HOLER--------*/
 		float BlackHoleSpawnTimer = 0.f;
@@ -90,6 +91,7 @@ namespace InGame
 		float BlackHoleDuration = 13.0f;
 		AEVec2 BlackHolePos;
 		float BlackHoleRadius = 400.f;
+		bool bHoleWarned = false;
 		/*--------HOLER--------*/
 	protected:
 	private:

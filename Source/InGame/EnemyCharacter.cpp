@@ -57,7 +57,11 @@ namespace InGame
 		Stats->HP = InData->Health;
 
 		AEVec2Set(&Stats->ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
-		
+		Stats->StatusEffectTimer[SLOW] = 0.f;
+		Stats->StatusEffectTimer[BURN] = 0.f;
+		Stats->StatusEffectTimer[STUN] = 0.f;
+		Stats->StatusEffectTimer[FEAR] = 0.f;
+		bIsPandingKill = false;
 		/*--------DASHER--------*/
 		bHasDashed = false;
 		bIsDashing = false;
@@ -98,9 +102,11 @@ namespace InGame
 		/*--------SNIPER--------*/
 		/*--------BURNER--------*/
 		float FlameZoneTimer = 0.f;
+		bFlameWarned = false;
 		/*--------BURNER--------*/
 		/*--------HOLER--------*/
 		float BlackHoleSpawnTimer = 0.f;
+		bHoleWarned = false;
 		/*--------HOLER--------*/
 	}
 
@@ -151,9 +157,9 @@ namespace InGame
 					{
 						effectiveMovementSpeed *= 0.5f;
 					}
-
-					position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-					position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+					AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime , position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+					Utils::ClampActorPosition(this, NewPos);
+					
 					break;
 				}
 				case EnemyType::ARCHER:
@@ -167,9 +173,8 @@ namespace InGame
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
-
-						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime , position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+						Utils::ClampActorPosition(this, NewPos);
 					}
 					else
 					{
@@ -222,9 +227,8 @@ namespace InGame
 								{
 									effectiveDashSpeed *= 0.5f;
 								}
-
-								position.x -= dashDirection.x * effectiveDashSpeed * global::DeltaTime;
-								position.y -= dashDirection.y * effectiveDashSpeed * global::DeltaTime;
+								AEVec2 NewPos = { position.x - direction.x * effectiveDashSpeed * global::DeltaTime , position.y - direction.y * effectiveDashSpeed * global::DeltaTime };
+								Utils::ClampActorPosition(this, NewPos);
 							}
 							else
 							{
@@ -358,8 +362,8 @@ namespace InGame
 							{
 								effectiveMovementSpeed *= 0.5f;
 							}
-							position.x -= MoveTargetDir.x * global::DeltaTime * effectiveMovementSpeed;
-							position.y -= MoveTargetDir.y * global::DeltaTime * effectiveMovementSpeed;
+							AEVec2 NewPos = { position.x - MoveTargetDir.x * global::DeltaTime * effectiveMovementSpeed, position.y - MoveTargetDir.y * global::DeltaTime * effectiveMovementSpeed };
+							Utils::ClampActorPosition(this, NewPos);
 
 						}
 						else
@@ -429,9 +433,8 @@ namespace InGame
 					float speed = Stats->MovementSpeed * OrbitSpeed;
 					if (Stats->StatusEffectTimer[SLOW] > 0)
 						speed *= 0.5f;
-
-					position.x += moveDir.x * speed * global::DeltaTime;
-					position.y += moveDir.y * speed * global::DeltaTime;
+					AEVec2 NewPos = { position.x + moveDir.x * speed * global::DeltaTime, position.y + moveDir.y * speed * global::DeltaTime };
+					Utils::ClampActorPosition(this, NewPos);
 
 					// 탄 발사
 					OrbitShootTimer += global::DeltaTime;
@@ -462,8 +465,8 @@ namespace InGame
 					case SniperState::APPROACHING:
 						if (len > SniperApproachDistance)
 						{
-							position.x += dirToPlayer.x * speed * global::DeltaTime;
-							position.y += dirToPlayer.y * speed * global::DeltaTime;
+							AEVec2 NewPos = { position.x + dirToPlayer.x * speed * global::DeltaTime, position.y + dirToPlayer.y * speed * global::DeltaTime };
+							Utils::ClampActorPosition(this, NewPos);
 							//AnimationState = MOVE;
 						}
 						else
@@ -485,8 +488,8 @@ namespace InGame
 
 						if (AEVec2Distance(&position, &SniperRetreatStartPos) < SniperRetreatDistance)
 						{
-							position.x += SniperRetreatDir.x * speed * global::DeltaTime;
-							position.y += SniperRetreatDir.y * speed * global::DeltaTime;
+							AEVec2 NewPos = { position.x + SniperRetreatDir.x * speed * global::DeltaTime, position.y + SniperRetreatDir.y * speed * global::DeltaTime };
+							Utils::ClampActorPosition(this, NewPos);
 							//AnimationState = MOVE;
 						}
 						else
@@ -523,7 +526,7 @@ namespace InGame
 									if (GS)
 									{
 										AEVec2 WarningDraw = { 3200.f, 30.f };
-										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer, this);
+										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer,true, this);
 										bIsWarned = true;
 									}
 								}
@@ -540,24 +543,29 @@ namespace InGame
 					FlameZoneTimer += global::DeltaTime;
 					if (len > 500)
 					{
+						if (bFlameWarned)
+						{
+							bFlameWarned = false;
+							FlameZoneTimer = 0.f;
+						}
 						f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
 						if (Stats->StatusEffectTimer[SLOW] > 0)
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
-
-						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime, position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+						Utils::ClampActorPosition(this, NewPos);
 					}
 					else
 					{
 						if (FlameZoneTimer >= FlameZoneInterval)
 						{
 							FlameZoneTimer = 0.f;
+							bFlameWarned = false;
 
 							BurningAreaAttack* BurningArea = new BurningAreaAttack;
-							BurningArea->Init(global::PlayerLocation, FlameZoneRadius, FlameZoneDuration, 1.f);
+							BurningArea->Init(FlameZonePos, FlameZoneRadius, FlameZoneDuration, 1.f,this,false);
 
 							if (Manager::gm.currStateREF)
 							{
@@ -565,6 +573,24 @@ namespace InGame
 								if (GS)
 								{
 									GS->EAAs.push_back(BurningArea);
+								}
+							}
+						}
+						else if (FlameZoneTimer > FlameZoneInterval - 1.f)
+						{
+							if (!bFlameWarned)
+							{
+								bFlameWarned = true;
+								if (Manager::gm.currStateREF)
+								{
+									Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+									if (GS)
+									{
+										FlameZonePos = global::PlayerLocation;
+										AEVec2 FlameZoneSize = { FlameZoneRadius * 2.f,FlameZoneRadius * 2.f };
+										GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, FlameZoneSize, 1.f, FlameZonePos, false, this);
+										bIsWarned = true;
+									}
 								}
 							}
 						}
@@ -576,15 +602,19 @@ namespace InGame
 					BlackHoleSpawnTimer += global::DeltaTime;
 					if (len > 500)
 					{
+						if (bHoleWarned)
+						{
+							bHoleWarned = false;
+							BlackHoleSpawnTimer = 0.f;
+						}
 						f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
 						if (Stats->StatusEffectTimer[SLOW] > 0)
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
-
-						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime, position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+						Utils::ClampActorPosition(this, NewPos);
 					}
 					else
 					{
@@ -594,19 +624,8 @@ namespace InGame
 
 							BlackholeAttack* BlackHole = new BlackholeAttack;
 							AEVec2 Size = { BlackHoleRadius * 2.f,BlackHoleRadius * 2.f };
-							std::random_device rd;
-							std::mt19937 gen(rd());
-							std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
-							std::uniform_real_distribution<float> radiusDist(0.0f, BlackHoleRadius); 
-
-							float angle = angleDist(gen);
-							float radius = radiusDist(gen);
-
-							AEVec2 spawnOffset = {cosf(angle) * radius, sinf(angle) * radius};
-
-							AEVec2 spawnPos = {global::PlayerLocation.x + spawnOffset.x,global::PlayerLocation.y + spawnOffset.y};
-
-							BlackHole->Init(spawnPos, Size, BlackHoleRadius, BlackHoleDuration);
+							
+							BlackHole->Init(BlackHolePos, Size, BlackHoleRadius, BlackHoleDuration,this,false);
 
 							if (Manager::gm.currStateREF)
 							{
@@ -614,6 +633,36 @@ namespace InGame
 								if (GS)
 								{
 									GS->EAAs.push_back(BlackHole);
+								}
+							}
+							bHoleWarned = false;
+						}
+						else if (BlackHoleSpawnTimer >= BlackHoleSpawnInterval - 1.f)
+						{
+							if (!bHoleWarned)
+							{
+								bHoleWarned = true;
+								if (Manager::gm.currStateREF)
+								{
+									Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+									if (GS)
+									{
+										std::random_device rd;
+										std::mt19937 gen(rd());
+										std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
+										std::uniform_real_distribution<float> radiusDist(0.0f, BlackHoleRadius);
+
+										float angle = angleDist(gen);
+										float radius = radiusDist(gen);
+
+										AEVec2 spawnOffset = { cosf(angle) * radius, sinf(angle) * radius };
+
+										BlackHolePos = { global::PlayerLocation.x + spawnOffset.x,global::PlayerLocation.y + spawnOffset.y };
+
+										AEVec2 HoleSize = { BlackHoleRadius * 2.f,BlackHoleRadius * 2.f };
+										GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, HoleSize, 1.f, BlackHolePos, false, this);
+										bIsWarned = true;
+									}
 								}
 							}
 						}

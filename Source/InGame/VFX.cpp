@@ -8,19 +8,37 @@ namespace InGame
 		Timer += DeltaTime;
 		s32 CurrentFrame = static_cast<int>((Timer / MaxTimer) * MaxFrameCount);
 		Animationoffset = static_cast<float>(CurrentFrame) / MaxFrameCount;
-		if (Type == VFXType::Lazer || Type == VFXType::WarningSquare)
+		if (Type == VFXType::Laser || Type == VFXType::WarningSquare)
 		{
 			if (Owner)
 			{
+				if (Owner->bIsPandingKill)
+				{
+					Timer = MaxTimer + 1;
+				}
 				Pivot = Owner->position;
 			}
-			AEVec2 dirToPlayer;
-			AEVec2Sub(&dirToPlayer, &global::PlayerLocation, &Pivot);
-			AEVec2Normalize(&dirToPlayer, &dirToPlayer);
-			Direction = dirToPlayer;
+			if (bIsTracking)
+			{
+				AEVec2 dirToPlayer;
+				AEVec2Sub(&dirToPlayer, &global::PlayerLocation, &Pivot);
+				AEVec2Normalize(&dirToPlayer, &dirToPlayer);
+				Direction = dirToPlayer;
+			}
+			
 
 			position.x = Pivot.x + Direction.x * size.x / 2;
 			position.y = Pivot.y + Direction.y * size.x / 2;
+		}
+		else if (Type == VFXType::WarningCircle)
+		{
+			if (bIsTracking)
+			{
+				if (Owner)
+				{
+					position = Owner->position;
+				}
+			}
 		}
 	}
 	void VFXManager::Init()
@@ -32,7 +50,7 @@ namespace InGame
 		MaxAnimationCount[WarningSquare] = 9;
 		MaxAnimationCount[Explosion] = 9;
 		MaxAnimationCount[Burn] = 9;
-		MaxAnimationCount[Lazer] = 9;
+		MaxAnimationCount[Laser] = 9;
 		MaxAnimationCount[BlackHole] = 9;
 	}
 	void VFXManager::Update()
@@ -64,7 +82,7 @@ namespace InGame
 		Actor::Draw();
 		for (VFXData* DataItem : DrawItemList)
 		{
-			if (DataItem->Type == VFXType::Lazer || DataItem->Type == VFXType::WarningSquare)
+			if (DataItem->Type == VFXType::Laser || DataItem->Type == VFXType::WarningSquare)
 			{
 				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
 				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
@@ -126,7 +144,21 @@ namespace InGame
 		DrawItemList.push_back(NewData);
 	}
 
-	void VFXManager::AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, Actor* InOwner)
+	void VFXManager::AddWarningVFX(VFXType NewVFXType, AEVec2 InSize, f32 InDuration, AEVec2 InTargetPosition, bool InbIsTracking, Actor* InOwner)
+	{
+		VFXData* NewData = new VFXData;
+		NewData->size = InSize;
+		NewData->Animationoffset = 0;
+		NewData->Timer = 0;
+		NewData->MaxTimer = InDuration;
+		NewData->Type = NewVFXType;
+		NewData->Owner = InOwner;
+		NewData->position = InTargetPosition;
+		NewData->bIsTracking = InbIsTracking;
+		DrawItemList.push_back(NewData);
+	}
+
+	void VFXManager::AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, bool InbIsTracking, Actor* InOwner)
 	{
 		VFXData* NewData = new VFXData;
 		NewData->Animationoffset = 0;
@@ -135,6 +167,7 @@ namespace InGame
 		NewData->Type = NewVFXType;
 		NewData->Direction = InDirection;
 		NewData->Owner = InOwner;
+		NewData->bIsTracking = InbIsTracking;
 		switch (NewVFXType)
 		{
 			case VFXType::WarningCircle:

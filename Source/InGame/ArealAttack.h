@@ -23,14 +23,15 @@ namespace InGame
 	class BlackholeAttack : public ArealAttack
 	{
 	public:
-		virtual void Init(AEVec2 SpawnLocation, AEVec2 DrawSize, f32 InRadius, f32 InlifeTime);
+		virtual void Init(AEVec2 SpawnLocation, AEVec2 DrawSize, f32 InRadius, f32 InlifeTime, Actor* InOwner, bool bInOwnerEffectable);
 		virtual void Update(std::vector<Character*>InCharacters) override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
 
 		f32 pullStrength = 100.f;
 		f32 damage = 3.f;
-
+		Actor* Owner = nullptr;
+		bool bOwnerEffectable = false;
 	private:
 	};
 
@@ -42,7 +43,7 @@ namespace InGame
 		virtual void Draw() override;
 		virtual void Destroy() override;
 
-		f32 damage = 5.f;
+		f32 damage = 4.f;
 
 	private:
 		bool bDidExplode = false;
@@ -51,7 +52,7 @@ namespace InGame
 	class BurningAreaAttack : public ArealAttack
 	{
 	public:
-		virtual void Init(AEVec2 SpawnLocation, f32 InRadius, f32 lifeTime, f32 damageInterval);
+		virtual void Init(AEVec2 SpawnLocation, f32 InRadius, f32 lifeTime, f32 damageInterval,Actor* InOwner, bool bInOwnerDamageAble);
 		virtual void Update(std::vector<Character*>InCharacters) override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
@@ -61,6 +62,8 @@ namespace InGame
 	private:
 		f32 tickTimer = 0.f;
 		f32 tickInterval = 1.f;
+		bool bOwnerDamageAble = true;
+		Actor* Owner = nullptr;
 	};
 
 	class LaserAttack : public ArealAttack

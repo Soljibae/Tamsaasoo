@@ -11,7 +11,7 @@ namespace InGame
 		WarningSquare = 1,
 		Explosion = 2,
 		Burn = 3,
-		Lazer = 4,
+		Laser = 4,
 		BlackHole = 5,
 	};
 	struct VFXData
@@ -27,6 +27,7 @@ namespace InGame
 		f32 Timer = 0.f;
 		f32 MaxTimer = 0.f;
 		Actor* Owner = nullptr;
+		bool bIsTracking = false;
 	};
 
 	class VFXManager : public Actor
@@ -38,7 +39,8 @@ namespace InGame
 		virtual void Draw() override;
 		virtual void Destroy() override;
 		void AddNewVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, f32 Duration);
-		void AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, Actor* InOwner);
+		void AddWarningVFX(VFXType NewVFXType, AEVec2 InSize,f32 InDuration, AEVec2 InTargetPosition, bool InbIsTracking, Actor* InOwner);
+		void AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, bool InbIsTracking, Actor* InOwner);
 		std::map<VFXType, s32> MaxAnimationCount;
 		std::list<VFXData*> DrawItemList;
 	};
