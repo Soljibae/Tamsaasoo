@@ -81,10 +81,14 @@ namespace InGame
 		void SpawnBomb(AEVec2& pos);
 		void SpawnBlackHole(AEVec2& pos);
 	protected:
-		//Default attack
+		//Bomb 
+		bool bBombWarned = false;
 		f32 BombTimer = 0.f;
 		f32 BombSpawnInterval = 2.f;
+		f32 BombRadius = 200.f;
+		f32 BombDelay = 3.f;
 		//BlackHole
+		bool bBlackHoleWarned = false;
 		float BlackholeTimer = 0.f;
 		float BlackholeInterval = 5.f;
 		float BlackholeDuration = 10.f;
@@ -93,6 +97,8 @@ namespace InGame
 		//Laser
 		f32 LaserTimer = 0.f;
 		f32 LaserSpawnInterval = 7.f;
+		f32 LaserSpawnMaxTime = 12.f;
+		bool bLaserWarned = false;
 		bool bUseEightDirections = true;
 		bool bLaserRotRight = true;
 		bool bUseRotate = true;

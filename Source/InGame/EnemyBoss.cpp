@@ -285,6 +285,15 @@ namespace InGame
 						jumpStartPos = position;
 						jumpTargetPos = global::PlayerLocation;
 						dashCount = 0;
+						if (Manager::gm.currStateREF)
+						{
+							Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+							if (GS)
+							{
+								GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, size, jumpMoveDuration,jumpTargetPos, false, this);
+								bIsWarned = true;
+							}
+						}
 					}
 				}
 			}
@@ -390,7 +399,7 @@ namespace InGame
 		ProjectileSpawnTimer = 0;
 		ProjectileChamberTimer = 1.5f;
 		bIsWaving = false;
-
+		bLaserWarned = false;
 		Stats->ProjectileSpeed = 3.f;
 		Stats->Damage = 1;
 		Stats->ProjectileCollisionSize = 15.f;
@@ -417,7 +426,8 @@ namespace InGame
 			std::uniform_int_distribution<int> dist(0, static_cast<int>(MovePositions.size()) - 1);
 
 			int index;
-			do {
+			do 
+			{
 				index = dist(gen);
 			} while (MovePositions[index].x == position.x && MovePositions[index].y == position.y);
 
@@ -454,18 +464,26 @@ namespace InGame
 		if (BombTimer >= BombSpawnInterval)
 		{
 			BombTimer = 0.f;
-
 			std::random_device rd;
 			std::mt19937 gen(rd());
-
-			for (int i = 0;i < 3;i++)
+			
+			if (Manager::gm.currStateREF)
 			{
-				std::uniform_real_distribution<float> distX(global::worldMin.x, global::worldMax.x);
-				std::uniform_real_distribution<float> distY(global::worldMin.y, global::worldMax.y);
+				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+				if (GS)
+				{
+					for (int i = 0;i < 3;i++)
+					{
+						std::uniform_real_distribution<float> distX(global::worldMin.x, global::worldMax.x);
+						std::uniform_real_distribution<float> distY(global::worldMin.y, global::worldMax.y);
 
-				AEVec2 bombPos = { distX(gen), distY(gen) };
+						AEVec2 bombPos = { distX(gen), distY(gen) };
 
-				SpawnBomb(bombPos);
+						AEVec2 WarningDraw = { BombRadius*2.f, BombRadius*2.f };
+						GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, WarningDraw, BombDelay, bombPos, false, this);
+						SpawnBomb(bombPos);
+					}
+				}
 			}
 		}
 
@@ -474,28 +492,46 @@ namespace InGame
 		{
 			BlackholeTimer = 0.f;
 
-			std::random_device rd;
-			std::mt19937 gen(rd());
-			std::uniform_real_distribution<float> distX(global::worldMin.x + 200.f, global::worldMax.x - 200.f);
-			std::uniform_real_distribution<float> distY(global::worldMin.y + 200.f, global::worldMax.y - 200.f);
-
-			BlackholePosition = { distX(gen), distY(gen) };
 			SpawnBlackHole(BlackholePosition);
+			bBlackHoleWarned = false;
+		}
+		else if (BlackholeTimer > BlackholeInterval - 1.f)
+		{
+			if (!bBlackHoleWarned)
+			{
+				std::random_device rd;
+				std::mt19937 gen(rd());
+				std::uniform_real_distribution<float> distX(global::worldMin.x + 200.f, global::worldMax.x - 200.f);
+				std::uniform_real_distribution<float> distY(global::worldMin.y + 200.f, global::worldMax.y - 200.f);
+
+				BlackholePosition = { distX(gen), distY(gen) };
+				bBlackHoleWarned = true;
+				if (Manager::gm.currStateREF)
+				{
+					Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+					if (GS)
+					{
+						AEVec2 WarningDraw = { BlackholeRadius, BlackholeRadius };
+						GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, WarningDraw, 1.f, BlackholePosition, false, this);
+						bBlackHoleWarned = true;
+					}
+				}
+			}
 		}
 
 		LaserTimer += global::DeltaTime;
-		if (LaserTimer >= 7.f)
+		if (LaserTimer >= LaserSpawnMaxTime)
 		{
+			bLaserWarned = false;
 			std::vector<AEVec2> directions;
 			std::random_device rd;
 			std::mt19937 gen(rd());
-			std::bernoulli_distribution dist1(0.5);
 			std::bernoulli_distribution dist2(0.5);
 			std::bernoulli_distribution dist3(0.5);
 
-			bool bUseEightDirections = dist1(gen);
-			bool bLaserRotRight = dist2(gen);
-			bool bUseRotate = dist3(gen);
+			
+			bLaserRotRight = dist2(gen);
+			bUseRotate = dist3(gen);
 			if (bUseEightDirections)
 			{
 				directions = {
@@ -525,7 +561,7 @@ namespace InGame
 				AEVec2Normalize(&normDir, &normDir);
 
 				LaserAttack* laser = new LaserAttack;
-				laser->Init(position, normDir, this, 3200.f, (bUseRotate ? 5.f : 3.f), (bUseRotate ? 0.5f : 0.f), bLaserRotRight);
+				laser->Init(position, normDir, this, 3200.f, (bUseRotate ? 10.f : 5.f), (bUseRotate ? 0.2f : 0.f), bLaserRotRight);
 
 				if (Manager::gm.currStateREF)
 				{
@@ -538,7 +574,53 @@ namespace InGame
 			}
 			LaserTimer = 0.f;
 		}
-
+		else if (LaserTimer > LaserSpawnMaxTime - 1.f)
+		{
+			if (!bLaserWarned)
+			{
+				bLaserWarned = true;
+				std::vector<AEVec2> directions;
+				std::random_device rd;
+				std::mt19937 gen(rd());
+				std::bernoulli_distribution dist1(0.5);
+				bUseEightDirections = dist1(gen);
+				if (bUseEightDirections)
+				{
+					directions = {
+						{ 1.f,  0.f },
+						{ -1.f, 0.f },
+						{ 0.f,  1.f },
+						{ 0.f, -1.f },
+						{ 0.707f,  0.707f },
+						{ -0.707f, 0.707f },
+						{ 0.707f, -0.707f },
+						{ -0.707f, -0.707f },
+					};
+				}
+				else
+				{
+					directions = {
+						{ 1.f,  0.f },
+						{ -1.f, 0.f },
+						{ 0.f,  1.f },
+						{ 0.f, -1.f }
+					};
+				}
+				if (Manager::gm.currStateREF)
+				{
+					Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+					if (GS)
+					{
+						AEVec2 WarningDraw = { 3200.f, 30.f };
+						for (AEVec2 dir : directions)
+						{
+							GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dir,false, this);
+						}
+						bIsWarned = true;
+					}
+				}
+			}
+		}
 		ProjectileSpawnTimer += global::DeltaTime;
 		WaveAttackSpawnTimer += global::DeltaTime;
 
@@ -659,7 +741,7 @@ namespace InGame
 	void Stage3Boss::SpawnBomb(AEVec2& pos)
 	{
 		BombAttack* NewBomb = new BombAttack;
-		NewBomb->Init(pos, 200.f, 3.f);
+		NewBomb->Init(pos, BombRadius, BombDelay);
 		if (Manager::gm.currStateREF)
 		{
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
@@ -673,8 +755,8 @@ namespace InGame
 	{
 		BlackholeAttack* NewBlackhole = new BlackholeAttack;
 		AEVec2 DrawSize;
-		AEVec2Set(&DrawSize, 600.f, 600.f);
-		NewBlackhole->Init(pos, DrawSize, BlackholeRadius, BlackholeDuration);
+		AEVec2Set(&DrawSize, BlackholeRadius, BlackholeRadius);
+		NewBlackhole->Init(pos, DrawSize, BlackholeRadius, BlackholeDuration,this,true);
 		if (Manager::gm.currStateREF)
 		{
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);

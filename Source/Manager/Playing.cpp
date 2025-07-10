@@ -349,7 +349,7 @@ namespace Manager
 					global::IsEnemyRecentlyDied = true;
 					global::RecentlyDeadEnemyPosition = EC->position;
 					PC->UpdateKill(EC->Exp);
-					EC->bIsPandingKill = false;
+					//EC->bIsPandingKill = false;
 					ECPool.push_back(EC);
 					ECs[i] = ECs.back();
 					ECs.pop_back();

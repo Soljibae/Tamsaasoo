@@ -57,7 +57,7 @@ namespace InGame
 		Stats->HP = InData->Health;
 
 		AEVec2Set(&Stats->ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
-		
+		bIsPandingKill = false;
 		/*--------DASHER--------*/
 		bHasDashed = false;
 		bIsDashing = false;
@@ -98,9 +98,11 @@ namespace InGame
 		/*--------SNIPER--------*/
 		/*--------BURNER--------*/
 		float FlameZoneTimer = 0.f;
+		bFlameWarned = false;
 		/*--------BURNER--------*/
 		/*--------HOLER--------*/
 		float BlackHoleSpawnTimer = 0.f;
+		bHoleWarned = false;
 		/*--------HOLER--------*/
 	}
 
@@ -523,7 +525,7 @@ namespace InGame
 									if (GS)
 									{
 										AEVec2 WarningDraw = { 3200.f, 30.f };
-										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer, this);
+										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer,true, this);
 										bIsWarned = true;
 									}
 								}
@@ -540,6 +542,11 @@ namespace InGame
 					FlameZoneTimer += global::DeltaTime;
 					if (len > 500)
 					{
+						if (bFlameWarned)
+						{
+							bFlameWarned = false;
+							FlameZoneTimer = 0.f;
+						}
 						f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
 						if (Stats->StatusEffectTimer[SLOW] > 0)
@@ -555,9 +562,10 @@ namespace InGame
 						if (FlameZoneTimer >= FlameZoneInterval)
 						{
 							FlameZoneTimer = 0.f;
+							bFlameWarned = false;
 
 							BurningAreaAttack* BurningArea = new BurningAreaAttack;
-							BurningArea->Init(global::PlayerLocation, FlameZoneRadius, FlameZoneDuration, 1.f);
+							BurningArea->Init(FlameZonePos, FlameZoneRadius, FlameZoneDuration, 1.f,this,false);
 
 							if (Manager::gm.currStateREF)
 							{
@@ -565,6 +573,24 @@ namespace InGame
 								if (GS)
 								{
 									GS->EAAs.push_back(BurningArea);
+								}
+							}
+						}
+						else if (FlameZoneTimer > FlameZoneInterval - 1.f)
+						{
+							if (!bFlameWarned)
+							{
+								bFlameWarned = true;
+								if (Manager::gm.currStateREF)
+								{
+									Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+									if (GS)
+									{
+										FlameZonePos = global::PlayerLocation;
+										AEVec2 FlameZoneSize = { FlameZoneRadius * 2.f,FlameZoneRadius * 2.f };
+										GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, FlameZoneSize, 1.f, FlameZonePos, false, this);
+										bIsWarned = true;
+									}
 								}
 							}
 						}
@@ -576,6 +602,11 @@ namespace InGame
 					BlackHoleSpawnTimer += global::DeltaTime;
 					if (len > 500)
 					{
+						if (bHoleWarned)
+						{
+							bHoleWarned = false;
+							BlackHoleSpawnTimer = 0.f;
+						}
 						f32 effectiveMovementSpeed = Stats->MovementSpeed;
 
 						if (Stats->StatusEffectTimer[SLOW] > 0)
@@ -594,19 +625,8 @@ namespace InGame
 
 							BlackholeAttack* BlackHole = new BlackholeAttack;
 							AEVec2 Size = { BlackHoleRadius * 2.f,BlackHoleRadius * 2.f };
-							std::random_device rd;
-							std::mt19937 gen(rd());
-							std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
-							std::uniform_real_distribution<float> radiusDist(0.0f, BlackHoleRadius); 
-
-							float angle = angleDist(gen);
-							float radius = radiusDist(gen);
-
-							AEVec2 spawnOffset = {cosf(angle) * radius, sinf(angle) * radius};
-
-							AEVec2 spawnPos = {global::PlayerLocation.x + spawnOffset.x,global::PlayerLocation.y + spawnOffset.y};
-
-							BlackHole->Init(spawnPos, Size, BlackHoleRadius, BlackHoleDuration);
+							
+							BlackHole->Init(BlackHolePos, Size, BlackHoleRadius, BlackHoleDuration,this,false);
 
 							if (Manager::gm.currStateREF)
 							{
@@ -614,6 +634,36 @@ namespace InGame
 								if (GS)
 								{
 									GS->EAAs.push_back(BlackHole);
+								}
+							}
+							bHoleWarned = false;
+						}
+						else if (BlackHoleSpawnTimer >= BlackHoleSpawnInterval - 1.f)
+						{
+							if (!bHoleWarned)
+							{
+								bHoleWarned = true;
+								if (Manager::gm.currStateREF)
+								{
+									Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+									if (GS)
+									{
+										std::random_device rd;
+										std::mt19937 gen(rd());
+										std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
+										std::uniform_real_distribution<float> radiusDist(0.0f, BlackHoleRadius);
+
+										float angle = angleDist(gen);
+										float radius = radiusDist(gen);
+
+										AEVec2 spawnOffset = { cosf(angle) * radius, sinf(angle) * radius };
+
+										BlackHolePos = { global::PlayerLocation.x + spawnOffset.x,global::PlayerLocation.y + spawnOffset.y };
+
+										AEVec2 HoleSize = { BlackHoleRadius * 2.f,BlackHoleRadius * 2.f };
+										GS->VFXManager.AddWarningVFX(VFXType::WarningCircle, HoleSize, 1.f, BlackHolePos, false, this);
+										bIsWarned = true;
+									}
 								}
 							}
 						}
