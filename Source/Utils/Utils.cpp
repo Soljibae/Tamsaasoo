@@ -664,6 +664,65 @@ AEVec2 Utils::GetRandomPointInEllipse(f32 collisionSize)
 	return Point;
 }
 
+void Utils::ClampActorPosition(InGame::Actor* InActor, AEVec2 NewPos)
+{
+	if (InActor)
+	{
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->CurrentStageType == InGame::StageType::TOWER)
+				{
+					float EllipseA = (global::worldMax.x - global::worldMin.x) / 2;
+					float EllipseB = (global::worldMax.y - global::worldMin.y) / 2;
+					float value = (NewPos.x * NewPos.x) / (EllipseA * EllipseA) + (NewPos.y * NewPos.y) / (EllipseB * EllipseB);
+					if (value <= 1.0f)
+					{
+						InActor->position = NewPos;
+					}
+				}
+				else
+				{
+					if (NewPos.x > global::worldMax.x)
+					{
+						InActor->position.x = global::worldMax.x;
+					}
+					else
+					{
+						InActor->position.x = NewPos.x;
+					}
+					if (InActor->position.x < global::worldMin.x)
+					{
+						InActor->position.x = global::worldMin.x;
+					}
+					else
+					{
+						InActor->position.x = NewPos.x;
+					}
+					if (InActor->position.y > global::worldMax.y)
+					{
+						InActor->position.y = global::worldMax.y;
+					}
+					else
+					{
+						InActor->position.y = NewPos.y;
+					}
+					if (InActor->position.y < global::worldMin.y)
+					{
+						InActor->position.y = global::worldMin.y;
+					}
+					else
+					{
+						InActor->position.y = NewPos.y;
+					}
+				}
+			}
+		}
+	}
+}
+
 void Utils::TestInit()
 {
 	global::testTexture = AEGfxTextureLoad("Assets/test.png");
@@ -675,3 +734,4 @@ void Utils::TestDestroy()
 	AEGfxTextureUnload(global::testTexture);
 	Utils::DestroyMesh(global::testMesh);
 }
+//

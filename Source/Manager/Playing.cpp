@@ -20,7 +20,7 @@ namespace Manager
 	{
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage1();
+			CurrentStage = new InGame::Stage3();
 		}
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
@@ -121,7 +121,6 @@ namespace Manager
 					cooldown = 0.f;
 				}
 			}
-			//
 			if (global::KeyInput(AEVK_1))
 			{
 				PC->AddItemToInventory(ITDB->itemList[25]->Clone());
@@ -349,7 +348,6 @@ namespace Manager
 					global::IsEnemyRecentlyDied = true;
 					global::RecentlyDeadEnemyPosition = EC->position;
 					PC->UpdateKill(EC->Exp);
-					//EC->bIsPandingKill = false;
 					ECPool.push_back(EC);
 					ECs[i] = ECs.back();
 					ECs.pop_back();

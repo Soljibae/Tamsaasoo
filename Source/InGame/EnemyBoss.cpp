@@ -284,6 +284,24 @@ namespace InGame
 						jumpTimer = 0.f;
 						jumpStartPos = position;
 						jumpTargetPos = global::PlayerLocation;
+						float EllipseA = (global::worldMax.x - global::worldMin.x) / 2 - (abs(size.x) / 2);
+						float EllipseB = (global::worldMax.y - global::worldMin.y) / 2 - (size.y / 2);
+						float value = (jumpTargetPos.x * jumpTargetPos.x) / (EllipseA * EllipseA) +
+							(jumpTargetPos.y * jumpTargetPos.y) / (EllipseB * EllipseB);
+
+						// 타원 바깥에 있는 경우 → 타원 경계선에 위치하도록 보정
+						if (value > 1.0f)
+						{
+							// 타원 중심에서의 방향벡터 정규화
+							AEVec2 dir;
+							AEVec2 Orient = { 0.f, 0.f };
+							AEVec2Sub(&dir, &jumpTargetPos, &Orient); // 맵 중심이 (0,0) 기준이라고 가정
+							AEVec2Normalize(&dir, &dir);
+
+							// 타원 경계 점으로 보간
+							jumpTargetPos.x = dir.x * EllipseA;
+							jumpTargetPos.y = dir.y * EllipseB;
+						}
 						dashCount = 0;
 						if (Manager::gm.currStateREF)
 						{

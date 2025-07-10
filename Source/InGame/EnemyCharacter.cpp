@@ -57,6 +57,10 @@ namespace InGame
 		Stats->HP = InData->Health;
 
 		AEVec2Set(&Stats->ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
+		Stats->StatusEffectTimer[SLOW] = 0.f;
+		Stats->StatusEffectTimer[BURN] = 0.f;
+		Stats->StatusEffectTimer[STUN] = 0.f;
+		Stats->StatusEffectTimer[FEAR] = 0.f;
 		bIsPandingKill = false;
 		/*--------DASHER--------*/
 		bHasDashed = false;
@@ -153,9 +157,9 @@ namespace InGame
 					{
 						effectiveMovementSpeed *= 0.5f;
 					}
-
-					position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-					position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+					AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime , position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+					Utils::ClampActorPosition(this, NewPos);
+					
 					break;
 				}
 				case EnemyType::ARCHER:
@@ -169,9 +173,8 @@ namespace InGame
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
-
-						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime , position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+						Utils::ClampActorPosition(this, NewPos);
 					}
 					else
 					{
@@ -224,9 +227,8 @@ namespace InGame
 								{
 									effectiveDashSpeed *= 0.5f;
 								}
-
-								position.x -= dashDirection.x * effectiveDashSpeed * global::DeltaTime;
-								position.y -= dashDirection.y * effectiveDashSpeed * global::DeltaTime;
+								AEVec2 NewPos = { position.x - direction.x * effectiveDashSpeed * global::DeltaTime , position.y - direction.y * effectiveDashSpeed * global::DeltaTime };
+								Utils::ClampActorPosition(this, NewPos);
 							}
 							else
 							{
@@ -360,8 +362,8 @@ namespace InGame
 							{
 								effectiveMovementSpeed *= 0.5f;
 							}
-							position.x -= MoveTargetDir.x * global::DeltaTime * effectiveMovementSpeed;
-							position.y -= MoveTargetDir.y * global::DeltaTime * effectiveMovementSpeed;
+							AEVec2 NewPos = { position.x - MoveTargetDir.x * global::DeltaTime * effectiveMovementSpeed, position.y - MoveTargetDir.y * global::DeltaTime * effectiveMovementSpeed };
+							Utils::ClampActorPosition(this, NewPos);
 
 						}
 						else
@@ -431,9 +433,8 @@ namespace InGame
 					float speed = Stats->MovementSpeed * OrbitSpeed;
 					if (Stats->StatusEffectTimer[SLOW] > 0)
 						speed *= 0.5f;
-
-					position.x += moveDir.x * speed * global::DeltaTime;
-					position.y += moveDir.y * speed * global::DeltaTime;
+					AEVec2 NewPos = { position.x + moveDir.x * speed * global::DeltaTime, position.y + moveDir.y * speed * global::DeltaTime };
+					Utils::ClampActorPosition(this, NewPos);
 
 					// 탄 발사
 					OrbitShootTimer += global::DeltaTime;
@@ -464,8 +465,8 @@ namespace InGame
 					case SniperState::APPROACHING:
 						if (len > SniperApproachDistance)
 						{
-							position.x += dirToPlayer.x * speed * global::DeltaTime;
-							position.y += dirToPlayer.y * speed * global::DeltaTime;
+							AEVec2 NewPos = { position.x + dirToPlayer.x * speed * global::DeltaTime, position.y + dirToPlayer.y * speed * global::DeltaTime };
+							Utils::ClampActorPosition(this, NewPos);
 							//AnimationState = MOVE;
 						}
 						else
@@ -487,8 +488,8 @@ namespace InGame
 
 						if (AEVec2Distance(&position, &SniperRetreatStartPos) < SniperRetreatDistance)
 						{
-							position.x += SniperRetreatDir.x * speed * global::DeltaTime;
-							position.y += SniperRetreatDir.y * speed * global::DeltaTime;
+							AEVec2 NewPos = { position.x + SniperRetreatDir.x * speed * global::DeltaTime, position.y + SniperRetreatDir.y * speed * global::DeltaTime };
+							Utils::ClampActorPosition(this, NewPos);
 							//AnimationState = MOVE;
 						}
 						else
@@ -553,9 +554,8 @@ namespace InGame
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
-
-						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime, position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+						Utils::ClampActorPosition(this, NewPos);
 					}
 					else
 					{
@@ -613,9 +613,8 @@ namespace InGame
 						{
 							effectiveMovementSpeed *= 0.5f;
 						}
-
-						position.x -= direction.x * effectiveMovementSpeed * global::DeltaTime;
-						position.y -= direction.y * effectiveMovementSpeed * global::DeltaTime;
+						AEVec2 NewPos = { position.x - direction.x * effectiveMovementSpeed * global::DeltaTime, position.y - direction.y * effectiveMovementSpeed * global::DeltaTime };
+						Utils::ClampActorPosition(this, NewPos);
 					}
 					else
 					{
