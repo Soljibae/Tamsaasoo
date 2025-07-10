@@ -18,6 +18,8 @@ namespace Manager
 
 	void Playing::Init()
 	{
+		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "bgm");
+		SFXManager.Init();
 		if (CurrentStage == nullptr)
 		{
 			CurrentStage = new InGame::Stage1();
@@ -86,7 +88,8 @@ namespace Manager
 			pickPanel.Show();
 		}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
-		if (global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive() && !gunPickPanel.IsActive())
+		bool canPause = global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive() && !gunPickPanel.IsActive() && !gameOverScreen.isGameOver;
+		if (canPause)
 		{
 			if (!gm.GamePaused)
 			{
@@ -629,7 +632,7 @@ namespace Manager
 		Utils::TestDestroy();
 		WM.Destroy();
 		InGame::SoulOrb::StaticDestroy();
-
+		SFXManager.Destroy();
 		PC->Destroy();
 		delete PC;
 		PC = nullptr;

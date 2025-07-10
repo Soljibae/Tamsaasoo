@@ -1,12 +1,15 @@
 #include "MainMenu.h"
 #include "../Utils/Utils.h"
 #include "GameManager.h"
+#include "../InGame/SFX.h"
 namespace Manager
 {
 	f32 MainMenu::alpha = 1.f;
-
 	void MainMenu::Init()
 	{
+		SFXManager.AddNewSFX(InGame::BGM,"Assets/SFX/changa.mp3","doom");
+		SFXManager.AddNewSFX(InGame::UI,"Assets/SFX/start.wav","start");
+		SFXManager.Init();
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 
@@ -24,7 +27,9 @@ namespace Manager
 		startButton.Texture = AEGfxTextureLoad("Assets/Buttons/StartButton.png");
 		startButton.position = { 0.f, 100.f };
 		startButton.size = { 300, 120 };
-		startButton.SetCallback([]() {gm.SetNextGameState(EGameState::PLAYING); });
+		startButton.SetCallback([]() {
+			SFXManager.Play("start");
+			});
 		startButton.Init();
 
 		exitButton.Mesh = Utils::CreateMesh();
@@ -45,6 +50,23 @@ namespace Manager
 		{
 			alpha = 0;
 			startButton.Update();
+			static bool shouldstart{ false };
+			if (startButton.IsClicked())
+			{
+				shouldstart = true;
+			}
+			if(shouldstart)
+			{
+				static f32 startdelaytime = 0.f;
+				const f32 delay = 1.f;
+				startdelaytime += global::DeltaTime;
+				if (startdelaytime > delay)
+				{
+					gm.SetNextGameState(EGameState::PLAYING);
+					startdelaytime = 0.f;
+					shouldstart = false;
+				}
+			}
 			exitButton.Update();
 		}
 	}
@@ -71,5 +93,6 @@ namespace Manager
 
 		AEGfxMeshFree(exitButton.Mesh);
 		AEGfxTextureUnload(exitButton.Texture);
+		SFXManager.Destroy();
 	}
 }

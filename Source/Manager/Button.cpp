@@ -44,8 +44,6 @@ namespace Manager
     {
         this->size = originSize;
         this->wasScaled = false;
-        isSelected = false;
-        activeButton = nullptr;
         if (callback)
             callback();
     }

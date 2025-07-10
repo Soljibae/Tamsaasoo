@@ -11,6 +11,7 @@ namespace InGame
 {
 	void PlayerCharacter::Init()
 	{
+		Manager::SFXManager.AddNewSFX(InGame::PLAYER, "Assets/SFX/potion.mp3", "potion");
 		position.x = 0;
 		position.y = 0;
 		CollisionRadius = 25;
@@ -87,7 +88,7 @@ namespace InGame
 		{
 			item_ptr.first->Update(this);
 		}
-
+		
 		if (bIsDashing)
 		{
 			UpdateDash();
@@ -179,6 +180,7 @@ namespace InGame
 					{
 						adjustHealth(1);
 						PS->Potion -= 100;
+						Manager::SFXManager.Play("potion");
 					}
 				}
 			}

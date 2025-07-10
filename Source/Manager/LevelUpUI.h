@@ -29,7 +29,8 @@ namespace Manager
 		
 		bool gotEpic = false;
 		InGame::Actor epicWhite;
-		f32 epicAlpha{ 1.f };
+		const f32 resetAlpha{ 0.3f };
+		f32 epicAlpha{ resetAlpha };
 		InGame::PlayerCharacter* PC;
 
 		std::array<Button, 3> ItemWindow;

@@ -4,6 +4,7 @@ namespace InGame
 {
 	void Actor::Init()
 	{
+
 	}
 	void Actor::Update()
 	{

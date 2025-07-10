@@ -19,11 +19,14 @@ namespace Manager
 	static f32 w{ static_cast<f32>(global::ScreenWidth) }, h{ static_cast<f32>(global::ScreenHeight) };
 	void LevelUpUI::ResetGotEpic()
 	{
-		epicAlpha = 1.f;
+		epicAlpha = resetAlpha;
 		gotEpic = false;
 	}
 	void LevelUpUI::Init(InGame::PlayerCharacter* InPC)
 	{
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/pick.wav", "pick");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/reroll.wav", "reroll");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/epic.wav", "epic");
 		currentOptions.reserve(3);
 		PC = InPC;
 
@@ -33,14 +36,16 @@ namespace Manager
 		f32 rerollSize = 100.f;
 		for (s8 i = 0; i < ItemWindow.size(); ++i)
 		{
+			ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 			ItemWindow[i].position = {
 				startX + i * (windowWidth + spacingX),
 				0
 			};
-
 			ItemWindow[i].size = { windowWidth, windowHeight };
-			ItemWindow[i].SetCallback([this, i]() 
+			ItemWindow[i].Texture = AEGfxTextureLoad("Assets/black.png");
+			ItemWindow[i].SetCallback([this, i]()
 				{
+					SFXManager.Play("pick");
 					PC->AddItemToInventory(currentOptions[i]->Clone());
 					this->isActive = false;
 					for (auto& cost : rerollCost)
@@ -153,6 +158,7 @@ namespace Manager
 				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				gotEpic = true;
+				SFXManager.Play("epic");
 				break;
 			}
 		}
@@ -248,6 +254,7 @@ namespace Manager
 		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		PC->PS->Money -= rerollCost[thisbutton];
 		rerollCost[thisbutton] *= 1.7f;
+		SFXManager.Play("reroll");
 
 		ResetGotEpic();
 
@@ -313,6 +320,7 @@ namespace Manager
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 			gotEpic = true;
+			SFXManager.Play("epic");
 			break;
 		}
 	}
@@ -365,7 +373,10 @@ namespace Manager
 		for (auto obj : ItemWindow)
 		{
 			if (obj.Texture)
+			{
 				AEGfxTextureUnload(obj.Texture);
+				obj.Texture = nullptr;
+			}
 		}
 
 		AEGfxMeshFree(epicWhite.Mesh);
@@ -387,8 +398,11 @@ namespace Manager
 		}
 		for (auto slot : ItemSlot)
 		{
-			if(slot.Texture)
+			if (slot.Texture)
+			{
 				AEGfxTextureUnload(slot.Texture);
+				slot.Texture = nullptr;
+			}
 		}
 		AEGfxDestroyFont(pFont);
 	}

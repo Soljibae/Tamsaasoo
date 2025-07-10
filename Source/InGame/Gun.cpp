@@ -11,6 +11,10 @@ namespace InGame
 {
 	void Gun::Init(PlayerCharacter* object)
 	{
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/pistol.wav", "pistol");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/rifle.wav", "rifle");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/shotgun.wav", "shotgun");
+
 		gunType = object->GunData->Type;
 		Mesh = Utils::CreateMesh();
 		Texture = AEGfxTextureLoad(object->GunData->TextureAddress.c_str());
@@ -36,6 +40,13 @@ namespace InGame
 		FireTimer += global::DeltaTime;
 		if (FireTimer > 1.f / RoundPerSec && AEInputCheckCurr(AEVK_LBUTTON))
 		{
+			if(gunType == PISTOL)
+				Manager::SFXManager.Play("pistol");
+			else if(gunType == RIFLE)
+				Manager::SFXManager.Play("rifle");
+			else if(gunType == SHOTGUN)
+				Manager::SFXManager.Play("shotgun");
+
 			FireProjectile(Dir, position);
 			FireTimer = 0.f;
 		}

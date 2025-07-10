@@ -1,24 +1,32 @@
 #pragma once
 #include "Actor.h"
+#include <map>
+#include <unordered_map>
+#include <array>
+#include <iostream>
+#include <vector>
 namespace InGame
 {
 	enum SFXType
 	{
-		System = 0,
-		Enemy = 1,
-		Player = 2,
-		Sfx = 3,
-		Bgm = 4,
-		Ui = 5,
-		Last = Ui
+		SYSTEM = 0,
+		ENEMY = 1,
+		PLAYER = 2,
+		SFX = 3,
+		BGM = 4,
+		UI = 5,
+		SFXType_LAST = UI
 	};
+
 	struct SFXData
 	{
 	public:
-		void Update(f32 DeltaTime);
-		SFXType Type;
-
-		AEAudioGroup ag = AEAudioCreateGroup();
+		SFXType type;
+		AEAudio audio;
+		f32 volume{ 1.f };
+		f32 pitch{ 1.f };
+		std::string name;
+		bool play{ false };
 	};
 
 	class SFXManager : public Actor
@@ -27,10 +35,10 @@ namespace InGame
 		~SFXManager() {};
 		void Init() override;
 		void Update() override;
-		void Draw() override;
 		void Destroy() override;
-		void AddNewSFX(SFXType NewSFXType);
-		//std::map<VFXType, s32> MaxAnimationCount;
-		//std::list<VFXData*> DrawItemList;
+		void AddNewSFX(SFXType NewSFXType, const char* Path, std::string name);
+		void Play(std::string name);
+		std::map<SFXType, AEAudioGroup> sound_group;
+		std::unordered_map<std::string, SFXData> SFXList;
 	};
 }

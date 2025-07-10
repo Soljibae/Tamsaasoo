@@ -56,6 +56,7 @@ namespace Manager
 				gm.Resume();
 				});
 			gunIcons[i].size = {buttonWidth/5.f, buttonHeight};
+			gunIcons[i].Texture = AEGfxTextureLoad("Assets/ShotGun.png");
 		}
 		iconMesh = Utils::CreateMesh();
 		ButtonMesh = Utils::CreateNinePatchMesh();
