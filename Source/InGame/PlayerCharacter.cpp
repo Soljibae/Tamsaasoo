@@ -11,7 +11,6 @@ namespace InGame
 {
 	void PlayerCharacter::Init()
 	{
-		Manager::SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/potion.wav", "potion");
 		position.x = 0;
 		position.y = 0;
 		CollisionRadius = 25;
@@ -180,7 +179,6 @@ namespace InGame
 					{
 						adjustHealth(1);
 						PS->Potion -= 100;
-						Manager::SFXManager.Play("potion");
 					}
 				}
 			}
