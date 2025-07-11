@@ -22,7 +22,8 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
 	isExplosive = false;
 	AEVec2Set(&ExplosionSize, global::item32ExplosionSize, global::item32ExplosionSize);
 	AEVec2Set(&ExplosionOffset, 0.f, 0.f);
-	
+	hasHit = false;
+
 	BulletSpeed = object->Stats->ProjectileSpeed;
 	HitCount = object->PS->effectiveHitCount ;
 	Damage = object->PS->effectiveDamage;
@@ -37,6 +38,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 	CollisionRadius = object->Stats->ProjectileCollisionSize;
 	bIsPandingKill = false;
 	isExplosive = false;
+	hasHit = false;
 
 	BulletSpeed = object->Stats->ProjectileSpeed;
 	Damage = object->Stats->Damage;
@@ -52,6 +54,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Dama
 	CollisionRadius = 5;
 	bIsPandingKill = false;
 	this->isExplosive = isExplosive;
+	hasHit = false;
 
 	this->HitCount = HitCount;
 	this->BulletSpeed = BulletSpeed;
@@ -166,6 +169,7 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 void InGame::Projectile::Explode(class EnemyCharacter* target)
 {
 	isExplosionStarted = true;
+	std::cout << "ex" << std::endl;
 
 	AEVec2Set(&ExplosionPos, target->position.x, target->position.y);
 

@@ -143,16 +143,16 @@ namespace Manager
 			ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/itemSlot.png");
 			switch (currentOptions[i]->grade)
 			{
-			case InGame::ItemGrade::COMMON:
+			case COMMON:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 				break;
-			case InGame::ItemGrade::UNCOMMON:
-				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotUC.png");
-				break;
-			case InGame::ItemGrade::RARE:
+			case RARE:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				break;
-			case InGame::ItemGrade::EPIC:
+			case EPIC:
+				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				gotEpic = true;
 				SFXManager.Play("epic");
@@ -301,19 +301,15 @@ namespace Manager
 		}
 		switch (currentOptions[thisbutton]->grade)
 		{
-		case InGame::ItemGrade::COMMON:
+		case COMMON:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 			break;
-		case InGame::ItemGrade::UNCOMMON:
-			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotUC.png");
-			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotUC.png");
-			break;
-		case InGame::ItemGrade::RARE:
+		case RARE:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 			break;
-		case InGame::ItemGrade::EPIC:
+		case EPIC:
 			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 			gotEpic = true;
