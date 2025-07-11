@@ -1749,7 +1749,7 @@ namespace InGame
 		}
 
 		FireTimer += global::DeltaTime;
-		if (FireTimer >= 1.f / effectiveFireRate)
+		if (FireTimer >= 1.f / effectiveFireRate && distanceMin)
 		{
 			FireTimer = 0.f;
 			if (Manager::gm.currStateREF)
