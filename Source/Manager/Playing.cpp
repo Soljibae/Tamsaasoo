@@ -22,7 +22,7 @@ namespace Manager
 		SFXManager.Init();
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage3();
+			CurrentStage = new InGame::Stage1();
 		}
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
@@ -197,9 +197,24 @@ namespace Manager
 				EP->Update();
 				EP->IsOutOfWorld();
 			}
-			for (InGame::Projectile*& PP : PPs)
+			std::vector<InGame::Character*> chars;
+			for (InGame::EnemyCharacter* ec : ECs)
 			{
-				bool bIsHit = false;
+				chars.push_back(static_cast<InGame::Character*>(ec));
+			}
+			for (InGame::Projectile* PP : PPs)
+			{
+				Utils::CheckCollision(*PP, chars);
+				if (Boss)
+				{
+					if (!Boss->bIsPandingKill)
+					{
+						std::vector<InGame::Character*> Bosses;
+						Bosses.push_back(static_cast<InGame::Character*>(Boss));
+						Utils::CheckCollision(*PP, Bosses, global::additionalDamageToBossRatio);
+					}
+				}
+/*				bool bIsHit = false;
 				for (InGame::EnemyCharacter*& EC : ECs)
 				{
 					if (PP->bIsPandingKill)
@@ -234,7 +249,7 @@ namespace Manager
 							}
 						}
 					}
-				}
+				}*/
 			}
 			for (InGame::SoulOrb*& SO : SOs)
 			{

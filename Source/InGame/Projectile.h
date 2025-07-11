@@ -22,6 +22,7 @@ namespace InGame
 		void OnHit(class EnemyCharacter* target);
 		void Explode(class EnemyCharacter* target);
 
+		AEVec2 LastLoc;
 		f32 Damage;
 		s32 HitCount;
 		f32 BulletSpeed;

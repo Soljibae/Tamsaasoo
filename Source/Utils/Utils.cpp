@@ -581,6 +581,87 @@ bool Utils::CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r)
 	return distSq <= radiusSumSq;
 }
 
+void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::Character*> Characters, f32 ExtraDamageRatio)
+{
+	
+	std::vector<std::pair<f32, InGame::Character*>> collided;
+
+	AEVec2 start = Projectile.LastLoc;
+	AEVec2 end = Projectile.position;
+
+	AEVec2 dir;
+	AEVec2Sub(&dir, &end, &start);
+
+	f32 a = dir.x * dir.x + dir.y * dir.y;
+
+	for (InGame::Character* Character : Characters)
+	{
+		AEVec2 center = Character->position;
+		f32 radius = Character->CollisionRadius;
+
+		AEVec2 f;
+		AEVec2Sub(&f, &start, &center);
+
+		f32 b = 2 * (f.x * dir.x + f.y * dir.y);
+		f32 c = (f.x * f.x + f.y * f.y) - radius * radius;
+
+		f32 discriminant = b * b - 4 * a * c;
+
+		if (discriminant < 0)
+			continue;
+
+		discriminant = sqrtf(discriminant);
+		f32 t1 = (-b - discriminant) / (2 * a);
+		f32 t2 = (-b + discriminant) / (2 * a);
+
+		f32 t = -1.0f;
+
+		if (t1 >= 0.0f && t1 <= 1.0f)
+			t = t1;
+		else if (t2 >= 0.0f && t2 <= 1.0f)
+			t = t2;
+
+		if (t >= 0.0f)
+		{
+			// 충돌한 캐릭터와 충돌 위치 비율 t 저장
+			collided.push_back({ t, Character });
+		}
+	}
+
+	// 충돌한 위치 비율(t)에 따라 정렬 (앞에 있는 것부터)
+	std::sort(collided.begin(), collided.end(),
+		[](const auto& a, const auto& b) {
+			return a.first < b.first;
+		});
+
+	// 정렬된 캐릭터 리스트 생성
+	std::vector<InGame::Character*> results;
+	for (auto& pair : collided)
+	{
+		results.push_back(pair.second);
+	}
+	for (InGame::Character* result : results)
+	{
+		if (Projectile.HitCount > 0)
+		{
+			if (result->bIsPandingKill)
+			{
+				continue;
+			}
+			else
+			{
+				result->adjustHealth(-Projectile.Damage * ExtraDamageRatio);
+				Projectile.HitCount--;
+			}
+		}
+		else
+		{
+			Projectile.bIsPandingKill = true;
+			break;
+		}
+	}
+}
+
 bool Utils::IsMouseInSquare(InGame::Actor& object)
 {
 	return Utils::IsMouseInSquare(object.position.x, object.position.y, object.size.x, object.size.y);
