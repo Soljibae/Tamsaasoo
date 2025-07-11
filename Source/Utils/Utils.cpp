@@ -33,28 +33,30 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 {
 	struct P { f32 x, y, u0, v0, u1, v1; };
 	std::vector<P> Patches = {
+
 		{ 0.5f, 0.5f, 0.00f, 0.75f, 0.25f, 1.00f },  // TopLeft
 		{ 0.5f, 0.5f, 0.25f, 0.75f, 0.75f, 1.00f },  // TopCenter
 		{ 0.5f, 0.5f, 0.75f, 0.75f, 1.00f, 1.00f },  // TopRight
 
 		{ 0.5f, 0.5f, 0.00f, 0.25f, 0.25f, 0.75f },  // CenterLeft
 		{ 0.5f, 0.5f, 0.25f, 0.25f, 0.75f, 0.75f },  // Center
-		{ 0.5f, 0.5f, 0.75f, 0.25f, 1.00f, 0.75f },  // CenterRight
+		{ 0.5f, 0.5f, 0.75f, 0.25f, 1.00f, 0.75f },  // CenterRight		
 
 		{ 0.5f, 0.5f, 0.00f, 0.00f, 0.25f, 0.25f },  // BottomLeft
 		{ 0.5f, 0.5f, 0.25f, 0.00f, 0.75f, 0.25f },  // BottomCenter
-		{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f }   // BottomRight
+		{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f },   // BottomRight
+
 	};
 	std::array<AEGfxVertexList*, 9> PatchArr{ nullptr };
 	int i = 0;
 	for (auto p : Patches)
 	{
-		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-p.x, -p.y, 0xFFFFFFFF, p.u0, p.v0,
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
 			-p.x, p.y, 0xFFFFFFFF, p.u0, p.v1
 		);
+		AEGfxMeshStart();
 		AEGfxTriAdd(
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
 			p.x, p.y, 0xFFFFFFFF, p.u1, p.v1,

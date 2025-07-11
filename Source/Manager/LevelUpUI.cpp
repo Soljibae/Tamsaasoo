@@ -36,7 +36,7 @@ namespace Manager
 		f32 rerollSize = 100.f;
 		for (s8 i = 0; i < ItemWindow.size(); ++i)
 		{
-			ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
+			ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/itemSlot.png");
 			ItemWindow[i].position = {
 				startX + i * (windowWidth + spacingX),
 				0
@@ -140,22 +140,19 @@ namespace Manager
 				AEGfxTextureUnload(ItemWindow[i].Texture);
 				ItemWindow[i].Texture = nullptr;
 			}
+			ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/itemSlot.png");
 			switch (currentOptions[i]->grade)
 			{
 			case InGame::ItemGrade::COMMON:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 				break;
 			case InGame::ItemGrade::UNCOMMON:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotUC.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotUC.png");
 				break;
 			case InGame::ItemGrade::RARE:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				break;
 			case InGame::ItemGrade::EPIC:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				gotEpic = true;
 				SFXManager.Play("epic");

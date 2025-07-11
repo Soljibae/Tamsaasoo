@@ -76,8 +76,8 @@ namespace Manager
 			currStateREF->Destroy();
 			delete currStateREF;
 			currStateREF = nullptr;
+			SFXManager.Destroy();
 		}
-		SFXManager.Destroy();
 	}
 
 	void GameManager::SetNextGameState(EGameState state)

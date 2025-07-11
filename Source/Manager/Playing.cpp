@@ -630,10 +630,10 @@ namespace Manager
 		Utils::TestDestroy();
 		WM.Destroy();
 		InGame::SoulOrb::StaticDestroy();
-		SFXManager.Destroy();
 		PC->Destroy();
 		delete PC;
 		PC = nullptr;
+		SFXManager.Destroy();
 	}
 	void Playing::SpawnWave()
 	{

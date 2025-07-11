@@ -18,6 +18,10 @@ namespace InGame
 				sfx.second.volume = 0.5f;
 				AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], sfx.second.volume, sfx.second.pitch, -1);
 			}
+			else if (sfx.second.type == SFX)
+			{
+				sfx.second.volume = 0.5f;
+			}
 		}
 	}
 
