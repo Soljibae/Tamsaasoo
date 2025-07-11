@@ -19,6 +19,9 @@ namespace Manager
 	void Playing::Init()
 	{
 		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "bgm");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/waveclear.wav", "waveclear");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/slime.wav", "slime");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/skeleton.mp3", "skeleton");
 		SFXManager.Init();
 		if (CurrentStage == nullptr)
 		{
@@ -406,9 +409,10 @@ namespace Manager
 					orb->Init(EC);
 					SOs.push_back(orb);
 
-					if (EC->Type == InGame::EnemyType::BOMBER)
+					float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);
+					switch (EC->Type)
 					{
-						float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);
+					case InGame::EnemyType::BOMBER:
 						if (distToPlayer <= EC->explosionRadius)
 						{
 							PC->OnDamaged();
@@ -428,6 +432,13 @@ namespace Manager
 						AEVec2 DrawSize;
 						AEVec2Set(&DrawSize, EC->explosionRadius * 2, EC->explosionRadius * 2);
 						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 3.f);
+						break;
+					case InGame::EnemyType::MINION:
+						SFXManager.Play("slime");
+						break;
+					case InGame::EnemyType::ARCHER:
+						SFXManager.Play("skeleton");
+						break;
 					}
 					global::IsEnemyRecentlyDied = true;
 					global::RecentlyDeadEnemyPosition = EC->position;
@@ -799,6 +810,7 @@ namespace Manager
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			EC->bIsPandingKill = true;
+			SFXManager.Play("waveclear");
 		}
 		for (InGame::Projectile*& EP : EPs)
 		{

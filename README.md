@@ -67,4 +67,4 @@
 - [rpg-essentials-sfx-free](https://leohpaz.itch.io/rpg-essentials-sfx-free)
 - [Universal UI/Menu Soundpack](https://cyrex-studios.itch.io/universal-ui-soundpack)
 - [Vignetting](https://forum.affinity.serif.com/index.php?/topic/114423-to-create-a-vignette-with-the-gradients-tools/)
-- []
+- [Slime sound](https://freesound.org/people/greenlinker/sounds/794272/)
