@@ -126,7 +126,7 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[25]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[32]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
