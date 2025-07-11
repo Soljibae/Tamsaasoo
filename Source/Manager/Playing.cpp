@@ -153,6 +153,25 @@ namespace Manager
 				PC->Stats->MaxHP += 2;
 				PC->Stats->HP += 3;
 			}
+			if (global::KeyInput(AEVK_9))
+			{
+				if (debugMod)
+				{
+					debugMod = false;
+					for (InGame::EnemyCharacter* EC : ECs)
+					{
+						EC->bIsPandingKill = true;
+					}
+				}
+				else
+				{
+					debugMod = true;
+					for (InGame::EnemyCharacter* EC : ECs)
+					{
+						EC->bIsPandingKill = true;
+					}
+				}
+			}
 			//
 			if (!bIsBossFight)
 			{
@@ -166,7 +185,7 @@ namespace Manager
 			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (!gameOverScreen.isGameOver)
 			{
-				if (WaveTimer > 3.f)
+				if (WaveTimer > 3.f && !debugMod)
 				{
 					WaveCount++;
 					WaveTimer = 0;
@@ -183,6 +202,46 @@ namespace Manager
 			PC->Update();
 			global::RecentlyDeadEnemyCount = 0;
 
+			if (debugMod && ECs.size() == 0)
+			{
+				InGame::EnemyCharacter* EC = ECPool.back();
+				ECPool.pop_back();
+				EC->Spawn({0.f ,0.f}, &MinionStruct);
+				ECs.push_back(EC);
+				ECs[0]->Stats->MaxHP = 999;
+				ECs[0]->Stats->HP = ECs[0]->Stats->MaxHP;
+			}
+
+			if (debugMod)
+			{
+				static f32 prev_hp = ECs[0]->Stats->HP;
+				f32 curr_hp = ECs[0]->Stats->HP;
+				f32 damage_this_frame = prev_hp - curr_hp;
+
+				static f32 total_damage_in_window = 0.f;
+				static f32 time_accumulator = 0.f;
+				const f32 dps_update_interval = 1.0f;
+
+				if (damage_this_frame > 0)
+				{
+					total_damage_in_window += damage_this_frame;
+				}
+
+				time_accumulator += global::DeltaTime;
+
+				if (time_accumulator >= dps_update_interval)
+				{
+					f32 average_dps = total_damage_in_window / time_accumulator;
+
+					std::cout << "Average DPS (last " << time_accumulator << "s): " << average_dps << std::endl;
+					std::cout << "HP: " << curr_hp << std::endl;
+
+					time_accumulator = 0.f;
+					total_damage_in_window = 0.f;
+				}
+
+				prev_hp = curr_hp;
+			}
 			for (InGame::Projectile*& PP : PPs)
 			{
 				PP->Update();
@@ -190,7 +249,8 @@ namespace Manager
 			}
 			for (InGame::EnemyCharacter* EC : ECs)
 			{
-				EC->Update();
+				if(!debugMod)
+					EC->Update();
 			}
 			for (InGame::Projectile*& EP : EPs)
 			{
@@ -214,6 +274,12 @@ namespace Manager
 					{
 						if (Utils::CheckCollision(*PP, *EC))
 						{
+							if (PP->hasHit)
+								continue;
+							if (PP->isExplosive)
+							{
+								PP->hasHit = true;
+							}
 							EC->adjustHealth(-PP->Damage);
 							PC->OnProjectileHit(EC, false);
 							PP->OnHit(EC);
