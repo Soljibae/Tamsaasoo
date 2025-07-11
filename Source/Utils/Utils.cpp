@@ -623,18 +623,15 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::C
 
 		if (t >= 0.0f)
 		{
-			// 충돌한 캐릭터와 충돌 위치 비율 t 저장
 			collided.push_back({ t, Character });
 		}
 	}
 
-	// 충돌한 위치 비율(t)에 따라 정렬 (앞에 있는 것부터)
 	std::sort(collided.begin(), collided.end(),
 		[](const auto& a, const auto& b) {
 			return a.first < b.first;
 		});
 
-	// 정렬된 캐릭터 리스트 생성
 	std::vector<InGame::Character*> results;
 	for (auto& pair : collided)
 	{
