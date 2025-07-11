@@ -30,7 +30,7 @@ namespace InGame
 		distance = (w + h) / 2.f;
 		Speed = distance / lifeTime * global::DeltaTime;
 		maxSpeed = distance / lifeTime * global::DeltaTime * 2;
-		alpha = 1.f;
+		alpha = 0.4f;
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/orb.wav", "orb");
 	}
 	void SoulOrb::Update()
