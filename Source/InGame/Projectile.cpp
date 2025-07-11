@@ -48,6 +48,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Dama
 	size.y = 10;
 	direction = Dir;
 	position = Pos;
+	LastLoc = position;
 	CollisionRadius = 5;
 	bIsPandingKill = false;
 	this->isExplosive = isExplosive;
@@ -65,6 +66,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Dama
 
 void InGame::Projectile::Update()
 {
+	LastLoc = position;
 	position.x += direction.x * BulletSpeed;
 	position.y += direction.y * BulletSpeed;
 

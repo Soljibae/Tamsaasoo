@@ -2,6 +2,7 @@
 #include "AEEngine.h"
 #include "../InGame/Actor.h"
 #include "../InGame/Character.h"
+#include "../InGame/Projectile.h"
 #include "../InGame/Item.h"
 
 namespace Utils
@@ -44,6 +45,8 @@ namespace Utils
 	bool CheckCollision(InGame::Actor& object1, InGame::Actor& object2);
 
 	bool CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r);
+
+	void CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::Character*> Characters, f32 ExtraDamageRatio = 1.f);
   
 	bool IsMouseInSquare(InGame::Actor& object);
 
