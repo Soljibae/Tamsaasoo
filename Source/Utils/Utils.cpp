@@ -33,28 +33,30 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 {
 	struct P { f32 x, y, u0, v0, u1, v1; };
 	std::vector<P> Patches = {
+
 		{ 0.5f, 0.5f, 0.00f, 0.75f, 0.25f, 1.00f },  // TopLeft
 		{ 0.5f, 0.5f, 0.25f, 0.75f, 0.75f, 1.00f },  // TopCenter
 		{ 0.5f, 0.5f, 0.75f, 0.75f, 1.00f, 1.00f },  // TopRight
 
 		{ 0.5f, 0.5f, 0.00f, 0.25f, 0.25f, 0.75f },  // CenterLeft
 		{ 0.5f, 0.5f, 0.25f, 0.25f, 0.75f, 0.75f },  // Center
-		{ 0.5f, 0.5f, 0.75f, 0.25f, 1.00f, 0.75f },  // CenterRight
+		{ 0.5f, 0.5f, 0.75f, 0.25f, 1.00f, 0.75f },  // CenterRight		
 
 		{ 0.5f, 0.5f, 0.00f, 0.00f, 0.25f, 0.25f },  // BottomLeft
 		{ 0.5f, 0.5f, 0.25f, 0.00f, 0.75f, 0.25f },  // BottomCenter
-		{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f }   // BottomRight
+		{ 0.5f, 0.5f, 0.75f, 0.00f, 1.00f, 0.25f },   // BottomRight
+
 	};
 	std::array<AEGfxVertexList*, 9> PatchArr{ nullptr };
 	int i = 0;
 	for (auto p : Patches)
 	{
-		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-p.x, -p.y, 0xFFFFFFFF, p.u0, p.v0,
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
 			-p.x, p.y, 0xFFFFFFFF, p.u0, p.v1
 		);
+		AEGfxMeshStart();
 		AEGfxTriAdd(
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
 			p.x, p.y, 0xFFFFFFFF, p.u1, p.v1,
@@ -579,6 +581,84 @@ bool Utils::CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r)
 	f32 radiusSumSq = radiusSum * radiusSum;
 
 	return distSq <= radiusSumSq;
+}
+
+void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::Character*> Characters, f32 ExtraDamageRatio)
+{
+	
+	std::vector<std::pair<f32, InGame::Character*>> collided;
+
+	AEVec2 start = Projectile.LastLoc;
+	AEVec2 end = Projectile.position;
+
+	AEVec2 dir;
+	AEVec2Sub(&dir, &end, &start);
+
+	f32 a = dir.x * dir.x + dir.y * dir.y;
+
+	for (InGame::Character* Character : Characters)
+	{
+		AEVec2 center = Character->position;
+		f32 radius = Character->CollisionRadius;
+
+		AEVec2 f;
+		AEVec2Sub(&f, &start, &center);
+
+		f32 b = 2 * (f.x * dir.x + f.y * dir.y);
+		f32 c = (f.x * f.x + f.y * f.y) - radius * radius;
+
+		f32 discriminant = b * b - 4 * a * c;
+
+		if (discriminant < 0)
+			continue;
+
+		discriminant = sqrtf(discriminant);
+		f32 t1 = (-b - discriminant) / (2 * a);
+		f32 t2 = (-b + discriminant) / (2 * a);
+
+		f32 t = -1.0f;
+
+		if (t1 >= 0.0f && t1 <= 1.0f)
+			t = t1;
+		else if (t2 >= 0.0f && t2 <= 1.0f)
+			t = t2;
+
+		if (t >= 0.0f)
+		{
+			collided.push_back({ t, Character });
+		}
+	}
+
+	std::sort(collided.begin(), collided.end(),
+		[](const auto& a, const auto& b) {
+			return a.first < b.first;
+		});
+
+	std::vector<InGame::Character*> results;
+	for (auto& pair : collided)
+	{
+		results.push_back(pair.second);
+	}
+	for (InGame::Character* result : results)
+	{
+		if (Projectile.HitCount > 0)
+		{
+			if (result->bIsPandingKill)
+			{
+				continue;
+			}
+			else
+			{
+				result->adjustHealth(-Projectile.Damage * ExtraDamageRatio);
+				Projectile.HitCount--;
+			}
+		}
+		else
+		{
+			Projectile.bIsPandingKill = true;
+			break;
+		}
+	}
 }
 
 bool Utils::IsMouseInSquare(InGame::Actor& object)

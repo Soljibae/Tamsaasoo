@@ -11,7 +11,7 @@ namespace InGame
 {
 	void PlayerCharacter::Init()
 	{
-		Manager::SFXManager.AddNewSFX(InGame::PLAYER, "Assets/SFX/potion.mp3", "potion");
+		Manager::SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/potion.wav", "potion");
 		position.x = 0;
 		position.y = 0;
 		CollisionRadius = 25;

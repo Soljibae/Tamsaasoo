@@ -279,6 +279,7 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/fire.wav", "fire");
 	}
 	void Item_6::Use(PlayerCharacter* owner)
 	{
@@ -296,7 +297,10 @@ namespace InGame
 	void Item_6::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
 	{
 		if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
+		{
 			target->Stats->StatusEffectTimer[BURN] = effectTime;
+			Manager::SFXManager.Play("fire");
+		}
 	}
 	//============================================= ID_7
 	Item_7::Item_7(const Item_7& other)
@@ -1394,6 +1398,7 @@ namespace InGame
 		MaxAnimationCount = 9;
 		tag = LUST;
 		grade = data.grade;
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/fear.mp3", "fear");
 	}
 	void Item_27::Use(PlayerCharacter* owner)
 	{
@@ -1434,6 +1439,7 @@ namespace InGame
 								if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
 								{
 									GS->ECs[i]->Stats->StatusEffectTimer[FEAR] = effectTime;
+									Manager::SFXManager.Play("fear");
 								}
 							}
 						}

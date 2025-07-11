@@ -62,4 +62,9 @@
 ## Asset 출처
 
 - [Explosion Animations Pack](https://ansimuz.itch.io/explosion-animations-pack)
-
+- [Synthesized Water](https://freesound.org/people/JomelleJager/sounds/383145/)
+- [Button FX by R. Mocci](https://rmocci.itch.io/button-fx)
+- [rpg-essentials-sfx-free](https://leohpaz.itch.io/rpg-essentials-sfx-free)
+- [Universal UI/Menu Soundpack](https://cyrex-studios.itch.io/universal-ui-soundpack)
+- [Vignetting](https://forum.affinity.serif.com/index.php?/topic/114423-to-create-a-vignette-with-the-gradients-tools/)
+- []
