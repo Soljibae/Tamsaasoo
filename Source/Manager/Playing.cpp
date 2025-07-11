@@ -257,21 +257,21 @@ namespace Manager
 				EP->Update();
 				EP->IsOutOfWorld();
 			}
-			std::vector<InGame::Character*> chars;
+			std::vector<InGame::EnemyCharacter*> chars;
 			for (InGame::EnemyCharacter* ec : ECs)
 			{
-				chars.push_back(static_cast<InGame::Character*>(ec));
+				chars.push_back(ec);
 			}
 			for (InGame::Projectile* PP : PPs)
 			{
-				Utils::CheckCollision(*PP, chars);
+				Utils::CheckCollision(*PP, chars, *PC, false);
 				if (Boss)
 				{
 					if (!Boss->bIsPandingKill)
 					{
-						std::vector<InGame::Character*> Bosses;
-						Bosses.push_back(static_cast<InGame::Character*>(Boss));
-						Utils::CheckCollision(*PP, Bosses, global::additionalDamageToBossRatio);
+						std::vector<InGame::EnemyCharacter*> Bosses;
+						Bosses.push_back(Boss);
+						Utils::CheckCollision(*PP, chars, *PC, true);
 					}
 				}
 /*				bool bIsHit = false;

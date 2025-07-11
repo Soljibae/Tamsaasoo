@@ -46,7 +46,7 @@ namespace Utils
 
 	bool CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r);
 
-	void CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::Character*> Characters, f32 ExtraDamageRatio = 1.f);
+	void CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::EnemyCharacter*> Characters, class InGame::PlayerCharacter& PC, bool isThisBoss);
   
 	bool IsMouseInSquare(InGame::Actor& object);
 
