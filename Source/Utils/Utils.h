@@ -2,6 +2,8 @@
 #include "AEEngine.h"
 #include "../InGame/Actor.h"
 #include "../InGame/Character.h"
+#include "../InGame/PlayerCharacter.h"
+#include "../InGame/EnemyCharacter.h"
 #include "../InGame/Projectile.h"
 #include "../InGame/Item.h"
 

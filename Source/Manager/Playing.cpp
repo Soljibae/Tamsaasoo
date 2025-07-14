@@ -183,7 +183,7 @@ namespace Manager
 			if (!bIsBossFight)
 			{
 				StageTimer -= global::DeltaTime;
-				WaveTimer -= global::DeltaTime;
+				WaveTimer += global::DeltaTime;
 			}
 			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (global::DeltaTime > 0.02)
