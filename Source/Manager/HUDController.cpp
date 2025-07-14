@@ -171,16 +171,112 @@ namespace Manager
 
 			switch (prevGunType)
 			{
-			case InGame::GunType::PISTOL:
+			case InGame::GunType::M1911:
 				fireTimeBar.size = { 7.f, 21.f }; // 1:3
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
-			case InGame::GunType::RIFLE:
+			case InGame::GunType::CZ75:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::DESERTEGLE:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::MP5:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::MPX:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::VECTOR:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::BEOWOLF:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::P90:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::MOSINNAGAT:
 				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
-			case InGame::GunType::SHOTGUN:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21 
+			case InGame::GunType::M24:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::RAILGUN:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::NITRO700:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::FNFAL:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M82BARRETT:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::AR15:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M110:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::BREN:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::MICROGUN:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M249:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M2:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::SAWEDOFFSHOTGUN:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::DOUBLEBARREL:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::KS23:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::M1897:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::BENELLIM4:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::SAIGA12:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::AA12:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			}
