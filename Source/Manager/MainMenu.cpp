@@ -7,9 +7,8 @@ namespace Manager
 	f32 MainMenu::alpha = 1.f;
 	void MainMenu::Init()
 	{
-		SFXManager.AddNewSFX(InGame::BGM,"Assets/SFX/changa.mp3","doom");
-		SFXManager.AddNewSFX(InGame::UI,"Assets/SFX/start.wav","start");
 		SFXManager.Init();
+		SFXManager.AddNewSFX(InGame::UI,"Assets/SFX/start.wav","start");
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 
@@ -57,6 +56,7 @@ namespace Manager
 			}
 			if(shouldstart)
 			{
+				alpha = 1.f;
 				static f32 startdelaytime = 0.f;
 				const f32 delay = 1.f;
 				startdelaytime += global::DeltaTime;
@@ -68,6 +68,7 @@ namespace Manager
 				}
 			}
 			exitButton.Update();
+			SFXManager.Update();
 		}
 	}
 	void MainMenu::Draw()

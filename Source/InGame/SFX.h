@@ -46,5 +46,6 @@ namespace InGame
 		f32 SFXReduceVol{ 0.5f };
 		f32 SYSOriginVol{ 0.5f };
 		f32 SYSReduceVol{ 0.5f };
+		f32 UIOriginVol{ 1.0f };
 	};
 }

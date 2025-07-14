@@ -5,8 +5,10 @@ namespace Manager
 {
 	static f32 w = global::ScreenWidth;
 	static f32 h = global::ScreenHeight;
-	static f32 padding = 5.f;
-	
+	const static f32 padding = 5.f;
+	const static f32 fontSize = 100.f;
+	const static f32 nameDrawSize = 0.8f;
+	const static f32 epitDrawSize = 0.3f;
 	void BossHPBar::Init(InGame::EnemyBoss* InBoss)
 	{
 		Boss = InBoss;
@@ -21,6 +23,7 @@ namespace Manager
 		HP.size = BG.size;
 		HP.Texture = AEGfxTextureLoad("Assets/HP/BossHP.png");
 		HP.Mesh = Utils::CreateMesh();
+		pFont = AEGfxCreateFont("Assets/Herofire.ttf", fontSize);
 	}
 
 	void BossHPBar::Update()
@@ -52,11 +55,21 @@ namespace Manager
 	{
 		Utils::DrawNinePatchMesh(BG, BG.Texture, BGMesh, padding);
 		Utils::DrawObject(HP, false);
+		f32 nw, nh, ew, eh;
+		AEGfxGetPrintSize(pFont, Boss->name.c_str(), nameDrawSize, &nw, &nh);
+		AEGfxGetPrintSize(pFont, Boss->epithet.c_str(), epitDrawSize, &ew, &eh);
+		f32 halfW{ w / 2.f }, halfH{ h / 2.f };
+		f32 nameX{ BG.position.x - (BG.size.x / 2.f) },
+			nameY{ BG.position.y + (BG.size.y / 2.f) + padding * 3.f },
+			epitX{ BG.position.x + (BG.size.x/2.f) - (ew * halfW) },
+			epitY{ BG.position.y + (BG.size.y / 2.f) + eh + padding * 3.f };
+		AEGfxPrint(pFont, Boss->name.c_str(), nameX / halfW, nameY / halfH, nameDrawSize, 1.f, 0.2f, 0.2f, 1.f);
+		AEGfxPrint(pFont, Boss->epithet.c_str(), epitX / halfW, epitY / halfH, epitDrawSize, 1.f, 1.f, 1.f, 0.8f);
 	}
 
 	void BossHPBar::Destroy()
 	{
-
+		AEGfxDestroyFont(pFont);
 		AEGfxMeshFree(HP.Mesh);
 		HP.Mesh = nullptr;
 		AEGfxTextureUnload(HP.Texture);

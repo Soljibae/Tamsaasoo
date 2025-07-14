@@ -140,6 +140,14 @@ namespace InGame
 				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
 				break;
 			}
+			case VFXType::SoulOrbVfx:
+			{
+				NewData->MaxTimer = Duration;
+				AEVec2Set(&NewData->size, InSize.x, InSize.y);
+				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
+				break;
+			}
+
 		}
 		DrawItemList.push_back(NewData);
 	}

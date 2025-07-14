@@ -121,7 +121,16 @@ namespace InGame
 		//std::cout << "ProjectileFired" << std::endl;
 	}
 	
-
+	NOGUNStruct::NOGUNStruct()
+	{
+		Type = GunType::NOGUN;
+		GuntypeDamageRatio = 1.f;
+		GuntypeFireRateRatio = 1.f;
+		ProjectileSpeed = 20.f;
+		ProjectileCollisionSize = 10.f;
+		ProjectileHitCount = 1;
+		TextureAddress = "Assets/Arm.png";
+	}
 	SAWEDOFFSHOTGUNStruct::SAWEDOFFSHOTGUNStruct()
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;

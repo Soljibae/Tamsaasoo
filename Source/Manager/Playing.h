@@ -30,6 +30,7 @@ namespace Manager
 		void Draw() override;
 		void Destroy() override;
 
+		InGame::Actor Fader;
 		InGame::PlayerCharacter* PC;
 		std::vector<InGame::Projectile*> PPPool;
 		std::vector<InGame::EnemyCharacter*> ECPool;

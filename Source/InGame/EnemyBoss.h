@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyCharacter.h"
+#include <string>
 #include <vector>
 namespace InGame
 {
@@ -12,6 +13,7 @@ namespace InGame
 		virtual void Draw() override;
 		virtual void Destroy() override;
 		virtual void OnPlayerHit();
+		std::string name, epithet;
 	protected:
 		
 	private:
@@ -27,6 +29,7 @@ namespace InGame
 
 		f32 WaveAttackSpawnTimer = 0.f;
 		f32 WaveAttackChamberTimer = 12.f;
+		
 		bool bIsWaving = false;
 	protected:
 

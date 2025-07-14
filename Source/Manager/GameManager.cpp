@@ -14,7 +14,6 @@ namespace Manager
 		nextState = EGameState::INTRO;
 		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
 		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
-		SFXManager.Init();
 	}
 
 	void GameManager::Update()
@@ -47,7 +46,6 @@ namespace Manager
 			forceRestart = false;
 		}
 		currStateREF->Update();
-		SFXManager.Update();
 	}
 
 	void GameManager::Pause()
@@ -75,7 +73,6 @@ namespace Manager
 			currStateREF->Destroy();
 			delete currStateREF;
 			currStateREF = nullptr;
-			SFXManager.Destroy();
 		}
 	}
 

@@ -37,76 +37,76 @@ namespace InGame
 		LAST = M2,
 	};
 
-	static void GetNextType(GunType InGunType, GunType& OutGunType1, GunType& OutGunType2, GunType OutGunType3)
+	static void GetNextType(GunType InGunType, GunType& OutGunType1, GunType& OutGunType2, GunType& OutGunType3)
 	{
 		switch (InGunType)
 		{
-		NOGUN:												//Init
+		case NOGUN:												//Init
 			OutGunType1 = M1911;
 			OutGunType2 = SAWEDOFFSHOTGUN;
 			OutGunType3 = CZ75;
 			break;
-		M1911:												//Tier1
+		case M1911:												//Tier1
 			OutGunType1 = MOSINNAGAT;
 			OutGunType2 = DESERTEGLE;
 			OutGunType3 = FNFAL;
 			break;
-		SAWEDOFFSHOTGUN:
+		case SAWEDOFFSHOTGUN:
 			OutGunType1 = DOUBLEBARREL;
 			OutGunType2 = M1897;
 			OutGunType3 = SAIGA12;
 			break;
-		CZ75:
+		case CZ75:
 			OutGunType1 = AR15;
 			OutGunType2 = MP5;
 			OutGunType3 = BREN;
 			break;
-		DOUBLEBARREL:										//Tier2
+		case DOUBLEBARREL:										//Tier2
 			OutGunType1 = KS23;
 			OutGunType2 = NOGUN;
 			OutGunType3 = NOGUN;
 			break;
-		M1897:
+		case M1897:
 			OutGunType1 = BENELLIM4;
 			OutGunType2 = NOGUN;
 			OutGunType3 = NOGUN;
 			break;
-		SAIGA12:
+		case SAIGA12:
 			OutGunType1 = AA12;
 			OutGunType2 = NOGUN;
 			OutGunType3 = NOGUN;
 			break;
-		MOSINNAGAT:											
+		case MOSINNAGAT:
 			OutGunType1 = M24;
 			OutGunType2 = RAILGUN;
 			OutGunType3 = NOGUN;
 			break;
-		DESERTEGLE:
+		case DESERTEGLE:
 			OutGunType1 = BEOWOLF;
 			OutGunType2 = NITRO700;
 			OutGunType3 = NOGUN;
 			break;
-		FNFAL:
+		case FNFAL:
 			OutGunType1 = M82BARRETT;
 			OutGunType2 = NOGUN;
 			OutGunType3 = NOGUN;
 			break;
-		AR15:
+		case AR15:
 			OutGunType1 = M110;
 			OutGunType2 = NOGUN;
 			OutGunType3 = NOGUN;
 			break;
-		MP5:
+		case MP5:
 			OutGunType1 = MPX;
 			OutGunType2 = VECTOR;
 			OutGunType3 = P90;
 			break;
-		BREN:
+		case BREN:
 			OutGunType1 = MICROGUN;
 			OutGunType2 = M249;
 			OutGunType3 = M2;
 			break;
-		defualt:
+		default:
 			OutGunType1 = NOGUN;
 			OutGunType2 = NOGUN;
 			OutGunType3 = NOGUN;
@@ -139,6 +139,11 @@ namespace InGame
 		f32 GuntypeDamageRatio;
 		f32 GuntypeFireRateRatio;
 		std::string TextureAddress;
+	};
+	struct NOGUNStruct : public GunStruct
+	{
+	public:
+		NOGUNStruct();
 	};
 	struct SAWEDOFFSHOTGUNStruct : public GunStruct
 	{

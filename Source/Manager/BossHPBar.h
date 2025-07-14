@@ -18,5 +18,6 @@ namespace Manager
 		f32 prevHP;
 		f32 currHP;
 		f32 maxHP;
+		s8 pFont;
 	};
 }

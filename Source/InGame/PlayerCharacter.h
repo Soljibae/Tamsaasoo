@@ -47,7 +47,7 @@ namespace InGame
 
 
 		
-		float DashSpeed = 700.0f;
+		float DashSpeed = 550.0f;
 		float DashTime = 0.5f;
 		float DashTimer = 0.0f;
 		float DashCooldown = 1.0f;

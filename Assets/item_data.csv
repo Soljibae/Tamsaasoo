@@ -152,7 +152,7 @@ On taking damage, gain increased Rate of Fire, Attack Power, and Movement Speed 
 
 20
 //20 - cooldown초에 한번 랜덤한 장소에 포션 생성, 획득 시 체력 1칸 회복
-Glut’s Girdle
+Glut's Girdle
 0
 Every 30 seconds, a potion spawns in a random location. Picking it up restores 1 Health.
 //value1, value2, value3, cooldown, duration, procchance, range

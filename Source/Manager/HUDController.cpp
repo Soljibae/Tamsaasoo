@@ -63,7 +63,7 @@ namespace Manager
 		float Y = (h / 2) - 90.f;
 
 		HPMesh = Utils::CreateMesh();
-		HPTex = AEGfxTextureLoad("Assets/HPBG.png");
+		HPTex = AEGfxTextureLoad("Assets/HP/HPBG.png");
 		//HPBG HUD init
 		InGame::Actor bgobj;
 		bgobj.Texture = HPTex;
@@ -77,7 +77,7 @@ namespace Manager
 			HPBG.push_back(bgobj);
 		}
 		//HP HUD init
-		HPBGTex = AEGfxTextureLoad("Assets/HP.png");
+		HPBGTex = AEGfxTextureLoad("Assets/HP/HP.png");
 		InGame::Actor hpobj;
 		hpobj.Texture = HPBGTex;
 		hpobj.Mesh = HPMesh;
@@ -103,13 +103,18 @@ namespace Manager
 		fireTimeBar.MovementSpeed = 0.000016f * (barEndX - barStartX) * global::DeltaTime;
 
 		Potion.position = { -(w / 2) + 100.f, h / 2 - 100.f };
-		Potion.size = { 90.f, 90.f };
+		Potion.size = { 100.f, 100.f };
 		Potion.Mesh = FillingMeshUpside(0);
-		Potion.Texture = AEGfxTextureLoad("Assets/Potion.png");
+		Potion.Texture = AEGfxTextureLoad("Assets/HP/Potion.png");
 		PotionBG.position = Potion.position;
-		PotionBG.size = { 100.f, 100.f };
+		PotionBG.size = Potion.size;
 		PotionBG.Mesh = Utils::CreateMesh();
-		PotionBG.Texture = AEGfxTextureLoad("Assets/PotionBG.png");
+		PotionBG.Texture = AEGfxTextureLoad("Assets/HP/PotionBG.png");
+		PotionFull.position = Potion.position;
+		PotionFull.size = Potion.size;
+		PotionFull.Mesh = Utils::CreateMesh();
+		PotionFull.Texture = AEGfxTextureLoad("Assets/HP/PotionFull.png");
+		
 		prevPotion = PC->PS->Potion;
 		prevFireRate = GUN->RoundPerSec;
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
@@ -130,7 +135,7 @@ namespace Manager
 			HPBG.clear();
 			const float spacingX = 10.0f; // 가로 간격
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
-			const float Y = (global::ScreenHeight / 2) - 100.f;
+			const float Y = (global::ScreenHeight / 2) - 90.f;
 			InGame::Actor bgobj;
 			bgobj.Texture = HPTex;
 			bgobj.Mesh = HPMesh;
@@ -317,9 +322,6 @@ namespace Manager
 			PC->PS->Money += 1000000000;
 		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		//DEBUG
-
-		//DEBUG
 		if (PC->PS->Potion != prevPotion)
 		{
 			f32 fillPercent = static_cast<f32>(prevPotion) / 100.f;
@@ -422,6 +424,11 @@ namespace Manager
 			Utils::DrawObject(HP[i], false);
 		Utils::DrawObject(PotionBG, false);
 		Utils::DrawObject(Potion, false);
+		if (PC->PS->Potion >= 100)
+		{
+			Utils::DrawObject(PotionFull, false);
+		}
+
 		if (GUN->FireTimer < 1.f / GUN->RoundPerSec)
 		{
 			Utils::DrawObject(ChamberTimeBar, false);
@@ -601,6 +608,9 @@ namespace Manager
 
 		AEGfxMeshFree(PotionBG.Mesh);
 		AEGfxTextureUnload(PotionBG.Texture);
+
+		AEGfxMeshFree(PotionFull.Mesh);
+		AEGfxTextureUnload(PotionFull.Texture);
 
 		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 		{

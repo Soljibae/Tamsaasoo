@@ -29,7 +29,7 @@ namespace InGame
 		PS = new PlayerStat;
 		Stats = PS;
 		Texture = AEGfxTextureLoad("Assets/Character.png");
-		GunData = new M1911Struct;
+		GunData = new NOGUNStruct;
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 

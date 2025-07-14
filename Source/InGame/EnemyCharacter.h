@@ -59,8 +59,8 @@ namespace InGame
 		float OrbitAngle = 0.f;
 		float OrbitSpeed = 1.0f;
 		float OrbitRadius = 300.f;
-		const float OrbitIdealDistance = 250.f; // ¿ÏÃæ °Å¸®
-		const float AngleAdjustDeg = 10.f; // °¢µµ º¸Á¤ (inward angle)
+		const float OrbitIdealDistance = 250.f; // ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½
+		const float AngleAdjustDeg = 10.f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (inward angle)
 		float OrbitShootTimer = 0.f;
 		float OrbitShootInterval = 1.5f;
 		/*--------ORBITER--------*/
