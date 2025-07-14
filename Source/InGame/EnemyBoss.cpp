@@ -21,6 +21,8 @@ namespace InGame
 		bIsPandingKill = false;
 		Utils::InitOffset(*this);
 		FrameTime = 1.0f;
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/KnifeThrow.mp3", "BossAttackKnife");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/FireMagic.mp3", "BossAttackMagic");
 	}
 	void EnemyBoss::Update()
 	{
@@ -116,6 +118,7 @@ namespace InGame
 					this->SpawnProjectile(dir, position);
 				}
 
+				Manager::SFXManager.Play("BossAttackMagic");
 				angleOffsetToggle = !angleOffsetToggle;
 			}
 
@@ -344,6 +347,7 @@ namespace InGame
 					AEVec2Neg(&rotatedDir, &rotatedDir);
 					SpawnProjectile(rotatedDir, position);
 				}
+				Manager::SFXManager.Play("BossAttackKnife");
 			}
 		}
 		else
@@ -591,6 +595,7 @@ namespace InGame
 				}
 			}
 			LaserTimer = 0.f;
+			Manager::SFXManager.Play("LaserFire");
 		}
 		else if (LaserTimer > LaserSpawnMaxTime - 1.f)
 		{
@@ -637,6 +642,7 @@ namespace InGame
 						bIsWarned = true;
 					}
 				}
+				Manager::SFXManager.Play("LaserWarning");
 			}
 		}
 		ProjectileSpawnTimer += global::DeltaTime;
@@ -663,6 +669,7 @@ namespace InGame
 			}
 
 			angleOffsetToggle = !angleOffsetToggle;
+			Manager::SFXManager.Play("BossAttackKnife");
 		}
 
 		if (WaveAttackSpawnTimer > WaveAttackChamberTimer)

@@ -97,7 +97,7 @@ namespace InGame
 			CollisionRadius = 35.f;
 			MovementSpeed = 100;
 			BulletSpeed = 5;
-			AEVec2Set(&ProjectileSize,20.f,20.f);
+			AEVec2Set(&ProjectileSize,40.f,40.f);
 		}
 	};
 	struct DasherData : EnemyData

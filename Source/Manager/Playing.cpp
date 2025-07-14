@@ -280,7 +280,7 @@ namespace Manager
 					{
 						std::vector<InGame::EnemyCharacter*> Bosses;
 						Bosses.push_back(Boss);
-						Utils::CheckCollision(*PP, chars, *PC, true);
+						Utils::CheckCollision(*PP, Bosses, *PC, true);
 					}
 				}
 /*				bool bIsHit = false;
