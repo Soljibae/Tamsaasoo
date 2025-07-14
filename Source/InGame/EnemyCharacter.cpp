@@ -515,6 +515,7 @@ namespace InGame
 									GS->EAAs.push_back(laser);
 								}
 							}
+							Manager::SFXManager.Play("LaserFire");
 						}
 						else if (SniperShootTimer >= SniperShootInterval-1.f)
 						{
@@ -530,6 +531,7 @@ namespace InGame
 										bIsWarned = true;
 									}
 								}
+								Manager::SFXManager.Play("LaserWarning");
 							}
 
 						}

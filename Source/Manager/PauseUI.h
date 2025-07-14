@@ -30,7 +30,7 @@ namespace Manager
 		std::unordered_map<InGame::ItemTag, std::string> tagString;
 		//pointer to PC in playing
 		InGame::PlayerCharacter* PC;
-		std::array<Button, 16> ItemSlot;
+		std::array<Button, 32> ItemSlot;
 		static AEGfxVertexList* slotMesh;
 		static AEGfxTexture* slotTexture;
 		//white image to rendered at mouse over on itemslot

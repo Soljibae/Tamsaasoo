@@ -29,7 +29,7 @@ namespace InGame
 		PS = new PlayerStat;
 		Stats = PS;
 		Texture = AEGfxTextureLoad("Assets/Character.png");
-		GunData = new PistolStruct;
+		GunData = new M1911Struct;
 		HoldingGun = new Gun();
 		HoldingGun->Init(this);
 
@@ -187,18 +187,19 @@ namespace InGame
 	}
 	void PlayerCharacter::Draw()
 	{
-		
-		if (bIsInvincible)
+		if (!bIsPandingKill)
 		{
-			HoldingGun->Draw(0.5f);
-			Utils::DrawObject(*this, true, 0.5f);
+			if (bIsInvincible)
+			{
+				HoldingGun->Draw(0.5f);
+				Utils::DrawObject(*this, true, 0.5f);
+			}
+			else
+			{
+				HoldingGun->Draw();
+				Utils::DrawObject(*this);
+			}
 		}
-		else
-		{
-			HoldingGun->Draw();
-			Utils::DrawObject(*this);
-		}
-		
 	}
 	void PlayerCharacter::Destroy()
 	{
@@ -238,7 +239,7 @@ namespace InGame
 			return;
 		}
 
-		if (!bIsInvincible && !bIsDashing)
+		if (!bIsInvincible && !bIsDashing && !bIsPandingKill)
 		{
 			Stats->HP = std::clamp(Stats->HP + Amount, 0.f, Stats->MaxHP);
 			if (Stats->HP <= 0)
@@ -251,6 +252,13 @@ namespace InGame
 				else
 				{
 					bIsPandingKill = true;
+					Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+					if (GS)
+					{
+						AEVec2 DrawSize;
+						AEVec2Set(&DrawSize, size.x * 4, size.x * 4);
+						GS->VFXManager.AddNewVFX(VFXType::Explosion, position, DrawSize, 3.f);
+					}
 				}
 			}
 			else

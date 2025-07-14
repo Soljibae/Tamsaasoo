@@ -17,7 +17,7 @@ namespace Manager
 	Utils::Camera* CAM = nullptr;
 	const static f32 fontSize = 72.f;
 	const static f32 textDrawSize = 0.35f;
-	const static s32 maxWaveCount = 60;
+	const static s32 maxWaveCount = 3;
 	void Playing::Init()
 	{
 		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "bgm");
@@ -71,7 +71,7 @@ namespace Manager
 			EC->Init();
 			ECPool.push_back(EC);
 		}
-		StageTimer = 3.f * maxWaveCount;
+		StageTimer = 3.f * maxWaveCount + 2.f;
 		WaveTimer = 0.;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
@@ -183,7 +183,7 @@ namespace Manager
 			if (!bIsBossFight)
 			{
 				StageTimer -= global::DeltaTime;
-				WaveTimer -= global::DeltaTime;
+				WaveTimer += global::DeltaTime;
 			}
 			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (global::DeltaTime > 0.02)
@@ -200,7 +200,7 @@ namespace Manager
 					if (WaveCount > maxWaveCount)
 					{
 						InitBossFight();
-						StageTimer = 3.f * maxWaveCount;
+						StageTimer = 3.f * maxWaveCount + 2.f;
 					}
 					else
 					{
@@ -280,7 +280,7 @@ namespace Manager
 					{
 						std::vector<InGame::EnemyCharacter*> Bosses;
 						Bosses.push_back(Boss);
-						Utils::CheckCollision(*PP, chars, *PC, true);
+						Utils::CheckCollision(*PP, Bosses, *PC, true);
 					}
 				}
 /*				bool bIsHit = false;
@@ -853,8 +853,6 @@ namespace Manager
 	}
 	void Playing::FinishBossFight()
 	{
-		//TODO : Select Gun
-		gunPickPanel.Show();
 		//TODO : Play Jump Animation
 		for (size_t i = 0; i < EPs.size(); i++)
 		{
@@ -878,6 +876,7 @@ namespace Manager
 	}
 	void Playing::ChangeStage()
 	{
+		gunPickPanel.Show();
 		if (PC)
 		{
 			AEVec2Set(&PC->position, 0.f, 0.f);

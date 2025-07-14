@@ -38,5 +38,10 @@ namespace InGame
 		s32 ExplosionAnimationCount = 0;
 		s32 ExplosionMaxAnimationCount = 9;
 		bool hasHit = false;
+		AEGfxTexture* PlayerTexture = nullptr;
+		AEGfxTexture* EnemyMobTexture = nullptr;
+		AEGfxTexture* Boss1Texture = nullptr;
+		AEGfxTexture* Boss2Texture = nullptr;
+		AEGfxTexture* Boss3Texture = nullptr;
 	};
 }

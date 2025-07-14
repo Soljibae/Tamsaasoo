@@ -20,9 +20,11 @@ namespace InGame
 			}
 			else if (sfx.second.type == SFX)
 			{
-				sfx.second.volume = 0.5f;
+				sfx.second.volume = 0.1f;
 			}
 		}
+		AddNewSFX(SFX, "Assets/SFX/LaserWarning.mp3", "LaserWarning");
+		AddNewSFX(SFX, "Assets/SFX/LaserFire.mp3", "LaserFire");
 	}
 
 	void SFXManager::Update()
@@ -40,11 +42,11 @@ namespace InGame
 
 	void SFXManager::Destroy()
 	{
-		for (auto sfx : SFXList)
+		for (auto& sfx : SFXList)
 		{
 			AEAudioUnloadAudio(sfx.second.audio);
 		}
-		for (auto group : sound_group)
+		for (auto& group : sound_group)
 		{
 			AEAudioUnloadAudioGroup(group.second);
 		}

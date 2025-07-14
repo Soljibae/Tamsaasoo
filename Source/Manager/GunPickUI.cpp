@@ -47,7 +47,7 @@ namespace Manager
 					PC->HoldingGun->Init(PC);
 					break;
 				case InGame::GunType::PISTOL:
-					PC->GunData = new InGame::PistolStruct();
+					PC->GunData = new InGame::M1911Struct();
 					PC->HoldingGun = new InGame::Gun();
 					PC->HoldingGun->Init(PC);
 					break;
