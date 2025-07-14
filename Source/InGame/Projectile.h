@@ -37,5 +37,6 @@ namespace InGame
 		bool isExplosionStarted = false;
 		s32 ExplosionAnimationCount = 0;
 		s32 ExplosionMaxAnimationCount = 9;
+		bool hasHit = false;
 	};
 }

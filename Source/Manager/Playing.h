@@ -71,6 +71,7 @@ namespace Manager
 		bool bIsJumping = false;
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
+		bool debugMod = false;
 	};
 	extern Utils::Camera* CAM;
 	

@@ -16,7 +16,7 @@ namespace InGame
 	Item::Item(const Item& other)
 		: id(other.id), name(other.name), description(other.description), iconPosition(other.iconPosition),
 		iconOffset(other.iconOffset), tag(other.tag), effectTime(other.effectTime), procChance(other.procChance),
-		CoolDown(other.CoolDown), value1(other.value1), value2(other.value2), value3(other.value3), range(other.range)
+		CoolDown(other.CoolDown), value1(other.value1), value2(other.value2), value3(other.value3), range(other.range), grade(other.grade)
 	{
 	}
 	void Item::DrawIcon()
@@ -47,7 +47,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
-		grade = EPIC;
+		grade = data.grade;
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
@@ -85,7 +85,7 @@ namespace InGame
 		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
-		grade = RARE;
+		grade = data.grade;
 		if (Manager::gm.currStateREF)
 		{
 			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
@@ -161,7 +161,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
-		grade = UNCOMMON;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -200,7 +200,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
-		grade = COMMON;
+		grade = data.grade;
 
 		appliedStack = 0;
 
@@ -241,6 +241,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = PRIDE;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -274,6 +275,7 @@ namespace InGame
 		effectTime = data.duration;
 		procChance = data.procChance;
 		tag = WRATH;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -313,6 +315,7 @@ namespace InGame
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		value1 = data.value1;
 		tag = WRATH;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -344,6 +347,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = WRATH;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -389,6 +393,7 @@ namespace InGame
 		effectRow = 1;
 		effectColumn = 9;
 		MaxAnimationCount = 9;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -488,6 +493,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = WRATH;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -535,6 +541,7 @@ namespace InGame
 		effectTime = data.duration;
 		MaxAnimationCount = 9;
 		value1 = data.value1;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -630,6 +637,7 @@ namespace InGame
 		tag = SLOTH;
 		value1 = data.value1;
 		value2 = data.value2;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -677,6 +685,7 @@ namespace InGame
 		effectColumn = 9;
 		MaxAnimationCount = 9;
 		tag = SLOTH;
+		grade = data.grade;
 	}
 	void Item_13::Use(PlayerCharacter* owner)
 	{
@@ -779,6 +788,7 @@ namespace InGame
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		appliedStack = 0;
 		tag = SLOTH;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -812,6 +822,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = SLOTH;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -850,6 +861,7 @@ namespace InGame
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		appliedStack = 0;
 		tag = GLUTTONY;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -890,6 +902,7 @@ namespace InGame
 		targetKillCount = data.value1;;
 		currKillCount = 0;
 		tag = GLUTTONY;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -928,6 +941,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GLUTTONY;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -965,6 +979,7 @@ namespace InGame
 		effectTimer = 0.f;
 		isActivated = false;
 		tag = GLUTTONY;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1015,6 +1030,7 @@ namespace InGame
 		CoolDown = data.cooldown;
 		FireTimer = 0.f;
 		AEVec2Set(&effectSize, 100.f, 100.f);
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1076,6 +1092,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1135,6 +1152,7 @@ namespace InGame
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		value1 = data.value1;
 		tag = GREED;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1193,6 +1211,7 @@ namespace InGame
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 		appliedStack = 0;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1230,6 +1249,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1262,6 +1282,7 @@ namespace InGame
 		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1317,6 +1338,7 @@ namespace InGame
 		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1375,6 +1397,7 @@ namespace InGame
 		effectTime = data.duration;
 		MaxAnimationCount = 9;
 		tag = LUST;
+		grade = data.grade;
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/fear.mp3", "fear");
 	}
 	void Item_27::Use(PlayerCharacter* owner)
@@ -1475,6 +1498,7 @@ namespace InGame
 		effectTime = data.duration;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1519,6 +1543,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1550,6 +1575,7 @@ namespace InGame
 		value1 = data.value1;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1601,6 +1627,7 @@ namespace InGame
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		AEVec2Set(&AnimationOffset, 0, 0);
 		tag = ENVY;
+		grade = data.grade;
 
 		dir = global::PlayerMouseDirection;
 		AEVec2 DirectionVector;
@@ -1708,6 +1735,7 @@ namespace InGame
 		AEVec2Set(&AnimationOffset, 0, 0);
 		tag = ENVY;
 		global::item32ExplosionSize = data.range;
+		grade = data.grade;
 
 		dir = global::PlayerMouseDirection;
 		AEVec2 DirectionVector;
@@ -1814,6 +1842,7 @@ namespace InGame
 		FireTimer = 0.f;
 		AEVec2Set(&dir, 0.f, 1.f);
 		AEVec2Set(&effectSize, 96.f, 96.f);
+		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -1915,6 +1944,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		tag = ENVY;
+		grade = data.grade;
 	}
 	void Item_34::Use(PlayerCharacter* owner)
 	{
@@ -1946,6 +1976,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		tag = ENVY;
+		grade = data.grade;
 	}
 	void Item_35::Use(PlayerCharacter* owner)
 	{

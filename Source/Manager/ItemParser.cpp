@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include "../InGame/Item.h"
 
 namespace Manager
 {
@@ -27,9 +28,10 @@ namespace Manager
                 continue;
             }
 
-            std::string junk, nameLine, descriptionLine, dataLine;
+            std::string junk, nameLine, gradeLine, descriptionLine, dataLine;
             if (std::getline(file, junk) &&
                 std::getline(file, nameLine) &&
+                std::getline(file, gradeLine) &&
                 std::getline(file, descriptionLine) &&
                 std::getline(file, junk) &&
                 std::getline(file, dataLine)) {
@@ -44,6 +46,7 @@ namespace Manager
                 ItemData data;
 
                 data.name = nameLine;
+                data.grade = static_cast<ItemGrade>(std::stoi(gradeLine));
                 data.description = descriptionLine;
 
                 if (values.size() >= 7) {

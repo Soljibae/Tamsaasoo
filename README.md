@@ -56,6 +56,7 @@
 - [2주차 영상](https://drive.google.com/file/d/1WxueMh_DTdlNmREtKTrDE5OeJRer1ju2/view?usp=sharing)
 - [3주차 영상](https://drive.google.com/file/d/1Q3lvfbdrs5O1BvOEBNIxgRsrHhmME7O_/view?usp=sharing)
 - [4주차 영상](https://drive.google.com/file/d/1wjRcj9kd4gMJ_tf38YrJvPPhl_USKL-y/view?usp=sharing)
+- [5주차 영상](https://drive.google.com/file/d/1xIbyPrvNlQEyGXtXgxhwnyqVttL9sR33/view?usp=sharing)
 
 ---
 
@@ -67,4 +68,4 @@
 - [rpg-essentials-sfx-free](https://leohpaz.itch.io/rpg-essentials-sfx-free)
 - [Universal UI/Menu Soundpack](https://cyrex-studios.itch.io/universal-ui-soundpack)
 - [Vignetting](https://forum.affinity.serif.com/index.php?/topic/114423-to-create-a-vignette-with-the-gradients-tools/)
-- []
+- [Slime sound](https://freesound.org/people/greenlinker/sounds/794272/)

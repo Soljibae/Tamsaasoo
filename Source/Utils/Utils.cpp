@@ -2,6 +2,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Manager/Playing.h"
 #include "../Manager/GameManager.h"
+#include "../InGame/PlayerCharacter.h"
 #include <random>
 
 AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
@@ -583,10 +584,10 @@ bool Utils::CheckCollision(InGame::Actor& object1, AEVec2 pos, f32 r)
 	return distSq <= radiusSumSq;
 }
 
-void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::Character*> Characters, f32 ExtraDamageRatio)
+void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::EnemyCharacter*> Characters, class InGame::PlayerCharacter& PC, bool isThisBoss)
 {
 	
-	std::vector<std::pair<f32, InGame::Character*>> collided;
+	std::vector<std::pair<f32, InGame::EnemyCharacter*>> collided;
 
 	AEVec2 start = Projectile.LastLoc;
 	AEVec2 end = Projectile.position;
@@ -596,7 +597,7 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::C
 
 	f32 a = dir.x * dir.x + dir.y * dir.y;
 
-	for (InGame::Character* Character : Characters)
+	for (InGame::EnemyCharacter* Character : Characters)
 	{
 		AEVec2 center = Character->position;
 		f32 radius = Character->CollisionRadius;
@@ -634,12 +635,12 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::C
 			return a.first < b.first;
 		});
 
-	std::vector<InGame::Character*> results;
+	std::vector<InGame::EnemyCharacter*> results;
 	for (auto& pair : collided)
 	{
 		results.push_back(pair.second);
 	}
-	for (InGame::Character* result : results)
+	for (InGame::EnemyCharacter* result : results)
 	{
 		if (Projectile.HitCount > 0)
 		{
@@ -649,7 +650,18 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::C
 			}
 			else
 			{
-				result->adjustHealth(-Projectile.Damage * ExtraDamageRatio);
+				if (Projectile.hasHit)
+					continue;
+				if (Projectile.isExplosive)
+				{
+					Projectile.OnHit(result);
+					Projectile.hasHit = true;
+				}
+				if(isThisBoss)
+					result->adjustHealth(-Projectile.Damage * global::additionalDamageToBossRatio);
+				else
+					result->adjustHealth(-Projectile.Damage);
+				PC.OnProjectileHit(result, false);
 				Projectile.HitCount--;
 			}
 		}

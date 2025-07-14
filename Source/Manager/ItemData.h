@@ -3,6 +3,12 @@
 
 namespace Manager
 {
+    enum ItemGrade
+    {
+        COMMON,
+        RARE,
+        EPIC
+    };
     struct ItemData {
      std::string name = " ";
      std::string description = " ";
@@ -13,6 +19,7 @@ namespace Manager
      f32 duration = -1;
      f32 range = -1;
      f32 procChance = -1;
+    ItemGrade grade;
  };
 }
 
