@@ -23,6 +23,8 @@ namespace InGame
 				sfx.second.volume = 0.5f;
 			}
 		}
+		AddNewSFX(SFX, "Assets/SFX/LaserWarning.mp3", "LaserWarning");
+		AddNewSFX(SFX, "Assets/SFX/LaserFire.mp3", "LaserFire");
 	}
 
 	void SFXManager::Update()

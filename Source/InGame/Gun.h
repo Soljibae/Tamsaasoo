@@ -6,11 +6,51 @@ namespace InGame
 {
 	enum GunType
 	{
-		PISTOL = 0,
-		RIFLE = 1,
-		SHOTGUN = 2,
-		LAST = SHOTGUN
+		NOGUN = 0,
+		SAWEDOFFSHOTGUN = 1,
+		DOUBLEBARREL = 2,
+		KS23 = 3,
+		M1897 = 4,
+		SAIGA12 = 5,
+		AA12 = 6,
+		M1911 = 7,
+		MOSINNAGAT = 8,
+		M24 = 9,
+		RAILGUN = 10,
+		DESERTEGLE = 11,
+		BEOWOLF = 12,
+		NITRO700 = 13,
+		FNFAL = 14,
+		M182BARRET = 15,
+		CZ75 = 16,
+		AR15 = 17,
+		M110 = 18,
+		MP5 = 19,
+		MPX = 20,
+		VECTOR = 21,
+		P90 = 22,
+		BREN = 23,
+		MICROGUN = 24,
+		M249 = 25,
+		M2 = 26,
+		LAST = M2,
+		PISTOL,
+		RIFLE,
+		SHOTGUN,
 	};
+
+	static void GetNextType(GunType InGunType, GunType& OutGunType1, GunType& OutGunType2, GunType OutGunType3)
+	{
+		switch (InGunType)
+		{
+		defualt:
+			OutGunType1 = NOGUN;
+			OutGunType2 = NOGUN;
+			OutGunType3 = NOGUN;
+			break;
+		}
+	}
+
 	class Gun : public Actor
 	{
 	public:
@@ -38,10 +78,10 @@ namespace InGame
 		std::string TextureAddress;
 	};
 
-	struct PistolStruct : public GunStruct
+	struct M1911Struct : public GunStruct
 	{
 	public:
-		PistolStruct();
+		M1911Struct();
 	};
 	struct RifleStruct : public GunStruct
 	{

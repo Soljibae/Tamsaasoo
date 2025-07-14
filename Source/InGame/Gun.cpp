@@ -40,7 +40,7 @@ namespace InGame
 		FireTimer += global::DeltaTime;
 		if (FireTimer > 1.f / RoundPerSec && AEInputCheckCurr(AEVK_LBUTTON))
 		{
-			if(gunType == PISTOL)
+			if(gunType == M1911)
 				Manager::SFXManager.Play("pistol");
 			else if(gunType == RIFLE)
 				Manager::SFXManager.Play("rifle");
@@ -121,15 +121,15 @@ namespace InGame
 		//std::cout << "ProjectileFired" << std::endl;
 	}
 	
-	PistolStruct::PistolStruct()
+	M1911Struct::M1911Struct()
 	{
-		Type = GunType::PISTOL;
+		Type = GunType::M1911;
 		GuntypeDamageRatio = 1.f;
 		GuntypeFireRateRatio = 1.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
-		TextureAddress = "Assets/Pistol.png";
+		TextureAddress = "Assets/Guns/Character_M1911.png";
 	}
 
 	RifleStruct::RifleStruct()

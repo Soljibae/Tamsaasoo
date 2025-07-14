@@ -9,7 +9,11 @@
 void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
-	Texture = AEGfxTextureLoad("Assets/Bullet.png");
+	PlayerTexture = AEGfxTextureLoad("Assets/Bullet.png");
+	EnemyMobTexture = AEGfxTextureLoad("Assets/EnemyMobBullet.png");
+	Boss1Texture = AEGfxTextureLoad("Assets/Boss1Bullet.png");
+	Boss2Texture = AEGfxTextureLoad("Assets/Boss2Bullet.png");
+	Boss3Texture = AEGfxTextureLoad("Assets/Boss3Bullet.png");
 }
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
@@ -27,6 +31,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, PlayerCharacter* object)
 	BulletSpeed = object->Stats->ProjectileSpeed;
 	HitCount = object->PS->effectiveHitCount ;
 	Damage = object->PS->effectiveDamage;
+	Texture = PlayerTexture;
 
 }
 
@@ -42,6 +47,23 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, EnemyCharacter* object)
 
 	BulletSpeed = object->Stats->ProjectileSpeed;
 	Damage = object->Stats->Damage;
+	
+	if (dynamic_cast<Stage1Boss*>(object))
+	{
+		Texture = Boss1Texture;
+	}
+	else if (dynamic_cast<Stage2Boss*>(object))
+	{
+		Texture = Boss2Texture;
+	}
+	else if (dynamic_cast<Stage3Boss*>(object))
+	{
+		Texture = Boss3Texture;
+	}
+	else
+	{
+		Texture = EnemyMobTexture;
+	}
 }
 
 void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Damage, s32 HitCount, bool isExplosive)
@@ -122,7 +144,31 @@ void InGame::Projectile::Destroy()
 		Utils::DestroyMesh(Mesh);
 		Mesh = nullptr;
 	}
-	AEGfxTextureUnload(Texture);
+	if (PlayerTexture)
+	{
+		AEGfxTextureUnload(PlayerTexture);
+		PlayerTexture = nullptr;
+	}
+	if (EnemyMobTexture)
+	{
+		AEGfxTextureUnload(EnemyMobTexture);
+		EnemyMobTexture = nullptr;
+	}
+	if (Boss1Texture)
+	{
+		AEGfxTextureUnload(Boss1Texture);
+		Boss1Texture = nullptr;
+	}
+	if (Boss2Texture)
+	{
+		AEGfxTextureUnload(Boss2Texture);
+		Boss2Texture = nullptr;
+	}
+	if (Boss3Texture)
+	{
+		AEGfxTextureUnload(Boss3Texture);
+		Boss3Texture = nullptr;
+	}
 	Texture = nullptr;
 }
 
