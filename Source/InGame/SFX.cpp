@@ -15,12 +15,7 @@ namespace InGame
 			auto& sfx = *it;
 			if (sfx.second.type == BGM)
 			{
-				sfx.second.volume = 0.5f;
-				AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], sfx.second.volume, sfx.second.pitch, -1);
-			}
-			else if (sfx.second.type == SFX)
-			{
-				sfx.second.volume = 0.1f;
+				AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], BGMOriginVol, sfx.second.pitch, -1);
 			}
 		}
 		AddNewSFX(SFX, "Assets/SFX/LaserWarning.mp3", "LaserWarning");
@@ -34,7 +29,17 @@ namespace InGame
 			auto& sfx = *it;
 			if (sfx.second.play)
 			{
-				AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], sfx.second.volume, sfx.second.pitch, 0);
+				switch(sfx.second.type)
+				{
+				case SFX:
+					AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], SFXOriginVol, sfx.second.pitch, 0);
+					break;
+				case BGM:
+					AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], BGMOriginVol, sfx.second.pitch, -1);
+					break;
+				case PLAYER:
+					AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], PLAYEROriginVol, sfx.second.pitch, -1);
+				}
 				sfx.second.play = false;
 			}
 		}

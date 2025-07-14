@@ -3,11 +3,15 @@
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 #include "GameOver.h"
+#include "../InGame/SFX.h"
+#include "GameManager.h"
+#include "BossHPBar.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
 namespace Manager
 {
+	BossHPBar BossHP;
 	HUDController HUD;
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
@@ -116,6 +120,7 @@ namespace Manager
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
+		SFXManager.AddNewSFX(InGame::PLAYER, "Assets/SFX/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()
@@ -175,7 +180,7 @@ namespace Manager
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::SHOTGUN:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.size = { 8.f, 21 }; // 8:21 
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			}
@@ -239,6 +244,7 @@ namespace Manager
 	}
 	void HUDController::Draw()
 	{
+		static bool soundReduced{ false };
 		// Set color to red and reset to origin color
 		if (PC->Stats->HP > 0 && PC->Stats->HP < 2)
 		{
@@ -250,7 +256,18 @@ namespace Manager
 			AEGfxSetTransparency(1.0f);
 
 			AEGfxTextureSet(Vignetting.Texture, 0.f, 0.f);
-
+			for(auto group : SFXManager.sound_group)
+			{
+				switch (group.first)
+				{
+				case InGame::BGM:
+					AEAudioSetGroupVolume(group.second, SFXManager.BGMReduceVol);
+					break;
+				case InGame::SFX:
+					AEAudioSetGroupVolume(group.second, SFXManager.SFXReduceVol); 
+					break;
+				}
+			}
 			AEMtx33 scale;
 			AEMtx33Scale(&scale, Vignetting.size.x, Vignetting.size.y);
 			AEMtx33 tran;
@@ -270,6 +287,31 @@ namespace Manager
 			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
 
 			AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
+			if(!soundReduced)
+				SFXManager.Play("heart");
+			soundReduced = true;
+		}
+		else
+		{
+			if (soundReduced)
+			{
+				for (auto group : SFXManager.sound_group)
+				{
+					switch (group.first)
+					{
+					case InGame::BGM:
+						AEAudioSetGroupVolume(group.second, SFXManager.BGMOriginVol);
+						break;
+					case InGame::SFX:
+						AEAudioSetGroupVolume(group.second, SFXManager.SFXOriginVol);
+						break;
+					case InGame::PLAYER:
+						AEAudioStopGroup(SFXManager.sound_group[InGame::PLAYER]);
+						break;
+					}
+				}
+				soundReduced = false;
+			}
 		}
 		if (gameOverScreen.isGameOver)
 		{
@@ -294,7 +336,6 @@ namespace Manager
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
-
 	}
 
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)

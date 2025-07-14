@@ -53,14 +53,13 @@ namespace Manager
 	void GameManager::Pause()
 	{
 		GamePaused = true;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], 0.3f);
-		;
+		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMReduceVol);
 	}
 
 	void GameManager::Resume()
 	{
 		GamePaused = false;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], 0.5f);
+		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMOriginVol);
 	}
 
 	void GameManager::Draw()

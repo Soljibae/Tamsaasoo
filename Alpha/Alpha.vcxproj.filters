@@ -131,6 +131,9 @@
     <ClCompile Include="..\Source\InGame\VFX.cpp">
       <Filter>소스 파일\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Manager\BossHPBar.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\InGame\Actor.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\InGame\VFX.h">
       <Filter>소스 파일\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\BossHPBar.h">
+      <Filter>소스 파일\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

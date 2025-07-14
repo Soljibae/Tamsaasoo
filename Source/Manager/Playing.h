@@ -18,6 +18,8 @@
 #include "../InGame/ArealAttack.h"
 #include "../InGame/VFX.h"
 #include "../InGame/SoulOrb.h"
+#include "BossHPBar.h"
+
 namespace Manager
 {
 	class Playing : public AGameState
@@ -64,6 +66,7 @@ namespace Manager
 		void FinishBossFight();
 		void ChangeStage();
 		InGame::EnemyBoss* Boss = nullptr;
+		BossHPBar bossHPBar;
 		InGame::Stage* CurrentStage = nullptr;
 		InGame::StageType CurrentStageType;
 		void InitStage();

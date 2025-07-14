@@ -185,12 +185,11 @@ namespace Manager
 				StageTimer -= global::DeltaTime;
 				WaveTimer += global::DeltaTime;
 			}
-			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (global::DeltaTime > 0.02)
 			{
 				std::cout << global::DeltaTime << std::endl;
+				StageTimer += global::DeltaTime;
 			}
-			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (!gameOverScreen.isGameOver)
 			{
 				if (WaveTimer > 3.f && !debugMod)
@@ -543,6 +542,7 @@ namespace Manager
 						PC->adjustHealth(-Boss->Stats->Damage);
 						Boss->OnPlayerHit();
 					}
+					bossHPBar.Update();
 				}
 			}
 
@@ -619,6 +619,7 @@ namespace Manager
 		if (Boss)
 		{
 			Boss->Draw();
+			bossHPBar.Draw();
 		}
 		VFXManager.Draw();
 		if (!bIsBossFight && !gm.GamePaused)
@@ -847,6 +848,7 @@ namespace Manager
 			}
 			Boss->Texture = AEGfxTextureLoad(CurrentStage->BossTextureAddress.c_str());
 			Boss->Init();
+			bossHPBar.Init(Boss);
 		}
 
 		global::isBossBattleStarted = true;

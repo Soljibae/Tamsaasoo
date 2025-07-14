@@ -62,9 +62,9 @@ namespace InGame
 		float jumpDuration = 2.0f;
 		AEVec2 jumpTargetPos;
 		float DrawAlpha = 1.f;
-		float jumpFadeOutDuration = 1.0f;  // »ç¶óÁö´Â ½Ã°£
-		float jumpFadeInDuration = 0.5f;   // ´Ù½Ã ³ªÅ¸³ª´Â ½Ã°£
-		float jumpMoveDuration = 2.0f;     // Á¡ÇÁ ÀüÃ¼ ½Ã°£ (= Á¡ÇÁ °Å¸® ÀÌµ¿ ½Ã°£)
+		float jumpFadeOutDuration = 1.0f;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+		float jumpFadeInDuration = 0.5f;   // ï¿½Ù½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+		float jumpMoveDuration = 2.0f;     // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Ã°ï¿½ (= ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½Ìµï¿½ ï¿½Ã°ï¿½)
 
 		AEVec2 jumpStartPos;
 	private:
@@ -110,7 +110,6 @@ namespace InGame
 		bool angleOffsetToggle = false;
 		f32 WaveAttackChamberTimer = 30.f;
 		bool bIsWaving = false;
-
 
 		//Movement
 		AEVec2 MoveStartPos;
