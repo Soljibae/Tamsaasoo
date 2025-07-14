@@ -45,6 +45,7 @@ namespace Manager
 
 		bool bIsBossFight = false;
 		u8 WaveCount = 0;
+		f32 StageTimer;
 		f32 WaveTimer;
 		InGame::EnemyType SpawningEnemyType;
 		InGame::MinionData MinionStruct;
@@ -68,10 +69,14 @@ namespace Manager
 		void InitStage();
 		AEVec2 GetSpawnLocation();
 
+		void DrawTime(f32 time);
+
 		bool bIsJumping = false;
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
 		bool debugMod = false;
+
+		s8 pFont;
 	};
 	extern Utils::Camera* CAM;
 	

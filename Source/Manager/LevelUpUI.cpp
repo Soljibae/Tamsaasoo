@@ -13,7 +13,7 @@ namespace Manager
 	const f32 fontSize = 72.f;
 	const f32 textDrawSize = 0.2f;
 	const f32 windowWidth = 350.f;
-	const f32 windowHeight = 600.f;
+	const f32 windowHeight = 550.f;
 	const f32 spacingX = 130.0f;
 	const f32 padding = 50.f;
 	static f32 w{ static_cast<f32>(global::ScreenWidth) }, h{ static_cast<f32>(global::ScreenHeight) };
@@ -58,7 +58,7 @@ namespace Manager
 				});
 			f32 winHalfW{ windowWidth / 2.f }, winHalfH{ windowHeight / 2.f };
 			rerollButton[i].position.x = ItemWindow[i].position.x - winHalfW + (rerollSize / 2.f) + padding;
-			rerollButton[i].position.y = ItemWindow[i].position.y - winHalfH + (rerollSize / 2.f) + padding;
+			rerollButton[i].position.y = ItemWindow[i].position.y - winHalfH + padding;
 			rerollButton[i].size = { rerollSize, rerollSize };
 			rerollButton[i].SetCallback([this, i]() {Reroll(i); });
 			f32 baseX{ rerollButton[i].position.x }, baseY{ rerollButton[i].position.y };
@@ -129,30 +129,20 @@ namespace Manager
 			ItemSlot[i].size.x = currentOptions[i]->size.x * 0.8f;
 			ItemSlot[i].size.y = currentOptions[i]->size.y * 0.8f;
 
-			if (ItemSlot[i].Texture)
-			{
-				AEGfxTextureUnload(ItemSlot[i].Texture);
-				ItemSlot[i].Texture = nullptr;
-			}
-
 			if (ItemWindow[i].Texture)
 			{
 				AEGfxTextureUnload(ItemWindow[i].Texture);
 				ItemWindow[i].Texture = nullptr;
 			}
-			ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/itemSlot.png");
 			switch (currentOptions[i]->grade)
 			{
 			case COMMON:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 				break;
 			case RARE:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 				break;
 			case EPIC:
-				ItemSlot[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				ItemWindow[i].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 				gotEpic = true;
 				SFXManager.Play("epic");
