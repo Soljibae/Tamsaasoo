@@ -16,7 +16,7 @@ namespace InGame
 	Stage3::Stage3()
 	{
 		Type = StageType::HEAVEN;
-		MapTextureAddress = "Assets/check.jpg";
+		MapTextureAddress = "Assets/Lv3Map.png";
 		BossTextureAddress = "Assets/Angel.png";
 	}
 	

@@ -22,7 +22,7 @@ namespace Manager
 		SFXManager.Init();
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage1();
+			CurrentStage = new InGame::Stage3();
 		}
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
@@ -170,8 +170,8 @@ namespace Manager
 				{
 					WaveCount++;
 					WaveTimer = 0;
-					if ((WaveCount > 60 && CurrentStageType == InGame::StageType::LAND) || (WaveCount > 100 && CurrentStageType == InGame::StageType::TOWER) || (WaveCount > 140 && CurrentStageType == InGame::StageType::HEAVEN))
-					{//60, 100, 140
+					if (WaveCount > 60)
+					{
 						InitBossFight();
 					}
 					else
