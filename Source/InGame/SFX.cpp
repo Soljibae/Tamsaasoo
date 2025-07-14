@@ -20,7 +20,7 @@ namespace InGame
 			}
 			else if (sfx.second.type == SFX)
 			{
-				sfx.second.volume = 0.5f;
+				sfx.second.volume = 0.1f;
 			}
 		}
 	}
@@ -40,11 +40,11 @@ namespace InGame
 
 	void SFXManager::Destroy()
 	{
-		for (auto sfx : SFXList)
+		for (auto& sfx : SFXList)
 		{
 			AEAudioUnloadAudio(sfx.second.audio);
 		}
-		for (auto group : sound_group)
+		for (auto& group : sound_group)
 		{
 			AEAudioUnloadAudioGroup(group.second);
 		}

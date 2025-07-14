@@ -289,16 +289,16 @@ namespace InGame
 						float value = (jumpTargetPos.x * jumpTargetPos.x) / (EllipseA * EllipseA) +
 							(jumpTargetPos.y * jumpTargetPos.y) / (EllipseB * EllipseB);
 
-						// Å¸¿ø ¹Ù±ù¿¡ ÀÖ´Â °æ¿ì ¡æ Å¸¿ø °æ°è¼±¿¡ À§Ä¡ÇÏµµ·Ï º¸Á¤
+						// Å¸ï¿½ï¿½ ï¿½Ù±ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½è¼±ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						if (value > 1.0f)
 						{
-							// Å¸¿ø Áß½É¿¡¼­ÀÇ ¹æÇâº¤ÅÍ Á¤±ÔÈ­
+							// Å¸ï¿½ï¿½ ï¿½ß½É¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½âº¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­
 							AEVec2 dir;
 							AEVec2 Orient = { 0.f, 0.f };
-							AEVec2Sub(&dir, &jumpTargetPos, &Orient); // ¸Ê Áß½ÉÀÌ (0,0) ±âÁØÀÌ¶ó°í °¡Á¤
+							AEVec2Sub(&dir, &jumpTargetPos, &Orient); // ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ (0,0) ï¿½ï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 							AEVec2Normalize(&dir, &dir);
 
-							// Å¸¿ø °æ°è Á¡À¸·Î º¸°£
+							// Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 							jumpTargetPos.x = dir.x * EllipseA;
 							jumpTargetPos.y = dir.y * EllipseB;
 						}
@@ -326,7 +326,7 @@ namespace InGame
 				AEVec2Normalize(&toPlayer, &toPlayer);
 
 				const int numBullets = 5;
-				const float angleSpreadDeg = 30.f; // ¡¾15µµ
+				const float angleSpreadDeg = 30.f; // ï¿½ï¿½15ï¿½ï¿½
 				const float angleStepDeg = angleSpreadDeg / (numBullets - 1);
 				const float angleStartDeg = -angleSpreadDeg / 2.0f;
 
@@ -350,36 +350,36 @@ namespace InGame
 		{
 			jumpTimer += global::DeltaTime;
 
-			// ºñÀ² °è»ê (0~1)
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (0~1)
 			float fadeOutRatio = std::fmin(jumpTimer / jumpFadeOutDuration, 1.0f);
 			float moveRatio = std::fmin(jumpTimer / jumpMoveDuration, 1.0f);
 			float fadeInRatio = std::fmax((jumpTimer - (jumpMoveDuration - jumpFadeInDuration)) / jumpFadeInDuration, 0.0f);
 
-			// Alpha Ã³¸®
+			// Alpha Ã³ï¿½ï¿½
 			if (jumpTimer < jumpMoveDuration - jumpFadeInDuration)
 			{
-				// Á¡Á¡ Èñ¹ÌÇØÁü
-				DrawAlpha = 1.0f - 0.7f * fadeOutRatio; // 1.0 ¡æ 0.3
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				DrawAlpha = 1.0f - 0.7f * fadeOutRatio; // 1.0 ï¿½ï¿½ 0.3
 			}
 			else
 			{
-				// ´Ù½Ã ¶Ñ·ÇÇÏ°Ô
+				// ï¿½Ù½ï¿½ ï¿½Ñ·ï¿½ï¿½Ï°ï¿½
 				AnimationState = ATTACK;
-				DrawAlpha = 0.3f + 0.7f * fadeInRatio; // 0.3 ¡æ 1.0
+				DrawAlpha = 0.3f + 0.7f * fadeInRatio; // 0.3 ï¿½ï¿½ 1.0
 			}
 
-			// À§Ä¡ ÀÌµ¿: Á¡ÇÁ ½ÃÀÛÁ¡ ¡æ ÂøÁö À§Ä¡ (º¸°£)
+			// ï¿½ï¿½Ä¡ ï¿½Ìµï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ (ï¿½ï¿½ï¿½ï¿½)
 			position.x = jumpStartPos.x + (jumpTargetPos.x - jumpStartPos.x) * moveRatio;
 			position.y = jumpStartPos.y + (jumpTargetPos.y - jumpStartPos.y) * moveRatio;
 
-			// ³«ÇÏ ¿Ï·á Ã³¸®
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ Ã³ï¿½ï¿½
 			if (jumpTimer >= jumpMoveDuration)
 			{
 				AnimationState = IDLE;
 				DrawAlpha = 1.0f;
 				bIsJumping = false;
 
-				// ³«ÇÏ °ø°Ý ÆÇÁ¤
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				AEVec2 toPlayer;
 				AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
 				float distance = AEVec2Length(&toPlayer);
@@ -438,7 +438,7 @@ namespace InGame
 
 		if (!bIsMoving && MoveTimer >= MoveCooldown)
 		{
-			// ´ÙÀ½ ¸ñÀûÁö ·£´ý ¼±ÅÃ (ÇöÀç À§Ä¡¿Í ´Ù¸¥ °÷)
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½)
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_int_distribution<int> dist(0, static_cast<int>(MovePositions.size()) - 1);
@@ -457,7 +457,7 @@ namespace InGame
 
 		if (bIsMoving)
 		{
-			// ¹æÇâ °è»ê
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 			AEVec2 toTarget;
 			AEVec2Sub(&toTarget, &MoveTargetPos, &position);
 			float distance = AEVec2Length(&toTarget);
