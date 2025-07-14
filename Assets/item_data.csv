@@ -180,7 +180,7 @@ Hoard Ring
 0
 Grants an immediate cash infusion based on your current wealth, but permanently inflates the price of all future rerolls.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.3, 0.5, -1, -1, -1, -1, -1
+0.3, 0.3, -1, -1, -1, -1, -1
 
 24
 //24 - 포션 사용 시 체력이 회복되지 않는 대신에 돈을 value1만큼 얻음

@@ -89,7 +89,7 @@ namespace Manager
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
 		for (auto& cost : rerollCost)
 		{
-			cost = 100;
+			cost = 20;
 		}
 	}
 
