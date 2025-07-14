@@ -128,7 +128,7 @@ Grants +2 Max Health. Decreases Movement Speed.
 
 17
 //17 - 적을 value1 마리 처치 할때마다 체력 value2 칸 회복
-Insatiate Cup
+Maw of Feasting
 0
 Restores 1 Health per 80 enemies slain.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -136,7 +136,7 @@ Restores 1 Health per 80 enemies slain.
 
 18
 //18 - 채워진 체력 한칸당 공격력 증가, 이동속도 감소 (한칸당 additionalDamage value1 증가, additionalMovementSpeed value2 감소)
-Maw of Feasting
+Insatiate Cup
 0
 Increases Attack Power and decreases Movement Speed based on your Health.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -240,7 +240,7 @@ Attacks execute enemies that are below 10% of their maximum health.
 
 31
 //31 - 플레이어가 보는 방향으로 총알을 발사하는 소환수 2개 소환 (기본 데미지 value1, 연사 value2, 관통력 value3)
-Mirror of Envy
+Echoing Shots
 0
 Summons two minions that fire bullets in the direction you are aiming.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -248,7 +248,7 @@ Summons two minions that fire bullets in the direction you are aiming.
 
 32
 //32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 폭발 반경 range (기본 데미지 value1, 연사 value2)
-Eyes of Verdure
+Apocalyptic Roar
 0
 Summons a minion that lobs grenades at the nearest enemy.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -256,7 +256,7 @@ Summons a minion that lobs grenades at the nearest enemy.
 
 33
 //33 - 플레이어 주변을 회전하며 탄환을 막아주고, 충돌 데미지를 주는 소환수 1개 소환 (기본 데미지 value1, 기본 각속도 value2)
-Jealous Ward
+Orbiting Hate
 0
 Summons a guardian that orbits you, blocking enemy projectiles and dealing contact damage.
 //value1, value2, value3, cooldown, duration, procchance, range
