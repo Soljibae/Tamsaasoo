@@ -31,7 +31,6 @@ namespace InGame
 		Speed = distance / lifeTime * global::DeltaTime;
 		maxSpeed = distance / lifeTime * global::DeltaTime * 2;
 		alpha = 0.4f;
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/orb.wav", "orb");
 	}
 	void SoulOrb::Update()
 	{
@@ -50,7 +49,6 @@ namespace InGame
 					if (GS->PC)
 					{
 						GS->PC->PS->Potion += 1;
-						Manager::SFXManager.Play("orb");
 					}
 				}
 			}

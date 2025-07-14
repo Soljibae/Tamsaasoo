@@ -8,7 +8,7 @@ Your attack power is increased by an amount proportional to your missing health 
 
 2
 //2 - duration초 이상 가만히 있을 경우 cooldown초마다 additionalFireRate value1 증가, 최대 10번 까지 중첩
-Vanity’s Diadem
+Vanity's Diadem
 0
 After standing still for 3 seconds, your fire rate increases every second. This effect stacks up to 10 times.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -180,7 +180,7 @@ Hoard Ring
 0
 Grants an immediate cash infusion based on your current wealth, but permanently inflates the price of all future rerolls.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.3, 0.5, -1, -1, -1, -1, -1
+0.3, 0.3, -1, -1, -1, -1, -1
 
 24
 //24 - 포션 사용 시 체력이 회복되지 않는 대신에 돈을 value1만큼 얻음
@@ -192,7 +192,7 @@ Potions no longer restore health. Instead, they grant a large amount of gold.
 
 25
 //25 - 골드 획득량이 value1 만큼 증가하지만, 피격 시 가진 돈의 value2 만큼 잃는다.
-Greed’s Grip
+Greed's Grip
 0
 Dramatically increases all Gold Gain. However, you lose a percentage of your current gold whenever you take damage.
 //value1, value2, value3, cooldown, duration, procchance, range

@@ -15,7 +15,9 @@
 namespace Manager
 {
 	Utils::Camera* CAM = nullptr;
-
+	const static f32 fontSize = 72.f;
+	const static f32 textDrawSize = 0.35f;
+	const static s32 maxWaveCount = 60;
 	void Playing::Init()
 	{
 		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "bgm");
@@ -69,6 +71,7 @@ namespace Manager
 			EC->Init();
 			ECPool.push_back(EC);
 		}
+		StageTimer = 3.f * maxWaveCount;
 		WaveTimer = 0.;
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
@@ -81,6 +84,7 @@ namespace Manager
 		WM.Init();
 		bIsJumping = false;
 		VFXManager.Init();
+		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
 	}
 	void Playing::Update()
 	{
@@ -133,7 +137,7 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[24]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
@@ -178,7 +182,8 @@ namespace Manager
 			//
 			if (!bIsBossFight)
 			{
-				WaveTimer += global::DeltaTime;
+				StageTimer -= global::DeltaTime;
+				WaveTimer -= global::DeltaTime;
 			}
 			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (global::DeltaTime > 0.02)
@@ -192,9 +197,10 @@ namespace Manager
 				{
 					WaveCount++;
 					WaveTimer = 0;
-					if (WaveCount > 60)
+					if (WaveCount > maxWaveCount)
 					{
 						InitBossFight();
+						StageTimer = 3.f * maxWaveCount;
 					}
 					else
 					{
@@ -615,6 +621,10 @@ namespace Manager
 			Boss->Draw();
 		}
 		VFXManager.Draw();
+		if (!bIsBossFight && !gm.GamePaused)
+		{
+			DrawTime(StageTimer);
+		}
 		HUD.Draw();
 		ExpPanel.Draw();
 		for (InGame::SoulOrb* SO : SOs)
@@ -714,7 +724,7 @@ namespace Manager
 		ITDB = nullptr;
 		ITRM->Destroy();
 		delete ITRM;
-
+		AEGfxDestroyFont(pFont);
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
@@ -938,5 +948,15 @@ namespace Manager
 			}
 		}
 		return SpawnPos;
+	}
+	void Playing::DrawTime(f32 time)
+	{
+		f32 halfH = global::ScreenHeight / 2.f;
+		s32 min = static_cast<s32>(time) / 60;
+		s32 sec = static_cast<s32>(time) % 60;
+		std::string timer{ std::to_string(min) + ":" + std::to_string(sec) };
+		f32 lw, lh;
+		AEGfxGetPrintSize(pFont, timer.c_str(), textDrawSize, &lw, &lh);
+		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, 400.f / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
 }

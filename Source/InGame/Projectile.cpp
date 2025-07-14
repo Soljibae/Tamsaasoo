@@ -206,16 +206,11 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 		BulletSpeed = 0.f;
 		CollisionRadius = 0.f; // 충돌 반경을 0으로 만들어 추가 충돌을 막습니다.
 	}
-	else if (HitCount < 1)
-	{
-		bIsPandingKill = true;
-	}
 }
 
 void InGame::Projectile::Explode(class EnemyCharacter* target)
 {
 	isExplosionStarted = true;
-	std::cout << "ex" << std::endl;
 
 	AEVec2Set(&ExplosionPos, target->position.x, target->position.y);
 

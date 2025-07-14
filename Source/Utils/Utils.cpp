@@ -662,12 +662,16 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::E
 				else
 					result->adjustHealth(-Projectile.Damage);
 				PC.OnProjectileHit(result, false);
-				Projectile.OnHit();
+				if (!Projectile.isExplosive)
+					Projectile.OnHit();
 			}
 		}
 		else
 		{
-			Projectile.bIsPandingKill = true;
+			
+			if (!Projectile.isExplosive)
+				Projectile.bIsPandingKill = true;
+
 			break;
 		}
 	}
