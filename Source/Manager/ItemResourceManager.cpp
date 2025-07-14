@@ -11,8 +11,14 @@ namespace Manager
 		explosionTexture = AEGfxTextureLoad("Assets/explosion.png");
 		explosionMesh = Utils::CreateMesh(1, 9);
 
-		minionTexture = AEGfxTextureLoad("Assets/item_minion_0.png");
-		minionMesh = Utils::CreateMesh();
+		item31minionTexture = AEGfxTextureLoad("Assets/item_minion_0.png");
+		item31minionMesh = Utils::CreateMesh();
+
+		item32minionTexture = AEGfxTextureLoad("Assets/item_minion_1.png");
+		item32minionMesh = Utils::CreateMesh();
+
+		item33minionTexture = AEGfxTextureLoad("Assets/item_minion_2.png");
+		item33minionMesh = Utils::CreateMesh();
 	}
 
 	void ItemResourceManager::Destroy()
@@ -33,12 +39,28 @@ namespace Manager
 
 		Utils::DestroyMesh(explosionMesh);
 
-		if (minionTexture)
+		if (item31minionTexture)
 		{
-			AEGfxTextureUnload(minionTexture);
-			minionTexture = nullptr;
+			AEGfxTextureUnload(item31minionTexture);
+			item31minionTexture = nullptr;
 		}
 
-		Utils::DestroyMesh(minionMesh);
+		Utils::DestroyMesh(item31minionMesh);
+
+		if (item32minionTexture)
+		{
+			AEGfxTextureUnload(item32minionTexture);
+			item32minionTexture = nullptr;
+		}
+
+		Utils::DestroyMesh(item32minionMesh);
+
+		if (item33minionTexture)
+		{
+			AEGfxTextureUnload(item33minionTexture);
+			item32minionTexture = nullptr;
+		}
+
+		Utils::DestroyMesh(item33minionMesh);
 	}
 }

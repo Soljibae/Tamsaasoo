@@ -399,21 +399,30 @@ void Utils::DrawObjectWithDirection(InGame::SkillEffectItem& object, AEGfxTextur
 
 	AEGfxTextureSet(Texture, object.AnimationOffset.x, object.AnimationOffset.y);
 
-	AEVec2 translated_pos;
-	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.effectPosition);
+	// 1. scale
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
 
+	// 2. flip
+	float flipX = (Direction.x >= 0.f) ? 1.0f : -1.0f;
+	AEMtx33 flip;
+	AEMtx33Scale(&flip, 1, flipX);
+
+	// 3. rotate
 	float angle = atan2f(Direction.y, Direction.x);
 	AEMtx33 rotate;
 	AEMtx33Rot(&rotate, angle);
 
-	AEMtx33 scale;
-	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
-
+	// 4. translate
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &object.effectPosition);
 	AEMtx33 tran;
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
 
+
 	AEMtx33 transform;
-	AEMtx33Concat(&transform, &rotate, &scale);
+	AEMtx33Concat(&transform, &flip, &scale);
+	AEMtx33Concat(&transform, &rotate, &transform);
 	AEMtx33Concat(&transform, &tran, &transform);
 
 	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
@@ -431,21 +440,30 @@ void Utils::DrawObjectWithDirection(InGame::SkillEffectItem& object, AEVec2 Posi
 
 	AEGfxTextureSet(Texture, object.AnimationOffset.x, object.AnimationOffset.y);
 
-	AEVec2 translated_pos;
-	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &Position);
+	// 1. scale
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
 
+	// 2. flip
+	float flipX = (Direction.x >= 0.f) ? 1.0f : -1.0f;
+	AEMtx33 flip;
+	AEMtx33Scale(&flip, 1, flipX);
+
+	// 3. rotate
 	float angle = atan2f(Direction.y, Direction.x);
 	AEMtx33 rotate;
 	AEMtx33Rot(&rotate, angle);
 
-	AEMtx33 scale;
-	AEMtx33Scale(&scale, object.effectSize.x, object.effectSize.y);
-
+	// 4. translate
+	AEVec2 translated_pos;
+	AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &Position);
 	AEMtx33 tran;
 	AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
 
+
 	AEMtx33 transform;
-	AEMtx33Concat(&transform, &rotate, &scale);
+	AEMtx33Concat(&transform, &flip, &scale);
+	AEMtx33Concat(&transform, &rotate, &transform);
 	AEMtx33Concat(&transform, &tran, &transform);
 
 	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);

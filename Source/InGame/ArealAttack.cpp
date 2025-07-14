@@ -196,7 +196,7 @@ namespace InGame
 
 	void BurningAreaAttack::Draw()
 	{
-		float alpha = 0.3f + 0.1f * sinf(timer * 6.f); // ºÒ²É ±ôºýÀÓ
+		float alpha = 0.3f + 0.1f * sinf(timer * 6.f); // ï¿½Ò²ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 		ArealAttack::Draw();
 		Utils::DrawObject(*this,true, alpha);
 	}
@@ -218,7 +218,7 @@ namespace InGame
 		length = InLength;
 		AEVec2Set(&position, Pivot.x + direction.x* InLength / 2, Pivot.y + direction.y * InLength / 2);
 		speed = InSpeed;
-		size = { length, 30.f }; // ·¹ÀÌÀú ±½±â
+		size = { length, 30.f }; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		CollisionRadius = InLength * 0.5f;
 		lifeTime = InDuration;
 		bRotRight = bInRotRight;
@@ -246,7 +246,7 @@ namespace InGame
 			return;
 		}
 
-		// ¹æÇâ È¸Àü
+		// ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
 		float angleRad = speed * global::DeltaTime * (bRotRight ? -1.f : 1.f);
 		float cosA = cosf(angleRad);
 		float sinA = sinf(angleRad);

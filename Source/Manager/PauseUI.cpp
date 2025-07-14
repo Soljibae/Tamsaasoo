@@ -44,7 +44,7 @@ namespace Manager
 		const float spacingX = 10.0f; // 가로 간격
 		const float spacingY = 10.0f; // 세로 간격
 		const float startX = -300.f; // 전체 위치 조정
-		const float startY = 0.f;
+		const float startY = -400.f + spacingY;
 
 		for (size_t i = 0; i < ItemSlot.size(); ++i)
 		{

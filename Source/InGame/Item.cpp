@@ -1622,7 +1622,7 @@ namespace InGame
 		FireTimer = 0.f;
 		HitCount = data.value3;
 		BulletSpeed = 15.f;
-		AEVec2Set(&effectSize, 128.f, 45.f);
+		AEVec2Set(&effectSize, 128.f, 128.f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		AEVec2Set(&AnimationOffset, 0, 0);
@@ -1699,8 +1699,8 @@ namespace InGame
 			{
 				if (GS->ITRM)
 				{
-					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
-					Utils::DrawObjectWithDirection(*this, this->effectPosition2, GS->ITRM->minionTexture, GS->ITRM->minionMesh, dir);
+					Utils::DrawObjectWithDirection(*this, GS->ITRM->item31minionTexture, GS->ITRM->item31minionMesh, dir);
+					Utils::DrawObjectWithDirection(*this, this->effectPosition2, GS->ITRM->item31minionTexture, GS->ITRM->item31minionMesh, dir);
 				}
 			}
 		}
@@ -1811,7 +1811,7 @@ namespace InGame
 			{
 				if (GS->ITRM)
 				{
-					Utils::DrawObjectWithDirection(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh, attackDir);
+					Utils::DrawObjectWithDirection(*this, GS->ITRM->item32minionTexture, GS->ITRM->item32minionMesh, attackDir);
 				}
 			}
 		}
@@ -1919,7 +1919,7 @@ namespace InGame
 			{
 				if (GS->ITRM)
 				{
-					Utils::DrawObject(*this, GS->ITRM->minionTexture, GS->ITRM->minionMesh);
+					Utils::DrawObject(*this, GS->ITRM->item33minionTexture, GS->ITRM->item33minionMesh);
 				}
 			}
 		}
