@@ -662,7 +662,7 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::E
 				else
 					result->adjustHealth(-Projectile.Damage);
 				PC.OnProjectileHit(result, false);
-				Projectile.HitCount--;
+				Projectile.OnHit();
 			}
 		}
 		else
