@@ -724,7 +724,7 @@ namespace Manager
 		ITDB = nullptr;
 		ITRM->Destroy();
 		delete ITRM;
-
+		AEGfxDestroyFont(pFont);
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
