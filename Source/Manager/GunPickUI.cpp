@@ -9,8 +9,8 @@
 namespace Manager
 {
 	GunPickUI gunPickPanel;
-	static const f32 w = static_cast<f32>(global::ScreenWidth);
-	static const f32 h = static_cast<f32>(global::ScreenHeight);
+	static f32 w = static_cast<f32>(global::ScreenWidth);
+	static f32 h = static_cast<f32>(global::ScreenHeight);
 	static f32 buttonWidth = w / 2.f;
 	static f32 buttonHeight = h / 5.f;
 	static f32 spacingY = 50.f;
@@ -18,7 +18,9 @@ namespace Manager
 	static f32 margin = 60.f;
 	static f32 padding = 15.f;
 	static f32 startY = -(h / 2.f) + margin + (buttonHeight / 2.f);
-
+	static const s32 fontSize{72};
+	static const f32 nameDrawSize{0.4f};
+	static const f32 descDrawSize{0.18f};
 	void GunPickUI::Init(InGame::PlayerCharacter* InPC)
 	{
 		PC = InPC;
@@ -180,16 +182,22 @@ namespace Manager
 						PC->HoldingGun->Init(PC);
 						break;
 					}
+					stageIdx++;
 					isActive = false;
 					gm.Resume();
 				}
 				});
-			gunIcons[i].size = {buttonWidth/5.f, buttonHeight};
+			gunIcons[i].size = { buttonWidth / 5.f, buttonHeight };
+			gunIcons[i].position.x = weaponOptionButtons[i].position.x-weaponOptionButtons[i].size.x/2.f+gunIcons[i].size.x/2.f;
+			gunIcons[i].position.y = weaponOptionButtons[i].position.y;
 			gunIcons[i].Texture = { nullptr };
 		}
 		iconMesh = Utils::CreateMesh();
 		ButtonMesh = Utils::CreateNinePatchMesh();
 		ButtonTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
+		colors[0] = { 1.0f, 1.0f, 1.0f }, colors[1] = { 0.7f, 0.7f, 1.0f }, colors[2] = { 1.0f, 0.5f, 1.0f }, colors[3] = { 0, 0, 0 };
+		stageIdx = 0;
+		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
 	}
 	void GunPickUI::Update()
 	{
@@ -208,8 +216,26 @@ namespace Manager
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
 			Utils::DrawNinePatchMesh(weaponOptionButtons[i], ButtonTexture, ButtonMesh, padding);
-			if(weaponOptions[i] != InGame::GunType::NOGUN)
+			if (weaponOptions[i] != InGame::GunType::NOGUN)
+			{
+				f32 sizeX = gunIcons[i].size.x, sizeY = gunIcons[i].size.y;
+				f32 startX = gunIcons[i].position.x + sizeX/1.7f, Y = gunIcons[i].position.y + sizeY/2.f;
+				f32 lw, lh;
+				AEGfxGetPrintSize(pFont, GunNames[i].c_str(), nameDrawSize, &lw, &lh);
+				lw *= w, lh *= h;
+
 				Utils::DrawObject(gunIcons[i], gunIcons[i].Texture, iconMesh);
+				AEGfxPrint(pFont, GunNames[i].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), nameDrawSize,
+					colors[stageIdx].r,
+					colors[stageIdx].g,
+					colors[stageIdx].b,
+					1.f
+				);
+				AEGfxGetPrintSize(pFont, GunDescriptions[i].c_str(), descDrawSize, &lw, &lh);
+				lh *= 2.f;
+				AEGfxPrint(pFont, GunDescriptions[i].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), descDrawSize,
+					1.f, 1.f, 1.f, 1.f);
+			}
 		}
 	}
 	void GunPickUI::Show()
@@ -361,7 +387,6 @@ namespace Manager
 				GunDescriptions[i] = "BulletStorm";
 				break;
 			}
-			gunIcons[i].position = weaponOptionButtons[i].position;
 		}
 		gm.Pause();
 	}
@@ -379,6 +404,7 @@ namespace Manager
 				AEGfxTextureUnload(gunIcons[i].Texture);
 		}
 		AEGfxTextureUnload(ButtonTexture);
+		AEGfxDestroyFont(pFont);
 	}
 	bool GunPickUI::IsActive() const
 	{
