@@ -630,15 +630,15 @@ namespace InGame
 
 		if (itemTagCount[ENVY] >= 7)
 		{
-			global::additionalMovementSpeed += 60;
+			global::additionalMinionDamage += 1.2;
 		}
 		else if (6 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 5)
 		{
-			global::additionalMovementSpeed += 35;
+			global::additionalMinionDamage += 0.8;
 		}
 		else if (4 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 3)
 		{
-			global::additionalMovementSpeed += 20;
+			global::additionalMinionDamage += 0.5;
 		}
 		PS->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
 		AEVec2Set(&PS->ProjectileSize, GunData->ProjectileCollisionSize, GunData->ProjectileCollisionSize);

@@ -1124,6 +1124,7 @@ namespace InGame
 		description = data.description;
 		value1 = data.value1;
 		value2 = data.value2;
+		value3 = data.value3;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = GREED;
 		grade = data.grade;
@@ -1133,6 +1134,7 @@ namespace InGame
 	}
 	void Item_21::Use(PlayerCharacter* owner)
 	{
+		global::additionalDamage += value3 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);;
 	}
 	void Item_21::Update(PlayerCharacter* owner)
 	{
@@ -1185,6 +1187,7 @@ namespace InGame
 		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		value1 = data.value1;
+		value2 = data.value2;
 		tag = GREED;
 		grade = data.grade;
 
@@ -1195,6 +1198,7 @@ namespace InGame
 	}
 	void Item_22::Use(PlayerCharacter* owner)
 	{
+		global::additionalFireRate += value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);;
 	}
 	void Item_22::Update(PlayerCharacter* owner)
 	{
@@ -1583,6 +1587,7 @@ namespace InGame
 		name = data.name;
 		description = data.description;
 		value1 = data.value1;
+		value2 = data.value2;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
 		grade = data.grade;
@@ -1592,6 +1597,7 @@ namespace InGame
 	}
 	void Item_29::Use(PlayerCharacter* owner)
 	{
+		global::additionalFireRate += value2 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 		global::additionalProcChanceRatio += value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f);
 	}
 	void Item_29::Update(PlayerCharacter* owner)
@@ -2055,7 +2061,7 @@ namespace InGame
 	}
 	void Item_34::Use(PlayerCharacter* owner)
 	{
-		global::additionalMinionDamage += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalMinionDamageRatio += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
 		global::additionalMinionHitCount += value2;
 	}
 	void Item_34::Update(PlayerCharacter* owner)

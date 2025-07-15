@@ -171,18 +171,18 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "Movement speed + ";
+						ss << " (" << "Minion Damage + ";
 						if (count >= 7)
 						{
-							ss << "60";
+							ss << "1.2";
 						}
 						else if (6 >= count && count >= 5)
 						{
-							ss << "35";
+							ss << "0.8";
 						}
 						else if (4 >= count && count >= 3)
 						{
-							ss << "20";
+							ss << "0.5";
 						}
 						ss << ")";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();

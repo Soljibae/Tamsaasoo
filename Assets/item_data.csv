@@ -17,7 +17,7 @@ After standing still for 3 seconds, your fire rate increases every second. This 
 3
 //3 - 스테이지에 존재하는 적 하나당 additionalDamage value1 증가
 Regal Hubris
-0
+2
 Increases damage for each enemy alive.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.05, -1, -1, -1, -1, -1, -1
@@ -25,7 +25,7 @@ Increases damage for each enemy alive.
 4
 //4 - 획득 시 최대 체력 value1칸 감소. 사망 시 1회 부활
 Lofty Mantle
-0
+1
 Reduces Max HP by 2. Grants one revive on death.
 //value1, value2, value3, cooldown, duration, procchance, range
 2.0, -1, -1, -1, -1, -1, -1
@@ -65,7 +65,7 @@ Increases the frequency of your Burn damage ticks.
 9
 //9 - cooldown초마다 피격 시 플레이어 주변으로 range 크기의 불꽃을 일으킴, 불꽃에 닿으면 최대 체력의 value1 % 만큼 데미지를 주고 duration초 동안 화상 상태 부여
 Angerflare
-0
+1
 Every 2 seconds, taking damage unleashes a fiery nova, burning nearby enemies for 30% of their max HP and applying Burn.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, -1, -1, 2, 5, -1, 400.0
@@ -73,7 +73,7 @@ Every 2 seconds, taking damage unleashes a fiery nova, burning nearby enemies fo
 10
 //10 - 데미지 배율이 화상 데미지 * value1만큼 증가함. (effectiveBurnDamage만큼 additionalDamageRatio가 증가)
 Pyre of Rage
-0
+2
 Your damage multiplier increases based on the amount of Burn damage you inflict.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, -1, -1, -1, -1, -1, -1
@@ -97,7 +97,7 @@ Deal 50% more damage to enemies above 80% health.
 13
 //13 -획득 시 연사 value1 감소, cooldown초마다 적 처치 시 폭발하며 주변 적에게 플레이어의 현재 데미지 * value2만큼의 피해를 준다. 기본 범위 range, 연사가 기본 연사보다 낮을수록 해당 효과의 범위가 증가 (additionalFireRate value1 감소)
 Chains of Rest
-0
+2
 Reduces fire rate. A defeated enemy will explode, damaging nearby foes. This effect can only occur once every 4 seconds. The explosion's radius increases as your fire rate decreases
 //value1, value2, value3, cooldown, duration, procchance, range
 0.2, 1.0, -1, 4.0, -1, -1, 400.0
@@ -105,7 +105,7 @@ Reduces fire rate. A defeated enemy will explode, damaging nearby foes. This eff
 14
 //14 - 획득 시 이동 속도 감소, 공격력 증가 (MovementSpeed -= value1, additionalDamage value2 증가)
 Slumber Ring
-0
+1
 Increases your attack damage but reduces your movement speed.
 //value1, value2, value3, cooldown, duration, procchance, range
 30.0, 1.0, -1, -1, -1, -1, -1
@@ -130,14 +130,14 @@ Grants +2 Max Health. Decreases Movement Speed.
 //17 - 적을 value1 마리 처치 할때마다 체력 value2 칸 회복
 Maw of Feasting
 0
-Restores 1 Health per 80 enemies slain.
+Restores 1 Health per 70 enemies slain.
 //value1, value2, value3, cooldown, duration, procchance, range
-80.0, 1.0, -1, -1, -1, -1, -1
+70.0, 1.0, -1, -1, -1, -1, -1
 
 18
 //18 - 채워진 체력 한칸당 공격력 증가, 이동속도 감소 (한칸당 additionalDamage value1 증가, additionalMovementSpeed value2 감소)
 Insatiate Cup
-0
+2
 Increases Attack Power and decreases Movement Speed based on your Health.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.08, 8.0, -1, -1, -1, -1, -1
@@ -145,10 +145,10 @@ Increases Attack Power and decreases Movement Speed based on your Health.
 19
 //19 - 피격 시 duration초간 연사, 공격력, 이동속도 증가 (additionalFireRate value1 증가, additionalDamage value2 증가, additionalMovementSpeed value3 증가)
 Bellyband
-0
+1
 On taking damage, gain increased Rate of Fire, Attack Power, and Movement Speed for 5 seconds.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.5, 0.5, 50.0, -1, 5.0, -1, -1
+1.0, 1.0, 50.0, -1, 5.0, -1, -1
 
 20
 //20 - cooldown초에 한번 랜덤한 장소에 포션 생성, 포션 게이지 회복
@@ -156,23 +156,23 @@ Glut's Girdle
 0
 Every 25 seconds, a potion spawns in a random location. Picking it up restores potion gauge.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, 2.0, -1, -1, -1
+-1, -1, -1, 25.0, -1, -1, -1
 
 21
-//21 - 보스 공격시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 보스 체력의 value2 만큼 데미지
+//21 - value 3만큼 additionalDamage 증가, 보스 공격시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 보스 체력의 value2 만큼 데미지
 Avarice Gauntlet
-0
-Attacks against bosses spend gold to deal damage equal to a percentage of their health.
+2
+Increases your attack damage, Attacks against bosses spend gold to deal damage equal to a percentage of their health.
 //value1, value2, value3, cooldown, duration, procchance, range
-50.0, 0.01, -1, -1, -1, -1, -1
+50.0, 0.01, 1.2, -1, -1, -1, -1
 
 22
-//22 - 피격 시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 데미지 방지 및 무적 부여
+//22 - value2만큼 additionalFireRate 증가, 피격 시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 데미지 방지 및 무적 부여
 Covet Crown
-0
-When hit, automatically consume gold to negate all incoming damage.
+1
+Gain increased Rate of Fire. When hit, automatically consume gold to negate all incoming damage.
 //value1, value2, value3, cooldown, duration, procchance, range
-500.0, -1, -1, -1, -1, -1, -1
+400.0, 0.3, -1, -1, -1, -1, -1
 
 23
 //23 - 즉시 현재 돈의 value1 만큼 얻고 이후 아이템 리롤의 가격이 value2 만큼 올라감
@@ -180,7 +180,7 @@ Hoard Ring
 0
 Grants an immediate cash infusion based on your current wealth, but permanently inflates the price of all future rerolls.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.3, 0.3, -1, -1, -1, -1, -1
+0.4, 0.3, -1, -1, -1, -1, -1
 
 24
 //24 - 포션 사용 시 체력이 회복되지 않는 대신에 돈을 value1만큼 얻음
@@ -188,7 +188,7 @@ Coin Scar
 0
 Potions no longer restore health. Instead, they grant a large amount of gold.
 //value1, value2, value3, cooldown, duration, procchance, range
-200.0, -1, -1, -1, -1, -1, -1
+150.0, -1, -1, -1, -1, -1, -1
 
 25
 //25 - 골드 획득량이 value1 만큼 증가하지만, 피격 시 가진 돈의 value2 만큼 잃는다.
@@ -201,8 +201,8 @@ Dramatically increases all Gold Gain. However, you lose a percentage of your cur
 26
 //26 - 적 공격 시 procchance 확률로 duration초간 스턴
 Temptation Veil 
-0
-Attacks have a 20% chance to stun enemies for 3 seconds.
+2
+Your attacks have a chance to stun enemies.
 //value1, value2, value3, cooldown, duration, procchance, range
 -1, -1, -1, -1, 3.0, 0.2, -1
 
@@ -210,25 +210,25 @@ Attacks have a 20% chance to stun enemies for 3 seconds.
 //27 - 적 처치 시 procchance 확률로 duration초간 range 범위 내 적들 공포
 Kiss of Lust
 0
-On kill, there is a 10% chance to fear nearby enemies for 4 seconds.
+On kill, there is a chance to fear nearby enemies.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, 4.0, 0.1, 500.0
+-1, -1, -1, -1, 4.0, 0.3, 500.0
 
 28
 //28 - 적 공격 시 procchance 확률로 duration초간 취약
 Desire Shroud
-0
-Attacks have a 20% chance to make an enemy Vulnerable for 3 seconds.
+1
+Your attacks have a chance to make an enemy Vulnerable.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, 3, 0.2, -1
+-1, -1, -1, -1, 3, 0.3, -1
 
 29
-//29 - 상태이상의 발동 확률이 증가(additionalProcChanceRatio value1 증가)
+//29 - 연사 증가, 상태이상의 발동 확률이 증가(additionalProcChanceRatio value1 증가, additionalFireRate valuse2 증가)
 Passion Orb
 0
-Increases the activation chance of all status effects.
+Gain increased Rate of Fire. Increases the activation chance of all status effects.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.3, -1, -1, -1, -1, -1, -1
+0.3, 0.2, -1, -1, -1, -1, -1
 
 30
 //30 - 적 공격 후 적의 현재 체력 / 최대 체력이 value1 이하 일시 즉사
@@ -244,26 +244,26 @@ Echoing Shots
 0
 Summons two minions that fire bullets in the direction you are aiming.
 //value1, value2, value3, cooldown, duration, procchance, range
-1.0, 3.0, 1.0, -1, -1, -1, -1
+0.5, 1.0, 1.0, -1, -1, -1, -1
 
 32
 //32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 폭발 반경 range (기본 데미지 value1, 연사 value2)
 Apocalyptic Roar
-0
+2
 Summons a minion that lobs grenades at the nearest enemy.
 //value1, value2, value3, cooldown, duration, procchance, range
-1.0, 1.0, -1, -1, -1, -1, 300.0
+1.0, 0.3, -1, -1, -1, -1, 300.0
 
 33
 //33 - 플레이어 주변을 회전하며 탄환을 막아주고, 충돌 데미지를 주는 소환수 1개 소환 (기본 데미지 value1, 기본 각속도 value2)
 Orbiting Hate
-0
+1
 Summons a guardian that orbits you, blocking enemy projectiles and dealing contact damage.
 //value1, value2, value3, cooldown, duration, procchance, range
-1.0, 150.0, -1, -1, -1, -1, -1
+1.5, 150.0, -1, -1, -1, -1, -1
 
 34
-//34 - 소환수의 데미지와 관통수 증가 (additionalMinionDamage value1 증가, additionalMinionHitCount value2 증가)
+//34 - 소환수의 데미지와 관통수 증가 (additionalMinionDamageRatio value1 증가, additionalMinionHitCount value2 증가)
 Covetous Eye
 0
 Your minions deal more damage and their attacks pierce through more enemies.

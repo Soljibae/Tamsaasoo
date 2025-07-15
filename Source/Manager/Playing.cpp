@@ -163,15 +163,15 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[4]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[34]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[25]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[35]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
-				PC->AddItemToInventory(ITDB->itemList[33]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
 			}
 			if (global::KeyInput(AEVK_4))
 			{
