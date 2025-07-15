@@ -473,7 +473,7 @@ namespace Manager
 						}
 						AEVec2 DrawSize;
 						AEVec2Set(&DrawSize, EC->explosionRadius * 2, EC->explosionRadius * 2);
-						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 3.f);
+						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 1.f);
 						SFXManager.Play("bomber");
 						break;
 					case InGame::EnemyType::ZIGZAG:
