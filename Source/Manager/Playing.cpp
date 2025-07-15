@@ -17,7 +17,7 @@ namespace Manager
 	Utils::Camera* CAM = nullptr;
 	const static f32 fontSize = 72.f;
 	const static f32 textDrawSize = 0.35f;
-	const static s32 maxWaveCount = 60;
+	const static s32 maxWaveCount = 1;
 	void Playing::Init()
 	{
 		Fader.Mesh = Utils::CreateMesh();
@@ -212,23 +212,23 @@ namespace Manager
 			//
 			if (!bIsBossFight)
 			{
-				StageTimer -= global::DeltaTime;
 				WaveTimer += global::DeltaTime;
-			}
-			if (!gameOverScreen.isGameOver)
-			{
-				if (WaveTimer > 3.f && !global::isTestMod)
+				if (!gameOverScreen.isGameOver)
 				{
-					WaveCount++;
-					WaveTimer = 0;
-					if (WaveCount > maxWaveCount)
+					StageTimer -= global::DeltaTime;
+					if (WaveTimer > 3.f && !global::isTestMod)
 					{
-						InitBossFight();
-						StageTimer = 3.f * maxWaveCount + global::DeltaTime;
-					}
-					else
-					{
-						SpawnWave();
+						WaveCount++;
+						WaveTimer = 0;
+						if (WaveCount > maxWaveCount)
+						{
+							InitBossFight();
+							StageTimer = 3.f * maxWaveCount + global::DeltaTime;
+						}
+						else
+						{
+							SpawnWave();
+						}
 					}
 				}
 			}
@@ -567,7 +567,14 @@ namespace Manager
 					++i;
 				}
 			}
-			CAM->Update(*PC);
+			if(!bossApearing)
+			{
+				CAM->Update(*PC);
+			}
+			else
+			{
+				CAM->Update(*Boss);
+			}
 
 			if(Boss)
 			{

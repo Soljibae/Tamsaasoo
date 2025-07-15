@@ -279,11 +279,6 @@ namespace Manager
 		AEVec2 originPos = currentOptions[thisbutton]->iconPosition;
 		currentOptions[thisbutton] = game->ITDB->itemList[idx];
 		currentOptions[thisbutton]->iconPosition = originPos;
-		if (ItemSlot[thisbutton].Texture)
-		{
-			AEGfxTextureUnload(ItemSlot[thisbutton].Texture);
-			ItemSlot[thisbutton].Texture = nullptr;
-		}
 		if (ItemWindow[thisbutton].Texture)
 		{
 			AEGfxTextureUnload(ItemWindow[thisbutton].Texture);
@@ -292,15 +287,12 @@ namespace Manager
 		switch (currentOptions[thisbutton]->grade)
 		{
 		case COMMON:
-			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotC.png");
 			break;
 		case RARE:
-			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotR.png");
 			break;
 		case EPIC:
-			ItemSlot[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 			ItemWindow[thisbutton].Texture = AEGfxTextureLoad("Assets/ItemSlots/SlotE.png");
 			gotEpic = true;
 			SFXManager.Play("epic");

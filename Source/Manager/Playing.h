@@ -79,6 +79,9 @@ namespace Manager
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
 
+		f32 bossApearTime{ 0.f }, bossApearDuration{ 4.f };
+		bool bossApearing{ false };
+		
 		s8 pFont;
 	};
 	extern Utils::Camera* CAM;
