@@ -59,8 +59,8 @@ namespace InGame
 		float OrbitAngle = 0.f;
 		float OrbitSpeed = 1.0f;
 		float OrbitRadius = 300.f;
-		const float OrbitIdealDistance = 250.f; // ���� �Ÿ�
-		const float AngleAdjustDeg = 10.f; // ���� ���� (inward angle)
+		const float OrbitIdealDistance = 250.f;
+		const float AngleAdjustDeg = 10.f;
 		float OrbitShootTimer = 0.f;
 		float OrbitShootInterval = 1.5f;
 		/*--------ORBITER--------*/
@@ -74,8 +74,10 @@ namespace InGame
 
 		AEVec2 SniperRetreatDir;
 		AEVec2 SniperRetreatStartPos;
+		AEVec2 SniperFireDir;
 		bool bRetreatDirInitialized = false;
 		bool bIsWarned = false;
+		bool bIsTargetDirValid = false;
 		/*--------SNIPER--------*/
 		/*--------BURNER--------*/
 		float FlameZoneTimer = 0.f;

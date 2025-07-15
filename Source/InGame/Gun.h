@@ -125,6 +125,7 @@ namespace InGame
 		f32 FireTimer = 0.f;
 		f32 RoundPerSec = 0.f;
 		GunType gunType;
+		s32 ProjectileSpawnCount;
 		AEVec2 ArmOffset;
 		class PlayerCharacter* Source;
 	};
@@ -138,6 +139,7 @@ namespace InGame
 		s32 ProjectileHitCount;
 		f32 GuntypeDamageRatio;
 		f32 GuntypeFireRateRatio;
+		s32 ProjectileSpawnCount;
 		std::string TextureAddress;
 	};
 	struct NOGUNStruct : public GunStruct
