@@ -92,7 +92,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Archer.png");
 			Damage = 1;
 			Exp = 2;
-			Health = 2;
+			Health = 3;
 			AEVec2Set(&DrawSize, 70.f, 70.f);
 			CollisionRadius = 35.f;
 			MovementSpeed = 100;
@@ -109,7 +109,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Dasher.png");
 			Damage = 1;
 			Exp = 4;
-			Health = 3;
+			Health = 9;
 			AEVec2Set(&DrawSize, 100.f, 100.f);
 			CollisionRadius = 25.f;
 			MovementSpeed = 100;
@@ -139,7 +139,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Bomber.png");
 			Damage = 4;
 			Exp = 5;
-			Health = 3;
+			Health = 6;
 			AEVec2Set(&DrawSize, 50.f, 50.f);
 			CollisionRadius = 25;
 			MovementSpeed = 30;
@@ -169,7 +169,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Orbiter.png");
 			Damage = 1;
 			Exp = 1;
-			Health = 3;
+			Health = 5;
 			AEVec2Set(&DrawSize, 70.f, 70.f);
 			CollisionRadius = 35;
 			MovementSpeed = 200;
@@ -186,7 +186,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Sniper.png");
 			Damage = 1;
 			Exp = 2;
-			Health = 10;
+			Health = 5;
 			AEVec2Set(&DrawSize, 70.f, 70.f);
 			CollisionRadius = 35.f;
 			MovementSpeed = 300;
@@ -203,7 +203,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Burner.png");
 			Damage = 1;
 			Exp = 2;
-			Health = 50;
+			Health = 15;
 			AEVec2Set(&DrawSize, 100.f, 100.f);
 			CollisionRadius = 50.f;
 			MovementSpeed = 100;
@@ -218,7 +218,7 @@ namespace InGame
 			Texture = AEGfxTextureLoad("Assets/Holer.png");
 			Damage = 1;
 			Exp = 2;
-			Health = 100;
+			Health = 30;
 			AEVec2Set(&DrawSize, 100.f, 100.f);
 			CollisionRadius = 50.f;
 			MovementSpeed = 100;

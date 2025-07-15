@@ -65,9 +65,9 @@ namespace InGame
 		float jumpDuration = 2.0f;
 		AEVec2 jumpTargetPos;
 		float DrawAlpha = 1.f;
-		float jumpFadeOutDuration = 1.0f;  // ������� �ð�
-		float jumpFadeInDuration = 0.5f;   // �ٽ� ��Ÿ���� �ð�
-		float jumpMoveDuration = 2.0f;     // ���� ��ü �ð� (= ���� �Ÿ� �̵� �ð�)
+		float jumpFadeOutDuration = 1.0f;  
+		float jumpFadeInDuration = 0.5f;   
+		float jumpMoveDuration = 2.0f;     
 
 		AEVec2 jumpStartPos;
 	private:
