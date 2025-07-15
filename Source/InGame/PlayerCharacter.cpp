@@ -40,7 +40,7 @@ namespace InGame
 		Stats->ProjectileSpeed = GunData->ProjectileSpeed;
 		Stats->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
 		AEVec2Set(&Stats->ProjectileSize, 20.f, 20.f);
-		Stats->Damage = 1.f;
+		Stats->Damage = 1.5f;
 		PS->Level = 1;
 		PS->ExpGained = 1.f;
 		PS->HitCount = GunData->ProjectileHitCount;

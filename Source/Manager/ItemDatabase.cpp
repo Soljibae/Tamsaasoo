@@ -146,5 +146,45 @@ namespace Manager
         auto item35_prototype = std::make_shared<InGame::Item_35>();
         item35_prototype->Init(itemValueDatabase[35]);
         itemList[item35_prototype->id] = item35_prototype;
+
+        auto item36_prototype = std::make_shared<InGame::Item_36>();
+        item36_prototype->Init(itemValueDatabase[36]);
+        itemList[item36_prototype->id] = item36_prototype;
+
+        auto item37_prototype = std::make_shared<InGame::Item_37>();
+        item37_prototype->Init(itemValueDatabase[37]);
+        itemList[item37_prototype->id] = item37_prototype;
+
+        auto item38_prototype = std::make_shared<InGame::Item_38>();
+        item38_prototype->Init(itemValueDatabase[38]);
+        itemList[item38_prototype->id] = item38_prototype;
+
+        auto item39_prototype = std::make_shared<InGame::Item_39>();
+        item39_prototype->Init(itemValueDatabase[39]);
+        itemList[item39_prototype->id] = item39_prototype;
+
+        auto item40_prototype = std::make_shared<InGame::Item_40>();
+        item40_prototype->Init(itemValueDatabase[40]);
+        itemList[item40_prototype->id] = item40_prototype;
+
+        auto item41_prototype = std::make_shared<InGame::Item_41>();
+        item41_prototype->Init(itemValueDatabase[41]);
+        itemList[item41_prototype->id] = item41_prototype;
+
+        auto item42_prototype = std::make_shared<InGame::Item_42>();
+        item42_prototype->Init(itemValueDatabase[42]);
+        itemList[item42_prototype->id] = item42_prototype;
+
+        auto item43_prototype = std::make_shared<InGame::Item_43>();
+        item43_prototype->Init(itemValueDatabase[43]);
+        itemList[item43_prototype->id] = item43_prototype;
+
+        auto item44_prototype = std::make_shared<InGame::Item_44>();
+        item44_prototype->Init(itemValueDatabase[44]);
+        itemList[item44_prototype->id] = item44_prototype;
+
+        auto item45_prototype = std::make_shared<InGame::Item_45>();
+        item45_prototype->Init(itemValueDatabase[45]);
+        itemList[item45_prototype->id] = item45_prototype;
     }
 }

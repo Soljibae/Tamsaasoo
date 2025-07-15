@@ -11,7 +11,7 @@
 namespace InGame
 {
 	AEVec2 Item::size;
-	s32 Item::row = 7, Item::column = 5;
+	s32 Item::row = 9, Item::column = 5;
 
 	Item::Item(const Item& other)
 		: id(other.id), name(other.name), description(other.description), iconPosition(other.iconPosition),
@@ -1748,8 +1748,8 @@ namespace InGame
 	{
 		//s16 count = Utils::GetItemCount(3);
 
-		effectiveDamage = (Damage + global::additionalMinionDamage)* global::additionalMinionDamageRatio;
-		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+		effectiveDamage = (Damage + global::additionalMinionDamage)* global::additionalMinionDamageRatio * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
 		effectiveHitCount = HitCount + global::additionalMinionHitCount;
 
 		dir = global::PlayerMouseDirection; 
@@ -1849,8 +1849,8 @@ namespace InGame
 	}
 	void Item_32::Update(PlayerCharacter* owner)
 	{
-		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
-		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		effectiveFireRate = (FireRate + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
 		effectiveHitCount = HitCount;
 
 		dir = global::PlayerMouseDirection;
@@ -1958,8 +1958,8 @@ namespace InGame
 	}
 	void Item_33::Update(PlayerCharacter* owner)
 	{
-		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio;
-		effectiveAngleSpeed = (angleSpeed + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio;
+		effectiveDamage = (Damage + global::additionalMinionDamage) * global::additionalMinionDamageRatio * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		effectiveAngleSpeed = (angleSpeed + global::additionalMinionFireRate) * global::additionalMinionFireRateRatio * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
 
 		angle -= effectiveAngleSpeed * global::DeltaTime;
 
@@ -2105,5 +2105,370 @@ namespace InGame
 	{
 		return std::make_shared<Item_35>(*this);
 	}
-	
+	//============================================= ID_36
+	Item_36::Item_36(const Item_36& other)
+		: Item(other)
+	{
+	}
+	void Item_36::Init(const Manager::ItemData& data)
+	{
+		id = 36;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_36::Use(PlayerCharacter* owner)
+	{
+		global::additionalDamageRatio += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_36::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_36::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_36::Clone() const
+	{
+		return std::make_shared<Item_36>(*this);
+	}
+	//============================================= ID_37
+	Item_37::Item_37(const Item_37& other)
+		: Item(other)
+	{
+	}
+	void Item_37::Init(const Manager::ItemData& data)
+	{
+		id = 37;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_37::Use(PlayerCharacter* owner)
+	{
+		global::additionalFireRateRatio += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_37::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_37::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_37::Clone() const
+	{
+		return std::make_shared<Item_37>(*this);
+	}
+	//============================================= ID_38
+	Item_38::Item_38(const Item_38& other)
+		: Item(other)
+	{
+	}
+	void Item_38::Init(const Manager::ItemData& data)
+	{
+		id = 38;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+		value2 = data.value2;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_38::Use(PlayerCharacter* owner)
+	{
+		global::additionalFireRate += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalMovementSpeed += value2 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_38::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_38::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_38::Clone() const
+	{
+		return std::make_shared<Item_38>(*this);
+	}
+	//============================================= ID_39
+	Item_39::Item_39(const Item_39& other)
+		: Item(other)
+	{
+	}
+	void Item_39::Init(const Manager::ItemData& data)
+	{
+		id = 39;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+		value2 = data.value2;
+		value3 = data.value3;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_39::Use(PlayerCharacter* owner)
+	{
+		global::additionalDamage += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalFireRate += value2 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+		global::additionalMovementSpeed += value3 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_39::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_39::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_39::Clone() const
+	{
+		return std::make_shared<Item_39>(*this);
+	}
+	//============================================= ID_40
+	Item_40::Item_40(const Item_40& other)
+		: Item(other)
+	{
+	}
+	void Item_40::Init(const Manager::ItemData& data)
+	{
+		id = 40;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_40::Use(PlayerCharacter* owner)
+	{
+		global::additionalHitCount += value1 * Utils::GetItemCount(this->id);
+	}
+	void Item_40::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_40::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_40::Clone() const
+	{
+		return std::make_shared<Item_40>(*this);
+	}
+	//============================================= ID_41
+	Item_41::Item_41(const Item_41& other)
+		: Item(other)
+	{
+	}
+	void Item_41::Init(const Manager::ItemData& data)
+	{
+		id = 41;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_41::Use(PlayerCharacter* owner)
+	{
+		global::additionalExpGainedRatio += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_41::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_41::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_41::Clone() const
+	{
+		return std::make_shared<Item_41>(*this);
+	}
+	//============================================= ID_42
+	Item_42::Item_42(const Item_42& other)
+		: Item(other)
+	{
+	}
+	void Item_42::Init(const Manager::ItemData& data)
+	{
+		id = 42;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_42::Use(PlayerCharacter* owner)
+	{
+		global::additionalDamage += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_42::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_42::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_42::Clone() const
+	{
+		return std::make_shared<Item_42>(*this);
+	}
+	//============================================= ID_43
+	Item_43::Item_43(const Item_43& other)
+		: Item(other)
+	{
+	}
+	void Item_43::Init(const Manager::ItemData& data)
+	{
+		id = 43;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_43::Use(PlayerCharacter* owner)
+	{
+		global::additionalMovementSpeed += value1 * (1.f + (Utils::GetItemCount(this->id) - 1) * 0.1f);
+	}
+	void Item_43::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_43::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_43::Clone() const
+	{
+		return std::make_shared<Item_43>(*this);
+	}
+	//============================================= ID_
+	Item_44::Item_44(const Item_44& other)
+		: Item(other), appliedStack(other.appliedStack)
+	{
+	}
+	void Item_44::Init(const Manager::ItemData& data)
+	{
+		id = 44;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		value1 = data.value1;
+		appliedStack = 0;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+	}
+	void Item_44::Use(PlayerCharacter* owner)
+	{
+		if (appliedStack != Utils::GetItemCount(id))
+		{
+			owner->Stats->MaxHP += value1;
+			owner->Stats->HP += value1;
+			appliedStack++;
+		}
+	}
+	void Item_44::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_44::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_44::Clone() const
+	{
+		return std::make_shared<Item_44>(*this);
+	}
+	//============================================= ID_45
+	Item_45::Item_45(const Item_45& other)
+		: Item(other)
+	{
+	}
+	void Item_45::Init(const Manager::ItemData& data)
+	{
+		id = 45;
+		name = data.name;
+		description = data.description;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		tag = EMPTY;
+		grade = data.grade;
+		procChance = data.procChance;
+
+		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
+		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/reload.WAV", "reload");
+	}
+	void Item_45::Use(PlayerCharacter* owner)
+	{
+		if (global::IsEnemyRecentlyDied)
+		{
+			for (s32 i = 0; i < global::RecentlyDeadEnemyCount;i++)
+			{
+				if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + ((Utils::GetItemCount(id) - 1) * procChance / 10.f)) * global::additionalProcChanceRatio))
+				{
+					Manager::SFXManager.Play("reload");
+					owner->HoldingGun->FireTimer = 1.f / owner->HoldingGun->RoundPerSec;
+					break;
+				}
+			}
+		}
+	}
+	void Item_45::Update(PlayerCharacter* owner)
+	{
+	}
+	void Item_45::Draw()
+	{
+	}
+	std::shared_ptr<Item> Item_45::Clone() const
+	{
+		return std::make_shared<Item_45>(*this);
+	}
+	void Item_45::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
+	{
+		if (isTargetBoss)
+		{
+			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + ((Utils::GetItemCount(id) - 1) * procChance / 10.f)) * global::additionalProcChanceRatio) * 1.5f)
+			{
+
+				if (Manager::gm.currStateREF)
+				{
+					Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+					if (GS)
+					{
+						if (GS->PC)
+						{
+							Manager::SFXManager.Play("reload");
+							GS->PC->HoldingGun->FireTimer = 1.f / GS->PC->HoldingGun->RoundPerSec;
+						}
+					}
+				}
+			}
+		}
+	}
 }

@@ -244,7 +244,7 @@ Echoing Shots
 0
 Summons two minions that fire bullets in the direction you are aiming.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.5, 1.0, 1.0, -1, -1, -1, -1
+0.5, 1.5, 1.0, -1, -1, -1, -1
 
 32
 //32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 폭발 반경 range (기본 데미지 value1, 연사 value2)
@@ -277,3 +277,83 @@ Emerald Gaze
 Increases the attack speed of your minions.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.5, -1, -1, -1, -1, -1, -1
+
+36
+//36 - value1 만큼 공격력 증가 (additionalDamageRatio value1 증가)
+Mark of the Destroyer
+2
+Increases attack damage ratio.
+//value1, value2, value3, cooldown, duration, procchance, range
+0.3, -1, -1, -1, -1, -1, -1
+
+37
+//37 - value1 만큼 연사 증가 (additionalFireRateRatio value1 증가)
+Symbol of Barrage
+2
+Increases fire rate ratio.
+//value1, value2, value3, cooldown, duration, procchance, range
+0.2, -1, -1, -1, -1, -1, -1
+
+38
+//38 - value1 만큼 연사 증가 value2 만큼 이속 증가 (additionalFireRate value1 증가, additionalMovementSpeed value2 증가 )
+Talisman of Vigilance
+1
+Increases fire rate and movement speed.
+//value1, value2, value3, cooldown, duration, procchance, range
+0.2, 30, -1, -1, -1, -1, -1
+
+39
+//39 - 공격력 공속 이속 증가 (additionalDamage value1 증가, additionalFireRate value2 증가, additionalMovementSpeed value3 증가)
+Trinity Emblem
+1
+Increases attack damage, fire rate and movement speed.
+//value1, value2, value3, cooldown, duration, procchance, range
+0.2, 0.1, 15, -1, -1, -1, -1
+
+40
+//40 - 관통수 증가 (additionalHitCount value1 증가)
+Piercing Crystal
+2
+Increases hit count.
+//value1, value2, value3, cooldown, duration, procchance, range
+1.0, -1, -1, -1, -1, -1, -1
+
+41
+//41 - 경험치 획득량 증가 (additionalExpGainedRatio value1 증가)
+Scroll of Wisdom
+1
+Increases Exp gained.
+//value1, value2, value3, cooldown, duration, procchance, range
+0.3, -1, -1, -1, -1, -1, -1
+
+42
+//42 - 공격력 증가 (additionalDamage value1 증가)
+Conqueror's Blade
+0
+Increases attack damage.
+//value1, value2, value3, cooldown, duration, procchance, range
+0.15, -1, -1, -1, -1, -1, -1
+
+43
+//43 - 이동속도 증가 (additionalMovementSpeed value1 증가)
+Stalker's Stride
+0
+Increases movement speed.
+//value1, value2, value3, cooldown, duration, procchance, range
+25, -1, -1, -1, -1, -1, -1
+
+44
+//44 - 최대체력 value1 증가
+Wellspring of Vitality
+0
+Grants +1 Max Health.
+//value1, value2, value3, cooldown, duration, procchance, range
+1.0, -1, -1, -1, -1, -1, -1
+
+45
+//45 - 적 처치 또는 보스 타격 시 procchance 확률로 즉시 재장전
+Unceasing Fury
+0
+Upon defeating an enemy or hitting a boss, there is a chance to instantly reload your weapon.
+//value1, value2, value3, cooldown, duration, procchance, range
+-1, -1, -1, -1, -1, 0.2, -1

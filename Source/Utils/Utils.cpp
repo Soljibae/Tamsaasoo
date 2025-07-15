@@ -675,11 +675,18 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::E
 					Projectile.OnHit(result);
 					Projectile.hasHit = true;
 				}
-				if(isThisBoss)
+				if (isThisBoss)
+				{
 					result->adjustHealth(-Projectile.Damage * global::additionalDamageToBossRatio);
+					PC.OnProjectileHit(result, true);
+				}	
 				else
+				{
 					result->adjustHealth(-Projectile.Damage);
-				PC.OnProjectileHit(result, false);
+					PC.OnProjectileHit(result, false);
+				}
+					
+				
 				if (!Projectile.isExplosive)
 					Projectile.OnHit();
 			}

@@ -50,8 +50,8 @@ namespace global
 	f32 additionalDamageToBossRatio = 1.f;
 	f32 additionalDamageFromBossRatio = 1.f;
 
-	std::array<f32, 3> StageExpGainedRatio = { 2.f , 3.2f, 4.5f };
-	std::array<f32, 3> StageGoldGainedRatio = { 2.f , 3.2f, 4.5f };
-	std::array<f32, 3> StageRerollCostRatio = { 1.4f , 2.5f, 4.0f };
+	std::array<f32, 3> StageExpGainedRatio = { 2.5f , 4.0f, 6.0f };
+	std::array<f32, 3> StageGoldGainedRatio = { 1.7f , 2.8f, 4.0f };
+	std::array<f32, 3> StageRerollCostRatio = { 1.4f , 2.5f, 3.6f };
 	//==================================
 }

@@ -166,12 +166,12 @@ namespace InGame
 		DrawItemList.push_back(NewData);
 	}
 
-	void VFXManager::AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, bool InbIsTracking, Actor* InOwner)
+	void VFXManager::AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, bool InbIsTracking, Actor* InOwner, float InTime)
 	{
 		VFXData* NewData = new VFXData;
 		NewData->Animationoffset = 0;
 		NewData->Timer = 0;
-		NewData->MaxTimer = 1.f;
+		NewData->MaxTimer = InTime;
 		NewData->Type = NewVFXType;
 		NewData->Direction = InDirection;
 		NewData->Owner = InOwner;
