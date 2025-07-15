@@ -15,6 +15,9 @@ namespace Manager
 		AEGfxTexture* explosionTexture;
 		AEGfxVertexList* explosionMesh;
 
+		AEGfxTexture* item9Texture;
+		AEGfxVertexList* item9Mesh;
+
 		AEGfxTexture* item31minionTexture;
 		AEGfxVertexList* item31minionMesh;
 

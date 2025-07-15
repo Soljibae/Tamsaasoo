@@ -48,7 +48,7 @@ Your attacks have a 30% chance to set the enemy on fire for 3 seconds.
 
 7
 //7 - additionalBurnDamage value1 증가 (적이 화상으로 입는 체력 비례 데미지가 증가)
-Fury’s Cinder
+Fury's Cinder
 0
 Increases the damage your Burn deals based on the enemy's Max Health.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -151,12 +151,12 @@ On taking damage, gain increased Rate of Fire, Attack Power, and Movement Speed 
 0.5, 0.5, 50.0, -1, 5.0, -1, -1
 
 20
-//20 - cooldown초에 한번 랜덤한 장소에 포션 생성, 획득 시 체력 1칸 회복
+//20 - cooldown초에 한번 랜덤한 장소에 포션 생성, 포션 게이지 회복
 Glut's Girdle
 0
-Every 30 seconds, a potion spawns in a random location. Picking it up restores 1 Health.
+Every 25 seconds, a potion spawns in a random location. Picking it up restores potion gauge.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, 30.0, -1, -1, -1
+-1, -1, -1, 25.0, -1, -1, -1
 
 21
 //21 - 보스 공격시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 보스 체력의 value2 만큼 데미지

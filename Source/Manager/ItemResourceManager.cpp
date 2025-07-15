@@ -11,6 +11,9 @@ namespace Manager
 		explosionTexture = AEGfxTextureLoad("Assets/explosion.png");
 		explosionMesh = Utils::CreateMesh(1, 9);
 
+		item9Texture = AEGfxTextureLoad("Assets/fire.png");
+		item9Mesh = Utils::CreateMesh(4, 4);
+
 		item31minionTexture = AEGfxTextureLoad("Assets/item_minion_0.png");
 		item31minionMesh = Utils::CreateMesh();
 
@@ -38,6 +41,14 @@ namespace Manager
 		}
 
 		Utils::DestroyMesh(explosionMesh);
+
+		if (item9Texture)
+		{
+			AEGfxTextureUnload(item9Texture);
+			item9Texture = nullptr;
+		}
+
+		Utils::DestroyMesh(item9Mesh);
 
 		if (item31minionTexture)
 		{
