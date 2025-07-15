@@ -14,6 +14,18 @@ namespace Manager
 		item9Texture = AEGfxTextureLoad("Assets/fire.png");
 		item9Mesh = Utils::CreateMesh(4, 4);
 
+		item11Texture = AEGfxTextureLoad("Assets/burst.png");
+		item11Mesh = Utils::CreateMesh(4, 5);
+
+		item20Texture = AEGfxTextureLoad("Assets/itemEffectPotion.png");
+		item20Mesh = Utils::CreateMesh(1, 1);
+
+		item27Texture = AEGfxTextureLoad("Assets/fear.png");
+		item27Mesh = Utils::CreateMesh(5, 6);
+
+		item30Texture = AEGfxTextureLoad("Assets/excute.png");
+		item30Mesh = Utils::CreateMesh(1, 9);
+
 		item31minionTexture = AEGfxTextureLoad("Assets/item_minion_0.png");
 		item31minionMesh = Utils::CreateMesh();
 
@@ -49,6 +61,38 @@ namespace Manager
 		}
 
 		Utils::DestroyMesh(item9Mesh);
+
+		if (item11Texture)
+		{
+			AEGfxTextureUnload(item11Texture);
+			item11Texture = nullptr;
+		}
+
+		Utils::DestroyMesh(item11Mesh);
+
+		if (item20Texture)
+		{
+			AEGfxTextureUnload(item20Texture);
+			item20Texture = nullptr;
+		}
+
+		Utils::DestroyMesh(item20Mesh);
+
+		if (item27Texture)
+		{
+			AEGfxTextureUnload(item27Texture);
+			item27Texture = nullptr;
+		}
+
+		Utils::DestroyMesh(item27Mesh);
+
+		if (item30Texture)
+		{
+			AEGfxTextureUnload(item30Texture);
+			item30Texture = nullptr;
+		}
+
+		Utils::DestroyMesh(item30Mesh);
 
 		if (item31minionTexture)
 		{
