@@ -125,7 +125,7 @@ namespace InGame
 			Damage = 1;
 			Exp = 5;
 			Health = 30;
-			AEVec2Set(&DrawSize, 50.f, 50.f);
+			AEVec2Set(&DrawSize, 100.f, 100.f);
 			CollisionRadius = 25;
 			MovementSpeed = 50;
 		}

@@ -427,9 +427,13 @@ namespace Manager
 				{
 					global::RecentlyDeadEnemyCount++;
 
-					InGame::SoulOrb* orb = new InGame::SoulOrb;
-					orb->Init(EC);
-					SOs.push_back(orb);
+					for (int i = 0;i < 3;i++)
+					{
+						InGame::SoulOrb* orb = new InGame::SoulOrb;
+						orb->Init(EC);
+						SOs.push_back(orb);
+					}
+					
 
 					float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);
 					switch (EC->Type)

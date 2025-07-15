@@ -243,7 +243,7 @@ namespace InGame
 							AEVec2 moved;
 							AEVec2Sub(&moved, &position, &dashStartPos);
 							float dashMoved = AEVec2Length(&moved);
-
+							
 							if (dashMoved < dashRange)
 							{
 								f32 effectiveDashSpeed = dashSpeed;
@@ -252,7 +252,7 @@ namespace InGame
 								{
 									effectiveDashSpeed *= 0.5f;
 								}
-								AEVec2 NewPos = { position.x - direction.x * effectiveDashSpeed * global::DeltaTime , position.y - direction.y * effectiveDashSpeed * global::DeltaTime };
+								AEVec2 NewPos = { position.x - dashDirection.x * effectiveDashSpeed * global::DeltaTime , position.y - dashDirection.y * effectiveDashSpeed * global::DeltaTime };
 								Utils::ClampActorPosition(this, NewPos);
 							}
 							else
@@ -543,15 +543,25 @@ namespace InGame
 							}
 							Manager::SFXManager.Play("LaserFire");
 						}
-						else if (SniperShootTimer >= SniperShootInterval - 0.2f)
+						else if (SniperShootTimer >= SniperShootInterval - 0.5f)
 						{
 							if (!bIsTargetDirValid)
 							{
 								SniperFireDir = dirToPlayer;
 								bIsTargetDirValid = true;
+								if (Manager::gm.currStateREF)
+								{
+									Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+									if (GS)
+									{
+										AEVec2 WarningDraw = { 3200.f, 30.f };
+										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, SniperFireDir, false, this ,0.5f);
+										bIsWarned = true;
+									}
+								}
 							}
 						}
-						else if (SniperShootTimer >= SniperShootInterval-1.2f)
+						else if (SniperShootTimer >= SniperShootInterval-1.5f)
 						{
 							if (!bIsWarned)
 							{
@@ -561,7 +571,7 @@ namespace InGame
 									if (GS)
 									{
 										AEVec2 WarningDraw = { 3200.f, 30.f };
-										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer,true, this);
+										GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dirToPlayer,true, this,1.f);
 										bIsWarned = true;
 									}
 								}

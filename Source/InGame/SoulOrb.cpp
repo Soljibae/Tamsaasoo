@@ -18,33 +18,57 @@ namespace InGame
 		bIsArrived = false;
 
 		AEMtx33MultVec(&position, &(Manager::CAM->translate_matrix), &target->position);
-		size = { 32.f , 32.f };
-		lifeTime = 3.f;
+		size = { 12.f , 12.f };
+		lifeTime = Utils::GetRandomFloat(0.f, 3.f);
+		alpha = 0.1f;
+
 		TargetPostion = { -(w / 2) + 100.f, h / 2 - 100.f };
 		TargetPostion.x += Utils::GetRandomFloat(-10.f, 10.f);
 		TargetPostion.y += Utils::GetRandomFloat(-10.f, 10.f);
 		TargetSize = { 70.f, 70.f };
-		AEVec2Sub(&direction, &TargetPostion, &position);
-		AEVec2Normalize(&direction, &direction);
-		//distance = AEVec2Distance(&TargetPostion, &position);
-		distance = (w + h) / 2.f;
-		Speed = distance / lifeTime * global::DeltaTime;
-		maxSpeed = distance / lifeTime * global::DeltaTime * 2;
-		alpha = 0.4f;
+
+		startPos = position;
+		endPos = TargetPostion;
+		currentTime = 0.0f;
+		totalTime = lifeTime;
+		peakHeight = 200.0f;
+
+		AEVec2Sub(&flatDir, &endPos, &startPos);
+		AEVec2Normalize(&flatDir, &flatDir);
+
+		float sign = Utils::GetRandomFloat(0.f, 1.f) < 0.5f ? -1.f : 1.f;
+		curveDirection = sign * Utils::GetRandomFloat(0.5f, 1.0f);
 	}
 	void SoulOrb::Update()
 	{
-		
-		f32 distanceSq = AEVec2Distance(&position, &TargetPostion);
-		const f32 arrival_threshold = 4.0f; 
+		currentTime += global::DeltaTime;
+		if (currentTime > totalTime)
+			currentTime = totalTime;
 
-		if (distanceSq < arrival_threshold * arrival_threshold && !bIsArrived)
+		float t = currentTime / totalTime; 
+
+		AEVec2 linearPos;
+		AEVec2Sub(&linearPos, &endPos, &startPos);
+		AEVec2Scale(&linearPos, &linearPos, t);
+		AEVec2Add(&linearPos, &startPos, &linearPos);
+
+		float curveOffset = -4 * peakHeight * (t - 0.5f) * (t - 0.5f) + peakHeight;
+
+		AEVec2 perp;
+		perp.x = -flatDir.y;
+		perp.y = flatDir.x;
+
+		AEVec2 offset;
+		AEVec2Scale(&offset, &perp, curveOffset * curveDirection);
+		AEVec2Add(&position, &linearPos, &offset);
+
+		if (t >= 1.0f && !bIsArrived)
 		{
 			bIsArrived = true;
+
 			if (Manager::gm.currStateREF)
 			{
-				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-				if (GS)
+				if (auto* GS = dynamic_cast<Manager::Playing*>(Manager::gm.currStateREF))
 				{
 					if (GS->PC)
 					{
@@ -53,27 +77,59 @@ namespace InGame
 				}
 			}
 		}
-		else if(!(distanceSq < arrival_threshold * arrival_threshold))
+
+		if (!bIsArrived)
 		{
-			Speed = std::clamp(Speed * 1.05f, 0.f, maxSpeed);
-
-			float moveDistance = Speed;
-
-			AEVec2 displacement;
-			AEVec2Scale(&displacement, &direction, moveDistance);
-
-			AEVec2Add(&position, &position, &displacement);
+			alpha = 0.2f + 0.6f * t;
 		}
-
-		if (bIsArrived)
+		else if (bIsArrived)
 		{
 			alpha -= 1.f / 0.5f * global::DeltaTime;
 		}
-
 		if (alpha <= 0)
 		{
 			bIsPandingKill = true;
 		}
+
+		//f32 distanceSq = AEVec2Distance(&position, &TargetPostion);
+		//const f32 arrival_threshold = 4.0f; 
+
+		//if (distanceSq < arrival_threshold * arrival_threshold && !bIsArrived)
+		//{
+		//	bIsArrived = true;
+		//	if (Manager::gm.currStateREF)
+		//	{
+		//		Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+		//		if (GS)
+		//		{
+		//			if (GS->PC)
+		//			{
+		//				GS->PC->PS->Potion += 1;
+		//			}
+		//		}
+		//	}
+		//}
+		//else if(!(distanceSq < arrival_threshold * arrival_threshold))
+		//{
+		//	Speed = std::clamp(Speed * 1.05f, 0.f, maxSpeed);
+
+		//	float moveDistance = Speed;
+
+		//	AEVec2 displacement;
+		//	AEVec2Scale(&displacement, &direction, moveDistance);
+
+		//	AEVec2Add(&position, &position, &displacement);
+		//}
+
+		//if (bIsArrived)
+		//{
+		//	alpha -= 1.f / 0.5f * global::DeltaTime;
+		//}
+
+		//if (alpha <= 0)
+		//{
+		//	bIsPandingKill = true;
+		//}
 	}
 	void SoulOrb::Draw()
 	{

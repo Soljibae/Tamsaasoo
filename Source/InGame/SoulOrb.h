@@ -27,5 +27,12 @@ namespace InGame
 
 		static AEGfxTexture* SoulOrbTexture;
 		static AEGfxVertexList* SoulOrbMesh;
+
+		AEVec2 startPos, endPos;
+		AEVec2 flatDir;
+		float currentTime;
+		float totalTime;
+		float peakHeight;
+		float curveDirection;
 	};
 }

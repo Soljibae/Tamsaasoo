@@ -135,7 +135,7 @@ namespace InGame
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 0.3f;
+		GuntypeFireRateRatio = 1.f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -146,7 +146,7 @@ namespace InGame
 	{
 		Type = GunType::DOUBLEBARREL;
 		GuntypeDamageRatio = 2.f;
-		GuntypeFireRateRatio = 0.3f;
+		GuntypeFireRateRatio = 1.0f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -168,7 +168,7 @@ namespace InGame
 	{
 		Type = GunType::M1897;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 0.75f;
+		GuntypeFireRateRatio = 2.0f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -179,7 +179,7 @@ namespace InGame
 	{
 		Type = GunType::BENELLIM4;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeFireRateRatio = 3.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -190,7 +190,7 @@ namespace InGame
 	{
 		Type = GunType::SAIGA12;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 2.0f;
+		GuntypeFireRateRatio = 4.0f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -212,7 +212,7 @@ namespace InGame
 	{
 		Type = GunType::M1911;
 		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeFireRateRatio = 2.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 2;
@@ -223,7 +223,7 @@ namespace InGame
 	{
 		Type = GunType::MOSINNAGAT;
 		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 0.5f;
+		GuntypeFireRateRatio = 1.0f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 5;
@@ -234,7 +234,7 @@ namespace InGame
 	{
 		Type = GunType::M24;
 		GuntypeDamageRatio = 5.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeFireRateRatio = 2.f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 10;
@@ -245,7 +245,7 @@ namespace InGame
 	{
 		Type = GunType::RAILGUN;
 		GuntypeDamageRatio = 10.f;
-		GuntypeFireRateRatio = 0.5f;
+		GuntypeFireRateRatio = 1.f;
 		ProjectileSpeed = 40.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 20;
@@ -256,7 +256,7 @@ namespace InGame
 	{
 		Type = GunType::DESERTEGLE;
 		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 0.5f;
+		GuntypeFireRateRatio = 1.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 3;
@@ -267,7 +267,7 @@ namespace InGame
 	{
 		Type = GunType::BEOWOLF;
 		GuntypeDamageRatio = 5.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeFireRateRatio = 2.f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 5;
@@ -278,7 +278,7 @@ namespace InGame
 	{
 		Type = GunType::NITRO700;
 		GuntypeDamageRatio = 20.f;
-		GuntypeFireRateRatio = 0.1f;
+		GuntypeFireRateRatio = 0.5f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 50.f;
 		ProjectileHitCount = 40;
@@ -300,7 +300,7 @@ namespace InGame
 	{
 		Type = GunType::M82BARRETT;
 		GuntypeDamageRatio = 10.f;
-		GuntypeFireRateRatio = 0.3f;
+		GuntypeFireRateRatio = 0.5f;
 		ProjectileSpeed = 40.f;
 		ProjectileCollisionSize = 30.f;
 		ProjectileHitCount = 10;
@@ -310,7 +310,7 @@ namespace InGame
 	CZ75Struct::CZ75Struct()
 	{
 		Type = GunType::CZ75;
-		GuntypeDamageRatio = 1.f;
+		GuntypeDamageRatio = 0.75f;
 		GuntypeFireRateRatio = 3.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
@@ -365,7 +365,7 @@ namespace InGame
 	VECTORStruct::VECTORStruct()
 	{
 		Type = GunType::VECTOR;
-		GuntypeDamageRatio = 1.f;
+		GuntypeDamageRatio = 0.5f;
 		GuntypeFireRateRatio = 10.f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 10.f;
@@ -377,7 +377,7 @@ namespace InGame
 	{
 		Type = GunType::P90;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 3.f;
+		GuntypeFireRateRatio = 5.f;
 		ProjectileSpeed = 25.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 3;
