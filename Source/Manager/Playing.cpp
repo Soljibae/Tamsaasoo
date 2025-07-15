@@ -17,7 +17,7 @@ namespace Manager
 	Utils::Camera* CAM = nullptr;
 	const static f32 fontSize = 72.f;
 	const static f32 textDrawSize = 0.35f;
-	const static s32 maxWaveCount = 1;
+	const static s32 maxWaveCount = 60;
 	void Playing::Init()
 	{
 		Fader.Mesh = Utils::CreateMesh();
@@ -150,20 +150,9 @@ namespace Manager
 				}
 				return;
 			}
-			if (global::IsEnemyRecentlyDied)
-			{
-				static f32 cooldown = 0.f;
-
-				cooldown += global::DeltaTime;
-				if (cooldown > 0.5f)
-				{
-					global::IsEnemyRecentlyDied = false;
-					cooldown = 0.f;
-				}
-			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[34]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[45]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
@@ -424,6 +413,10 @@ namespace Manager
 				{
 					++i;
 				}
+			}
+			if (global::IsEnemyRecentlyDied)
+			{
+				global::IsEnemyRecentlyDied = false;
 			}
 			for (size_t i = 0; i < ECs.size(); )
 			{

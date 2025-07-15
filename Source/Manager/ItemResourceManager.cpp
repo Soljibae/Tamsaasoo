@@ -6,7 +6,7 @@ namespace Manager
 	void ItemResourceManager::Init()
 	{
 		itemIconTexture = AEGfxTextureLoad("Assets/Item.png");
-		itemIconMesh = Utils::CreateMesh(7, 5);
+		itemIconMesh = Utils::CreateMesh(9, 5);
 		
 		explosionTexture = AEGfxTextureLoad("Assets/explosion.png");
 		explosionMesh = Utils::CreateMesh(1, 9);

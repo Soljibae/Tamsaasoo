@@ -679,4 +679,155 @@ namespace InGame
 		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
 		virtual void OnDamaged() {}
 	};
+	//============================================= ID_36
+	class Item_36 : public Item // to do change class name
+	{
+	public:
+		Item_36() = default;
+		Item_36(const Item_36& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_37
+	class Item_37 : public Item // to do change class name
+	{
+	public:
+		Item_37() = default;
+		Item_37(const Item_37& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_38
+	class Item_38 : public Item // to do change class name
+	{
+	public:
+		Item_38() = default;
+		Item_38(const Item_38& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_39
+	class Item_39 : public Item // to do change class name
+	{
+	public:
+		Item_39() = default;
+		Item_39(const Item_39& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_40
+	class Item_40 : public Item // to do change class name
+	{
+	public:
+		Item_40() = default;
+		Item_40(const Item_40& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_41
+	class Item_41 : public Item // to do change class name
+	{
+	public:
+		Item_41() = default;
+		Item_41(const Item_41& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_42
+	class Item_42 : public Item // to do change class name
+	{
+	public:
+		Item_42() = default;
+		Item_42(const Item_42& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_43
+	class Item_43 : public Item // to do change class name
+	{
+	public:
+		Item_43() = default;
+		Item_43(const Item_43& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_44
+	class Item_44 : public Item // to do change class name
+	{
+	public:
+		Item_44() = default;
+		Item_44(const Item_44& other);
+		s32 appliedStack;
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss) {}
+		virtual void OnDamaged() {}
+	};
+	//============================================= ID_45
+	class Item_45 : public Item // to do change class name
+	{
+	public:
+		Item_45() = default;
+		Item_45(const Item_45& other);
+
+		virtual void Init(const Manager::ItemData& data) override;
+		virtual void Use(class PlayerCharacter* owner) override;
+		virtual void Update(class PlayerCharacter* owner) override;
+		virtual void Draw() override;
+		virtual std::shared_ptr<Item> Clone() const override;
+		virtual void OnHit(InGame::EnemyCharacter* target, bool isTargetBoss);
+		virtual void OnDamaged() {}
+	};
 }
