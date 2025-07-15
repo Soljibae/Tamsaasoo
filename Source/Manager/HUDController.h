@@ -29,7 +29,8 @@ namespace Manager
 
 		InGame::Actor ChamberTimeBar;
 		InGame::Actor fireTimeBar;
-		
+		InGame::Actor ammoType;
+
 		InGame::Actor Potion;
 		InGame::Actor PotionBG;
 		InGame::Actor PotionFull;

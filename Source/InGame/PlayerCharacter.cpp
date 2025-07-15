@@ -82,7 +82,12 @@ namespace InGame
 
 		UpdateStats();
 
-		Stats->HP = std::clamp(Stats->HP, 0.f, Stats->MaxHP);
+		if(Stats->MaxHP > 0)
+			Stats->HP = std::clamp(Stats->HP, 0.f, Stats->MaxHP);
+		else if (Stats->MaxHP <= 0)
+		{
+			bIsPandingKill = true;
+		}
 		PS->effectiveMovementSpeed = std::clamp(PS->effectiveMovementSpeed, 30.f, 600.f); // to do
 
 		for (const auto& item_ptr : inventory)
@@ -90,6 +95,11 @@ namespace InGame
 			item_ptr.first->Update(this);
 		}
 		
+		if (bisCoinDroped)
+		{
+			Manager::SFXManager.Play("coin_drop");
+			bisCoinDroped = false;
+		}
 		if (bIsDashing)
 		{
 			UpdateDash();
@@ -170,6 +180,7 @@ namespace InGame
 			{
 				if (PS->Potion >= 100)
 				{
+					Manager::SFXManager.Play("coin_gain");
 					PS->Money += global::item24GoldGained;
 					PS->Potion -= 100;
 				}
@@ -250,8 +261,9 @@ namespace InGame
 			{
 				if (IsRevivable())
 				{
+					Manager::SFXManager.Play("revive");
 					bIsInvincible = true;
-					Stats->HP = Stats->MaxHP; // to do
+					Stats->HP = Stats->MaxHP;
 				}
 				else
 				{
@@ -618,15 +630,15 @@ namespace InGame
 
 		if (itemTagCount[ENVY] >= 7)
 		{
-			global::additionalMovementSpeed += 60;
+			global::additionalMinionDamage += 1.2;
 		}
 		else if (6 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 5)
 		{
-			global::additionalMovementSpeed += 35;
+			global::additionalMinionDamage += 0.8;
 		}
 		else if (4 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 3)
 		{
-			global::additionalMovementSpeed += 20;
+			global::additionalMinionDamage += 0.5;
 		}
 		PS->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
 		AEVec2Set(&PS->ProjectileSize, GunData->ProjectileCollisionSize, GunData->ProjectileCollisionSize);

@@ -17,16 +17,18 @@ namespace Manager
 	AEGfxTexture* HUDController::HPTex = nullptr;
 	AEGfxTexture* HUDController::HPBGTex = nullptr;
 	InGame::Item* HUDController::prevItem{ nullptr };
-	const f32 HPWidth = 40.f;
-	const f32 HPHeight = 50.f;
-	const f32 textDrawSize = 0.2f;
-	const f32 fontSize = 72.f;
-	const f32 maxTextW = 400.0f;
-	const f32 padding = 20.f;
+	const static f32 HPWidth = 40.f;
+	const static f32 HPHeight = 50.f;
+	const static f32 textDrawSize = 0.2f;
+	const static f32 fontSize = 72.f;
+	const static f32 maxTextW = 400.0f;
+	const static f32 padding = 20.f;
 	Tooltip tooltip;
 	const AEVec2 PotionAsset{20.f, 16.f};
 	const AEVec2 PotionBGAsset{24.f, 28.f};
 	const AEVec2 PotionSize{ 5.f, 5.f };
+	const static float spacingX = 3.f;
+	const static f32 vignettingRedValue = 0.5f;
 	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
 	{
 		f32 fill = std::clamp(fillPercent, 0.f, 1.f);
@@ -61,7 +63,6 @@ namespace Manager
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
 		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2.35f };
 		Coin.size = { 30.f, 30.f };
-		float spacingX = 3.f; // 가로 간격
 		float startX = -(w / 2) + 200.f;
 		float Y = (h / 2) - 90.f;
 
@@ -92,18 +93,20 @@ namespace Manager
 		}
 
 		prevGunType = GUN->gunType;
-		ChamberTimeBar.Mesh = Utils::CreateMesh();
-		ChamberTimeBar.Texture = AEGfxTextureLoad("Assets/FireDelayBG.png");
-		fireTimeBar.Mesh = Utils::CreateMesh();
-		fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 		ChamberTimeBar.position = { 0.f, -30.f };
-		ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
-		fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
-		fireTimeBar.position.y = ChamberTimeBar.position.y;
-		fireTimeBar.size = { 10.f, 30.f };
+		ChamberTimeBar.size = { 66.f, 7.f };
+		ChamberTimeBar.Mesh = Utils::CreateMesh();
+		ChamberTimeBar.Texture = AEGfxTextureLoad("Assets/UI/FireDelayBG.png");
+		fireTimeBar.position = ChamberTimeBar.position;
+		fireTimeBar.size = ChamberTimeBar.size;
+		fireTimeBar.Mesh = Utils::CreateMesh();
+		fireTimeBar.Texture = AEGfxTextureLoad("Assets/UI/FireTimeBar.png");
+		ammoType.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+		ammoType.position.y = ChamberTimeBar.position.y;
+		ammoType.Mesh = Utils::CreateMesh();
+		ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 		f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
-		fireTimeBar.MovementSpeed = 0.000016f * (barEndX - barStartX) * global::DeltaTime;
 
 		Potion.position = { -(w / 2) + 100.f, h / 2 - 100.f };
 		Potion.size = { PotionSize.x * PotionAsset.x, PotionSize.y * PotionAsset.y };
@@ -113,7 +116,8 @@ namespace Manager
 		PotionBG.size = { PotionSize.x * PotionBGAsset.x, PotionSize.y * PotionBGAsset.y };
 		PotionBG.Mesh = Utils::CreateMesh();
 		PotionBG.Texture = AEGfxTextureLoad("Assets/HP/PotionBG.png");
-		PotionFull.position = PotionBG.position;
+		PotionFull.position.x = PotionBG.position.x;
+		PotionFull.position.y = PotionBG.position.y+10.f;
 		PotionFull.size = PotionBG.size;
 		PotionFull.Mesh = Utils::CreateMesh();
 		PotionFull.Texture = AEGfxTextureLoad("Assets/HP/PotionFull.png");
@@ -136,7 +140,6 @@ namespace Manager
 		if (prevMaxHP != PC->Stats->MaxHP)
 		{
 			HPBG.clear();
-			const float spacingX = 10.0f; // 가로 간격
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
 			const float Y = (global::ScreenHeight / 2) - 90.f;
 			InGame::Actor bgobj;
@@ -172,149 +175,161 @@ namespace Manager
 
 		if (GUN->gunType != prevGunType)
 		{
-			AEGfxTextureUnload(fireTimeBar.Texture);
-			fireTimeBar.Texture = nullptr;
+			AEGfxTextureUnload(ammoType.Texture);
+			ammoType.Texture = nullptr;
 			GUN = PC->HoldingGun;
 			prevGunType = GUN->gunType;
 
 			switch (prevGunType)
 			{
 			case InGame::GunType::M1911:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::CZ75:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::DESERTEGLE:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::MP5:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::MPX:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::VECTOR:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::BEOWOLF:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
 			case InGame::GunType::P90:
-				fireTimeBar.size = { 7.f, 21.f }; // 1:3
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 21.f }; // 1:3
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::MOSINNAGAT:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::M24:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::RAILGUN:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::NITRO700:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::FNFAL:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::M82BARRETT:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::AR15:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::M110:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::BREN:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::MICROGUN:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::M249:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::M2:
-				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.size = { 7.f, 29.4f }; // 1:4.2
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
 			case InGame::GunType::SAWEDOFFSHOTGUN:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			case InGame::GunType::DOUBLEBARREL:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			case InGame::GunType::KS23:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			case InGame::GunType::M1897:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			case InGame::GunType::BENELLIM4:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			case InGame::GunType::SAIGA12:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			case InGame::GunType::AA12:
-				fireTimeBar.size = { 8.f, 21 }; // 8:21
-				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.size = { 8.f, 21 }; // 8:21
+				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
 			}
 		}
 		/*--------Centered can fire UI--------*/
-		if (prevFireRate != GUN->RoundPerSec)
-		{
-			ChamberTimeBar.size = { 50.f / GUN->RoundPerSec, 14.f };
-		}
-		if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)
-		{
-			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
-		}
+		//if (fireTimeBar.position.x > ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f)
+		//{
+		//	fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+		//}
 
+
+		//f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+		//f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
 		f32 fireDelay = 1.0f / GUN->RoundPerSec;
 		f32 fillPercent = GUN->FireTimer / fireDelay;
 		if (fillPercent > 1.f) fillPercent = 1.f;
-		f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
-		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
-		fireTimeBar.MovementSpeed = fillPercent * (barEndX - barStartX) * global::DeltaTime;
-
+		f32 decrease = 1.f - fillPercent;
 		//can't fire
 		if (GUN->FireTimer > 0 && GUN->FireTimer < fireDelay)
 		{
-			fireTimeBar.position.x = barStartX + (barEndX - barStartX) * fillPercent;
+			//fireTimeBar.position.x = barStartX + (barEndX - barStartX) * fillPercent;
+			
+			AEGfxMeshFree(fireTimeBar.Mesh);
+			fireTimeBar.Mesh = nullptr;
+			AEGfxMeshStart();
+			AEGfxTriAdd(
+				-0.5f, -0.5f, 0xFFFFFFFF, 0.f, 1.f,
+				0.5f - decrease, -0.5f, 0xFFFFFFFF, fillPercent, 1.f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.f, 0.f
+			);
+			AEGfxTriAdd(
+				0.5f - decrease, -0.5f, 0xFFFFFFFF, fillPercent, 1.f,
+				0.5f - decrease, 0.5f, 0xFFFFFFFF, fillPercent, 0.f,
+				-0.5f, 0.5f, 0xFFFFFFFF, 0.f, 0.f
+			);
+			fireTimeBar.Mesh = AEGfxMeshEnd();
 		}
 		//can fire
 		else if (GUN->FireTimer > fireDelay)
 		{
-			fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+			//fireTimeBar.position.x = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
+			fillPercent = 0.f;
 		}
 		prevFireRate = GUN->RoundPerSec;
 		/*--------Centered can fire UI--------*/
@@ -349,7 +364,6 @@ namespace Manager
 		// Set color to red and reset to origin color
 		if (PC->Stats->HP > 0 && PC->Stats->HP < 2)
 		{
-			f32 r = 0.5f;
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -379,7 +393,7 @@ namespace Manager
 
 			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
 
-			AEGfxSetColorToAdd(r, 0.f, 0.f, 0.5f);
+			AEGfxSetColorToAdd(vignettingRedValue, 0.f, 0.f, 0.5f);
 
 			AEGfxSetTransform(transform.m);
 
@@ -436,12 +450,26 @@ namespace Manager
 		{
 			Utils::DrawObject(ChamberTimeBar, false);
 			Utils::DrawObject(fireTimeBar, false);
+			Utils::DrawObject(ammoType, false);
 		}
 		Utils::DrawObject(Coin, false);
 		std::string pText = std::to_string(static_cast<s32>(PC->PS->Money));
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
-		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
+		static bool isBigger{ false };
+		static f64 prevMoney{ PC->PS->Money };
+		if (prevMoney != PC->PS->Money)
+		{
+			isBigger = true;
+			prevMoney = PC->PS->Money;
+		}
+
+		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2),
+			(Coin.position.y - Coin.size.y / 2.5f) / (h / 2), isBigger ? 0.33f : 0.3f, 1, 1, 1, 1);
+		if (isBigger)
+		{
+			isBigger = false;
+		}
 	}
 
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
@@ -602,6 +630,9 @@ namespace Manager
 
 		AEGfxMeshFree(fireTimeBar.Mesh);
 		AEGfxTextureUnload(fireTimeBar.Texture);
+
+		AEGfxMeshFree(ammoType.Mesh);
+		AEGfxTextureUnload(ammoType.Texture);
 
 		AEGfxMeshFree(Coin.Mesh);
 		AEGfxTextureUnload(Coin.Texture);
