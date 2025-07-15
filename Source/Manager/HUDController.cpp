@@ -24,6 +24,9 @@ namespace Manager
 	const f32 maxTextW = 400.0f;
 	const f32 padding = 20.f;
 	Tooltip tooltip;
+	const AEVec2 PotionAsset{20.f, 16.f};
+	const AEVec2 PotionBGAsset{24.f, 28.f};
+	const AEVec2 PotionSize{ 5.f, 5.f };
 	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
 	{
 		f32 fill = std::clamp(fillPercent, 0.f, 1.f);
@@ -58,7 +61,7 @@ namespace Manager
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
 		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2.35f };
 		Coin.size = { 30.f, 30.f };
-		float spacingX = 10.0f; // 가로 간격
+		float spacingX = 3.f; // 가로 간격
 		float startX = -(w / 2) + 200.f;
 		float Y = (h / 2) - 90.f;
 
@@ -72,7 +75,7 @@ namespace Manager
 		{
 			int row = i;
 			int col = i;
-			bgobj.position = { startX + col * (HPWidth + spacingX), Y };
+			bgobj.position = { startX + col * (HPWidth+ spacingX), Y };
 			bgobj.size = { HPWidth, HPHeight };
 			HPBG.push_back(bgobj);
 		}
@@ -103,15 +106,15 @@ namespace Manager
 		fireTimeBar.MovementSpeed = 0.000016f * (barEndX - barStartX) * global::DeltaTime;
 
 		Potion.position = { -(w / 2) + 100.f, h / 2 - 100.f };
-		Potion.size = { 100.f, 100.f };
+		Potion.size = { PotionSize.x * PotionAsset.x, PotionSize.y * PotionAsset.y };
 		Potion.Mesh = FillingMeshUpside(0);
 		Potion.Texture = AEGfxTextureLoad("Assets/HP/Potion.png");
-		PotionBG.position = Potion.position;
-		PotionBG.size = Potion.size;
+		PotionBG.position = { Potion.position.x, Potion.position.y + 20.f };
+		PotionBG.size = { PotionSize.x * PotionBGAsset.x, PotionSize.y * PotionBGAsset.y };
 		PotionBG.Mesh = Utils::CreateMesh();
 		PotionBG.Texture = AEGfxTextureLoad("Assets/HP/PotionBG.png");
-		PotionFull.position = Potion.position;
-		PotionFull.size = Potion.size;
+		PotionFull.position = PotionBG.position;
+		PotionFull.size = PotionBG.size;
 		PotionFull.Mesh = Utils::CreateMesh();
 		PotionFull.Texture = AEGfxTextureLoad("Assets/HP/PotionFull.png");
 		

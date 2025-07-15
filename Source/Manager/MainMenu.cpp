@@ -8,7 +8,7 @@ namespace Manager
 	void MainMenu::Init()
 	{
 		SFXManager.Init();
-		SFXManager.AddNewSFX(InGame::UI,"Assets/SFX/start.wav","start");
+		SFXManager.AddNewSFX(InGame::UI,"Assets/SFX/UI/start.wav","start");
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 
