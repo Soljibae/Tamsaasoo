@@ -27,6 +27,7 @@ namespace Manager
 	const AEVec2 PotionAsset{20.f, 16.f};
 	const AEVec2 PotionBGAsset{24.f, 28.f};
 	const AEVec2 PotionSize{ 5.f, 5.f };
+	const static float spacingX = 3.f;
 	AEGfxVertexList* FillingMeshUpside(f32 fillPercent)
 	{
 		f32 fill = std::clamp(fillPercent, 0.f, 1.f);
@@ -61,7 +62,6 @@ namespace Manager
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
 		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2.35f };
 		Coin.size = { 30.f, 30.f };
-		float spacingX = 3.f; // 가로 간격
 		float startX = -(w / 2) + 200.f;
 		float Y = (h / 2) - 90.f;
 
@@ -136,7 +136,6 @@ namespace Manager
 		if (prevMaxHP != PC->Stats->MaxHP)
 		{
 			HPBG.clear();
-			const float spacingX = 10.0f; // 가로 간격
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
 			const float Y = (global::ScreenHeight / 2) - 90.f;
 			InGame::Actor bgobj;

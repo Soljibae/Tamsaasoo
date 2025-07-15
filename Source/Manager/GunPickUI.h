@@ -27,6 +27,13 @@ namespace Manager
 		std::array<std::string, 3> GunDescriptions;
 		AEGfxVertexList* iconMesh;
 		bool isActive{ false };
+		s32 stageIdx;
+		s8 pFont;
+		struct Colors
+		{
+			f32 r, g, b;
+		};
+		std::array<Colors, 4> colors;
 	};
 	extern GunPickUI gunPickPanel;
 }
