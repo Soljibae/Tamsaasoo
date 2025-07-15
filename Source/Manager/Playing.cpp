@@ -39,7 +39,7 @@ namespace Manager
 		SFXManager.Play("doom");
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage1();
+			CurrentStage = new InGame::Stage2();
 		}
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
@@ -995,15 +995,24 @@ namespace Manager
 
 			SpawnPos.x = PC->position.x + distance * std::cos(theta);
 			SpawnPos.y = PC->position.y + distance * std::sin(theta);
-			if (SpawnPos.x < global::worldMax.x &&
-				SpawnPos.x > global::worldMin.x &&
-				SpawnPos.y < global::worldMax.y &&
-				SpawnPos.y > global::worldMin.y &&
-				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 ||
-					SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2)
-				)
+			if ((CurrentStageType == InGame::StageType::LAND|| CurrentStageType == InGame::StageType::HEAVEN)&&
+				(SpawnPos.x < global::worldMax.x && SpawnPos.x > global::worldMin.x && SpawnPos.y < global::worldMax.y && SpawnPos.y > global::worldMin.y )&&
+				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 || SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2))
 			{
 				break;
+			}
+			else if ((CurrentStageType == InGame::StageType::TOWER)&&
+				(SpawnPos.x < global::worldMax.x && SpawnPos.x > global::worldMin.x && SpawnPos.y < global::worldMax.y && SpawnPos.y > global::worldMin.y) &&
+				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 || SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2)
+				)
+			{
+				float EllipseA = (global::worldMax.x - global::worldMin.x) / 2;
+				float EllipseB = (global::worldMax.y - global::worldMin.y) / 2;
+				float value = (SpawnPos.x * SpawnPos.x) / (EllipseA * EllipseA) + (SpawnPos.y * SpawnPos.y) / (EllipseB * EllipseB);
+				if (value <= 1.0f)
+				{
+					break;
+				}
 			}
 		}
 		return SpawnPos;
@@ -1018,4 +1027,4 @@ namespace Manager
 		AEGfxGetPrintSize(pFont, timer.c_str(), textDrawSize, &lw, &lh);
 		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, 400.f / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
-}//네~~ 안녕하세요 헌이입니다! 장성현씨!! 정말 그러시면 안되는거죠~~
+}
