@@ -23,6 +23,8 @@ namespace Manager
 		std::array<AEGfxVertexList*, 9> ButtonMesh;
 		AEGfxTexture* ButtonTexture;
 		std::array<InGame::Actor, 3> gunIcons;
+		std::array<std::string, 3> GunNames;
+		std::array<std::string, 3> GunDescriptions;
 		AEGfxVertexList* iconMesh;
 		bool isActive{ false };
 	};

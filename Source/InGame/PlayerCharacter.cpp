@@ -624,7 +624,10 @@ namespace InGame
 		{
 			global::additionalMovementSpeed += 20;
 		}
-
+		PS->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
+		AEVec2Set(&PS->ProjectileSize, GunData->ProjectileCollisionSize, GunData->ProjectileCollisionSize);
+		PS->ProjectileSpeed = GunData->ProjectileSpeed;
+		PS->HitCount = GunData->ProjectileHitCount;
 		PS->effectiveDamage = (Stats->Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
 		PS->effectiveFireRate = (Stats->FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
 		PS->effectiveExpGained = PS->ExpGained * global::additionalExpGainedRatio;

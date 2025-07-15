@@ -53,8 +53,29 @@ namespace InGame
 		size = InData->DrawSize;
 		CollisionRadius = InData->CollisionRadius;
 		position = Pos;
-		Stats->MaxHP = InData->Health;
-		Stats->HP = InData->Health;
+		if (Manager::gm.currStateREF)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->CurrentStageType == StageType::LAND)
+				{
+					Stats->MaxHP = InData->Health;
+					Stats->HP = InData->Health;
+				}
+				else if (GS->CurrentStageType == StageType::TOWER)
+				{
+					Stats->MaxHP = InData->Health * 3.f;
+					Stats->HP = InData->Health * 3.f;
+				}
+				else if (GS->CurrentStageType == StageType::HEAVEN)
+				{
+					Stats->MaxHP = InData->Health * 6.f;
+					Stats->HP = InData->Health * 6.f;
+				}
+			}
+		}
+		
 
 		AEVec2Set(&Stats->ProjectileSize, InData->ProjectileSize.x, InData->ProjectileSize.y);
 		Stats->StatusEffectTimer[SLOW] = 0.f;
@@ -99,6 +120,7 @@ namespace InGame
 		SniperShootTimer = 0.f;
 		bRetreatDirInitialized = false;
 		bIsWarned = false;
+		bIsTargetDirValid = false;
 		/*--------SNIPER--------*/
 		/*--------BURNER--------*/
 		float FlameZoneTimer = 0.f;
@@ -505,8 +527,9 @@ namespace InGame
 						{
 							SniperShootTimer = 0.f;
 							LaserAttack* laser = new LaserAttack;
-							laser->Init(position, dirToPlayer, this, 3200.f, 1.f, 0.f, false);
+							laser->Init(position, SniperFireDir, this, 3200.f, 1.f, 0.f, false);
 							bIsWarned = false;
+							bIsTargetDirValid = false;
 							if (Manager::gm.currStateREF)
 							{
 								Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
@@ -517,7 +540,15 @@ namespace InGame
 							}
 							Manager::SFXManager.Play("LaserFire");
 						}
-						else if (SniperShootTimer >= SniperShootInterval-1.f)
+						else if (SniperShootTimer >= SniperShootInterval - 0.2f)
+						{
+							if (!bIsTargetDirValid)
+							{
+								SniperFireDir = dirToPlayer;
+								bIsTargetDirValid = true;
+							}
+						}
+						else if (SniperShootTimer >= SniperShootInterval-1.2f)
 						{
 							if (!bIsWarned)
 							{
@@ -533,7 +564,6 @@ namespace InGame
 								}
 								Manager::SFXManager.Play("LaserWarning");
 							}
-
 						}
 						//AnimationState = ATTACK;
 						break;
@@ -698,7 +728,6 @@ namespace InGame
 		{
 			Amount *= 1.2f;
 		}
-
 		if (Stats->HP / Stats->MaxHP >= global::item12TriggerRatio && Utils::GetItemCount(12) > 0) //ID:12 Item's effect
 		{
 			Amount *= global::item12AdditionalDamage;
