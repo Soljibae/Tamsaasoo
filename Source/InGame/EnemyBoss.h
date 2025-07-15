@@ -14,6 +14,8 @@ namespace InGame
 		virtual void Destroy() override;
 		virtual void OnPlayerHit();
 		std::string name, epithet;
+		f32 bossApearTime{ 0.f }, bossApearDuration{ 6.f };
+		bool bossApearing{ false };
 	protected:
 		
 	private:

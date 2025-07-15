@@ -21,6 +21,7 @@ namespace Manager
 	static const s32 fontSize{72};
 	static const f32 nameDrawSize{0.4f};
 	static const f32 descDrawSize{0.18f};
+
 	void GunPickUI::Init(InGame::PlayerCharacter* InPC)
 	{
 		PC = InPC;

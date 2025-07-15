@@ -21,6 +21,7 @@ namespace InGame
 		bIsPandingKill = false;
 		Utils::InitOffset(*this);
 		FrameTime = 1.0f;
+		bossApearTime = 0.f;
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/KnifeThrow.mp3", "BossAttackKnife");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/FireMagic.mp3", "BossAttackMagic");
 	}

@@ -57,8 +57,6 @@ namespace InGame
 
 		Utils::InitOffset(*this);
 		inventory.clear();
-
-		Manager::SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/potion.wav", "potion");
 	}
 	void PlayerCharacter::Update()
 	{
@@ -82,12 +80,7 @@ namespace InGame
 
 		UpdateStats();
 
-		if(Stats->MaxHP > 0)
-			Stats->HP = std::clamp(Stats->HP, 0.f, Stats->MaxHP);
-		else if (Stats->MaxHP <= 0)
-		{
-			bIsPandingKill = true;
-		}
+		Stats->HP = std::clamp(Stats->HP, 0.f, Stats->MaxHP);
 		PS->effectiveMovementSpeed = std::clamp(PS->effectiveMovementSpeed, 30.f, 600.f); // to do
 
 		for (const auto& item_ptr : inventory)
@@ -95,11 +88,6 @@ namespace InGame
 			item_ptr.first->Update(this);
 		}
 		
-		if (bisCoinDroped)
-		{
-			Manager::SFXManager.Play("coin_drop");
-			bisCoinDroped = false;
-		}
 		if (bIsDashing)
 		{
 			UpdateDash();
@@ -175,12 +163,10 @@ namespace InGame
 		if (global::KeyInput(AEVK_P)) PS->Potion += 100;
 		if (global::KeyInput(AEVK_Q))
 		{
-
 			if (Utils::GetItemCount(24))
 			{
 				if (PS->Potion >= 100)
 				{
-					Manager::SFXManager.Play("coin_gain");
 					PS->Money += global::item24GoldGained;
 					PS->Potion -= 100;
 				}
@@ -191,7 +177,6 @@ namespace InGame
 				{
 					if (PS->Potion >= 100)
 					{
-						Manager::SFXManager.Play("potion");
 						adjustHealth(1);
 						PS->Potion -= 100;
 					}
@@ -261,9 +246,8 @@ namespace InGame
 			{
 				if (IsRevivable())
 				{
-					Manager::SFXManager.Play("revive");
 					bIsInvincible = true;
-					Stats->HP = Stats->MaxHP;
+					Stats->HP = Stats->MaxHP; // to do
 				}
 				else
 				{
@@ -630,20 +614,17 @@ namespace InGame
 
 		if (itemTagCount[ENVY] >= 7)
 		{
-			global::additionalMinionDamage += 1.2;
+			global::additionalMovementSpeed += 60;
 		}
 		else if (6 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 5)
 		{
-			global::additionalMinionDamage += 0.8;
+			global::additionalMovementSpeed += 35;
 		}
 		else if (4 >= itemTagCount[ENVY] && itemTagCount[ENVY] >= 3)
 		{
-			global::additionalMinionDamage += 0.5;
+			global::additionalMovementSpeed += 20;
 		}
-		PS->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
-		AEVec2Set(&PS->ProjectileSize, GunData->ProjectileCollisionSize, GunData->ProjectileCollisionSize);
-		PS->ProjectileSpeed = GunData->ProjectileSpeed;
-		PS->HitCount = GunData->ProjectileHitCount;
+
 		PS->effectiveDamage = (Stats->Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
 		PS->effectiveFireRate = (Stats->FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
 		PS->effectiveExpGained = PS->ExpGained * global::additionalExpGainedRatio;

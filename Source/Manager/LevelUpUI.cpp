@@ -10,12 +10,12 @@ namespace Manager
 	AEGfxVertexList* LevelUpUI::rerollMesh{ nullptr };
 	AEGfxTexture* LevelUpUI::rerollTexture{ nullptr };
 	AEGfxTexture* LevelUpUI::ItemSlotTexture{ nullptr };
-	const f32 fontSize = 72.f;
-	const f32 textDrawSize = 0.2f;
-	const f32 windowWidth = 350.f;
-	const f32 windowHeight = 550.f;
-	const f32 spacingX = 130.0f;
-	const f32 padding = 50.f;
+	const static f32 fontSize = 72.f;
+	const static f32 textDrawSize = 0.2f;
+	const static f32 windowWidth = 350.f;
+	const static f32 windowHeight = 550.f;
+	const static f32 spacingX = 130.0f;
+	const static f32 padding = 50.f;
 	static f32 w{ static_cast<f32>(global::ScreenWidth) }, h{ static_cast<f32>(global::ScreenHeight) };
 	void LevelUpUI::ResetGotEpic()
 	{

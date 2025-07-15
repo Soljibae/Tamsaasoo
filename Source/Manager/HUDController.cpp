@@ -108,7 +108,7 @@ namespace Manager
 		f32 barStartX = ChamberTimeBar.position.x - ChamberTimeBar.size.x / 2.f;
 		f32 barEndX = ChamberTimeBar.position.x + ChamberTimeBar.size.x / 2.f;
 
-		Potion.position = { -(w / 2) + 100.f, h / 2 - 100.f };
+		Potion.position = { -(w / 2) + 100.f, h / 2 - 130.f };
 		Potion.size = { PotionSize.x * PotionAsset.x, PotionSize.y * PotionAsset.y };
 		Potion.Mesh = FillingMeshUpside(0);
 		Potion.Texture = AEGfxTextureLoad("Assets/HP/Potion.png");

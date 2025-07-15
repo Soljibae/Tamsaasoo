@@ -8,6 +8,7 @@
 #include "ExpUI.h"
 #include "GunPickUI.h"
 #include "GameOver.h"
+#include "BossAppearScene.h"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -15,6 +16,7 @@
 namespace Manager
 {
 	Utils::Camera* CAM = nullptr;
+	BossAppearScene bossAppearScene;
 	const static f32 fontSize = 72.f;
 	const static f32 textDrawSize = 0.35f;
 	const static s32 maxWaveCount = 1;
@@ -25,10 +27,8 @@ namespace Manager
 		Fader.position = { 0, 0 };
 		Fader.size = { static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight) };
 		Fader.Alpha = 1.f;
-
 		SFXManager.Init();
 		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.mp3", "doom");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/waveclear.wav", "waveclear");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/slime.wav", "slime");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/skeleton.mp3", "skeleton");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/tanker.wav", "tanker");
@@ -36,6 +36,7 @@ namespace Manager
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/dasherDead.wav", "dasherDead");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/sniper.wav", "sniper");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/zigzag.wav", "zigzag");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Boss/siren.wav", "siren");
 		SFXManager.Play("doom");
 		if (CurrentStage == nullptr)
 		{
@@ -143,7 +144,7 @@ namespace Manager
 			{
 				JumpAnimationTimer += global::DeltaTime;
 				Utils::UpdateOffset(*PC);
-				if (JumpAnimationTimer >= 0.4f)
+				if (JumpAnimationTimer >= 4.f)
 				{
 					bIsJumping = false;
 					ChangeStage();
@@ -216,6 +217,7 @@ namespace Manager
 				if (!gameOverScreen.isGameOver)
 				{
 					StageTimer -= global::DeltaTime;
+					StageTimer = StageTimer < 0.f ? 0.f : StageTimer;
 					if (WaveTimer > 3.f && !global::isTestMod)
 					{
 						WaveCount++;
@@ -223,6 +225,9 @@ namespace Manager
 						if (WaveCount > maxWaveCount)
 						{
 							InitBossFight();
+							Boss->bossApearing = true;
+							bossAppearScene.Init(Boss);
+							SFXManager.Play("siren");
 							StageTimer = 3.f * maxWaveCount + global::DeltaTime;
 						}
 						else
@@ -232,7 +237,10 @@ namespace Manager
 					}
 				}
 			}
-			PC->Update();
+			if (!Boss || (Boss && !Boss->bossApearing))
+			{
+				PC->Update();
+			}
 			global::RecentlyDeadEnemyCount = 0;
 
 			if (global::isTestMod && ECs.size() == 0)
@@ -567,13 +575,13 @@ namespace Manager
 					++i;
 				}
 			}
-			if(!bossApearing)
-			{
-				CAM->Update(*PC);
+			if(Boss && Boss->bossApearing)
+			{ 
+				CAM->Update(*Boss);
 			}
 			else
 			{
-				CAM->Update(*Boss);
+				CAM->Update(*PC);
 			}
 
 			if(Boss)
@@ -585,9 +593,13 @@ namespace Manager
 					Boss = nullptr;
 					bIsBossFight = false;
 					FinishBossFight();
-
+					bossAppearScene.Destroy();
 				}
-				else
+				else if (Boss->bossApearing)
+				{
+					bossAppearScene.Update();
+				}
+				else if(!Boss->bossApearing)
 				{
 					Boss->Update();
 					if (Utils::CheckCollision(*Boss, *PC))
@@ -673,15 +685,21 @@ namespace Manager
 		if (Boss)
 		{
 			Boss->Draw();
-			bossHPBar.Draw();
+			if (!Boss->bossApearing)
+			{
+				bossHPBar.Draw();
+			}
 		}
 		VFXManager.Draw();
 		if (!bIsBossFight && !gm.GamePaused)
 		{
 			DrawTime(StageTimer);
 		}
-		HUD.Draw();
-		ExpPanel.Draw();
+		if (!Boss || (Boss && !Boss->bossApearing))
+		{
+			HUD.Draw();
+			ExpPanel.Draw();
+		}
 		for (InGame::SoulOrb* SO : SOs)
 		{
 			SO->Draw();
@@ -705,6 +723,8 @@ namespace Manager
 			pausePanel.Draw();
 		}
 		gameOverScreen.Draw();
+		if(Boss && Boss->bossApearing)
+			bossAppearScene.Draw();
 		Utils::DrawObject(Fader, false, Fader.Alpha);
 	}
 	void Playing::Destroy()
@@ -884,7 +904,6 @@ namespace Manager
 		for (InGame::EnemyCharacter* EC : ECs)
 		{
 			EC->bIsPandingKill = true;
-			SFXManager.Play("waveclear");
 		}
 		for (InGame::Projectile*& EP : EPs)
 		{

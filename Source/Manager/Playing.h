@@ -78,9 +78,6 @@ namespace Manager
 		bool bIsJumping = false;
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
-
-		f32 bossApearTime{ 0.f }, bossApearDuration{ 4.f };
-		bool bossApearing{ false };
 		
 		s8 pFont;
 	};

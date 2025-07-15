@@ -15,7 +15,7 @@ namespace Manager
 		maxHP = Boss->Stats->MaxHP;
 		currHP = Boss->Stats->HP;
 		prevHP = currHP;
-		BG.position = { 0.f, 350.f };
+		BG.position = { 0.f, 320.f };
 		BG.size = { w / 3.f, 40.f };
 		BG.Texture = AEGfxTextureLoad("Assets/ItemSlots/HPFrame.png");
 		BGMesh = Utils::CreateNinePatchMesh();
