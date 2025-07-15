@@ -56,6 +56,8 @@ namespace InGame
 	void Stage1Boss::Init()
 	{
 		EnemyBoss::Init();
+		name = "Eldros";
+		epithet = "the Spellweaver";//or Spellbinder
 		Stats->MovementSpeed = 100.f;
 		size.x = 105;
 		size.y = 192;
@@ -213,6 +215,8 @@ namespace InGame
 	{
 		EnemyBoss::Init();
 
+		name = "Valoran";
+		epithet = "the Crusader";//or Knight-Commander
 		Stats->MovementSpeed = 1200.f;
 		size = { 300.f, 300.f };
 		position = { 0.f, 0.f };
@@ -406,6 +410,8 @@ namespace InGame
 	void Stage3Boss::Init()
 	{
 		EnemyBoss::Init();
+		name = "Seraphiel";
+		epithet = "the Luminary";//or Radiant
 		size = { 300.f, 300.f };
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;

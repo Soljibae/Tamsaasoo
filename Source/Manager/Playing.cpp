@@ -17,14 +17,21 @@ namespace Manager
 	Utils::Camera* CAM = nullptr;
 	const static f32 fontSize = 72.f;
 	const static f32 textDrawSize = 0.35f;
-	const static s32 maxWaveCount = 3;
+	const static s32 maxWaveCount = 60;
 	void Playing::Init()
 	{
-		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "bgm");
+		Fader.Mesh = Utils::CreateMesh();
+		Fader.Texture = AEGfxTextureLoad("Assets/black.png");
+		Fader.position = { 0, 0 };
+		Fader.size = { static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight) };
+		Fader.Alpha = 1.f;
+
+		SFXManager.Init();
+		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "doom");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/waveclear.wav", "waveclear");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/slime.wav", "slime");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/skeleton.mp3", "skeleton");
-		SFXManager.Init();
+		SFXManager.Play("doom");
 		if (CurrentStage == nullptr)
 		{
 			CurrentStage = new InGame::Stage1();
@@ -78,19 +85,34 @@ namespace Manager
 		ExpPanel.Init(PC);
 		HUD.Init(PC, PC->HoldingGun);
 		gunPickPanel.Init(PC);
-		gm.GamePaused = false;
 		gameOverScreen.Init();
 		Utils::TestInit();
 		WM.Init();
 		bIsJumping = false;
 		VFXManager.Init();
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		gm.GamePaused = false;
+
+		gunPickPanel.Show();
 	}
 	void Playing::Update()
 	{
-		// Press ESCAPE to pause the game
+		if (global::DeltaTime > 0.02)
+		{
+			std::cout << global::DeltaTime << std::endl;
+			return;
+		}
+		if (Fader.Alpha > 0.f)
+			Fader.Alpha -= global::DeltaTime * 2.f;
+		else
+			Fader.Alpha = 0.f;
+
 		ExpPanel.Update();
 		if (global::KeyInput(AEVK_G))
+		{
+			gunPickPanel.Show();
+		}
+		if (global::KeyInput(AEVK_H))
 		{
 			pickPanel.Show();
 		}
@@ -185,12 +207,6 @@ namespace Manager
 				StageTimer -= global::DeltaTime;
 				WaveTimer += global::DeltaTime;
 			}
-			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
-			if (global::DeltaTime > 0.02)
-			{
-				std::cout << global::DeltaTime << std::endl;
-			}
-			/*--------------------------------DEBUG FOR LATENCY--------------------------------*/
 			if (!gameOverScreen.isGameOver)
 			{
 				if (WaveTimer > 3.f && !debugMod)
@@ -543,6 +559,7 @@ namespace Manager
 						PC->adjustHealth(-Boss->Stats->Damage);
 						Boss->OnPlayerHit();
 					}
+					bossHPBar.Update();
 				}
 			}
 
@@ -566,6 +583,7 @@ namespace Manager
 		{
 			pausePanel.Update();
 		}
+		SFXManager.Update();
 	}
 	void Playing::Draw()
 	{
@@ -619,6 +637,7 @@ namespace Manager
 		if (Boss)
 		{
 			Boss->Draw();
+			bossHPBar.Draw();
 		}
 		VFXManager.Draw();
 		if (!bIsBossFight && !gm.GamePaused)
@@ -634,6 +653,12 @@ namespace Manager
 		if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
+			Utils::DrawObject(HUD.Coin, false);	
+			std::string pText = std::to_string(static_cast<s32>(PC->PS->Money));
+			f32 textW, textH;
+			AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
+			AEGfxPrint(pFont, pText.c_str(), (HUD.Coin.position.x + HUD.Coin.size.x / 1.5f) / (global::ScreenWidth / 2), (HUD.Coin.position.y - HUD.Coin.size.y / 2.5f) / (global::ScreenHeight / 2), 0.3f, 1, 1, 1, 1);
+
 		}
 		else if (gunPickPanel.IsActive())
 		{
@@ -644,9 +669,12 @@ namespace Manager
 			pausePanel.Draw();
 		}
 		gameOverScreen.Draw();
+		Utils::DrawObject(Fader, false, Fader.Alpha);
 	}
 	void Playing::Destroy()
 	{
+		AEGfxMeshFree(Fader.Mesh);
+		AEGfxTextureUnload(Fader.Texture);
 		VFXManager.Destroy();
 		HUD.Destroy();
 		gameOverScreen.Destroy();
@@ -847,6 +875,7 @@ namespace Manager
 			}
 			Boss->Texture = AEGfxTextureLoad(CurrentStage->BossTextureAddress.c_str());
 			Boss->Init();
+			bossHPBar.Init(Boss);
 		}
 
 		global::isBossBattleStarted = true;

@@ -18,6 +18,8 @@
 #include "../InGame/ArealAttack.h"
 #include "../InGame/VFX.h"
 #include "../InGame/SoulOrb.h"
+#include "BossHPBar.h"
+
 namespace Manager
 {
 	class Playing : public AGameState
@@ -28,6 +30,7 @@ namespace Manager
 		void Draw() override;
 		void Destroy() override;
 
+		InGame::Actor Fader;
 		InGame::PlayerCharacter* PC;
 		std::vector<InGame::Projectile*> PPPool;
 		std::vector<InGame::EnemyCharacter*> ECPool;
@@ -64,6 +67,7 @@ namespace Manager
 		void FinishBossFight();
 		void ChangeStage();
 		InGame::EnemyBoss* Boss = nullptr;
+		BossHPBar bossHPBar;
 		InGame::Stage* CurrentStage = nullptr;
 		InGame::StageType CurrentStageType;
 		void InitStage();

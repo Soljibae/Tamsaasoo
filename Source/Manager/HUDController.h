@@ -14,6 +14,7 @@ namespace Manager
 		void ShowTooltip(InGame::Item& item);
 		void Destroy();
 		std::vector<std::string> SplitTextIntoLines(const std::string& text, f32 maxWidth);
+		InGame::Actor Coin;
 	private:
 		InGame::PlayerCharacter* PC;
 		InGame::Gun* GUN;
@@ -25,13 +26,13 @@ namespace Manager
 		static AEGfxTexture* HPTex;
 		static AEGfxTexture* HPBGTex;
 
-		InGame::Actor Coin;
 
 		InGame::Actor ChamberTimeBar;
 		InGame::Actor fireTimeBar;
 		
 		InGame::Actor Potion;
 		InGame::Actor PotionBG;
+		InGame::Actor PotionFull;
 
 		InGame::GunType prevGunType;
 		s16 prevPotion;

@@ -32,6 +32,7 @@ namespace InGame
 		s32 column = 0;
 		f32 FrameTime = 0.f;
 		f32 TimeAcc = 0.f;
+		f32 Alpha = 1.f;
 		AEVec2 offset;
 		bool bIsPandingKill = false;
 		EAnimationState AnimationState = EAnimationState::IDLE;

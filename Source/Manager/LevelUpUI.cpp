@@ -50,7 +50,7 @@ namespace Manager
 					this->isActive = false;
 					for (auto& cost : rerollCost)
 					{
-						cost = 100;
+						cost = 20;
 					}
 					delayTime = 0.f;
 					ResetGotEpic();
@@ -238,9 +238,9 @@ namespace Manager
 		{
 			return;
 		}
-		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
 		PC->PS->Money -= rerollCost[thisbutton];
-		rerollCost[thisbutton] *= 1.7f;
+		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
+
 		SFXManager.Play("reroll");
 
 		ResetGotEpic();

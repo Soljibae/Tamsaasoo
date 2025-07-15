@@ -14,7 +14,6 @@ namespace Manager
 		nextState = EGameState::INTRO;
 		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
 		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
-		SFXManager.Init();
 	}
 
 	void GameManager::Update()
@@ -47,20 +46,18 @@ namespace Manager
 			forceRestart = false;
 		}
 		currStateREF->Update();
-		SFXManager.Update();
 	}
 
 	void GameManager::Pause()
 	{
 		GamePaused = true;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], 0.3f);
-		;
+		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMReduceVol);
 	}
 
 	void GameManager::Resume()
 	{
 		GamePaused = false;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], 0.5f);
+		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMOriginVol);
 	}
 
 	void GameManager::Draw()
@@ -76,7 +73,6 @@ namespace Manager
 			currStateREF->Destroy();
 			delete currStateREF;
 			currStateREF = nullptr;
-			SFXManager.Destroy();
 		}
 	}
 

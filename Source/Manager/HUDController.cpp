@@ -3,11 +3,15 @@
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 #include "GameOver.h"
+#include "../InGame/SFX.h"
+#include "GameManager.h"
+#include "BossHPBar.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
 namespace Manager
 {
+	BossHPBar BossHP;
 	HUDController HUD;
 	AEGfxVertexList* HUDController::HPMesh = nullptr;
 	AEGfxTexture* HUDController::HPTex = nullptr;
@@ -59,7 +63,7 @@ namespace Manager
 		float Y = (h / 2) - 90.f;
 
 		HPMesh = Utils::CreateMesh();
-		HPTex = AEGfxTextureLoad("Assets/HPBG.png");
+		HPTex = AEGfxTextureLoad("Assets/HP/HPBG.png");
 		//HPBG HUD init
 		InGame::Actor bgobj;
 		bgobj.Texture = HPTex;
@@ -73,7 +77,7 @@ namespace Manager
 			HPBG.push_back(bgobj);
 		}
 		//HP HUD init
-		HPBGTex = AEGfxTextureLoad("Assets/HP.png");
+		HPBGTex = AEGfxTextureLoad("Assets/HP/HP.png");
 		InGame::Actor hpobj;
 		hpobj.Texture = HPBGTex;
 		hpobj.Mesh = HPMesh;
@@ -99,13 +103,18 @@ namespace Manager
 		fireTimeBar.MovementSpeed = 0.000016f * (barEndX - barStartX) * global::DeltaTime;
 
 		Potion.position = { -(w / 2) + 100.f, h / 2 - 100.f };
-		Potion.size = { 90.f, 90.f };
+		Potion.size = { 100.f, 100.f };
 		Potion.Mesh = FillingMeshUpside(0);
-		Potion.Texture = AEGfxTextureLoad("Assets/Potion.png");
+		Potion.Texture = AEGfxTextureLoad("Assets/HP/Potion.png");
 		PotionBG.position = Potion.position;
-		PotionBG.size = { 100.f, 100.f };
+		PotionBG.size = Potion.size;
 		PotionBG.Mesh = Utils::CreateMesh();
-		PotionBG.Texture = AEGfxTextureLoad("Assets/PotionBG.png");
+		PotionBG.Texture = AEGfxTextureLoad("Assets/HP/PotionBG.png");
+		PotionFull.position = Potion.position;
+		PotionFull.size = Potion.size;
+		PotionFull.Mesh = Utils::CreateMesh();
+		PotionFull.Texture = AEGfxTextureLoad("Assets/HP/PotionFull.png");
+		
 		prevPotion = PC->PS->Potion;
 		prevFireRate = GUN->RoundPerSec;
 		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
@@ -116,6 +125,7 @@ namespace Manager
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
+		SFXManager.AddNewSFX(InGame::PLAYER, "Assets/SFX/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()
@@ -125,7 +135,7 @@ namespace Manager
 			HPBG.clear();
 			const float spacingX = 10.0f; // 가로 간격
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
-			const float Y = (global::ScreenHeight / 2) - 100.f;
+			const float Y = (global::ScreenHeight / 2) - 90.f;
 			InGame::Actor bgobj;
 			bgobj.Texture = HPTex;
 			bgobj.Mesh = HPMesh;
@@ -166,15 +176,111 @@ namespace Manager
 
 			switch (prevGunType)
 			{
-			case InGame::GunType::PISTOL:
+			case InGame::GunType::M1911:
 				fireTimeBar.size = { 7.f, 21.f }; // 1:3
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
 				break;
-			case InGame::GunType::RIFLE:
+			case InGame::GunType::CZ75:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::DESERTEGLE:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::MP5:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::MPX:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::VECTOR:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::BEOWOLF:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				break;
+			case InGame::GunType::P90:
+				fireTimeBar.size = { 7.f, 21.f }; // 1:3
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::MOSINNAGAT:
 				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
 				break;
-			case InGame::GunType::SHOTGUN:
+			case InGame::GunType::M24:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::RAILGUN:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::NITRO700:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::FNFAL:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M82BARRETT:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::AR15:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M110:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::BREN:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::MICROGUN:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M249:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::M2:
+				fireTimeBar.size = { 7.f, 29.4f }; // 1:4.2
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				break;
+			case InGame::GunType::SAWEDOFFSHOTGUN:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::DOUBLEBARREL:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::KS23:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::M1897:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::BENELLIM4:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::SAIGA12:
+				fireTimeBar.size = { 8.f, 21 }; // 8:21
+				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				break;
+			case InGame::GunType::AA12:
 				fireTimeBar.size = { 8.f, 21 }; // 8:21
 				fireTimeBar.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
 				break;
@@ -216,9 +322,6 @@ namespace Manager
 			PC->PS->Money += 1000000000;
 		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		//DEBUG
-
-		//DEBUG
 		if (PC->PS->Potion != prevPotion)
 		{
 			f32 fillPercent = static_cast<f32>(prevPotion) / 100.f;
@@ -239,6 +342,7 @@ namespace Manager
 	}
 	void HUDController::Draw()
 	{
+		static bool soundReduced{ false };
 		// Set color to red and reset to origin color
 		if (PC->Stats->HP > 0 && PC->Stats->HP < 2)
 		{
@@ -250,7 +354,18 @@ namespace Manager
 			AEGfxSetTransparency(1.0f);
 
 			AEGfxTextureSet(Vignetting.Texture, 0.f, 0.f);
-
+			for(auto group : SFXManager.sound_group)
+			{
+				switch (group.first)
+				{
+				case InGame::BGM:
+					AEAudioSetGroupVolume(group.second, SFXManager.BGMReduceVol);
+					break;
+				case InGame::SFX:
+					AEAudioSetGroupVolume(group.second, SFXManager.SFXReduceVol); 
+					break;
+				}
+			}
 			AEMtx33 scale;
 			AEMtx33Scale(&scale, Vignetting.size.x, Vignetting.size.y);
 			AEMtx33 tran;
@@ -270,6 +385,31 @@ namespace Manager
 			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
 
 			AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
+			if(!soundReduced)
+				SFXManager.Play("heart");
+			soundReduced = true;
+		}
+		else
+		{
+			if (soundReduced)
+			{
+				for (auto group : SFXManager.sound_group)
+				{
+					switch (group.first)
+					{
+					case InGame::BGM:
+						AEAudioSetGroupVolume(group.second, SFXManager.BGMOriginVol);
+						break;
+					case InGame::SFX:
+						AEAudioSetGroupVolume(group.second, SFXManager.SFXOriginVol);
+						break;
+					case InGame::PLAYER:
+						AEAudioStopGroup(SFXManager.sound_group[InGame::PLAYER]);
+						break;
+					}
+				}
+				soundReduced = false;
+			}
 		}
 		if (gameOverScreen.isGameOver)
 		{
@@ -284,6 +424,11 @@ namespace Manager
 			Utils::DrawObject(HP[i], false);
 		Utils::DrawObject(PotionBG, false);
 		Utils::DrawObject(Potion, false);
+		if (PC->PS->Potion >= 100)
+		{
+			Utils::DrawObject(PotionFull, false);
+		}
+
 		if (GUN->FireTimer < 1.f / GUN->RoundPerSec)
 		{
 			Utils::DrawObject(ChamberTimeBar, false);
@@ -294,7 +439,6 @@ namespace Manager
 		f32 textW, textH;
 		AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2), (Coin.position.y - Coin.size.y / 2.5f) / (h / 2), 0.3f, 1, 1, 1, 1);
-
 	}
 
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
@@ -464,6 +608,9 @@ namespace Manager
 
 		AEGfxMeshFree(PotionBG.Mesh);
 		AEGfxTextureUnload(PotionBG.Texture);
+
+		AEGfxMeshFree(PotionFull.Mesh);
+		AEGfxTextureUnload(PotionFull.Texture);
 
 		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 		{
