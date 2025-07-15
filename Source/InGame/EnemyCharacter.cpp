@@ -129,10 +129,11 @@ namespace InGame
 			{
 				BurnTimer = 0.f;
 				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage);
+				std::cout << -Stats->MaxHP * global::effectiveBurnDamage << std::endl;
 			}
 		}
 
-		if (!(Stats->StatusEffectTimer[STUN] > 0))
+		if (!(Stats->StatusEffectTimer[STUN] > 0 || global::isTestMod))
 		{
 			f32 len = AEVec2Distance(&global::PlayerLocation, &position);
 			f32 dx = position.x - global::PlayerLocation.x;

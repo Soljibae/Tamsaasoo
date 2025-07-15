@@ -57,6 +57,8 @@ namespace InGame
 
 		Utils::InitOffset(*this);
 		inventory.clear();
+
+		Manager::SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/potion.wav", "potion");
 	}
 	void PlayerCharacter::Update()
 	{
@@ -163,6 +165,7 @@ namespace InGame
 		if (global::KeyInput(AEVK_P)) PS->Potion += 100;
 		if (global::KeyInput(AEVK_Q))
 		{
+
 			if (Utils::GetItemCount(24))
 			{
 				if (PS->Potion >= 100)
@@ -177,6 +180,7 @@ namespace InGame
 				{
 					if (PS->Potion >= 100)
 					{
+						Manager::SFXManager.Play("potion");
 						adjustHealth(1);
 						PS->Potion -= 100;
 					}

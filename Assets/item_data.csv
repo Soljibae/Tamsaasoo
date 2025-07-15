@@ -84,7 +84,7 @@ Hourglass
 0
 Periodically slows nearby enemies. The area of effect is larger the lower your rate of fire is.
 //value1, value2, value3, cooldown, duration, procchance, range
-1.0, -1, -1, 5.0, 3.0, -1, 400.0
+1.0, -1, -1, 4.0, 3.0, -1, 700.0
 
 12
 //12 - 공격한 적의 현재 체력 / 최대 체력이 value1 이상이라면 최종 데미지가 value2 증가함.
@@ -156,7 +156,7 @@ Glut's Girdle
 0
 Every 25 seconds, a potion spawns in a random location. Picking it up restores potion gauge.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, 25.0, -1, -1, -1
+-1, -1, -1, 2.0, -1, -1, -1
 
 21
 //21 - 보스 공격시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 보스 체력의 value2 만큼 데미지

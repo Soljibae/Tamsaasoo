@@ -16,6 +16,7 @@ namespace global
 	extern AEGfxTexture* testTexture;
 	extern AEGfxVertexList* testMesh;
 	extern bool isBossBattleStarted;
+	extern bool isTestMod;
 	extern s32 RecentlyDeadEnemyCount;
 	extern s32 CurrentStageNumber;
 

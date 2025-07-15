@@ -368,7 +368,7 @@ namespace InGame
 	}
 	//============================================= ID_9
 	Item_9::Item_9(const Item_9& other)
-		: SkillEffectItem(other), isStarted(other.isStarted), isReady(other.isReady)
+		: SkillEffectItem(other), isStarted(other.isStarted), isReady(other.isReady), imageSize(other.imageSize)
 	{
 	}
 	void Item_9::Init(const Manager::ItemData& data)
@@ -387,7 +387,8 @@ namespace InGame
 		AEVec2Set(&effectPosition, 0.f, 0.f);
 		FrameTime = 0.1f;
 		AEVec2Set(&AnimationOffset, 0.f, 0.f);
-		AEVec2Set(&effectSize, data.range, data.range);
+		AEVec2Set(&imageSize, data.range, data.range);
+		AEVec2Scale(&effectSize, &imageSize, 1.8f);
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
 		effectRow = 4;
@@ -465,19 +466,19 @@ namespace InGame
 					{
 						for (size_t i = 0; i < GS->ECs.size(); i++)
 						{
-							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
+							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, imageSize.x / 2))
 							{
-								GS->ECs[i]->Stats->StatusEffectTimer[BURN] = effectTime;
-								
-								if (global::isBossBattleStarted)
-								{
-									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats->MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f) * 0.1f);
-								}
-								else
-								{
-									GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats->MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f));
-								}
+								GS->ECs[i]->Stats->StatusEffectTimer[BURN] = effectTime;				
+								GS->ECs[i]->adjustHealth(-GS->ECs[i]->Stats->MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f));
 							}
+						}
+					}
+					if (GS->Boss != nullptr)
+					{
+						if (Utils::CheckCollision(*GS->Boss, effectPosition, imageSize.x / 2))
+						{
+							GS->Boss->Stats->StatusEffectTimer[BURN] = effectTime;
+							GS->Boss->adjustHealth(-GS->Boss->Stats->MaxHP * value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1f) * 0.1f);
 						}
 					}
 				}
@@ -534,21 +535,24 @@ namespace InGame
 		FireTimer = 0.f;
 		FrameTime = 0.1f;
 		AEVec2Set(&effectSize, 0.f, 0.f);
+		AEVec2Set(&imageSize, 0.f, 0.f);
 		additionalEffectSizeRatio = 1.f;
 		AEVec2Set(&AnimationOffset, 0.f, 0.f);
 		AEVec2Set(&baseEffectSize, data.range, data.range);
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
-		effectRow = 1;
-		effectColumn = 9;
+		effectRow = 4;
+		effectColumn = 5;
 		tag = SLOTH;
 		effectTime = data.duration;
-		MaxAnimationCount = 9;
+		MaxAnimationCount = 19;
 		value1 = data.value1;
 		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/burst.wav", "burst");
 	}
 	void Item_11::Use(PlayerCharacter* owner)
 	{
@@ -558,7 +562,8 @@ namespace InGame
 	{
 		additionalEffectSizeRatio = value1 * (owner->Stats->FireRate * owner->GunData->GuntypeFireRateRatio) / owner->PS->effectiveFireRate;
 	
-		AEVec2Scale(&effectSize, &baseEffectSize, additionalEffectSizeRatio);
+		AEVec2Scale(&imageSize, &baseEffectSize, additionalEffectSizeRatio);
+		AEVec2Scale(&effectSize, &imageSize, 2.f);
 
 		if (!isStarted)
 		{
@@ -576,6 +581,8 @@ namespace InGame
 			isReady = false;
 			isStarted = true;
 
+			Manager::SFXManager.Play("burst");
+
 			if (Manager::gm.currStateREF)
 			{
 				Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
@@ -585,9 +592,9 @@ namespace InGame
 					{
 						for (size_t i = 0; i < GS->ECs.size(); i++)
 						{
-							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
+							if (Utils::CheckCollision(*GS->ECs[i], effectPosition, imageSize.x / 2))
 							{
-								GS->ECs[i]->Stats->StatusEffectTimer[STUN] = effectTime;
+								GS->ECs[i]->Stats->StatusEffectTimer[SLOW] = effectTime;
 							}
 						}
 					}
@@ -611,7 +618,7 @@ namespace InGame
 				{
 					if (GS->ITRM)
 					{
-						Utils::DrawObject(*this, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
+						Utils::DrawObject(*this, GS->ITRM->item11Texture, GS->ITRM->item11Mesh);
 					}
 				}
 			}
@@ -739,6 +746,13 @@ namespace InGame
 							{
 								GS->ECs[i]->adjustHealth(-owner->PS->effectiveDamage);
 							}
+						}
+					}
+					if (GS->Boss != nullptr)
+					{
+						if (Utils::CheckCollision(*GS->Boss, effectPosition, effectSize.x / 2))
+						{
+							GS->Boss->adjustHealth(-owner->PS->effectiveDamage);
 						}
 					}
 				}
@@ -917,6 +931,7 @@ namespace InGame
 
 		if (currKillCount >= targetKillCount * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f))
 		{
+			Manager::SFXManager.Play("potion");
 			currKillCount -= static_cast<s32>(targetKillCount * (1.f - (Utils::GetItemCount(id) - 1) * 0.05f));
 			owner->Stats->HP += value2;
 		}
@@ -1038,6 +1053,8 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/pour.wav", "pour");
 	}
 	void Item_20::Use(PlayerCharacter* owner)
 	{
@@ -1059,6 +1076,7 @@ namespace InGame
 
 			if (potionPtr && Utils::CheckCollision(*owner, potionPtr->position, potionPtr->CollisionRadius))
 			{
+				Manager::SFXManager.Play("pour");
 				owner->PS->Potion = 100;
 				it = Potions.erase(it);
 			}
@@ -1075,7 +1093,14 @@ namespace InGame
 	{
 		for (const std::shared_ptr<Actor>& Potion : Potions)
 		{
-			Utils::DrawTest(Potion->position.x, Potion->position.y, Potion->size.x, Potion->size.y);
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObject(Potion->position, { 0,0 }, Potion->size, GS->ITRM->item20Texture, GS->ITRM->item20Mesh);
+				}
+			}
 		}
 	}
 	std::shared_ptr<Item> Item_20::Clone() const
@@ -1375,7 +1400,7 @@ namespace InGame
 	}
 	//============================================= ID_27
 	Item_27::Item_27(const Item_27& other)
-		: SkillEffectItem(other), isReady{ other.isReady }, isStarted{ other.isStarted }
+		: SkillEffectItem(other), isReady{ other.isReady }, isStarted{ other.isStarted }, imageSize(other.imageSize)
 	{
 	}
 	void Item_27::Init(const Manager::ItemData& data)
@@ -1384,22 +1409,23 @@ namespace InGame
 		name = data.name;
 		description = data.description;
 		AEVec2Set(&iconPosition, 0.f, 0.f);
-		AEVec2Set(&effectSize, data.range, data.range);
+		AEVec2Set(&imageSize, data.range, data.range);
+		AEVec2Scale(&effectSize, &imageSize, 2.5f);
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 		isReady = true;
 		isStarted = false;
 		CoolDown = 0.1f;
 		FireTimer = 0.f;
-		FrameTime = 0.1f;
+		FrameTime = 0.05f;
 		AEVec2Set(&AnimationOffset, 0.f, 0.f);
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
-		effectRow = 1;
-		effectColumn = 9;
+		effectRow = 5;
+		effectColumn = 6;
 		procChance = data.procChance;
 		effectTime = data.duration;
-		MaxAnimationCount = 9;
+		MaxAnimationCount = 30;
 		tag = LUST;
 		grade = data.grade;
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/fear.mp3", "fear");
@@ -1427,6 +1453,8 @@ namespace InGame
 		{
 			if (num <= effectiveProcChance)
 			{
+				Manager::SFXManager.Play("fear");
+
 				effectPosition = global::RecentlyDeadEnemyPosition;
 				isReady = false;
 				isStarted = true;
@@ -1440,10 +1468,9 @@ namespace InGame
 						{
 							for (size_t i = 0; i < GS->ECs.size(); i++)
 							{
-								if (Utils::CheckCollision(*GS->ECs[i], effectPosition, effectSize.x / 2))
+								if (Utils::CheckCollision(*GS->ECs[i], effectPosition, imageSize.x / 2))
 								{
 									GS->ECs[i]->Stats->StatusEffectTimer[FEAR] = effectTime;
-									Manager::SFXManager.Play("fear");
 								}
 							}
 						}
@@ -1472,7 +1499,7 @@ namespace InGame
 				{
 					if (GS->ITRM)
 					{
-						Utils::DrawObject(*this, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
+						Utils::DrawObject(*this, GS->ITRM->item27Texture, GS->ITRM->item27Mesh);
 					}
 				}
 			}
@@ -1568,7 +1595,7 @@ namespace InGame
 	}
 	//============================================= ID_30
 	Item_30::Item_30(const Item_30& other)
-		: Item(other)
+		: SkillEffectItem(other)
 	{
 	}
 	void Item_30::Init(const Manager::ItemData& data)
@@ -1783,6 +1810,12 @@ namespace InGame
 					AEVec2Set(&attackDir, closestEnemy->position.x - effectPosition.x, closestEnemy->position.y - effectPosition.y);
 					AEVec2Normalize(&attackDir, &attackDir);
 				}
+				else if (GS->Boss != nullptr)
+				{
+					closestEnemy = GS->Boss;
+					AEVec2Set(&attackDir, closestEnemy->position.x - effectPosition.x, closestEnemy->position.y - effectPosition.y);
+					AEVec2Normalize(&attackDir, &attackDir);
+				}
 			}
 		}
 
@@ -1845,7 +1878,8 @@ namespace InGame
 		distance = 200.f;
 		FireTimer = 0.f;
 		AEVec2Set(&dir, 0.f, 1.f);
-		AEVec2Set(&effectSize, 96.f, 96.f);
+		AEVec2Set(&imageSize, 96.f, 96.f);
+		AEVec2Scale(&effectSize, &imageSize, 2.f);
 		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
@@ -1906,6 +1940,13 @@ namespace InGame
 							{
 								GS->ECs[i]->adjustHealth(-effectiveDamage);
 							}
+						}
+					}
+					if (GS->Boss != nullptr)
+					{
+						if (Utils::CheckCollision(*GS->Boss, effectPosition, effectSize.x / 2))
+						{
+							GS->Boss->adjustHealth(-effectiveDamage);
 						}
 					}
 					isReady = false;

@@ -211,6 +211,7 @@ namespace InGame
 
 		bool isStarted;
 		bool isReady;
+		AEVec2 imageSize;
 
 		virtual void Init(const Manager::ItemData& data) override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -246,6 +247,7 @@ namespace InGame
 		bool isReady;
 		AEVec2 baseEffectSize;
 		f32 additionalEffectSizeRatio;
+		AEVec2 imageSize;
 
 		virtual void Init(const Manager::ItemData& data) override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -508,6 +510,7 @@ namespace InGame
 
 		bool isReady;
 		bool isStarted;
+		AEVec2 imageSize;
 
 		virtual void Init(const Manager::ItemData& data) override;
 		virtual void Use(class PlayerCharacter* owner) override;
@@ -548,7 +551,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_30
-	class Item_30 : public Item // to do change class name
+	class Item_30 : public SkillEffectItem // to do change class name
 	{
 	public:
 		Item_30() = default;
@@ -627,6 +630,7 @@ namespace InGame
 		Item_33(const Item_33& other);
 
 		AEVec2 dir;
+		AEVec2 imageSize;
 		f32 angle;
 		f32 angleSpeed;
 		f32 effectiveAngleSpeed;
