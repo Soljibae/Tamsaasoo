@@ -206,6 +206,7 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/revive.wav", "revive");
 	}
 	void Item_4::Use(PlayerCharacter* owner)
 	{	
@@ -697,6 +698,8 @@ namespace InGame
 		MaxAnimationCount = 9;
 		tag = SLOTH;
 		grade = data.grade;
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/explosion.wav", "explosion");
 	}
 	void Item_13::Use(PlayerCharacter* owner)
 	{
@@ -729,6 +732,8 @@ namespace InGame
 
 		if (isReady && global::IsEnemyRecentlyDied)
 		{
+			Manager::SFXManager.Play("explosion");
+
 			effectPosition = global::RecentlyDeadEnemyPosition;
 			isReady = false;
 			isStarted = true;
@@ -1185,6 +1190,8 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/coin_drop.mp3", "coin_drop");
 	}
 	void Item_22::Use(PlayerCharacter* owner)
 	{
@@ -1219,6 +1226,7 @@ namespace InGame
 		{
 			if ((InPC->PS->Money >= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05)) && !InPC->IsPlayerInvincible())
 			{
+				InPC->bisCoinDroped = true;
 				InPC->PS->Money -= value1 * (1.f - (Utils::GetItemCount(id) - 1) * 0.05);
 				InPC->SetPlayerInvincible();
 
@@ -1282,6 +1290,8 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/coin_gain.wav", "coin_gain");
 	}
 	void Item_24::Use(PlayerCharacter* owner)
 	{
@@ -1348,7 +1358,8 @@ namespace InGame
 
 		if (InPC)
 		{
-			
+
+			InPC->bisCoinDroped = true;
 			InPC->PS->Money -= InPC->PS->Money * value2 * (1.f - (Utils::GetItemCount(id) - 1) * 0.1);
 	
 		}
@@ -1595,7 +1606,7 @@ namespace InGame
 	}
 	//============================================= ID_30
 	Item_30::Item_30(const Item_30& other)
-		: SkillEffectItem(other)
+		: SkillEffectItem(other), effects(other.effects)
 	{
 	}
 	void Item_30::Init(const Manager::ItemData& data)
@@ -1607,18 +1618,56 @@ namespace InGame
 		AEVec2Set(&iconPosition, 0.f, 0.f);
 		tag = LUST;
 		grade = data.grade;
+		AEVec2Set(&iconPosition, 0.f, 0.f);
+		AEVec2Set(&effectSize, 50.f, 50.f);
+		FrameTime = 0.1f;
+		AEVec2Set(&AnimationOffset, 0.f, 0.f);
+		AnimationCount = 0;
+		AnimationTimer = 0.f;
+		effectRow = 1;
+		effectColumn = 9;
+		procChance = data.procChance;
+		effectTime = data.duration;
+		MaxAnimationCount = 9;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/execute.ogg", "execute");
 	}
 	void Item_30::Use(PlayerCharacter* owner)
 	{
+		for (const std::shared_ptr<Actor>& effect : effects)
+		{
+			Utils::UpdateOffset(*effect);
+		}
 	}
 	void Item_30::Update(PlayerCharacter* owner)
 	{
 	}
 	void Item_30::Draw()
 	{
+		for (const std::shared_ptr<Actor>& effect : effects)
+		{
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				if (GS->ITRM)
+				{
+					Utils::DrawObject(effect->position, effect->offset, effect->size, GS->ITRM->item30Texture, GS->ITRM->item30Mesh);
+				}
+			}
+		}
+
+		for (int i = effects.size() - 1; i >= 0; --i)
+		{
+			const std::shared_ptr<Actor>& effect = effects[i];
+
+			if (effect->AnimationCount == effect->MaxAnimationCount[EAnimationState::IDLE] - 1)
+			{
+				effects.erase(effects.begin() + i);
+			}
+		}
 	}
 	std::shared_ptr<Item> Item_30::Clone() const
 	{
@@ -1628,8 +1677,21 @@ namespace InGame
 	{
 		if (!isTargetBoss)
 		{
-			if (target->Stats->HP / target->Stats->MaxHP <= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats->HP > 0.f)
+			if (target->Stats->HP > 0.f && target->Stats->HP / target->Stats->MaxHP <= value1 * (1.f + (Utils::GetItemCount(id) - 1) * 0.1) && target->Stats->HP > 0.f)
 			{
+				Manager::SFXManager.Play("execute");
+
+				std::shared_ptr<Actor> newEffect = std::make_shared<Actor>();
+				AEVec2Scale(&newEffect->size, &target->size, 2.f);
+				newEffect->position = target->position;
+				newEffect->row = effectRow;
+				newEffect->column = effectColumn;
+				newEffect->AnimationCount = AnimationCount;
+				newEffect->FrameTime = FrameTime;
+				newEffect->MaxAnimationCount[EAnimationState::IDLE] = MaxAnimationCount;
+
+				effects.push_back(newEffect);
+
 				target->adjustHealth(-99999999.f);
 			}
 		}

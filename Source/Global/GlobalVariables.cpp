@@ -52,6 +52,6 @@ namespace global
 
 	std::array<f32, 3> StageExpGainedRatio = { 2.f , 3.2f, 4.5f };
 	std::array<f32, 3> StageGoldGainedRatio = { 2.f , 3.2f, 4.5f };
-	std::array<f32, 3> StageRerollCostRatio = { 2.f , 3.0f, 4.0f };
+	std::array<f32, 3> StageRerollCostRatio = { 1.4f , 2.5f, 4.0f };
 	//==================================
 }

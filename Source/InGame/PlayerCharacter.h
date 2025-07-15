@@ -39,6 +39,7 @@ namespace InGame
 		void SetPlayerInvincible();
 
 		bool bIsDashing = false;
+		bool bisCoinDroped = false;
 	protected:
 		AEVec2 MouseDirection;
 
