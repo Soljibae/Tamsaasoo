@@ -87,6 +87,7 @@ void InGame::Projectile::Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Dama
 	TimeAcc = 0.f;
 	AEVec2Set(&ExplosionPos, 0.f, 0.f);
 	AEVec2Set(&ExplosionSize, 300.f, 300.f);
+	Texture = PlayerTexture;
 }
 
 void InGame::Projectile::Update()
@@ -210,6 +211,8 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 
 void InGame::Projectile::Explode(class EnemyCharacter* target)
 {
+	Manager::SFXManager.Play("explosion");
+
 	isExplosionStarted = true;
 
 	AEVec2Set(&ExplosionPos, target->position.x, target->position.y);

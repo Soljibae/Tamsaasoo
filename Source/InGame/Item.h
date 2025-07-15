@@ -557,6 +557,8 @@ namespace InGame
 		Item_30() = default;
 		Item_30(const Item_30& other);
 
+		std::vector<std::shared_ptr<Actor>> effects;
+
 		virtual void Init(const Manager::ItemData& data) override;
 		virtual void Use(class PlayerCharacter* owner) override;
 		virtual void Update(class PlayerCharacter* owner) override;
