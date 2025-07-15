@@ -643,7 +643,7 @@ namespace InGame
 						AEVec2 WarningDraw = { 3200.f, 30.f };
 						for (AEVec2 dir : directions)
 						{
-							GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dir,false, this);
+							GS->VFXManager.AddWarningVFX(VFXType::WarningSquare, position, WarningDraw, dir,false, this, 1.f);
 						}
 						bIsWarned = true;
 					}

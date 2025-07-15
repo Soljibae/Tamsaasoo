@@ -70,7 +70,6 @@ namespace InGame
 				if (dist == 0.f)
 				{
 					continue;
-					//a
 				}
 				else if (dist < radius)
 				{

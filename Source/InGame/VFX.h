@@ -41,9 +41,8 @@ namespace InGame
 		virtual void Destroy() override;
 		void AddNewVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, f32 Duration);
 		void AddWarningVFX(VFXType NewVFXType, AEVec2 InSize,f32 InDuration, AEVec2 InTargetPosition, bool InbIsTracking, Actor* InOwner);
-		void AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, bool InbIsTracking, Actor* InOwner);
+		void AddWarningVFX(VFXType NewVFXType, AEVec2 InPosition, AEVec2 InSize, AEVec2 InDirection, bool InbIsTracking, Actor* InOwner, float Time);
 		std::map<VFXType, s32> MaxAnimationCount;
 		std::list<VFXData*> DrawItemList;
 	};
 }
-//a
