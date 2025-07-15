@@ -18,6 +18,18 @@ namespace Manager
 		AEGfxTexture* item9Texture;
 		AEGfxVertexList* item9Mesh;
 
+		AEGfxTexture* item11Texture;
+		AEGfxVertexList* item11Mesh;
+
+		AEGfxTexture* item20Texture;
+		AEGfxVertexList* item20Mesh;
+
+		AEGfxTexture* item27Texture;
+		AEGfxVertexList* item27Mesh;
+
+		AEGfxTexture* item30Texture;
+		AEGfxVertexList* item30Mesh;
+
 		AEGfxTexture* item31minionTexture;
 		AEGfxVertexList* item31minionMesh;
 

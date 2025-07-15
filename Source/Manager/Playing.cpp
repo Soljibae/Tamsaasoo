@@ -163,11 +163,11 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[9]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
-				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[32]->Clone());
 			}
 			if (global::KeyInput(AEVK_3))
 			{
@@ -175,11 +175,11 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_4))
 			{
-				PC->AddItemToInventory(ITDB->itemList[13]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[9]->Clone());
 			}
 			if (global::KeyInput(AEVK_5))
 			{
-				PC->AddItemToInventory(ITDB->itemList[15]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[6]->Clone());
 			}
 			if (global::KeyInput(AEVK_6))
 			{
@@ -192,9 +192,9 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_9))
 			{
-				if (debugMod)
+				if (global::isTestMod)
 				{
-					debugMod = false;
+					global::isTestMod = false;
 					for (InGame::EnemyCharacter* EC : ECs)
 					{
 						EC->bIsPandingKill = true;
@@ -202,7 +202,7 @@ namespace Manager
 				}
 				else
 				{
-					debugMod = true;
+					global::isTestMod = true;
 					for (InGame::EnemyCharacter* EC : ECs)
 					{
 						EC->bIsPandingKill = true;
@@ -217,7 +217,7 @@ namespace Manager
 			}
 			if (!gameOverScreen.isGameOver)
 			{
-				if (WaveTimer > 3.f && !debugMod)
+				if (WaveTimer > 3.f && !global::isTestMod)
 				{
 					WaveCount++;
 					WaveTimer = 0;
@@ -235,7 +235,7 @@ namespace Manager
 			PC->Update();
 			global::RecentlyDeadEnemyCount = 0;
 
-			if (debugMod && ECs.size() == 0)
+			if (global::isTestMod && ECs.size() == 0)
 			{
 				InGame::EnemyCharacter* EC = ECPool.back();
 				ECPool.pop_back();
@@ -245,7 +245,7 @@ namespace Manager
 				ECs[0]->Stats->HP = ECs[0]->Stats->MaxHP;
 			}
 
-			if (debugMod)
+			if (global::isTestMod)
 			{
 				static f32 prev_hp = ECs[0]->Stats->HP;
 				f32 curr_hp = ECs[0]->Stats->HP;
@@ -282,7 +282,6 @@ namespace Manager
 			}
 			for (InGame::EnemyCharacter* EC : ECs)
 			{
-				if(!debugMod)
 					EC->Update();
 			}
 			for (InGame::Projectile*& EP : EPs)
@@ -473,7 +472,7 @@ namespace Manager
 						}
 						AEVec2 DrawSize;
 						AEVec2Set(&DrawSize, EC->explosionRadius * 2, EC->explosionRadius * 2);
-						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 3.f);
+						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 1.f);
 						SFXManager.Play("bomber");
 						break;
 					case InGame::EnemyType::ZIGZAG:
@@ -995,15 +994,24 @@ namespace Manager
 
 			SpawnPos.x = PC->position.x + distance * std::cos(theta);
 			SpawnPos.y = PC->position.y + distance * std::sin(theta);
-			if (SpawnPos.x < global::worldMax.x &&
-				SpawnPos.x > global::worldMin.x &&
-				SpawnPos.y < global::worldMax.y &&
-				SpawnPos.y > global::worldMin.y &&
-				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 ||
-					SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2)
-				)
+			if ((CurrentStageType == InGame::StageType::LAND|| CurrentStageType == InGame::StageType::HEAVEN)&&
+				(SpawnPos.x < global::worldMax.x && SpawnPos.x > global::worldMin.x && SpawnPos.y < global::worldMax.y && SpawnPos.y > global::worldMin.y )&&
+				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 || SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2))
 			{
 				break;
+			}
+			else if ((CurrentStageType == InGame::StageType::TOWER)&&
+				(SpawnPos.x < global::worldMax.x && SpawnPos.x > global::worldMin.x && SpawnPos.y < global::worldMax.y && SpawnPos.y > global::worldMin.y) &&
+				(SpawnPos.x < PC->position.x - global::ScreenWidth / 2 || SpawnPos.x > PC->position.x + global::ScreenWidth / 2 || SpawnPos.y < PC->position.y - global::ScreenHeight / 2 || SpawnPos.y > PC->position.y + global::ScreenHeight / 2)
+				)
+			{
+				float EllipseA = (global::worldMax.x - global::worldMin.x) / 2;
+				float EllipseB = (global::worldMax.y - global::worldMin.y) / 2;
+				float value = (SpawnPos.x * SpawnPos.x) / (EllipseA * EllipseA) + (SpawnPos.y * SpawnPos.y) / (EllipseB * EllipseB);
+				if (value <= 1.0f)
+				{
+					break;
+				}
 			}
 		}
 		return SpawnPos;
@@ -1018,4 +1026,4 @@ namespace Manager
 		AEGfxGetPrintSize(pFont, timer.c_str(), textDrawSize, &lw, &lh);
 		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, 400.f / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
-}//네~~ 안녕하세요 헌이입니다! 장성현씨!! 정말 그러시면 안되는거죠~~
+}

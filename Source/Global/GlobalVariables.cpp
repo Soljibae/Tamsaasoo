@@ -12,6 +12,7 @@ namespace global
 	AEGfxTexture* testTexture = nullptr;
 	AEGfxVertexList* testMesh = nullptr;
 	bool isBossBattleStarted = false;
+	bool isTestMod = false;
 	s32 RecentlyDeadEnemyCount = 0;
 	s32 CurrentStageNumber = 0;
 	f32 item12TriggerRatio;

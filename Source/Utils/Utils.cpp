@@ -848,4 +848,3 @@ void Utils::TestDestroy()
 	AEGfxTextureUnload(global::testTexture);
 	Utils::DestroyMesh(global::testMesh);
 }
-//

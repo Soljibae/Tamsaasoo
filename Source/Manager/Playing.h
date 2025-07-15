@@ -78,7 +78,6 @@ namespace Manager
 		bool bIsJumping = false;
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
-		bool debugMod = false;
 
 		s8 pFont;
 	};
