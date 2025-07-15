@@ -39,7 +39,7 @@ namespace Manager
 		SFXManager.Play("doom");
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage2();
+			CurrentStage = new InGame::Stage1();
 		}
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
