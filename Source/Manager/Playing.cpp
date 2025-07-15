@@ -27,10 +27,15 @@ namespace Manager
 		Fader.Alpha = 1.f;
 
 		SFXManager.Init();
-		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/doom.mp3", "doom");
+		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.mp3", "doom");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/waveclear.wav", "waveclear");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/slime.wav", "slime");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/skeleton.mp3", "skeleton");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/slime.wav", "slime");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/skeleton.mp3", "skeleton");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/tanker.wav", "tanker");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/bomber.wav", "bomber");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/dasherDead.wav", "dasherDead");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/sniper.wav", "sniper");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/zigzag.wav", "zigzag");
 		SFXManager.Play("doom");
 		if (CurrentStage == nullptr)
 		{
@@ -103,7 +108,10 @@ namespace Manager
 			return;
 		}
 		if (Fader.Alpha > 0.f)
+		{
 			Fader.Alpha -= global::DeltaTime * 2.f;
+			return;
+		}
 		else
 			Fader.Alpha = 0.f;
 
@@ -155,7 +163,7 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[32]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[9]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
@@ -216,7 +224,7 @@ namespace Manager
 					if (WaveCount > maxWaveCount)
 					{
 						InitBossFight();
-						StageTimer = 3.f * maxWaveCount + 2.f;
+						StageTimer = 3.f * maxWaveCount + global::DeltaTime;
 					}
 					else
 					{
@@ -434,6 +442,18 @@ namespace Manager
 					float distToPlayer = AEVec2Distance(&EC->position, &global::PlayerLocation);
 					switch (EC->Type)
 					{
+					case InGame::EnemyType::MINION:
+						SFXManager.Play("slime");
+						break;
+					case InGame::EnemyType::ARCHER:
+						SFXManager.Play("skeleton");
+						break;
+					case InGame::EnemyType::DASHER:
+						SFXManager.Play("dasherDead");
+						break;
+					case InGame::EnemyType::TANKER:
+						SFXManager.Play("tanker");
+						break;
 					case InGame::EnemyType::BOMBER:
 						if (distToPlayer <= EC->explosionRadius)
 						{
@@ -454,12 +474,22 @@ namespace Manager
 						AEVec2 DrawSize;
 						AEVec2Set(&DrawSize, EC->explosionRadius * 2, EC->explosionRadius * 2);
 						VFXManager.AddNewVFX(InGame::VFXType::Explosion, EC->position, DrawSize, 3.f);
+						SFXManager.Play("bomber");
 						break;
-					case InGame::EnemyType::MINION:
-						SFXManager.Play("slime");
+					case InGame::EnemyType::ZIGZAG:
+						SFXManager.Play("zigzag");
 						break;
-					case InGame::EnemyType::ARCHER:
-						SFXManager.Play("skeleton");
+					case InGame::EnemyType::ORBITER:
+
+						break;
+					case InGame::EnemyType::SNIPER:
+						SFXManager.Play("sniper");
+						break;
+					case InGame::EnemyType::BURNER:
+
+						break;
+					case InGame::EnemyType::HOLER:
+
 						break;
 					}
 					global::IsEnemyRecentlyDied = true;
@@ -949,6 +979,7 @@ namespace Manager
 				BG->Texture = AEGfxTextureLoad(CurrentStage->MapTextureAddress.c_str());
 			}
 		}
+		CAM->Init(*PC);
 	}
 	AEVec2 Playing::GetSpawnLocation()
 	{
@@ -982,9 +1013,9 @@ namespace Manager
 		f32 halfH = global::ScreenHeight / 2.f;
 		s32 min = static_cast<s32>(time) / 60;
 		s32 sec = static_cast<s32>(time) % 60;
-		std::string timer{ std::to_string(min) + ":" + std::to_string(sec) };
+		std::string timer{ std::to_string(min) + ":" + (sec<10 ? "0"+std::to_string(sec) : std::to_string(sec))};
 		f32 lw, lh;
 		AEGfxGetPrintSize(pFont, timer.c_str(), textDrawSize, &lw, &lh);
 		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, 400.f / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
-}
+}//네~~ 안녕하세요 헌이입니다! 장성현씨!! 정말 그러시면 안되는거죠~~
