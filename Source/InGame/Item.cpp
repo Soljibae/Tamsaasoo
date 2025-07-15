@@ -390,13 +390,15 @@ namespace InGame
 		AEVec2Set(&effectSize, data.range, data.range);
 		AnimationCount = 0;
 		AnimationTimer = 0.f;
-		effectRow = 1;
-		effectColumn = 9;
-		MaxAnimationCount = 9;
+		effectRow = 4;
+		effectColumn = 4;
+		MaxAnimationCount = 11;
 		grade = data.grade;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/burn.flac", "burn");
 	}
 	void Item_9::Use(PlayerCharacter* owner)
 	{
@@ -429,7 +431,7 @@ namespace InGame
 				{
 					if (GS->ITRM)
 					{
-						Utils::DrawObject(*this, GS->ITRM->explosionTexture, GS->ITRM->explosionMesh);
+						Utils::DrawObject(*this, GS->ITRM->item9Texture, GS->ITRM->item9Mesh);
 					}
 				}
 			}
@@ -451,6 +453,8 @@ namespace InGame
 		{
 			isReady = false;
 			
+			Manager::SFXManager.Play("burn");
+
 			isStarted = true;
 			if (Manager::gm.currStateREF)
 			{
@@ -1055,7 +1059,7 @@ namespace InGame
 
 			if (potionPtr && Utils::CheckCollision(*owner, potionPtr->position, potionPtr->CollisionRadius))
 			{
-				owner->adjustHealth(1);
+				owner->PS->Potion = 100;
 				it = Potions.erase(it);
 			}
 			else
