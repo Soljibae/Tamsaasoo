@@ -206,7 +206,7 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/revive.wav", "revive");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/revive.wav", "revive");
 	}
 	void Item_4::Use(PlayerCharacter* owner)
 	{	
@@ -280,7 +280,7 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/fire.wav", "fire");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/fire.wav", "fire");
 	}
 	void Item_6::Use(PlayerCharacter* owner)
 	{
@@ -400,7 +400,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/burn.flac", "burn");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/burn.flac", "burn");
 	}
 	void Item_9::Use(PlayerCharacter* owner)
 	{
@@ -553,7 +553,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/burst.wav", "burst");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/burst.wav", "burst");
 	}
 	void Item_11::Use(PlayerCharacter* owner)
 	{
@@ -699,7 +699,7 @@ namespace InGame
 		tag = SLOTH;
 		grade = data.grade;
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/explosion.wav", "explosion");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/explosion.wav", "explosion");
 	}
 	void Item_13::Use(PlayerCharacter* owner)
 	{
@@ -1059,7 +1059,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/pour.wav", "pour");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/pour.wav", "pour");
 	}
 	void Item_20::Use(PlayerCharacter* owner)
 	{
@@ -1194,7 +1194,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/coin_drop.mp3", "coin_drop");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/coin_drop.mp3", "coin_drop");
 	}
 	void Item_22::Use(PlayerCharacter* owner)
 	{
@@ -1295,7 +1295,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/coin_gain.wav", "coin_gain");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/coin_gain.wav", "coin_gain");
 	}
 	void Item_24::Use(PlayerCharacter* owner)
 	{
@@ -1387,7 +1387,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/stun.ogg", "stun");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/stun.ogg", "stun");
 	}
 	void Item_26::Use(PlayerCharacter* owner)
 	{
@@ -1443,7 +1443,7 @@ namespace InGame
 		MaxAnimationCount = 30;
 		tag = LUST;
 		grade = data.grade;
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/fear.mp3", "fear");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/fear.mp3", "fear");
 	}
 	void Item_27::Use(PlayerCharacter* owner)
 	{
@@ -1639,7 +1639,7 @@ namespace InGame
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/execute.ogg", "execute");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/execute.ogg", "execute");
 	}
 	void Item_30::Use(PlayerCharacter* owner)
 	{
@@ -1887,6 +1887,7 @@ namespace InGame
 			}
 		}
 
+		
 		FireTimer += global::DeltaTime;
 		if (FireTimer >= 1.f / effectiveFireRate && distanceMin)
 		{
@@ -2422,7 +2423,7 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/reload.WAV", "reload");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Effect/reload.WAV", "reload");
 	}
 	void Item_45::Use(PlayerCharacter* owner)
 	{

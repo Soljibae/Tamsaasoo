@@ -133,7 +133,7 @@ namespace Manager
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
-		SFXManager.AddNewSFX(InGame::PLAYER, "Assets/SFX/HeartBeat.wav", "heart");
+		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()

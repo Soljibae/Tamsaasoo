@@ -28,6 +28,13 @@ namespace Manager
 
 		struct Cursor : public InGame::Actor
 		{
+			void Init() override
+			{
+				position = { 0,0 };
+				size = { 30.f, 30.f };
+				Mesh = Utils::CreateMesh();
+				Texture = AEGfxTextureLoad("Assets/UI/cursor.png");
+			}
 			void Update() override
 			{
 				AEInputGetCursorPosition(&mouseX, &mouseY);
