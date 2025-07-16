@@ -184,8 +184,14 @@ namespace InGame
 			}
 		}
 		/*----- Heal Potion -----*/
-
-<<<<<<< HEAD
+		if (PS->ExpCount >= PS->TargetExp)
+		{
+			PS->ExpCount -= PS->TargetExp;
+			PS->TargetExp *= 1.35f;
+			PS->Level++;
+			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
+			Manager::pickPanel.Show();
+		}
 		for (auto it = afterImages.begin(); it != afterImages.end(); )
 		{
 			it->timer -= global::DeltaTime;
@@ -199,15 +205,6 @@ namespace InGame
 			{
 				++it;
 			}
-=======
-		if (PS->ExpCount >= PS->TargetExp)
-		{
-			PS->ExpCount -= PS->TargetExp;
-			PS->TargetExp *= 1.35f;
-			PS->Level++;
-			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
-			Manager::pickPanel.Show();
->>>>>>> 6aa83be59326985439c4f7f498e01dbfd1437fa7
 		}
 	}
 	void PlayerCharacter::Draw()
