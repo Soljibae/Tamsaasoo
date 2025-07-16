@@ -184,6 +184,15 @@ namespace InGame
 			}
 		}
 		/*----- Heal Potion -----*/
+
+		if (PS->ExpCount >= PS->TargetExp)
+		{
+			PS->ExpCount -= PS->TargetExp;
+			PS->TargetExp *= 1.35f;
+			PS->Level++;
+			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
+			Manager::pickPanel.Show();
+		}
 	}
 	void PlayerCharacter::Draw()
 	{
@@ -295,14 +304,6 @@ namespace InGame
 	{
 		PS->Money += 1.f * global::StageGoldGainedRatio[global::CurrentStageNumber - 1] * global::additionalGoldGainedRatio;
 		PS->ExpCount += Exp * PS->effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
-		if (PS->ExpCount >= PS->TargetExp)
-		{
-			PS->ExpCount -= PS->TargetExp;
-			PS->TargetExp *= 1.45f;
-			PS->Level++;
-			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
-			Manager::pickPanel.Show();
-		}
 	}
 	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)
 	{

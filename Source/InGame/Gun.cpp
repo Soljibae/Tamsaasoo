@@ -134,7 +134,7 @@ namespace InGame
 	SAWEDOFFSHOTGUNStruct::SAWEDOFFSHOTGUNStruct()
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;
-		GuntypeDamageRatio = 1.f;
+		GuntypeDamageRatio = 1.1f;
 		GuntypeFireRateRatio = 0.9f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 20.f;
@@ -211,8 +211,8 @@ namespace InGame
 	M1911Struct::M1911Struct()
 	{
 		Type = GunType::M1911;
-		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 2.f;
+		GuntypeDamageRatio = 1.2f;
+		GuntypeFireRateRatio = 1.3f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 2;
@@ -311,7 +311,7 @@ namespace InGame
 	{
 		Type = GunType::CZ75;
 		GuntypeDamageRatio = 0.75f;
-		GuntypeFireRateRatio = 3.f;
+		GuntypeFireRateRatio = 2.5f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;

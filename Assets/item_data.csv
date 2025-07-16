@@ -4,7 +4,7 @@ Scepter of Pride
 0
 Your attack power is increased by an amount proportional to your missing health when you are below half health.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.5, 0.05, -1, -1, -1, -1, -1
+0.5, 0.03, -1, -1, -1, -1, -1
 
 2
 //2 - duration초 이상 가만히 있을 경우 cooldown초마다 additionalFireRate value1 증가, 최대 10번 까지 중첩
