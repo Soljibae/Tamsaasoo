@@ -199,7 +199,7 @@ namespace InGame
 		for (auto it = afterImages.begin(); it != afterImages.end(); )
 		{
 			it->timer -= global::DeltaTime;
-			it->alpha -= global::DeltaTime / 0.3f; // Å¸ÀÌ¸Ó ±âÁØÀ¸·Î ¾ËÆÄ °¨¼Ò
+			it->alpha -= global::DeltaTime / 0.3f; // Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 			if (it->timer <= 0 || it->alpha <= 0)
 			{
@@ -433,7 +433,7 @@ namespace InGame
 			img.position = position;
 			img.size = size;
 			img.alpha = 0.5f;
-			img.timer = 0.3f; // ÀÜ»óÀÌ À¯ÁöµÇ´Â ½Ã°£
+			img.timer = 0.3f; // ï¿½Ü»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ã°ï¿½
 
 			afterImages.push_back(img);
 			afterImageTimer = 0.f;

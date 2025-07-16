@@ -18,8 +18,8 @@ namespace Manager
 
         if (shouldScale)
         {
-            size.x = originSize.x * 1.05f;
-            size.y = originSize.y * 1.05f;
+            size.x = originSize.x * 1.04f;
+            size.y = originSize.y * 1.04f;
         }
         else if (!isSelected)
         {

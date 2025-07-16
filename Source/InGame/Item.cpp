@@ -1887,7 +1887,6 @@ namespace InGame
 			}
 		}
 
-		
 		FireTimer += global::DeltaTime;
 		if (FireTimer >= 1.f / effectiveFireRate && distanceMin)
 		{

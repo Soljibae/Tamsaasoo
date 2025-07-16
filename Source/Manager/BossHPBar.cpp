@@ -23,7 +23,7 @@ namespace Manager
 		HP.size = BG.size;
 		HP.Texture = AEGfxTextureLoad("Assets/HP/BossHP.png");
 		HP.Mesh = Utils::CreateMesh();
-		pFont = AEGfxCreateFont("Assets/Herofire.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/Herofire.ttf", fontSize);
 	}
 
 	void BossHPBar::Update()

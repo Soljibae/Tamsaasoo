@@ -14,21 +14,36 @@ namespace Manager
 
 	void PauseUI::Init(InGame::PlayerCharacter* InPC)
 	{
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
-		f32 BW{300}, BH{120}; // button width, button height
+		f32 BW{ 300 }, BH{ 120 }, BX{-w/2.f+BW/1.5f}; // button width, button height
 		resumeButton.Mesh = Utils::CreateMesh();
 		resumeButton.Texture = AEGfxTextureLoad("Assets/Buttons/ResumeButton.png");
-		resumeButton.position = {-600, 300};
+		resumeButton.position = { BX, 300};
 		resumeButton.size = { BW , BH };
-		resumeButton.SetCallback([]() { gm.Resume(); });
+		resumeButton.SetCallback([]() { 
+			gm.Resume(); 
+			SFXManager.Play("button");
+			});
 		resumeButton.Init();
+
+		settingButton.Mesh = Utils::CreateMesh();
+		settingButton.Texture = AEGfxTextureLoad("Assets/Buttons/SettingButton.png");
+		settingButton.position = { BX, 150};
+		settingButton.size = { BW , BH };
+		settingButton.SetCallback([]() {
+			//TODO: Setting Button callback
+			});
+		settingButton.Init();
 
 		mainmenuButton.Mesh = Utils::CreateMesh();
 		mainmenuButton.Texture = AEGfxTextureLoad("Assets/Buttons/MainMenuButton.png");
-		mainmenuButton.position = {-600, 150};
+		mainmenuButton.position = { BX, 0};
 		mainmenuButton.size = { BW , BH };
-		mainmenuButton.SetCallback([]() { gm.SetNextGameState(EGameState::MAINMENU); });
+		mainmenuButton.SetCallback([]() { 
+			gm.SetNextGameState(EGameState::MAINMENU); 
+			});
 		mainmenuButton.Init();
 
 		pauseDimmer.Mesh = Utils::CreateMesh();
@@ -86,6 +101,7 @@ namespace Manager
 		if (gameOverScreen.isGameOver)
 			return;
 		resumeButton.Update();
+		settingButton.Update();
 		mainmenuButton.Update();
 
 		std::stringstream ss;
@@ -473,6 +489,7 @@ namespace Manager
 
 		//buttons
 		Utils::DrawObject(resumeButton, false);
+		Utils::DrawObject(settingButton, false);
 		Utils::DrawObject(mainmenuButton, false);
 		for (int i = 0; i < PC->inventory.size(); i++)
 		{
@@ -487,6 +504,9 @@ namespace Manager
 	{
 		AEGfxMeshFree(resumeButton.Mesh);
 		AEGfxTextureUnload(resumeButton.Texture);
+
+		AEGfxMeshFree(settingButton.Mesh);
+		AEGfxTextureUnload(settingButton.Texture);
 
 		AEGfxMeshFree(mainmenuButton.Mesh);
 		AEGfxTextureUnload(mainmenuButton.Texture);

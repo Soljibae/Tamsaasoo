@@ -31,7 +31,7 @@ namespace Manager
 		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.mp3", "doom");
 
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/slime.wav", "slime");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/skeleton.mp3", "skeleton");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/skeleton.wav", "skeleton");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/tanker.wav", "tanker");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/bomber.wav", "bomber");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/dasherDead.wav", "dasherDead");

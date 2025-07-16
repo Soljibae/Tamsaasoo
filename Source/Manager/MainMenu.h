@@ -4,6 +4,7 @@
 #include "../InGame/Actor.h"
 #include "../Utils/Utils.h"
 #include "Button.h"
+#include <array>
 namespace Manager
 {
 	class MainMenu : public AGameState
@@ -16,10 +17,13 @@ namespace Manager
 	private:
 		InGame::Actor Illust;
 		InGame::Actor Black;
+		InGame::Actor Wbutton;
 		f32 fadeInTime{ 0 };
 		const f32 fadeInDuration{ 1.f };
 		static f32 alpha;
-		Button startButton;
-		Button exitButton;
+		f32 buttonAlpha{ 0.5f };
+		AEGfxVertexList* buttonMesh;
+		AEGfxTexture* BbuttonTexture;
+		std::array<Button, 3> Buttons;
 	};
 }

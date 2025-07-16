@@ -431,9 +431,6 @@ namespace Manager
 					case InGame::SFX:
 						AEAudioSetGroupVolume(group.second, SFXManager.SFXOriginVol);
 						break;
-					case InGame::PLAYER:
-						AEAudioStopGroup(SFXManager.sound_group[InGame::PLAYER]);
-						break;
 					}
 				}
 				soundReduced = false;

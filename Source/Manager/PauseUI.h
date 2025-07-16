@@ -17,9 +17,8 @@ namespace Manager
 		void Draw();
 		void Destroy();
 	private:
-		//resume button
 		Button resumeButton;
-		//return to mainmenu button
+		Button settingButton;
 		Button mainmenuButton;
 		//pause screen black background image
 		InGame::Actor pauseDimmer;

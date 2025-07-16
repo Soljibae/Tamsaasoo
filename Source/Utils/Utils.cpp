@@ -14,7 +14,6 @@ AEGfxVertexList* Utils::CreateMesh(s32 row, s32 column)
 	f32 sprite_uv_width = 1.f / static_cast<f32>(column);
 	f32 sprite_uv_height = 1.f / static_cast<f32>(row);
 
-
 	AEGfxTriAdd(
 		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, sprite_uv_height,
 		0.5f, -0.5f, 0xFFFFFFFF, sprite_uv_width, sprite_uv_height,
@@ -64,13 +63,14 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 			p.x, p.y, 0xFFFFFFFF, p.u1, p.v1,
 			-p.x, p.y, 0xFFFFFFFF, p.u0, p.v1
 		);
+
 		PatchArr[i] = AEGfxMeshEnd();
 
 		i++;
 	}
 	return PatchArr;
 }
-void Utils::DrawNinePatchMesh(InGame::Actor object, AEGfxTexture* texture, std::array<AEGfxVertexList*, 9> patches, f32 padding)
+void Utils::DrawNinePatchMesh(InGame::Actor object, AEGfxTexture* texture, std::array<AEGfxVertexList*, 9> patches, f32 padding, f32 alpha)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -78,7 +78,7 @@ void Utils::DrawNinePatchMesh(InGame::Actor object, AEGfxTexture* texture, std::
 
 	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
 
-	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, alpha);
 
 	AEGfxTextureSet(texture, 0.f, 0.f);
 	AEMtx33 scale;
@@ -160,6 +160,9 @@ void Utils::DrawNinePatchMesh(InGame::Actor object, AEGfxTexture* texture, std::
 		AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 		i++;
 	}
+	AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
+
+	AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
 }
 void Utils::DestroyMesh(AEGfxVertexList* Mesh)
 {

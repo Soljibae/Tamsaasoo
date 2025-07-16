@@ -9,12 +9,9 @@ namespace InGame
 {
 	enum SFXType
 	{
-		SYSTEM = 0,
-		ENEMY = 1,
-		PLAYER = 2,
-		SFX = 3,
-		BGM = 4,
-		UI = 5,
+		SFX = 0,
+		BGM = 1,
+		UI = 2,
 		SFXType_LAST = UI
 	};
 
@@ -41,11 +38,8 @@ namespace InGame
 		std::unordered_map<std::string, SFXData> SFXList;
 		f32 BGMOriginVol{ 0.45f };
 		f32 BGMReduceVol{ 0.3f };
-		f32 PLAYEROriginVol{ 1.0f };
 		f32 SFXOriginVol{ 1.0f };
 		f32 SFXReduceVol{ 0.5f };
-		f32 SYSOriginVol{ 0.5f };
-		f32 SYSReduceVol{ 0.5f };
 		f32 UIOriginVol{ 1.0f };
 	};
 }
