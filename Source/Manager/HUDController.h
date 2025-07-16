@@ -15,6 +15,8 @@ namespace Manager
 		void Destroy();
 		std::vector<std::string> SplitTextIntoLines(const std::string& text, f32 maxWidth);
 		InGame::Actor Coin;
+		InGame::Actor* GetPotion();
+		f32 PotionFillPercent = 0.f;
 	private:
 		InGame::PlayerCharacter* PC;
 		InGame::Gun* GUN;

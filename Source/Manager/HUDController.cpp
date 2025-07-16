@@ -110,7 +110,8 @@ namespace Manager
 
 		Potion.position = { -(w / 2) + 100.f, h / 2 - 130.f };
 		Potion.size = { PotionSize.x * PotionAsset.x, PotionSize.y * PotionAsset.y };
-		Potion.Mesh = FillingMeshUpside(0);
+		PotionFillPercent = 0.f;
+		Potion.Mesh = FillingMeshUpside(PotionFillPercent);
 		Potion.Texture = AEGfxTextureLoad("Assets/HP/Potion.png");
 		PotionBG.position = { Potion.position.x, Potion.position.y + 20.f };
 		PotionBG.size = { PotionSize.x * PotionBGAsset.x, PotionSize.y * PotionBGAsset.y };
@@ -351,9 +352,9 @@ namespace Manager
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{
-			f32 fillPercent = static_cast<f32>(prevPotion) / static_cast<f32>(global::MaxPotionGauge);
+			PotionFillPercent = static_cast<f32>(prevPotion) / static_cast<f32>(global::MaxPotionGauge);
 			AEGfxMeshFree(Potion.Mesh);
-			Potion.Mesh = FillingMeshUpside(fillPercent);
+			Potion.Mesh = FillingMeshUpside(PotionFillPercent);
 			if (prevPotion > PC->PS->Potion)
 			{
 				prevPotion -= 3;
@@ -527,6 +528,11 @@ namespace Manager
 			}
 		}
 		return lines;
+	}
+
+	InGame::Actor* HUDController::GetPotion()
+	{
+		return &Potion;
 	}
 
 	void HUDController::TooltipUpdate(InGame::Item& item)

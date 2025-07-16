@@ -184,7 +184,6 @@ namespace InGame
 			}
 		}
 		/*----- Heal Potion -----*/
-
 		if (PS->ExpCount >= PS->TargetExp)
 		{
 			PS->ExpCount -= PS->TargetExp;
@@ -192,6 +191,20 @@ namespace InGame
 			PS->Level++;
 			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
 			Manager::pickPanel.Show();
+		}
+		for (auto it = afterImages.begin(); it != afterImages.end(); )
+		{
+			it->timer -= global::DeltaTime;
+			it->alpha -= global::DeltaTime / 0.3f; // 타이머 기준으로 알파 감소
+
+			if (it->timer <= 0 || it->alpha <= 0)
+			{
+				it = afterImages.erase(it);
+			}
+			else
+			{
+				++it;
+			}
 		}
 	}
 	void PlayerCharacter::Draw()
@@ -207,6 +220,10 @@ namespace InGame
 			{
 				HoldingGun->Draw();
 				Utils::DrawObject(*this);
+			}
+			for (const auto& img : afterImages)
+			{
+				Utils::DrawObject(img.position, offset,img.size, Texture, Mesh, img.alpha);
 			}
 		}
 	}
@@ -399,6 +416,19 @@ namespace InGame
 		AEVec2Scale(&delta, &DashDirection, DashSpeed * global::DeltaTime);
 
 		AEVec2 newPos = { position.x + delta.x, position.y + delta.y };
+
+		afterImageTimer += global::DeltaTime;
+		if (afterImageTimer >= afterImageCooldown)
+		{
+			AfterImage img;
+			img.position = position;
+			img.size = size;
+			img.alpha = 0.5f;
+			img.timer = 0.3f; // 잔상이 유지되는 시간
+
+			afterImages.push_back(img);
+			afterImageTimer = 0.f;
+		}
 
 		if (Manager::gm.currStateREF)
 		{

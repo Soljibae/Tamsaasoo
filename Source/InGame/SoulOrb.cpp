@@ -3,6 +3,7 @@
 #include "../Global/GlobalVariables.h"
 #include "../Manager/Playing.h"
 #include "../Manager/GameManager.h"
+#include "../Manager/HUDController.h"
 #include <algorithm>
 
 namespace InGame
@@ -21,10 +22,13 @@ namespace InGame
 		size = { 12.f , 12.f };
 		lifeTime = Utils::GetRandomFloat(0.f, 3.f);
 		alpha = 0.1f;
-
-		TargetPostion = { -(w / 2) + 100.f, h / 2 - 100.f };
+		AEVec2 Pos = Manager::HUD.GetPotion()->position;
+		Pos.y -= Manager::HUD.GetPotion()->size.y/2.f;
+		Pos.y += Manager::HUD.GetPotion()->size.y * Manager::HUD.PotionFillPercent;
+		TargetPostion = Pos;
+		//TargetPostion = { -(w / 2) + 100.f, h / 2 - 100.f };
 		TargetPostion.x += Utils::GetRandomFloat(-10.f, 10.f);
-		TargetPostion.y += Utils::GetRandomFloat(-10.f, 10.f);
+		//TargetPostion.y += Utils::GetRandomFloat(-10.f, 10.f);
 		TargetSize = { 70.f, 70.f };
 
 		startPos = position;
@@ -90,46 +94,6 @@ namespace InGame
 		{
 			bIsPandingKill = true;
 		}
-
-		//f32 distanceSq = AEVec2Distance(&position, &TargetPostion);
-		//const f32 arrival_threshold = 4.0f; 
-
-		//if (distanceSq < arrival_threshold * arrival_threshold && !bIsArrived)
-		//{
-		//	bIsArrived = true;
-		//	if (Manager::gm.currStateREF)
-		//	{
-		//		Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-		//		if (GS)
-		//		{
-		//			if (GS->PC)
-		//			{
-		//				GS->PC->PS->Potion += 1;
-		//			}
-		//		}
-		//	}
-		//}
-		//else if(!(distanceSq < arrival_threshold * arrival_threshold))
-		//{
-		//	Speed = std::clamp(Speed * 1.05f, 0.f, maxSpeed);
-
-		//	float moveDistance = Speed;
-
-		//	AEVec2 displacement;
-		//	AEVec2Scale(&displacement, &direction, moveDistance);
-
-		//	AEVec2Add(&position, &position, &displacement);
-		//}
-
-		//if (bIsArrived)
-		//{
-		//	alpha -= 1.f / 0.5f * global::DeltaTime;
-		//}
-
-		//if (alpha <= 0)
-		//{
-		//	bIsPandingKill = true;
-		//}
 	}
 	void SoulOrb::Draw()
 	{
