@@ -40,7 +40,7 @@ namespace InGame
 		Stats->ProjectileSpeed = GunData->ProjectileSpeed;
 		Stats->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
 		AEVec2Set(&Stats->ProjectileSize, 20.f, 20.f);
-		Stats->Damage = 1.5f;
+		Stats->Damage = 1.f;
 		PS->Level = 1;
 		PS->ExpGained = 1.f;
 		PS->HitCount = GunData->ProjectileHitCount;
@@ -185,6 +185,7 @@ namespace InGame
 		}
 		/*----- Heal Potion -----*/
 
+<<<<<<< HEAD
 		for (auto it = afterImages.begin(); it != afterImages.end(); )
 		{
 			it->timer -= global::DeltaTime;
@@ -198,6 +199,15 @@ namespace InGame
 			{
 				++it;
 			}
+=======
+		if (PS->ExpCount >= PS->TargetExp)
+		{
+			PS->ExpCount -= PS->TargetExp;
+			PS->TargetExp *= 1.35f;
+			PS->Level++;
+			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
+			Manager::pickPanel.Show();
+>>>>>>> 6aa83be59326985439c4f7f498e01dbfd1437fa7
 		}
 	}
 	void PlayerCharacter::Draw()
@@ -314,14 +324,6 @@ namespace InGame
 	{
 		PS->Money += 1.f * global::StageGoldGainedRatio[global::CurrentStageNumber - 1] * global::additionalGoldGainedRatio;
 		PS->ExpCount += Exp * PS->effectiveExpGained * global::StageExpGainedRatio[global::CurrentStageNumber - 1];
-		if (PS->ExpCount >= PS->TargetExp)
-		{
-			PS->ExpCount -= PS->TargetExp;
-			PS->TargetExp *= 1.45f;
-			PS->Level++;
-			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
-			Manager::pickPanel.Show();
-		}
 	}
 	void PlayerCharacter::AddItemToInventory(std::shared_ptr<Item> item)
 	{

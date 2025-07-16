@@ -11,9 +11,10 @@ namespace InGame
 {
 	void Gun::Init(PlayerCharacter* object)
 	{
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/pistol.wav", "pistol");
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/rifle.wav", "rifle");
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/shotgun.wav", "shotgun");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/pistol.wav", "pistol");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/rifle.wav", "rifle");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/shotgun.wav", "shotgun");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/shotgun+reload.wav", "shotgun+reload");
 
 		gunType = object->GunData->Type;
 		ProjectileSpawnCount = object->GunData->ProjectileSpawnCount;
@@ -45,7 +46,9 @@ namespace InGame
 				Manager::SFXManager.Play("pistol");
 			else if(gunType == BEOWOLF || gunType == MOSINNAGAT || gunType == M24 || gunType == RAILGUN || gunType == NITRO700 || gunType == FNFAL || gunType == M82BARRETT || gunType == AR15 || gunType == M110 || gunType == BREN || gunType == MICROGUN || gunType == M249 || gunType == M2)
 				Manager::SFXManager.Play("rifle");
-			else if(gunType == SAWEDOFFSHOTGUN || gunType == DOUBLEBARREL || gunType == KS23 || gunType == M1897 || gunType == BENELLIM4 || gunType == SAIGA12 || gunType == AA12)
+			else if(gunType == SAWEDOFFSHOTGUN || gunType == DOUBLEBARREL || gunType == KS23 || gunType == M1897 || gunType == BENELLIM4)
+				Manager::SFXManager.Play("shotgun+reload");
+			else if(gunType == SAIGA12 || gunType == AA12)
 				Manager::SFXManager.Play("shotgun");
 
 			FireProjectile(Dir, position);
@@ -134,8 +137,8 @@ namespace InGame
 	SAWEDOFFSHOTGUNStruct::SAWEDOFFSHOTGUNStruct()
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeDamageRatio = 1.1f;
+		GuntypeFireRateRatio = 0.9f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -190,7 +193,7 @@ namespace InGame
 	{
 		Type = GunType::SAIGA12;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 4.0f;
+		GuntypeFireRateRatio = 2.0f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -201,7 +204,7 @@ namespace InGame
 	{
 		Type = GunType::AA12;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 5.0f;
+		GuntypeFireRateRatio = 3.5f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -211,8 +214,8 @@ namespace InGame
 	M1911Struct::M1911Struct()
 	{
 		Type = GunType::M1911;
-		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 2.f;
+		GuntypeDamageRatio = 1.2f;
+		GuntypeFireRateRatio = 1.3f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 2;
@@ -311,7 +314,7 @@ namespace InGame
 	{
 		Type = GunType::CZ75;
 		GuntypeDamageRatio = 0.75f;
-		GuntypeFireRateRatio = 3.f;
+		GuntypeFireRateRatio = 2.5f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;

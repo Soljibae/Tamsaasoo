@@ -2,6 +2,7 @@
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 #include "GameOver.h"
+#include <sstream>
 namespace Manager
 {
 	ExpUI ExpPanel;
@@ -11,6 +12,8 @@ namespace Manager
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		f32 space = 3.f;
+
+		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
 
 		xpBarBackground.Mesh = Utils::CreateMesh();
 		xpBarBackground.Texture = AEGfxTextureLoad("Assets/black.png");
@@ -46,6 +49,20 @@ namespace Manager
 		Utils::DrawObject(xpBarBackground, false);
 		Utils::DrawObject(xpBarEmpty, false, 0.5f);
 		Utils::DrawObject(xpBarFill, false);
+		
+		f32 padding = 5.f;
+
+		std::ostringstream os;
+
+		os << "Lv." << PC->PS->Level;
+		f32 textW, textH;
+		AEGfxGetPrintSize(pFont, os.str().c_str(), textDrawSize, &textW, &textH);
+
+		f32 wh = global::ScreenWidth / 2.f;
+		f32 hh = global::ScreenHeight / 2.f;
+		
+		AEGfxPrint(pFont, os.str().c_str(), (xpBarBackground.position.x - xpBarBackground.size.x / 2.f + padding) / wh,
+			(xpBarBackground.position.y - xpBarBackground.size.y / 2.f) / hh + textH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
 	void ExpUI::Destroy()
 	{

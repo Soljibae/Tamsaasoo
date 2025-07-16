@@ -84,8 +84,9 @@ namespace Manager
 			EC->Init();
 			ECPool.push_back(EC);
 		}
-		StageTimer = 3.f * maxWaveCount + 2.f;
+		StageTimer = 3.f * maxWaveCount;
 		WaveTimer = 0.;
+		InGame::EnemyCharacter::StaticInit();
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
 		ExpPanel.Init(PC);
@@ -153,7 +154,7 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[45]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[26]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
@@ -217,7 +218,6 @@ namespace Manager
 							Boss->bossApearing = true;
 							bossAppearScene.Init(Boss);
 							SFXManager.Play("siren");
-							StageTimer = 3.f * maxWaveCount + global::DeltaTime;
 						}
 						else
 						{
@@ -806,6 +806,7 @@ namespace Manager
 		ITRM->Destroy();
 		delete ITRM;
 		AEGfxDestroyFont(pFont);
+		InGame::EnemyCharacter::StaticDestroy();
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
@@ -1041,12 +1042,14 @@ namespace Manager
 	}
 	void Playing::DrawTime(f32 time)
 	{
+		f32 halfW = global::ScreenWidth / 2.f;
 		f32 halfH = global::ScreenHeight / 2.f;
 		s32 min = static_cast<s32>(time) / 60;
 		s32 sec = static_cast<s32>(time) % 60;
 		std::string timer{ std::to_string(min) + ":" + (sec<10 ? "0"+std::to_string(sec) : std::to_string(sec))};
 		f32 lw, lh;
 		AEGfxGetPrintSize(pFont, timer.c_str(), textDrawSize, &lw, &lh);
+		AEGfxPrint(pFont, timer.c_str(), (- lw / 2.f + 5.f/ halfW), (400.f-2.f) / halfH, textDrawSize, 0.f, 0.f, 0.f, 1.f);
 		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, 400.f / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
 }

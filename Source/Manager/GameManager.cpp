@@ -2,12 +2,19 @@
 #include "Intro.h"
 #include "Playing.h"
 #include "MainMenu.h"
+
 namespace Manager
 {
 	GameManager gm;
 	InGame::SFXManager SFXManager;
+	GameManager::Cursor cursor;
 	void GameManager::Init()
 	{
+		cursor.position = { 0,0 };
+		cursor.size = { 30.f, 30.f };
+		cursor.Mesh = Utils::CreateMesh();
+		cursor.Texture = AEGfxTextureLoad("Assets/UI/cursor.png");
+
 		currStateREF = new Intro();
 		currStateREF->Init();
 		currState = EGameState::TEMP;
@@ -19,6 +26,7 @@ namespace Manager
 	void GameManager::Update()
 	{
 		AESysFrameStart();
+		cursor.Update();
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
 
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -63,6 +71,7 @@ namespace Manager
 	void GameManager::Draw()
 	{
 		currStateREF->Draw();
+		cursor.Draw();
 		AESysFrameEnd();
 	}
 	
@@ -74,6 +83,7 @@ namespace Manager
 			delete currStateREF;
 			currStateREF = nullptr;
 		}
+		cursor.Destroy();
 	}
 
 	void GameManager::SetNextGameState(EGameState state)

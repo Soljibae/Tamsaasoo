@@ -1,4 +1,5 @@
 #include "EnemyCharacter.h"
+#include "EnemyCharacter.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
 #include "../Manager/GameManager.h"
@@ -7,6 +8,9 @@
 #include <random>
 namespace InGame
 {
+	AEGfxTexture* EnemyCharacter::stunTexture = nullptr;
+	AEGfxVertexList* EnemyCharacter::stunMesh = nullptr;
+
 	void InGame::EnemyCharacter::Init()
 	{
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Enemy/dasherAttack.wav", "dasherAttack");
@@ -36,6 +40,20 @@ namespace InGame
 		dashDuration = 0.f;
 		recoverTimer = 0.f;
 		dashDirection = { 0, 0 };
+
+		stunVFX.size = { 64.f, 64.f };
+		stunVFX.AnimationCount = 0;
+		stunVFX.MaxAnimationCount[IDLE] = 10;
+		stunVFX.FrameTime = 0.1f;
+		stunVFX.row = 1;
+		stunVFX.column = 10;
+		stunVFX.TimeAcc = 0.f;
+	}
+
+	void EnemyCharacter::StaticInit()
+	{
+		stunTexture = AEGfxTextureLoad("Assets/stun.png");
+		stunMesh = Utils::CreateMesh(1, 10);
 	}
 
 	void EnemyCharacter::Spawn(AEVec2 Pos, EnemyData* InData)
@@ -740,10 +758,20 @@ namespace InGame
 				}
 			}
 		}
+		else
+		{
+			Utils::UpdateOffset(stunVFX);
+			AEVec2Set(&stunVFX.position, position.x, position.y + size.y / 2.f);
+		}
 	}
 	void EnemyCharacter::Draw()
 	{
 		Utils::DrawObject(*this);
+
+		if (Stats->StatusEffectTimer[STUN] > 0)
+		{
+			Utils::DrawObject(stunVFX.position, stunVFX.offset, stunVFX.size, stunTexture, stunMesh);
+		}
 		for (const auto& img : afterImages)
 		{
 			Utils::DrawObject(img.position, offset, img.size, Texture, Mesh, img.alpha);
@@ -763,6 +791,18 @@ namespace InGame
 		}
 		Texture = nullptr;
 	}
+
+	void EnemyCharacter::StaticDestroy()
+	{
+		if (stunTexture)
+		{
+			AEGfxTextureUnload(stunTexture);
+			stunTexture = nullptr;
+		}
+
+		Utils::DestroyMesh(stunMesh);
+	}
+
 	void EnemyCharacter::adjustHealth(f32 Amount)
 	{
 		if (Stats->StatusEffectTimer[VULNERABLE] > 0 && Amount < 0)

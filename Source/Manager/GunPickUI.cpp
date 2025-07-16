@@ -32,6 +32,10 @@ namespace Manager
 		};
 		for (int i = 0; i < weaponOptionButtons.size(); i++)
 		{
+			SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/pistol_reload.WAV", "pistol_reload");
+			SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/machinegun_reload.WAV", "rifle_reload");
+			SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/shotgun_reload.WAV", "shotgun_reload");
+			
 			weaponOptionButtons[i].size = { buttonWidth, buttonHeight };
 			weaponOptionButtons[i].Init();
 			weaponOptionButtons[i].position = {
@@ -51,136 +55,163 @@ namespace Manager
 						PC->GunData = new InGame::M1911Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::CZ75:
 						PC->GunData = new InGame::CZ75Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::DESERTEGLE:
 						PC->GunData = new InGame::DESERTEGLEStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::MP5:
 						PC->GunData = new InGame::MP5Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::MPX:
 						PC->GunData = new InGame::MPXStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::VECTOR:
 						PC->GunData = new InGame::VECTORStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::BEOWOLF:
 						PC->GunData = new InGame::BEOWOLFStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::P90:
 						PC->GunData = new InGame::P90Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::MOSINNAGAT:
 						PC->GunData = new InGame::MOSINNAGATStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::M24:
 						PC->GunData = new InGame::M24Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::RAILGUN:
 						PC->GunData = new InGame::RAILGUNStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::NITRO700:
 						PC->GunData = new InGame::NITRO700Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::FNFAL:
 						PC->GunData = new InGame::FNFALStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::M82BARRETT:
 						PC->GunData = new InGame::M82BARRETTStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::AR15:
 						PC->GunData = new InGame::AR15Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::M110:
 						PC->GunData = new InGame::M110Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::BREN:
 						PC->GunData = new InGame::BRENStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::MICROGUN:
 						PC->GunData = new InGame::MICROGUNStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("pistol_reload");
 						break;
 					case InGame::GunType::M249:
 						PC->GunData = new InGame::M249Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::M2:
 						PC->GunData = new InGame::M2Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("rifle_reload");
 						break;
 					case InGame::GunType::SAWEDOFFSHOTGUN:
 						PC->GunData = new InGame::SAWEDOFFSHOTGUNStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::DOUBLEBARREL:
 						PC->GunData = new InGame::DOUBLEBARRELStruct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::KS23:
 						PC->GunData = new InGame::KS23Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::M1897:
 						PC->GunData = new InGame::M1897Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::BENELLIM4:
 						PC->GunData = new InGame::BENELLIM4Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::SAIGA12:
 						PC->GunData = new InGame::SAIGA12Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					case InGame::GunType::AA12:
 						PC->GunData = new InGame::AA12Struct();
 						PC->HoldingGun = new InGame::Gun();
 						PC->HoldingGun->Init(PC);
+						SFXManager.Play("shotgun_reload");
 						break;
 					}
 					stageIdx++;

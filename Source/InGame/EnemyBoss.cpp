@@ -70,8 +70,8 @@ namespace InGame
 		ProjectileChamberTimer = 5;
 		bIsWaving = false;
 
-		Stats->HP = 200;
-		Stats->MaxHP = 200;
+		Stats->HP =	400;
+		Stats->MaxHP = 400;
 		Stats->FireRate = 5.f;
 		Stats->ProjectileSpeed = 3.f;
 		Stats->Damage = 1;
@@ -223,8 +223,8 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats->HP = 800;
-		Stats->MaxHP = 800;
+		Stats->HP = 900;
+		Stats->MaxHP = 900;
 		Stats->Damage = 1;
 
 		dashTimer = 0.f;

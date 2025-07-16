@@ -12,6 +12,10 @@ namespace Manager
 		void Draw();
 		void Destroy();
 
+		s8 pFont;
+		f32 fontSize = 72.f;
+		f32 textDrawSize = 0.2f;
+
 		InGame::Actor xpBarBackground;
 		InGame::Actor xpBarEmpty;
 		InGame::Actor xpBarFill;
