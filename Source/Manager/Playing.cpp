@@ -19,7 +19,7 @@ namespace Manager
 	BossAppearScene bossAppearScene;
 	const static f32 fontSize = 72.f;
 	const static f32 textDrawSize = 0.35f;
-	const static s32 maxWaveCount = 1;
+	const static s32 maxWaveCount = 60;
 	void Playing::Init()
 	{
 		Fader.Mesh = Utils::CreateMesh();
