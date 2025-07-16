@@ -49,7 +49,7 @@ Your attacks have a 30% chance to set the enemy on fire for 3 seconds.
 7
 //7 - additionalBurnDamage value1 증가 (적이 화상으로 입는 체력 비례 데미지가 증가)
 Fury's Cinder
-0
+1
 Increases the damage your Burn deals based on the enemy's Max Health.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.05, -1, -1, -1, -1, -1, -1
@@ -65,7 +65,7 @@ Increases the frequency of your Burn damage ticks.
 9
 //9 - cooldown초마다 피격 시 플레이어 주변으로 range 크기의 불꽃을 일으킴, 불꽃에 닿으면 최대 체력의 value1 % 만큼 데미지를 주고 duration초 동안 화상 상태 부여
 Angerflare
-1
+0
 Every 2 seconds, taking damage unleashes a fiery nova, burning nearby enemies for 30% of their max HP and applying Burn.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, -1, -1, 2, 5, -1, 400.0
@@ -105,15 +105,15 @@ Reduces fire rate. A defeated enemy will explode, damaging nearby foes. This eff
 14
 //14 - 획득 시 이동 속도 감소, 공격력 증가 (MovementSpeed -= value1, additionalDamage value2 증가)
 Slumber Ring
-1
+0
 Increases your attack damage but reduces your movement speed.
 //value1, value2, value3, cooldown, duration, procchance, range
-30.0, 1.0, -1, -1, -1, -1, -1
+30.0, 0.5, -1, -1, -1, -1, -1
 
 15
 //15 - 획득 시 연사 감소, 기본 연사/현재 연사 * value2 만큼 공격력 배율 증가 (additionalFireRateRatio value1 감소)
 Apathy Band
-0
+1
 Reduces fire. The damage bonus scales inversely with your fire rate.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.1, 1.0, -1, -1, -1, -1, -1
@@ -121,7 +121,7 @@ Reduces fire. The damage bonus scales inversely with your fire rate.
 16
 //16 - 획득 시, 이동 속도 value1 감소, 체력 value2 칸 증가 (MovementSpeed -= value1, MaxHP value2, HP value2 증가)
 Feast Chalice
-0
+1
 Grants +2 Max Health. Decreases Movement Speed.
 //value1, value2, value3, cooldown, duration, procchance, range
 30.0, 2.0, -1, -1, -1, -1, -1
@@ -145,7 +145,7 @@ Increases Attack Power and decreases Movement Speed based on your Health.
 19
 //19 - 피격 시 duration초간 연사, 공격력, 이동속도 증가 (additionalFireRate value1 증가, additionalDamage value2 증가, additionalMovementSpeed value3 증가)
 Bellyband
-1
+0
 On taking damage, gain increased Rate of Fire, Attack Power, and Movement Speed for 5 seconds.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, 1.0, 50.0, -1, 5.0, -1, -1
@@ -356,4 +356,4 @@ Unceasing Fury
 0
 Upon defeating an enemy or hitting a boss, there is a chance to instantly reload your weapon.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, 0.2, -1
+-1, -1, -1, -1, -1, 0.1, -1

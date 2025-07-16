@@ -135,7 +135,7 @@ namespace InGame
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeFireRateRatio = 0.9f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -190,7 +190,7 @@ namespace InGame
 	{
 		Type = GunType::SAIGA12;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 4.0f;
+		GuntypeFireRateRatio = 2.0f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -201,7 +201,7 @@ namespace InGame
 	{
 		Type = GunType::AA12;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 5.0f;
+		GuntypeFireRateRatio = 3.5f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
