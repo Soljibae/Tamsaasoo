@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cmath>
 #include <random>
+#include "SettingUI.h"
 
 namespace Manager
 {
@@ -137,6 +138,17 @@ namespace Manager
 			pickPanel.Show();
 		}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
+
+		static bool prevSettingPanelState = false;
+		static bool isDelayOn = false;
+		static f32 timeAccForDelay = 0.f;
+
+		if (prevSettingPanelState && !SettingPanel.isSettingOn)
+		{
+			isDelayOn = true;
+			timeAccForDelay = 0.f;
+		}
+			
 		bool canPause = global::KeyInput(AEVK_ESCAPE) && !pickPanel.IsActive() && !gunPickPanel.IsActive() && !gameOverScreen.isGameOver;
 		if (canPause)
 		{
@@ -146,9 +158,20 @@ namespace Manager
 			}
 			else
 			{
-				gm.Resume();
+				if(!isDelayOn)
+					gm.Resume();
 			}
 		}
+		if (isDelayOn)
+		{
+			timeAccForDelay += global::DeltaTime;
+			if (timeAccForDelay > 0.5f)
+			{
+				isDelayOn = false;
+			}
+		}
+		prevSettingPanelState = SettingPanel.isSettingOn;
+
 		if (!gm.GamePaused)
 		{
 			if (bIsJumping)
