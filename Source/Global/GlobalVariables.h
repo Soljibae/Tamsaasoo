@@ -19,6 +19,7 @@ namespace global
 	extern bool isTestMod;
 	extern s32 RecentlyDeadEnemyCount;
 	extern s32 CurrentStageNumber;
+	extern s32 MaxPotionGauge;
 
 	extern f32 item12TriggerRatio;
 	extern f32 item12AdditionalDamage;

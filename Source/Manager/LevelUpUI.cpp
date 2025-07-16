@@ -16,6 +16,8 @@ namespace Manager
 	const static f32 windowHeight = 550.f;
 	const static f32 spacingX = 130.0f;
 	const static f32 padding = 50.f;
+	const static f32 probEpic = 0.04f;
+	const static f32 probRare = 0.24f;
 	static f32 w{ static_cast<f32>(global::ScreenWidth) }, h{ static_cast<f32>(global::ScreenHeight) };
 	void LevelUpUI::ResetGotEpic()
 	{
@@ -90,6 +92,14 @@ namespace Manager
 		for (auto& cost : rerollCost)
 		{
 			cost = 20;
+		}
+
+
+		const Playing* game = static_cast<Playing*>(gm.currStateREF);
+
+		for (size_t i = 1; i <= game->ITDB->itemList.size(); i++)
+		{
+			containerForGrade[game->ITDB->itemList[i]->grade].push_back(game->ITDB->itemList[i]->id);
 		}
 	}
 
@@ -308,22 +318,31 @@ namespace Manager
 
 		std::mt19937 gen(rd());
 
-		//range of item id
-		s8 min = 1;
-
-		size_t max = game->ITDB->itemList.size();
-
-		std::uniform_int_distribution<> dis(min, max);
-
 		std::unordered_set<int> used_indices;
 		std::vector<std::shared_ptr<InGame::Item>> options;
 		options.reserve(3);
 		for (s8 i = 0; i < 3; i++)
 		{
+			ItemGrade currGrade;
+			f32 prob = Utils::GetRandomFloat(0.f, 1.f);
+			if (0.f <= prob && prob <= 1.f - probEpic - probRare)
+				currGrade = COMMON;
+			else if(1.f - probEpic - probRare < prob && prob <= 1.f - probEpic)
+				currGrade = RARE;
+			else if (1.f - probEpic < prob && prob <= 1.f)
+				currGrade = EPIC;
+			
 			int idx;
+
+			s8 min = 0;
+
+			size_t max = containerForGrade[currGrade].size() - 1;
+
+			std::uniform_int_distribution<> dis(min, max);
+
 			while(true)
 			{
-				idx = dis(gen);
+				idx = containerForGrade[currGrade][dis(gen)];
 				auto result = used_indices.insert(idx);
 				if (result.second)
 					break;

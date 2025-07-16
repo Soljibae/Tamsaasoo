@@ -1082,7 +1082,7 @@ namespace InGame
 			if (potionPtr && Utils::CheckCollision(*owner, potionPtr->position, potionPtr->CollisionRadius))
 			{
 				Manager::SFXManager.Play("pour");
-				owner->PS->Potion = 100;
+				owner->PS->Potion = global::MaxPotionGauge;
 				it = Potions.erase(it);
 			}
 			else
