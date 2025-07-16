@@ -6,6 +6,9 @@
 #include "Button.h"
 #include <vector>
 #include <array>
+#include <map>
+#include "../Manager/ItemData.h"
+
 namespace Manager
 {
 	class LevelUpUI : public InGame::Actor
@@ -52,6 +55,7 @@ namespace Manager
 		AEGfxTexture* rerollCostTexture;
 		std::array<s32, 3> rerollCost;
 		s8 pFont;
+		std::map<ItemGrade, std::vector<s32>> containerForGrade;
 	};
 	extern LevelUpUI pickPanel;
 }

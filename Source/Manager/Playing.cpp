@@ -86,6 +86,7 @@ namespace Manager
 		}
 		StageTimer = 3.f * maxWaveCount;
 		WaveTimer = 0.;
+		InGame::EnemyCharacter::StaticInit();
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
 		ExpPanel.Init(PC);
@@ -153,7 +154,7 @@ namespace Manager
 			}
 			if (global::KeyInput(AEVK_1))
 			{
-				PC->AddItemToInventory(ITDB->itemList[45]->Clone());
+				PC->AddItemToInventory(ITDB->itemList[26]->Clone());
 			}
 			if (global::KeyInput(AEVK_2))
 			{
@@ -805,6 +806,7 @@ namespace Manager
 		ITRM->Destroy();
 		delete ITRM;
 		AEGfxDestroyFont(pFont);
+		InGame::EnemyCharacter::StaticDestroy();
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();

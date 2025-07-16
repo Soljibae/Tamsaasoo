@@ -342,7 +342,7 @@ namespace Manager
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{
-			f32 fillPercent = static_cast<f32>(prevPotion) / 100.f;
+			f32 fillPercent = static_cast<f32>(prevPotion) / static_cast<f32>(global::MaxPotionGauge);
 			AEGfxMeshFree(Potion.Mesh);
 			Potion.Mesh = FillingMeshUpside(fillPercent);
 			if (prevPotion > PC->PS->Potion)
@@ -442,7 +442,7 @@ namespace Manager
 			Utils::DrawObject(HP[i], false);
 		Utils::DrawObject(PotionBG, false);
 		Utils::DrawObject(Potion, false);
-		if (PC->PS->Potion >= 100)
+		if (PC->PS->Potion >= global::MaxPotionGauge)
 		{
 			Utils::DrawObject(PotionFull, false);
 		}

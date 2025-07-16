@@ -40,7 +40,7 @@ namespace InGame
 		Stats->ProjectileSpeed = GunData->ProjectileSpeed;
 		Stats->ProjectileCollisionSize = GunData->ProjectileCollisionSize;
 		AEVec2Set(&Stats->ProjectileSize, 20.f, 20.f);
-		Stats->Damage = 1.5f;
+		Stats->Damage = 1.f;
 		PS->Level = 1;
 		PS->ExpGained = 1.f;
 		PS->HitCount = GunData->ProjectileHitCount;
@@ -158,27 +158,27 @@ namespace InGame
 		
 		Utils::UpdateOffset(*this);
 		/*----- Heal Potion -----*/
-		if (PS->Potion > 100)
-			PS->Potion = 100;
-		if (global::KeyInput(AEVK_P)) PS->Potion += 100;
+		if (PS->Potion > 300)
+			PS->Potion = 300;
+		if (global::KeyInput(AEVK_P)) PS->Potion += 300;
 		if (global::KeyInput(AEVK_Q))
 		{
 			if (Utils::GetItemCount(24))
 			{
-				if (PS->Potion >= 100)
+				if (PS->Potion >= global::MaxPotionGauge)
 				{
 					PS->Money += global::item24GoldGained;
-					PS->Potion -= 100;
+					PS->Potion -= global::MaxPotionGauge;
 				}
 			}
 			else
 			{
 				if (Stats->HP < Stats->MaxHP)
 				{
-					if (PS->Potion >= 100)
+					if (PS->Potion >= global::MaxPotionGauge)
 					{
 						adjustHealth(1);
-						PS->Potion -= 100;
+						PS->Potion -= global::MaxPotionGauge;
 					}
 				}
 			}
@@ -628,7 +628,7 @@ namespace InGame
 		PS->effectiveDamage = (Stats->Damage + global::additionalDamage) * global::additionalDamageRatio * GunData->GuntypeDamageRatio;
 		PS->effectiveFireRate = (Stats->FireRate + global::additionalFireRate) * global::additionalFireRateRatio * GunData->GuntypeFireRateRatio;
 		PS->effectiveExpGained = PS->ExpGained * global::additionalExpGainedRatio;
-		PS->effectiveHitCount = PS->HitCount + global::additionalHitCount;
+		PS->effectiveHitCount = GunData->ProjectileHitCount + global::additionalHitCount;
 		PS->effectiveMovementSpeed = Stats->MovementSpeed + global::additionalMovementSpeed;
 
 		global::effectiveBurnDamage = PS->BurnDamage + global::additionalBurnDamage;

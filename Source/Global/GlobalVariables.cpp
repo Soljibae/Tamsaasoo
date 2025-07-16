@@ -20,6 +20,7 @@ namespace global
 	f32 item23RerollCostRatio = 1.f;
 	f32 item24GoldGained;
 	f32 item32ExplosionSize = 0.f;
+	s32 MaxPotionGauge = 300;
 
 	// additionalStats =================
 	f32 additionalDamage = 0.f;

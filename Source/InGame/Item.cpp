@@ -1082,7 +1082,7 @@ namespace InGame
 			if (potionPtr && Utils::CheckCollision(*owner, potionPtr->position, potionPtr->CollisionRadius))
 			{
 				Manager::SFXManager.Play("pour");
-				owner->PS->Potion = 100;
+				owner->PS->Potion = global::MaxPotionGauge;
 				it = Potions.erase(it);
 			}
 			else
@@ -1386,6 +1386,8 @@ namespace InGame
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/stun.ogg", "stun");
 	}
 	void Item_26::Use(PlayerCharacter* owner)
 	{
@@ -1402,15 +1404,13 @@ namespace InGame
 	}
 	void Item_26::OnHit(InGame::EnemyCharacter* target, bool isTargetBoss)
 	{
-		if (isTargetBoss)
-		{
-			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio) / 10.f)
-				target->Stats->StatusEffectTimer[STUN] = effectTime / 10.f;
-		}
-		else 
+		if (!isTargetBoss)
 		{
 			if (Utils::GetRandomFloat(0.f, 1.f) <= (procChance + (Utils::GetItemCount(id) - 1) * procChance / 10.f) * global::additionalProcChanceRatio)
+			{
+				Manager::SFXManager.Play("stun");
 				target->Stats->StatusEffectTimer[STUN] = effectTime;
+			}
 		}
 	}
 	//============================================= ID_27

@@ -15,10 +15,12 @@ namespace InGame
 	public:
 		virtual ~EnemyCharacter() {};
 		virtual void Init() override;
+		static void StaticInit();
 		void Spawn(AEVec2 Pos, EnemyData* InData);
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
+		static void StaticDestroy();
 		virtual void adjustHealth(f32 Amount) override;
 		void UpdateEffectTime();
 
@@ -28,6 +30,11 @@ namespace InGame
 		f32 ProjectileChamberTimer = 3.f;
 		f32 BurnTimer = 0.f;
 		void SpawnProjectile(AEVec2 Dir, AEVec2 Pos);
+
+		static AEGfxTexture* stunTexture;
+		static AEGfxVertexList* stunMesh;
+
+		Actor stunVFX;
 
 		/*--------DASHER--------*/
 		bool bHasDashed = false;
