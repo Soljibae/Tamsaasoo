@@ -25,6 +25,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	//_CrtSetBreakAlloc(110390);
 	
 	Manager::gm.Init();
+	AESysSetWindowIcon("Assets/UI/horn.ico", 32.f, 32.f);
 
 	while (gGameRunning)
 	{

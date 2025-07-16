@@ -27,8 +27,7 @@ namespace Manager
 			Letterboxs[i].Mesh = Utils::CreateMesh();
 			Letterboxs[i].Texture = AEGfxTextureLoad("Assets/black.png");
 		}
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMReduceVol);
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::SFX], SFXManager.SFXReduceVol);
+		global::isVolumeReduced = true;
 	}
 	void BossAppearScene::Update()
 	{
@@ -81,8 +80,7 @@ namespace Manager
 		if (Boss->bossApearTime > Boss->bossApearDuration)
 		{
 			Boss->bossApearing = false;
-			AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMOriginVol);
-			AEAudioSetGroupVolume(SFXManager.sound_group[InGame::SFX], SFXManager.SFXOriginVol);
+			global::isVolumeReduced = false;
 		}
 	}
 	void BossAppearScene::Draw()

@@ -2,6 +2,7 @@
 #include "Intro.h"
 #include "Playing.h"
 #include "MainMenu.h"
+#include "SettingUI.h"
 
 namespace Manager
 {
@@ -15,6 +16,8 @@ namespace Manager
 		currStateREF->Init();
 		currState = EGameState::TEMP;
 		nextState = EGameState::INTRO;
+		SettingPanel.Init();
+		SettingUI::StaticInit();
 		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
 		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 	}
@@ -24,6 +27,17 @@ namespace Manager
 		AESysFrameStart();
 		cursor.Update();
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
+
+		if (SettingPanel.isFullScreen)
+		{
+			if(!AESysIsFullScreen())
+				AESysSetFullScreen(true);
+		}
+		else
+		{
+			if (AESysIsFullScreen())
+				AESysSetFullScreen(false);
+		}
 
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 		if (currState != nextState || forceRestart)
@@ -48,24 +62,33 @@ namespace Manager
 			}
 			forceRestart = false;
 		}
-		currStateREF->Update();
+		if (AEInputCheckCurr(AEVK_F1)) //to do
+			SettingPanel.isSettingOn = true;
+
+		SettingPanel.Update();
+
+		if(!SettingPanel.isSettingOn)
+			currStateREF->Update();
+
 	}
 
 	void GameManager::Pause()
 	{
 		GamePaused = true;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMReduceVol);
+		global::isVolumeReduced = true;
 	}
 
 	void GameManager::Resume()
 	{
 		GamePaused = false;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMOriginVol);
+		global::isVolumeReduced = false;
 	}
 
 	void GameManager::Draw()
 	{
 		currStateREF->Draw();
+		if (SettingPanel.isSettingOn)
+			SettingPanel.Draw();
 		cursor.Draw();
 		AESysFrameEnd();
 	}
@@ -79,6 +102,8 @@ namespace Manager
 			currStateREF = nullptr;
 		}
 		cursor.Destroy();
+		SettingPanel.Destroy();
+		SettingUI::StaticDestory();
 	}
 
 	void GameManager::SetNextGameState(EGameState state)

@@ -5,6 +5,7 @@
 #include "GameOver.h"
 #include <sstream>
 #include <iomanip>
+#include "SettingUI.h"
 
 namespace Manager
 {
@@ -58,7 +59,7 @@ namespace Manager
 		const float slotHeight = 100.0f;
 		const float spacingX = 10.0f; // 가로 간격
 		const float spacingY = 10.0f; // 세로 간격
-		const float startX = -300.f; // 전체 위치 조정
+		const float startX = -215.f; // 전체 위치 조정
 		const float startY = -400.f + spacingY;
 
 		for (size_t i = 0; i < ItemSlot.size(); ++i)
@@ -80,12 +81,12 @@ namespace Manager
 		statsUI.Mesh = Utils::CreateMesh();
 		statsUI.Texture = AEGfxTextureLoad("Assets/black.png");
 		statsUI.size = { 430.f, 430.f };
-		statsUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, - statsUI.size.y / 2.f + 50.f };
+		statsUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, -400.f + statsUI.size.y / 2.f - 40.f};
 
 		tagUI.Mesh = Utils::CreateMesh();
 		tagUI.Texture = AEGfxTextureLoad("Assets/black.png");
-		tagUI.size = { 430.f, 320.f };
-		tagUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, tagUI.size.y / 2.f + 60.f };
+		tagUI.size = { 430.f, 430.f };
+		tagUI.position = { (gridRightEdgeX + screenRightEdgeX) / 2.0f, statsUI.position.y + statsUI.size.y + 10.f};
 
 		slotWhite.Mesh = Utils::CreateMesh();
 		slotWhite.Texture = AEGfxTextureLoad("Assets/white.png");
@@ -415,11 +416,15 @@ namespace Manager
 				}
 			}
 
+			
+
 			for (size_t i = 0; i < PC->inventory.size(); i++)
 			{
 				if (ItemSlot[i].IsHovered())
 					HUD.TooltipUpdate(*PC->inventory[i].first);
 			}
+			
+			
 		}
 	}
 

@@ -21,6 +21,8 @@ namespace global
 	extern s32 CurrentStageNumber;
 	extern s32 MaxPotionGauge;
 
+	extern bool isVolumeReduced;
+
 	extern f32 item12TriggerRatio;
 	extern f32 item12AdditionalDamage;
 	extern f32 item23RerollCostRatio;
