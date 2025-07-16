@@ -2,6 +2,7 @@
 #include "../Utils/Utils.h"
 #include "GameManager.h"
 #include "../InGame/SFX.h"
+#include "SettingUI.h"
 namespace Manager
 {
 	f32 MainMenu::alpha = 1.f;
@@ -66,7 +67,7 @@ namespace Manager
 		Buttons[1].size = buttonSize;
 		Buttons[1].SetCallback([]() {
 			SFXManager.Play("button");
-			gm.shouldExit = true;
+			SettingPanel.isSettingOn = true;
 			});
 		Buttons[1].Init();
 

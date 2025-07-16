@@ -34,7 +34,8 @@ namespace Manager
 		settingButton.position = { BX, 150};
 		settingButton.size = { BW , BH };
 		settingButton.SetCallback([]() {
-			//TODO: Setting Button callback
+			SFXManager.Play("button");
+			SettingPanel.isSettingOn = true;
 			});
 		settingButton.Init();
 

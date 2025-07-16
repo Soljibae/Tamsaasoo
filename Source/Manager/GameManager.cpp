@@ -62,13 +62,11 @@ namespace Manager
 			}
 			forceRestart = false;
 		}
-		if (AEInputCheckCurr(AEVK_F1)) //to do
-			SettingPanel.isSettingOn = true;
 
 		SettingPanel.Update();
 
-		if(!SettingPanel.isSettingOn)
-			currStateREF->Update();
+		//if(!SettingPanel.isSettingOn)
+		currStateREF->Update();
 
 	}
 

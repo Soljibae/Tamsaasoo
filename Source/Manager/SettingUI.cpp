@@ -92,8 +92,8 @@ namespace Manager
 	{
 		if (SettingPanel.isSettingOn)
 		{
-			if (AEInputCheckCurr(AEVK_ESCAPE))
-				isSettingOn = false;
+			if (AEInputCheckTriggered(AEVK_ESCAPE))
+				SettingPanel.isSettingOn = false;
 
 			if (AEInputCheckCurr(AEVK_LBUTTON)) {
 				if (Utils::IsMouseInSquare(sfxBarBackground.position.x, sfxBarBackground.position.y, sfxBarBackground.size.x, sfxBarBackground.size.y))
