@@ -57,6 +57,8 @@ namespace InGame
 
 		Utils::InitOffset(*this);
 		inventory.clear();
+
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/potion.wav", "potion");
 	}
 	void PlayerCharacter::Update()
 	{
@@ -167,6 +169,7 @@ namespace InGame
 			{
 				if (PS->Potion >= global::MaxPotionGauge)
 				{
+					Manager::SFXManager.Play("coin_gain");
 					PS->Money += global::item24GoldGained;
 					PS->Potion -= global::MaxPotionGauge;
 				}
@@ -177,6 +180,7 @@ namespace InGame
 				{
 					if (PS->Potion >= global::MaxPotionGauge)
 					{
+						Manager::SFXManager.Play("potion");
 						adjustHealth(1);
 						PS->Potion -= global::MaxPotionGauge;
 					}
@@ -407,6 +411,11 @@ namespace InGame
 					position.y = std::clamp(newPos.y, global::worldMin.y + size.y / 2, global::worldMax.y - size.y / 2);
 				}
 			}
+		}
+		if (bisCoinDroped)
+		{
+			Manager::SFXManager.Play("coin_drop");
+			bisCoinDroped = false;
 		}
 	}
 	void PlayerCharacter::UpdateDash()
