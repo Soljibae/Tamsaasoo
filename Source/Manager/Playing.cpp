@@ -84,7 +84,11 @@ namespace Manager
 			EC->Init();
 			ECPool.push_back(EC);
 		}
-		StageTimer = 3.f * maxWaveCount;
+		StageTimer = 3.f * maxWaveCount + global::DeltaTime;
+		if (global::DeltaTime > 0.1)
+		{
+			StageTimer += global::DeltaTime;
+		}
 		WaveTimer = 0.;
 		InGame::EnemyCharacter::StaticInit();
 		pausePanel.Init(PC);
@@ -104,9 +108,10 @@ namespace Manager
 	}
 	void Playing::Update()
 	{
-		if (global::DeltaTime > 0.02)
+		if (global::DeltaTime > 0.1)
 		{
 			std::cout << global::DeltaTime << std::endl;
+			StageTimer += global::DeltaTime;
 			return;
 		}
 		if (Fader.Alpha > 0.f)
@@ -179,7 +184,7 @@ namespace Manager
 			if (global::KeyInput(AEVK_O))
 			{
 				PC->Stats->MaxHP += 2;
-				PC->Stats->HP += 3;
+				PC->Stats->HP += 2;
 			}
 			if (global::KeyInput(AEVK_9))
 			{
@@ -1003,6 +1008,7 @@ namespace Manager
 			}
 		}
 		CAM->Init(*PC);
+		StageTimer = 3.f * maxWaveCount;
 	}
 	AEVec2 Playing::GetSpawnLocation()
 	{

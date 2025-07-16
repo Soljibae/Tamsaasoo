@@ -141,17 +141,26 @@ namespace Manager
 		{
 			HPBG.clear();
 			const float startX = -(global::ScreenWidth / 2) + 200.f;
-			const float Y = (global::ScreenHeight / 2) - 90.f;
+			float Y = (global::ScreenHeight / 2) - 90.f;
 			InGame::Actor bgobj;
 			bgobj.Texture = HPTex;
 			bgobj.Mesh = HPMesh;
+
+			int col = 0;
 			for (int i = 0; i < PC->Stats->MaxHP; ++i)
 			{
-				int row = i;
-				int col = i;
+				if (PC->Stats->MaxHP > 7)
+				{
+					if (col > 7)
+					{
+						col = 0;
+						Y += 30;
+					}
+				}
 				bgobj.position = { startX + col * (HPWidth + spacingX), Y };
-				bgobj.size = { HPWidth, HPHeight };
 				HPBG.push_back(bgobj);
+				col++;
+				bgobj.size = { HPWidth, HPHeight };
 			}
 		}
 
