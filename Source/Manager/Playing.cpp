@@ -29,13 +29,18 @@ namespace Manager
 		Fader.Alpha = 1.f;
 		SFXManager.Init();
 		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.mp3", "doom");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/slime.wav", "slime");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/skeleton.mp3", "skeleton");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/tanker.wav", "tanker");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/bomber.wav", "bomber");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/dasherDead.wav", "dasherDead");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/sniper.wav", "sniper");
-		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/zigzag.wav", "zigzag");
+
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/slime.wav", "slime");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/skeleton.mp3", "skeleton");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/tanker.wav", "tanker");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/bomber.wav", "bomber");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/dasherDead.wav", "dasherDead");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/sniper.wav", "sniper");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/zigzag.wav", "zigzag");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/orbiter.wav", "orbiter");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/burner.wav", "burner");
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/holer.wav", "holer");
+
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Boss/siren.wav", "siren");
 		SFXManager.Play("doom");
 		if (CurrentStage == nullptr)
@@ -489,16 +494,16 @@ namespace Manager
 						SFXManager.Play("zigzag");
 						break;
 					case InGame::EnemyType::ORBITER:
-
+						SFXManager.Play("orbiter");
 						break;
 					case InGame::EnemyType::SNIPER:
 						SFXManager.Play("sniper");
 						break;
 					case InGame::EnemyType::BURNER:
-
+						SFXManager.Play("burner");
 						break;
 					case InGame::EnemyType::HOLER:
-
+						SFXManager.Play("holer");
 						break;
 					}
 					global::IsEnemyRecentlyDied = true;
@@ -618,7 +623,6 @@ namespace Manager
 				gameOverScreen.isGameOver = true;
 			}
 			HUD.Update();
-			VFXManager.Update();
 			gameOverScreen.Update();
 		}
 		else if (pickPanel.IsActive())
@@ -633,6 +637,7 @@ namespace Manager
 		{
 			pausePanel.Update();
 		}
+		VFXManager.Update();
 		SFXManager.Update();
 	}
 	void Playing::Draw()

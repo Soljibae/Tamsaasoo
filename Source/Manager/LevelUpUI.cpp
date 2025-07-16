@@ -26,9 +26,9 @@ namespace Manager
 	}
 	void LevelUpUI::Init(InGame::PlayerCharacter* InPC)
 	{
-		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/pick.wav", "pick");
-		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/reroll.wav", "reroll");
-		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/epic.wav", "epic");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/pick.wav", "pick");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/reroll.wav", "reroll");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/epic.wav", "epic");
 		currentOptions.reserve(3);
 		PC = InPC;
 

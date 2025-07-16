@@ -11,14 +11,9 @@ namespace Manager
 	GameManager::Cursor cursor;
 	void GameManager::Init()
 	{
-		cursor.position = { 0,0 };
-		cursor.size = { 30.f, 30.f };
-		cursor.Mesh = Utils::CreateMesh();
-		cursor.Texture = AEGfxTextureLoad("Assets/UI/cursor.png");
-
 		SettingPanel.Init();
 		SettingUI::StaticInit();
-
+		cursor.Init();
 		currStateREF = new Intro();
 		currStateREF->Init();
 		currState = EGameState::TEMP;
@@ -45,7 +40,6 @@ namespace Manager
 		}
 
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-
 		if (currState != nextState || forceRestart)
 		{
 			currStateREF->Destroy();

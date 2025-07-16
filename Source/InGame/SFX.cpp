@@ -4,9 +4,6 @@ namespace InGame
 {
 	void SFXManager::Init()
 	{
-		sound_group[SYSTEM] = AEAudioCreateGroup();
-		sound_group[ENEMY] = AEAudioCreateGroup();
-		sound_group[PLAYER] = AEAudioCreateGroup();
 		sound_group[SFX] = AEAudioCreateGroup();
 		sound_group[BGM] = AEAudioCreateGroup();
 		sound_group[UI] = AEAudioCreateGroup();
@@ -32,8 +29,6 @@ namespace InGame
 				case BGM:
 					AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], BGMOriginVol, sfx.second.pitch, -1);
 					break;
-				case PLAYER:
-					AEAudioPlay(sfx.second.audio, sound_group[sfx.second.type], PLAYEROriginVol, sfx.second.pitch, -1);
 				}
 				sfx.second.play = false;
 			}
