@@ -1,253 +1,258 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Global">
+      <UniqueIdentifier>{5932714a-18c1-45dd-8f49-da09d13229ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="InGame">
+      <UniqueIdentifier>{f8ac0fd6-7e54-4809-9abe-fc6bd9b97b83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Global">
-      <UniqueIdentifier>{15a07c32-a97a-48b7-831a-078502009bba}</UniqueIdentifier>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{aa8ebb34-896a-40d6-8f09-d45758f34125}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\InGame">
-      <UniqueIdentifier>{9faa83a1-5956-47a0-9194-e27fefbf57bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Utils">
-      <UniqueIdentifier>{72cb4bb2-73a9-40b2-bdaf-2bc5ba1b1da4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\Manager">
-      <UniqueIdentifier>{33781b03-bfe9-4cc2-9080-7d0c808ef2d7}</UniqueIdentifier>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{dd466938-79b1-4dcf-aba1-339b63e39cdb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\Global\GlobalVariables.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
     <ClCompile Include="..\Source\Global\main.cpp">
-      <Filter>소스 파일\Global</Filter>
+      <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\Actor.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\Character.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\Projectile.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Global\GlobalVariables.cpp">
-      <Filter>소스 파일\Global</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Utils\Utils.cpp">
-      <Filter>소스 파일\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\GameManager.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Utils\Camera.cpp">
-      <Filter>소스 파일\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\Intro.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\GameState.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\Playing.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\MainMenu.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\Background.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\PauseUI.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\Button.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\Gun.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\PlayerStat.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\Stat.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\Item.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\EnemyBoss.cpp">
-      <Filter>소스 파일\InGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\LevelUpUI.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Manager\HUDController.cpp">
-      <Filter>소스 파일\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\InGame\SpawnList.cpp">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\ArealAttack.cpp">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Manager\ItemResourceManager.cpp">
-      <Filter>소스 파일\Manager</Filter>
+    <ClCompile Include="..\Source\InGame\Background.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Manager\ExpUI.cpp">
-      <Filter>소스 파일\Manager</Filter>
+    <ClCompile Include="..\Source\InGame\Character.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Manager\ItemDatabase.cpp">
-      <Filter>소스 파일\Manager</Filter>
+    <ClCompile Include="..\Source\InGame\EnemyBoss.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Manager\ItemParser.cpp">
-      <Filter>소스 파일\Manager</Filter>
+    <ClCompile Include="..\Source\InGame\EnemyCharacter.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\Stage.cpp">
-      <Filter>소스 파일\InGame</Filter>
+    <ClCompile Include="..\Source\InGame\Gun.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\InGame\SoulOrb.cpp">
-      <Filter>소스 파일\InGame</Filter>
+    <ClCompile Include="..\Source\InGame\Item.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Manager\GameOver.cpp">
-      <Filter>소스 파일\Manager</Filter>
+    <ClCompile Include="..\Source\InGame\PlayerCharacter.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\PlayerStat.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\Projectile.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\SFX.cpp">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\SoulOrb.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\SpawnList.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\Stage.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\InGame\Stat.cpp">
+      <Filter>InGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\InGame\VFX.cpp">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\BossAppearScene.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\BossHPBar.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\Button.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ExpUI.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\GameManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\GameOver.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\GameState.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Manager\GunPickUI.cpp">
-    <ClCompile Include="..\Source\Manager\BossHPBar.cpp">
-      <Filter>소스 파일\Manager</Filter>
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\HUDController.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\Intro.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ItemDatabase.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ItemParser.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\ItemResourceManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\LevelUpUI.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\MainMenu.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\PauseUI.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\Playing.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Manager\SettingUI.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\Camera.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\Utils.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\InGame\Actor.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Character.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\EnemyCharacter.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\PlayerCharacter.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Projectile.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Global\GlobalVariables.h">
-      <Filter>소스 파일\Global</Filter>
+      <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Utils\Utils.h">
-      <Filter>소스 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\GameManager.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Utils\Camera.h">
-      <Filter>소스 파일\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\Intro.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\Intro.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\GameState.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\Playing.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\MainMenu.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Background.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\PauseUI.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\Button.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Gun.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\PlayerStat.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Stat.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Item.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\EnemyData.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\EnemyBoss.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\LevelUpUI.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\Stage.h">
-      <Filter>소스 파일\InGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Manager\HUDController.h">
-      <Filter>소스 파일\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\InGame\SpawnList.h">
-      <Filter>소스 파일\InGame</Filter>
+    <ClInclude Include="..\Source\InGame\Actor.h">
+      <Filter>InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\ArealAttack.h">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Manager\ItemResourceManager.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="..\Source\InGame\Background.h">
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Manager\ExpUI.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="..\Source\InGame\Character.h">
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Manager\ItemDatabase.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="..\Source\InGame\EnemyBoss.h">
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Manager\ItemParser.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="..\Source\InGame\EnemyCharacter.h">
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Manager\ItemData.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="..\Source\InGame\EnemyData.h">
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\InGame\SoulOrb.h">
-      <Filter>소스 파일\InGame</Filter>
+    <ClInclude Include="..\Source\InGame\Gun.h">
+      <Filter>InGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Manager\GameOver.h">
-      <Filter>소스 파일\Manager</Filter>
+    <ClInclude Include="..\Source\InGame\Item.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\PlayerCharacter.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\PlayerStat.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Projectile.h">
+      <Filter>InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\SFX.h">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\SoulOrb.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\SpawnList.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Stage.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\InGame\Stat.h">
+      <Filter>InGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\InGame\VFX.h">
-      <Filter>소스 파일\InGame</Filter>
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\BossAppearScene.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\BossHPBar.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\Button.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ExpUI.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\GameManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\GameOver.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\GameState.h">
+      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Manager\GunPickUI.h">
-    <ClInclude Include="..\Source\Manager\BossHPBar.h">
-      <Filter>소스 파일\Manager</Filter>
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\HUDController.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\Intro.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemData.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemDatabase.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemParser.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\ItemResourceManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\LevelUpUI.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\MainMenu.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\PauseUI.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\Playing.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\SettingUI.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Utils\Camera.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Utils\Utils.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

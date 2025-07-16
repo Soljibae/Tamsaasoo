@@ -287,7 +287,7 @@ void Utils::DrawObject(InGame::Actor& object, AEGfxTexture* Texture, AEGfxVertex
 	AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
 }
 
-void Utils::DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha)
+void Utils::DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture* Texture, AEGfxVertexList* Mesh, f32 alpha, bool is_camera_enabled)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
@@ -304,9 +304,15 @@ void Utils::DrawObject(AEVec2 position, AEVec2 offset, AEVec2 size, AEGfxTexture
 		AEMtx33 scale;
 		AEMtx33Scale(&scale, size.x, size.y);
 		AEMtx33 tran;
-		AEVec2 translated_pos;
-		AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &position);
-		AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+		AEMtx33Trans(&tran, position.x, position.y);
+
+		if (is_camera_enabled)
+		{
+			AEVec2 translated_pos;
+			AEMtx33MultVec(&translated_pos, &(Manager::CAM->translate_matrix), &position);
+			AEMtx33Trans(&tran, translated_pos.x, translated_pos.y);
+		}
+		
 		AEMtx33 transform;
 
 		AEMtx33Concat(&transform, &tran, &scale);

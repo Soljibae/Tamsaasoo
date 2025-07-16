@@ -2,6 +2,7 @@
 #include "Intro.h"
 #include "Playing.h"
 #include "MainMenu.h"
+#include "SettingUI.h"
 
 namespace Manager
 {
@@ -14,6 +15,9 @@ namespace Manager
 		cursor.size = { 30.f, 30.f };
 		cursor.Mesh = Utils::CreateMesh();
 		cursor.Texture = AEGfxTextureLoad("Assets/UI/cursor.png");
+
+		SettingPanel.Init();
+		SettingUI::StaticInit();
 
 		currStateREF = new Intro();
 		currStateREF->Init();
@@ -28,6 +32,17 @@ namespace Manager
 		AESysFrameStart();
 		cursor.Update();
 		global::DeltaTime = (f32)AEFrameRateControllerGetFrameTime();
+
+		if (SettingPanel.isFullScreen)
+		{
+			if(!AESysIsFullScreen())
+				AESysSetFullScreen(true);
+		}
+		else
+		{
+			if (AESysIsFullScreen())
+				AESysSetFullScreen(false);
+		}
 
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
@@ -53,7 +68,14 @@ namespace Manager
 			}
 			forceRestart = false;
 		}
-		currStateREF->Update();
+		if (AEInputCheckCurr(AEVK_F1)) //to do
+			SettingPanel.isSettingOn = true;
+
+		if(SettingPanel.isSettingOn)
+			SettingPanel.Update();
+		else
+			currStateREF->Update();
+		
 	}
 
 	void GameManager::Pause()
@@ -71,6 +93,8 @@ namespace Manager
 	void GameManager::Draw()
 	{
 		currStateREF->Draw();
+		if (SettingPanel.isSettingOn)
+			SettingPanel.Draw();
 		cursor.Draw();
 		AESysFrameEnd();
 	}
@@ -84,6 +108,8 @@ namespace Manager
 			currStateREF = nullptr;
 		}
 		cursor.Destroy();
+		SettingPanel.Destroy();
+		SettingUI::StaticDestory();
 	}
 
 	void GameManager::SetNextGameState(EGameState state)
