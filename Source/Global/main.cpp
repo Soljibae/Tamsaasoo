@@ -20,7 +20,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	// Changing the window title
 	AESysSetWindowTitle("HeavenRiser");
 	global::font = AEGfxCreateFont("Assets/liberation-mono.ttf", 72);
-	AEInputShowCursor(1);
+	AEInputShowCursor(0);
 
 	//_CrtSetBreakAlloc(110390);
 	

@@ -205,7 +205,7 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 	{
 		Explode(target);
 		BulletSpeed = 0.f;
-		CollisionRadius = 0.f; // Ãæµ¹ ¹Ý°æÀ» 0À¸·Î ¸¸µé¾î Ãß°¡ Ãæµ¹À» ¸·½À´Ï´Ù.
+		CollisionRadius = 0.f; // ï¿½æµ¹ ï¿½Ý°ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½æµ¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
 	}
 }
 

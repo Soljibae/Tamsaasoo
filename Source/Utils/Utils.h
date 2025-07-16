@@ -36,6 +36,8 @@ namespace Utils
 
 	void DrawItem(InGame::Item& item);
 
+	void DrawCursor(InGame::Actor cursor);
+
 	void DrawTest(f32 x, f32 y, f32 width, f32 height);
 
 	void InitOffset(InGame::Actor& object);
