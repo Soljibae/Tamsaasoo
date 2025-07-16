@@ -20,7 +20,7 @@ Regal Hubris
 2
 Increases damage for each enemy alive.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.05, -1, -1, -1, -1, -1, -1
+0.04, -1, -1, -1, -1, -1, -1
 
 4
 //4 - 획득 시 최대 체력 value1칸 감소. 사망 시 1회 부활
@@ -44,7 +44,7 @@ Ember of Wrath
 0
 Your attacks have a 30% chance to set the enemy on fire for 3 seconds.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, 3.0, 0.3, -1
+-1, -1, -1, -1, 3.0, 0.2, -1
 
 7
 //7 - additionalBurnDamage value1 증가 (적이 화상으로 입는 체력 비례 데미지가 증가)
@@ -204,7 +204,7 @@ Temptation Veil
 2
 Your attacks have a chance to stun enemies.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, 3.0, 0.2, -1
+-1, -1, -1, -1, 3.0, 0.15, -1
 
 27
 //27 - 적 처치 시 procchance 확률로 duration초간 range 범위 내 적들 공포
@@ -220,7 +220,7 @@ Desire Shroud
 1
 Your attacks have a chance to make an enemy Vulnerable.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, 3, 0.3, -1
+-1, -1, -1, -1, 3, 0.2, -1
 
 29
 //29 - 연사 증가, 상태이상의 발동 확률이 증가(additionalProcChanceRatio value1 증가, additionalFireRate valuse2 증가)
