@@ -256,11 +256,55 @@ namespace InGame
 					AnimationState = MOVE;
 					bIsCharging = true;
 				}
+				else if (cooldownTime > 1.f)
+				{
+					if (!bDoRadialAttack)
+					{
+						AEVec2 toPlayer;
+						AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
+						AEVec2Normalize(&toPlayer, &toPlayer);
+
+						const int numBullets = 5;
+						const float angleSpreadDeg = 30.f;
+						const float angleStepDeg = angleSpreadDeg / (numBullets - 1);
+						const float angleStartDeg = -angleSpreadDeg / 2.0f;
+
+						for (int i = 0; i < numBullets; ++i)
+						{
+							float angleDeg = angleStartDeg + i * angleStepDeg;
+							float angleRad = angleDeg * (3.1415926f / 180.0f);
+
+							float cosA = cosf(angleRad);
+							float sinA = sinf(angleRad);
+
+							AEVec2 rotatedDir;
+							rotatedDir.x = toPlayer.x * cosA - toPlayer.y * sinA;
+							rotatedDir.y = toPlayer.x * sinA + toPlayer.y * cosA;
+							AEVec2Neg(&rotatedDir, &rotatedDir);
+							SpawnProjectile(rotatedDir, position);
+						}
+						Manager::SFXManager.Play("BossAttackKnife");
+						bDoRadialAttack = true;
+					}
+				}
 			}
 			else
 			{
 				AEVec2 delta;
 				AEVec2Scale(&delta, &dashDirection, Stats->MovementSpeed * global::DeltaTime);
+
+				afterImageTimer += global::DeltaTime;
+				if (afterImageTimer >= afterImageCooldown)
+				{
+					AfterImage img;
+					img.position = position;
+					img.size = size;
+					img.alpha = DrawAlpha;
+					img.timer = 0.3f;
+
+					afterImages.push_back(img);
+					afterImageTimer = 0.f;
+				}
 
 				if (dashDirection.x < 0.0f && size.x > 0.0f)
 				{
@@ -281,6 +325,7 @@ namespace InGame
 				}
 				else
 				{
+					bDoRadialAttack = false;
 					bIsCharging = false;
 					cooldownTime = 0.f;
 					dashCount++;
@@ -297,16 +342,13 @@ namespace InGame
 						float value = (jumpTargetPos.x * jumpTargetPos.x) / (EllipseA * EllipseA) +
 							(jumpTargetPos.y * jumpTargetPos.y) / (EllipseB * EllipseB);
 
-						// Ÿ�� �ٱ��� �ִ� ��� �� Ÿ�� ��輱�� ��ġ�ϵ��� ����
 						if (value > 1.0f)
 						{
-							// Ÿ�� �߽ɿ����� ���⺤�� ����ȭ
 							AEVec2 dir;
 							AEVec2 Orient = { 0.f, 0.f };
-							AEVec2Sub(&dir, &jumpTargetPos, &Orient); // �� �߽��� (0,0) �����̶�� ����
+							AEVec2Sub(&dir, &jumpTargetPos, &Orient); 
 							AEVec2Normalize(&dir, &dir);
 
-							// Ÿ�� ��� ������ ����
 							jumpTargetPos.x = dir.x * EllipseA;
 							jumpTargetPos.y = dir.y * EllipseB;
 						}
@@ -323,81 +365,59 @@ namespace InGame
 					}
 				}
 			}
-
-			radialAttackTimer += global::DeltaTime;
-			if (radialAttackTimer >= radialAttackCooldown)
-			{
-				radialAttackTimer = 0.f;
-
-				AEVec2 toPlayer;
-				AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
-				AEVec2Normalize(&toPlayer, &toPlayer);
-
-				const int numBullets = 5;
-				const float angleSpreadDeg = 30.f; // ��15��
-				const float angleStepDeg = angleSpreadDeg / (numBullets - 1);
-				const float angleStartDeg = -angleSpreadDeg / 2.0f;
-
-				for (int i = 0; i < numBullets; ++i)
-				{
-					float angleDeg = angleStartDeg + i * angleStepDeg;
-					float angleRad = angleDeg * (3.1415926f / 180.0f);
-
-					float cosA = cosf(angleRad);
-					float sinA = sinf(angleRad);
-
-					AEVec2 rotatedDir;
-					rotatedDir.x = toPlayer.x * cosA - toPlayer.y * sinA;
-					rotatedDir.y = toPlayer.x * sinA + toPlayer.y * cosA;
-					AEVec2Neg(&rotatedDir, &rotatedDir);
-					SpawnProjectile(rotatedDir, position);
-				}
-				Manager::SFXManager.Play("BossAttackKnife");
-			}
 		}
 		else
 		{
 			jumpTimer += global::DeltaTime;
 
-			// ���� ��� (0~1)
 			float fadeOutRatio = std::fmin(jumpTimer / jumpFadeOutDuration, 1.0f);
 			float moveRatio = std::fmin(jumpTimer / jumpMoveDuration, 1.0f);
 			float fadeInRatio = std::fmax((jumpTimer - (jumpMoveDuration - jumpFadeInDuration)) / jumpFadeInDuration, 0.0f);
 
-			// Alpha ó��
 			if (jumpTimer < jumpMoveDuration - jumpFadeInDuration)
 			{
-				// ���� �������
-				DrawAlpha = 1.0f - 0.7f * fadeOutRatio; // 1.0 �� 0.3
+				DrawAlpha = 1.0f - 0.7f * fadeOutRatio;
 			}
 			else
 			{
-				// �ٽ� �ѷ��ϰ�
 				AnimationState = ATTACK;
-				DrawAlpha = 0.3f + 0.7f * fadeInRatio; // 0.3 �� 1.0
+				DrawAlpha = 0.3f + 0.7f * fadeInRatio; 
 			}
 
-			// ��ġ �̵�: ���� ������ �� ���� ��ġ (����)
 			position.x = jumpStartPos.x + (jumpTargetPos.x - jumpStartPos.x) * moveRatio;
 			position.y = jumpStartPos.y + (jumpTargetPos.y - jumpStartPos.y) * moveRatio;
 
-			// ���� �Ϸ� ó��
 			if (jumpTimer >= jumpMoveDuration)
 			{
 				AnimationState = IDLE;
 				DrawAlpha = 1.0f;
 				bIsJumping = false;
 
-				// ���� ���� ����
 				AEVec2 toPlayer;
 				AEVec2Sub(&toPlayer, &global::PlayerLocation, &position);
 				float distance = AEVec2Length(&toPlayer);
 			}
 		}
+
+		for (auto it = afterImages.begin(); it != afterImages.end(); )
+		{
+			it->timer -= global::DeltaTime;
+			it->alpha -= global::DeltaTime / 0.3f;
+
+			if (it->timer <= 0 || it->alpha <= 0)
+				it = afterImages.erase(it);
+			else
+				++it;
+		}
 	}
 	void Stage2Boss::Draw()
 	{
-		Utils::DrawObject(*this,true,DrawAlpha);
+		for (const auto& img : afterImages)
+		{
+			Utils::DrawObject(img.position, offset, img.size, Texture, Mesh, img.alpha);
+		}
+
+		Utils::DrawObject(*this, true, DrawAlpha);
 	}
 	void Stage2Boss::Destroy()
 	{
@@ -449,7 +469,6 @@ namespace InGame
 
 		if (!bIsMoving && MoveTimer >= MoveCooldown)
 		{
-			// ���� ������ ���� ���� (���� ��ġ�� �ٸ� ��)
 			std::random_device rd;
 			std::mt19937 gen(rd());
 			std::uniform_int_distribution<int> dist(0, static_cast<int>(MovePositions.size()) - 1);
@@ -468,7 +487,6 @@ namespace InGame
 
 		if (bIsMoving)
 		{
-			// ���� ���
 			AEVec2 toTarget;
 			AEVec2Sub(&toTarget, &MoveTargetPos, &position);
 			float distance = AEVec2Length(&toTarget);

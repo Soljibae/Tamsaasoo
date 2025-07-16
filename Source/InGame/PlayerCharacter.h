@@ -8,6 +8,7 @@
 #include <memory>
 namespace InGame
 {
+	
 	class PlayerCharacter : public Character
 	{
 	public:
@@ -54,6 +55,7 @@ namespace InGame
 		float DashCooldown = 1.0f;
 		float DashCooldownTimer = 0.0f;
 		AEVec2 DashDirection;
+		
 
 	private:
 	};

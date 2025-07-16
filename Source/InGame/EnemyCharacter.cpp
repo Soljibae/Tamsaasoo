@@ -246,6 +246,19 @@ namespace InGame
 							
 							if (dashMoved < dashRange)
 							{
+								afterImageTimer += global::DeltaTime;
+								if (afterImageTimer >= afterImageCooldown)
+								{
+									AfterImage img;
+									img.position = position;
+									img.size = size;
+									img.alpha = 0.5f;
+									img.timer = 0.3f;
+
+									afterImages.push_back(img);
+									afterImageTimer = 0.f;
+								}
+
 								f32 effectiveDashSpeed = dashSpeed;
 
 								if (Stats->StatusEffectTimer[SLOW] > 0)
@@ -286,6 +299,17 @@ namespace InGame
 							dashDuration = 0.f;
 							bHasDashed = false;
 						}
+					}
+
+					for (auto it = afterImages.begin(); it != afterImages.end(); )
+					{
+						it->timer -= global::DeltaTime;
+						it->alpha -= global::DeltaTime / 0.3f;
+
+						if (it->timer <= 0 || it->alpha <= 0)
+							it = afterImages.erase(it);
+						else
+							++it;
 					}
 					break;
 				}
@@ -720,6 +744,10 @@ namespace InGame
 	void EnemyCharacter::Draw()
 	{
 		Utils::DrawObject(*this);
+		for (const auto& img : afterImages)
+		{
+			Utils::DrawObject(img.position, offset, img.size, Texture, Mesh, img.alpha);
+		}
 	}
 	void EnemyCharacter::Destroy()
 	{
@@ -751,6 +779,7 @@ namespace InGame
 		if (Stats->HP <= 0)
 		{
 			bIsPandingKill = true;
+			afterImages.clear();
 		}
 	}
 	void EnemyCharacter::SpawnProjectile(AEVec2 Dir, AEVec2 Pos)

@@ -111,7 +111,7 @@ namespace InGame
 			Exp = 4;
 			Health = 9;
 			AEVec2Set(&DrawSize, 100.f, 100.f);
-			CollisionRadius = 25.f;
+			CollisionRadius = 50.f;
 			MovementSpeed = 100;
 		}
 	};
@@ -126,7 +126,7 @@ namespace InGame
 			Exp = 5;
 			Health = 30;
 			AEVec2Set(&DrawSize, 100.f, 100.f);
-			CollisionRadius = 25;
+			CollisionRadius = 50.f;
 			MovementSpeed = 50;
 		}
 	};
@@ -174,7 +174,7 @@ namespace InGame
 			CollisionRadius = 35;
 			MovementSpeed = 200;
 			BulletSpeed = 5;
-			AEVec2Set(&ProjectileSize, 20.f, 20.f);
+			AEVec2Set(&ProjectileSize, 40.f, 40.f);
 		}
 	};
 	struct SniperData : EnemyData
@@ -191,7 +191,6 @@ namespace InGame
 			CollisionRadius = 35.f;
 			MovementSpeed = 300;
 			BulletSpeed = 5;
-			AEVec2Set(&ProjectileSize, 20.f, 20.f);
 		}
 	};
 	struct BurnerData : EnemyData
