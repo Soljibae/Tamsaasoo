@@ -2,6 +2,7 @@
 #include "../Utils/Utils.h"
 #include "GameManager.h"
 #include "../InGame/SFX.h"
+#include <algorithm>
 namespace Manager
 {
 	f32 MainMenu::alpha = 1.f;
@@ -15,19 +16,23 @@ namespace Manager
 		QUIT = 2,
 		LASTBUTTON = QUIT
 	};
-	static AEGfxVertexList* Hekirekiissen(f32 start, f32 end)
+	AEGfxVertexList* Hekirekiissen(f32 start, f32 end)
 	{
 		s32 c = 0xFFFFFFFF;
+		f32 tstart = std::clamp(start + 0.25f, 0.25f, 1.0f);
+		f32 tend = std::clamp(end + 0.25f, 0.25f, 1.0f);
+		f32 bstart = std::clamp(start, 0.0f, 0.75f);
+		f32 bend = std::clamp(end, 0.0f, 0.75f);
 		AEGfxMeshStart();
 		AEGfxTriAdd(
-			-0.5f, -0.5f, c, start, 1.f,
-			0.5f, -0.5f, c, end, 1.f,
-			-0.5f, 0.5f, c, start, 0.f
+			-0.5f + bstart, -0.5f, c, bstart, 1.f,
+			-0.5f + bend, -0.5f, c, bend, 1.f,
+			-0.5f + tstart, 0.5f, c, tstart, 0.f
 			);
 		AEGfxTriAdd(
-			0.5f, -0.5f, c, end, 1.f,
-			0.5f, 0.5f, c, end, 0.f,
-			-0.5f, 0.5f, c, start, 0.f
+			-0.5f + bend, -0.5f, c, bend, 1.f,
+			-0.5f + tend, 0.5f, c, tend, 0.f,
+			-0.5f + tstart, 0.5f, c, tstart, 0.f
 		);
 		return AEGfxMeshEnd();
 	}
@@ -55,28 +60,31 @@ namespace Manager
 		Wbutton.Mesh = Utils::CreateMesh();
 		Wbutton.Texture = AEGfxTextureLoad("Assets/Buttons/WButton.png");
 
-		Buttons[0].size = buttonSize;
-		Buttons[0].position = { buttonPosX, 100.f };
+		f32 startY = 0.f;
+		f32 space = 10.f;
+		f32 spacingY = buttonSize.y + space;
+		for (auto& btn : Buttons)
+		{
+			btn.size = buttonSize;
+			btn.position = { buttonPosX, startY };
+			startY -= spacingY;
+		}
+		Buttons[0].Init();
 		Buttons[0].SetCallback([]() {
 			SFXManager.Play("button");
 			});
-		Buttons[0].Init();
 
-		Buttons[1].position = { buttonPosX, -100.f };
-		Buttons[1].size = buttonSize;
+		Buttons[1].Init();
 		Buttons[1].SetCallback([]() {
 			SFXManager.Play("button");
 			gm.shouldExit = true;
 			});
-		Buttons[1].Init();
 
-		Buttons[2].position = { buttonPosX, -300.f };
-		Buttons[2].size = buttonSize;
+		Buttons[2].Init();
 		Buttons[2].SetCallback([]() {
 			SFXManager.Play("button");
 			gm.shouldExit = true;
 			});
-		Buttons[2].Init();
 	}
 
 	void MainMenu::Update()
@@ -116,40 +124,60 @@ namespace Manager
 	void MainMenu::Draw()
 	{
 		Utils::DrawObject(Illust, false);
-		Utils::DrawObject(Buttons[0], BbuttonTexture, buttonMesh, buttonAlpha);
-		Utils::DrawObject(Buttons[1], BbuttonTexture, buttonMesh, buttonAlpha);
-		Utils::DrawObject(Buttons[2], BbuttonTexture, buttonMesh, buttonAlpha);
-		static f32 animateTime{ 0.f };
-		static AEVec2 lightRange{0.f, 0.f};
-		static AEVec2 lightSpeed{0.f, 0.f};
-		for (auto button : Buttons)
-		{
-			if (button.IsHovered())
-			{
-				animateTime += global::DeltaTime;
-				AEGfxMeshFree(Wbutton.Mesh);
-				Wbutton.Mesh = Hekirekiissen(lightRange.x, lightRange.y);
-				if (animateTime < 2.f)
-				{
-					lightRange.x += lightSpeed.x;
-					lightRange.y += lightSpeed.y;
-				}
-				Wbutton.position = button.position;
-				Wbutton.size = button.size;
-				Utils::DrawObject(Wbutton, Wbutton.Texture, Wbutton.Mesh, buttonAlpha);
-			}
-			else
-			{
-				animateTime = 0.f;
+		for (int i = 0; i < 3; ++i)
+			Utils::DrawObject(Buttons[i], BbuttonTexture, buttonMesh, buttonAlpha);
 
-				static AEVec2 lightRange{ 0.f, 0.f };
+		bool hovered = false;
+		static Button* target = nullptr;
+		static Button* prevtarget = nullptr;
+		for (auto& btn : Buttons) {
+			if (btn.IsHovered())
+			{ 
+				hovered = true; target = &btn; break;
 			}
+		}
+
+		static f32 start{ 0.f }, end{ 0.f }, sspeed{ 0.f }, espeed{ 0.f };
+		static f32 animTime{ 0.f };
+		if (target != prevtarget)
+		{
+			animTime = start = end = sspeed = espeed = 0.f;
+		}
+		if (target && target == prevtarget && target->IsHovered() && animTime < 1.f)
+		{
+			animTime += global::DeltaTime;
+			if(end < 0.5f)
+				espeed += global::DeltaTime/2.f;
+			else
+				espeed -= global::DeltaTime / 2.f;
+			if(animTime > .06f)
+			{
+				if(start < 0.5f)
+					sspeed += global::DeltaTime / 2.f;
+				else
+					sspeed -= global::DeltaTime / 2.f;
+			}
+			sspeed = std::clamp(sspeed, 0.01f, 1.f);
+			espeed = std::clamp(espeed, 0.01f, 1.f);
+			start += sspeed;
+			end += espeed;
+			start = std::clamp(start, 0.f, 1.f);
+			end = std::clamp(end, 0.f, 1.f);
+			AEGfxMeshFree(Wbutton.Mesh);
+			Wbutton.Mesh = Hekirekiissen(start, end);
+
+			Wbutton.position = target->position;
+			Wbutton.size = target->size;
+			Utils::DrawObject(Wbutton, Wbutton.Texture, Wbutton.Mesh, 0.5f);
+		}
+		else if (!hovered)
+		{
+			animTime = start = end = sspeed = espeed = 0.f;
 		}
 
 		if (alpha != 0)
-		{
 			Utils::DrawObject(Black, false, alpha);
-		}
+		prevtarget = target;
 	}
 	void MainMenu::Destroy()
 	{

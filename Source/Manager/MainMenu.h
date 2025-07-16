@@ -21,7 +21,7 @@ namespace Manager
 		f32 fadeInTime{ 0 };
 		const f32 fadeInDuration{ 1.f };
 		static f32 alpha;
-		f32 buttonAlpha{ 0.5f };
+		f32 buttonAlpha{ 0.3f };
 		AEGfxVertexList* buttonMesh;
 		AEGfxTexture* BbuttonTexture;
 		std::array<Button, 3> Buttons;
