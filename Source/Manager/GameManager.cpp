@@ -11,13 +11,13 @@ namespace Manager
 	GameManager::Cursor cursor;
 	void GameManager::Init()
 	{
-		SettingPanel.Init();
-		SettingUI::StaticInit();
 		cursor.Init();
 		currStateREF = new Intro();
 		currStateREF->Init();
 		currState = EGameState::TEMP;
 		nextState = EGameState::INTRO;
+		SettingPanel.Init();
+		SettingUI::StaticInit();
 		AEVec2Set(&global::worldMin, -static_cast<f32>(global::ScreenWidth), -static_cast<f32>(global::ScreenHeight));
 		AEVec2Set(&global::worldMax, static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight));
 	}
@@ -65,23 +65,23 @@ namespace Manager
 		if (AEInputCheckCurr(AEVK_F1)) //to do
 			SettingPanel.isSettingOn = true;
 
-		if(SettingPanel.isSettingOn)
-			SettingPanel.Update();
-		else
+		SettingPanel.Update();
+
+		if(!SettingPanel.isSettingOn)
 			currStateREF->Update();
-		
+
 	}
 
 	void GameManager::Pause()
 	{
 		GamePaused = true;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMReduceVol);
+		global::isVolumeReduced = true;
 	}
 
 	void GameManager::Resume()
 	{
 		GamePaused = false;
-		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], SFXManager.BGMOriginVol);
+		global::isVolumeReduced = false;
 	}
 
 	void GameManager::Draw()

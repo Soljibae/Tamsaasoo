@@ -1,6 +1,7 @@
 #include "Button.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
+#include "SettingUI.h"
 
 namespace Manager
 {
@@ -51,6 +52,9 @@ namespace Manager
     // Return true if mouse on button(IsMouseInSquare)
     bool Button::IsHovered()
     {
+        if (SettingPanel.isSettingOn)
+            return false;
+
         return Utils::IsMouseInSquare(*this);
     }
 

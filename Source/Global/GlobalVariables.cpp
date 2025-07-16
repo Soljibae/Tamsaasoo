@@ -22,6 +22,8 @@ namespace global
 	f32 item32ExplosionSize = 0.f;
 	s32 MaxPotionGauge = 300;
 
+	bool isVolumeReduced = false;;
+
 	// additionalStats =================
 	f32 additionalDamage = 0.f;
 	f32 additionalDamageRatio = 1.f;

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include "SettingUI.h"
+
 namespace Manager
 {
 	BossHPBar BossHP;
@@ -386,10 +388,10 @@ namespace Manager
 				switch (group.first)
 				{
 				case InGame::BGM:
-					AEAudioSetGroupVolume(group.second, SFXManager.BGMReduceVol);
+					global::isVolumeReduced = true;
 					break;
 				case InGame::SFX:
-					AEAudioSetGroupVolume(group.second, SFXManager.SFXReduceVol); 
+					global::isVolumeReduced = true;
 					break;
 				}
 			}
@@ -426,10 +428,10 @@ namespace Manager
 					switch (group.first)
 					{
 					case InGame::BGM:
-						AEAudioSetGroupVolume(group.second, SFXManager.BGMOriginVol);
+						global::isVolumeReduced = false;
 						break;
 					case InGame::SFX:
-						AEAudioSetGroupVolume(group.second, SFXManager.SFXOriginVol);
+						global::isVolumeReduced = false;
 						break;
 					case InGame::PLAYER:
 						AEAudioStopGroup(SFXManager.sound_group[InGame::PLAYER]);
@@ -598,6 +600,9 @@ namespace Manager
 	void HUDController::ShowTooltip(InGame::Item& item)
 	{
 		
+		if (SettingPanel.isSettingOn)
+			return;
+
 		Utils::DrawNinePatchMesh(tooltip.Window, tooltip.Window.Texture, tooltip.WindowMesh, padding);
 		f32 tmp, lh;
 		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &tmp, &lh);

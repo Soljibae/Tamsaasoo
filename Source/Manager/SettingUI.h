@@ -6,6 +6,11 @@
 
 namespace Manager
 {
+	struct SoundBar
+	{
+
+	};
+
 	class SettingUI
 	{
 	public:
@@ -16,9 +21,10 @@ namespace Manager
 		void Destroy();
 		static void StaticDestory();
 
-		std::array<AEGfxVertexList*, 9> uiMesh;
 		s8 pFont;
+		f32 fontSize = 72.f;
 		f32 padding = 15.f;
+		f32 textDrawSize = 0.2f;
 
 		static AEGfxVertexList* soundBarBackgroundMesh;
 		static AEGfxTexture* soundBarBackgroundTexture;
@@ -45,7 +51,10 @@ namespace Manager
 		InGame::Actor uiBarBackground;
 		InGame::Actor uiBarFill;
 
-		std::vector<std::shared_ptr<InGame::Actor>> borders;
+		InGame::Actor checkBox;
+		InGame::Actor checkSign;
+
+		InGame::Actor border;
 
 		bool isSettingOn = false;
 		bool isFullScreen = false;
