@@ -25,7 +25,7 @@ namespace Manager
 	{
 		f32 padding = 4.f;
 
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 
 		UI.size = {300.f, 500.f};
 		UI.position = { 0.f, 0.f };

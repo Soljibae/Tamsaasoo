@@ -280,7 +280,7 @@ Increases the attack speed of your minions.
 
 36
 //36 - value1 만큼 공격력 증가 (additionalDamageRatio value1 증가)
-Mark of the Destroyer
+Destroyer's Mark
 2
 Increases attack damage ratio.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -296,7 +296,7 @@ Increases fire rate ratio.
 
 38
 //38 - value1 만큼 연사 증가 value2 만큼 이속 증가 (additionalFireRate value1 증가, additionalMovementSpeed value2 증가 )
-Talisman of Vigilance
+Vigilance Talisman
 1
 Increases fire rate and movement speed.
 //value1, value2, value3, cooldown, duration, procchance, range
@@ -344,7 +344,7 @@ Increases movement speed.
 
 44
 //44 - 최대체력 value1 증가
-Wellspring of Vitality
+Well of Vitality
 0
 Grants +1 Max Health.
 //value1, value2, value3, cooldown, duration, procchance, range

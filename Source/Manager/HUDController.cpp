@@ -127,7 +127,7 @@ namespace Manager
 		
 		prevPotion = PC->PS->Potion;
 		prevFireRate = GUN->RoundPerSec;
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
 		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltipBorder.png");
@@ -135,7 +135,7 @@ namespace Manager
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
-		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/HeartBeat.wav", "heart");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()

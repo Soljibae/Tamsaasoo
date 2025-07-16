@@ -13,10 +13,11 @@ namespace Manager
     }
     void Button::Update()
     {
-        if(IsHovered() || isSelected)
+        if (IsHovered() || isSelected)
+        {
             activeButton = this;
+        }
         bool shouldScale = (IsHovered() || isSelected) && this == activeButton;
-
         if (shouldScale)
         {
             size.x = originSize.x * 1.04f;

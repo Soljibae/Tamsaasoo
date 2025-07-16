@@ -88,7 +88,7 @@ namespace Manager
 		pauseDimmer.Texture = AEGfxTextureLoad("Assets/black.png");
 		pauseDimmer.position = { 0, 0 };
 		pauseDimmer.size = { static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight) };
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		for (auto& cost : rerollCost)
 		{
 			cost = 20;

@@ -229,7 +229,7 @@ namespace Manager
 		ButtonTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
 		colors[0] = { 1.0f, 1.0f, 1.0f }, colors[1] = { 0.7f, 0.7f, 1.0f }, colors[2] = { 1.0f, 0.5f, 1.0f }, colors[3] = { 0, 0, 0 };
 		stageIdx = 0;
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 	}
 	void GunPickUI::Update()
 	{

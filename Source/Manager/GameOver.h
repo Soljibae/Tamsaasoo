@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "../InGame/Actor.h"
 #include "Button.h"
+#include <array>
 namespace Manager
 {
 	class GameOver
@@ -15,12 +16,13 @@ namespace Manager
 	private:
 		InGame::Actor BG;
 		f32 BGalpha;
-		struct Buttons
-		{
-			Button Retry;
-			Button MainMenu;
-		};
-		Buttons buttons;
+
+		f32 buttonAlpha{ 0.3f };
+		InGame::Actor Wbutton;
+		AEGfxVertexList* buttonMesh;
+		AEGfxTexture* BbuttonTexture;
+		std::array<Button, 2> Buttons;
+
 		f32 fadeoutTime;
 		f32 fadeoutDuration;
 		f32 buttonShowDelay;

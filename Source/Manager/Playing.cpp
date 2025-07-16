@@ -107,7 +107,7 @@ namespace Manager
 		WM.Init();
 		bIsJumping = false;
 		VFXManager.Init();
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		gm.GamePaused = false;
 
 		gunPickPanel.Show();

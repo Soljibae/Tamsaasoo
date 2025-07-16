@@ -58,7 +58,9 @@ namespace InGame
 		Utils::InitOffset(*this);
 		inventory.clear();
 
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/potion.wav", "potion");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Player/dead.mp3", "dead");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Player/gethit.mp3", "gethit");
+		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Player/potion.wav", "potion");
 	}
 	void PlayerCharacter::Update()
 	{
@@ -69,6 +71,7 @@ namespace InGame
 		if (Stats->MaxHP <= 0)
 		{
 			bIsPandingKill = true;
+			Manager::SFXManager.Play("dead");
 		}
 
 		UpdateEffectTime();
@@ -282,6 +285,7 @@ namespace InGame
 				else
 				{
 					bIsPandingKill = true;
+					Manager::SFXManager.Play("dead");
 					Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
 					if (GS)
 					{
@@ -294,6 +298,7 @@ namespace InGame
 			else
 			{
 				bIsInvincible = true;
+				Manager::SFXManager.Play("gethit");
 			}
 		}
 	}

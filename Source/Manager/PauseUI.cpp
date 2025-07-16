@@ -6,53 +6,63 @@
 #include <sstream>
 #include <iomanip>
 #include "SettingUI.h"
-
+#include <algorithm>
+#include "MainMenu.h"
 namespace Manager
 {
 	PauseUI pausePanel;
 	AEGfxVertexList* PauseUI::slotMesh;
 	AEGfxTexture* PauseUI::slotTexture;
+	static s32 fontSize = 72;
+	static f32 textDrawSize = 0.3f;
 
 	void PauseUI::Init(InGame::PlayerCharacter* InPC)
 	{
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/buttonover.wav", "buttonover");
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
-		f32 BW{ 300 }, BH{ 120 }, BX{-w/2.f+BW/1.5f}; // button width, button height
-		resumeButton.Mesh = Utils::CreateMesh();
-		resumeButton.Texture = AEGfxTextureLoad("Assets/Buttons/ResumeButton.png");
-		resumeButton.position = { BX, 300};
-		resumeButton.size = { BW , BH };
-		resumeButton.SetCallback([]() { 
-			gm.Resume(); 
-			SFXManager.Play("button");
-			});
-		resumeButton.Init();
+		f32 BW{ 400 }, BH{ 90 }, BX{-w/2.f+BW/1.5f}; // button width, button height
 
-		settingButton.Mesh = Utils::CreateMesh();
-		settingButton.Texture = AEGfxTextureLoad("Assets/Buttons/SettingButton.png");
-		settingButton.position = { BX, 150};
-		settingButton.size = { BW , BH };
-		settingButton.SetCallback([]() {
-			SFXManager.Play("button");
-			SettingPanel.isSettingOn = true;
-			});
-		settingButton.Init();
-
-		mainmenuButton.Mesh = Utils::CreateMesh();
-		mainmenuButton.Texture = AEGfxTextureLoad("Assets/Buttons/MainMenuButton.png");
-		mainmenuButton.position = { BX, 0};
-		mainmenuButton.size = { BW , BH };
-		mainmenuButton.SetCallback([]() { 
-			gm.SetNextGameState(EGameState::MAINMENU); 
-			});
-		mainmenuButton.Init();
 
 		pauseDimmer.Mesh = Utils::CreateMesh();
 		pauseDimmer.Texture = AEGfxTextureLoad("Assets/black.png");
 		pauseDimmer.position = {0, 0};
 		pauseDimmer.size = {w, h};
-		
+
+		buttonMesh = Utils::CreateMesh();
+		BbuttonTexture = AEGfxTextureLoad("Assets/Buttons/BButton.png");
+
+		Wbutton.size = { BW,BH };
+		Wbutton.Mesh = Utils::CreateMesh();
+		Wbutton.Texture = AEGfxTextureLoad("Assets/Buttons/WButton.png");
+
+		f32 bstartY = 200.f;
+		f32 bspace = 10.f;
+		f32 bspacingY = BH + bspace;
+		for (auto& btn : Buttons)
+		{
+			btn.size = { BW,BH };
+			btn.position = { BX, bstartY };
+			bstartY -= bspacingY;
+		}
+		Buttons[0].Init();
+		Buttons[0].SetCallback([]() {
+			SFXManager.Play("button");
+			gm.Resume();
+			});
+
+		Buttons[1].Init();
+		Buttons[1].SetCallback([]() {
+			SFXManager.Play("button");
+			SettingPanel.isSettingOn = true;
+			});
+
+		Buttons[2].Init();
+		Buttons[2].SetCallback([]() {
+			gm.SetNextGameState(EGameState::MAINMENU);
+			});
+
 		slotMesh = Utils::CreateMesh();
 		slotTexture = AEGfxTextureLoad("Assets/black.png");
 		const int columns = 4; // 한 줄에 몇 개
@@ -93,7 +103,7 @@ namespace Manager
 		slotWhite.Texture = AEGfxTextureLoad("Assets/white.png");
 		slotWhite.size = { slotWidth, slotHeight };
 
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", 72.f);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 
 		PC = InPC;
 	}
@@ -102,9 +112,6 @@ namespace Manager
 	{
 		if (gameOverScreen.isGameOver)
 			return;
-		resumeButton.Update();
-		settingButton.Update();
-		mainmenuButton.Update();
 
 		std::stringstream ss;
 
@@ -416,16 +423,16 @@ namespace Manager
 					break;
 				}
 			}
+		}
+		for (auto& btn : Buttons)
+		{
+			btn.Update();
+		}
 
-			
-
-			for (size_t i = 0; i < PC->inventory.size(); i++)
-			{
-				if (ItemSlot[i].IsHovered())
-					HUD.TooltipUpdate(*PC->inventory[i].first);
-			}
-			
-			
+		for (size_t i = 0; i < PC->inventory.size(); i++)
+		{
+			if (ItemSlot[i].IsHovered())
+				HUD.TooltipUpdate(*PC->inventory[i].first);
 		}
 	}
 
@@ -433,6 +440,7 @@ namespace Manager
 	{
 		if (gameOverScreen.isGameOver)
 			return;
+
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		//background fading
@@ -492,11 +500,94 @@ namespace Manager
 				count++;
 			}	
 		}
+		for (int i = 0; i < 3; ++i)
+			Utils::DrawObject(Buttons[i], BbuttonTexture, buttonMesh, buttonAlpha);
 
-		//buttons
-		Utils::DrawObject(resumeButton, false);
-		Utils::DrawObject(settingButton, false);
-		Utils::DrawObject(mainmenuButton, false);
+		bool hovered = false;
+		static bool played = false;
+		static Button* target = nullptr;
+		static Button* prevtarget = nullptr;
+		prevtarget = target;
+		for (auto& btn : Buttons) {
+			if (btn.IsHovered())
+			{
+				hovered = true; target = &btn; break;
+			}
+		}
+
+		static f32 start{ 0.f }, end{ 0.f }, sspeed{ 0.f }, espeed{ 0.f };
+		static f32 animTime{ 0.f };
+		if (target != prevtarget)
+		{
+			played = false;
+			animTime = start = end = sspeed = espeed = 0.f;
+		}
+		if (target && target == prevtarget && target->IsHovered() && animTime < 1.f)
+		{
+			if (!played)
+			{
+				played = true;
+				SFXManager.Play("buttonover");
+			}
+			animTime += global::DeltaTime;
+			if (end < 0.5f)
+				espeed += global::DeltaTime / 2.f;
+			else
+				espeed -= global::DeltaTime / 2.f;
+			if (animTime > .06f)
+			{
+				if (start < 0.5f)
+					sspeed += global::DeltaTime / 2.f;
+				else
+					sspeed -= global::DeltaTime / 2.f;
+			}
+			sspeed = std::clamp(sspeed, 0.01f, 1.f);
+			espeed = std::clamp(espeed, 0.01f, 1.f);
+			start += sspeed;
+			end += espeed;
+			start = std::clamp(start, 0.f, 1.f);
+			end = std::clamp(end, 0.f, 1.f);
+			AEGfxMeshFree(Wbutton.Mesh);
+			Wbutton.Mesh = Hekirekiissen(start, end);
+
+			Wbutton.position = target->position;
+			Wbutton.size = target->size;
+			Utils::DrawObject(Wbutton, Wbutton.Texture, Wbutton.Mesh, 0.5f);
+		}
+		else if (!hovered)
+		{
+			played = false;
+			animTime = start = end = sspeed = espeed = 0.f;
+		}
+		int idx = 0;
+		f32 lw, lh;
+		f32 halfW{ static_cast<f32>(global::ScreenWidth) / 2.f }, halfH{ static_cast<f32>(global::ScreenHeight) / 2.f };
+		for (auto& btn : Buttons)
+		{
+			switch (idx)
+			{
+			case 0:
+				AEGfxGetPrintSize(pFont, "Resume", textDrawSize, &lw, &lh);
+				lw *= halfW;
+				lh *= halfH;
+				AEGfxPrint(pFont, "Resume", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
+				break;
+			case 1:
+				AEGfxGetPrintSize(pFont, "Setting", textDrawSize, &lw, &lh);
+				lw *= halfW;
+				lh *= halfH;
+				AEGfxPrint(pFont, "Setting", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
+				break;
+			case 2:
+				AEGfxGetPrintSize(pFont, "Mainmenu", textDrawSize, &lw, &lh);
+				lw *= halfW;
+				lh *= halfH;
+				AEGfxPrint(pFont, "Mainmenu", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
+				break;
+			}
+			idx++;
+		}
+
 		for (int i = 0; i < PC->inventory.size(); i++)
 		{
 			if (ItemSlot[i].IsHovered())
@@ -508,14 +599,11 @@ namespace Manager
 
 	void PauseUI::Destroy()
 	{
-		AEGfxMeshFree(resumeButton.Mesh);
-		AEGfxTextureUnload(resumeButton.Texture);
+		AEGfxMeshFree(buttonMesh);
+		AEGfxTextureUnload(BbuttonTexture);
 
-		AEGfxMeshFree(settingButton.Mesh);
-		AEGfxTextureUnload(settingButton.Texture);
-
-		AEGfxMeshFree(mainmenuButton.Mesh);
-		AEGfxTextureUnload(mainmenuButton.Texture);
+		AEGfxMeshFree(Wbutton.Mesh);
+		AEGfxTextureUnload(Wbutton.Texture);
 
 		AEGfxMeshFree(pauseDimmer.Mesh);
 		AEGfxTextureUnload(pauseDimmer.Texture);

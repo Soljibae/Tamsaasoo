@@ -17,13 +17,16 @@ namespace Manager
 	private:
 		InGame::Actor Illust;
 		InGame::Actor Black;
-		InGame::Actor Wbutton;
+		InGame::Actor Title;
 		f32 fadeInTime{ 0 };
 		const f32 fadeInDuration{ 1.f };
 		static f32 alpha;
 		f32 buttonAlpha{ 0.3f };
+		InGame::Actor Wbutton;
 		AEGfxVertexList* buttonMesh;
 		AEGfxTexture* BbuttonTexture;
 		std::array<Button, 3> Buttons;
+		s8 pFont;
 	};
+	AEGfxVertexList* Hekirekiissen(f32 start, f32 end);
 }

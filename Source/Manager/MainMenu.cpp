@@ -9,6 +9,8 @@ namespace Manager
 	f32 MainMenu::alpha = 1.f;
 	static AEVec2 buttonSize{ 500.f, 100.f };
 	static f32 buttonPosX = static_cast<f32>(global::ScreenWidth) / 2.f - buttonSize.x*0.8f;
+	const static s32 fontSize = 72;
+	static const f32 textDrawSize = 0.4f;
 	// code to reference for buttons index
 	static enum class ButtonType
 	{
@@ -40,14 +42,21 @@ namespace Manager
 	void MainMenu::Init()
 	{
 		SFXManager.Init();
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/start.wav", "start");
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/buttonover.wav", "buttonover");
 		f32 w = static_cast<f32>(global::ScreenWidth);
 		f32 h = static_cast<f32>(global::ScreenHeight);
 
 		Illust.Mesh = Utils::CreateMesh();
-		Illust.Texture = AEGfxTextureLoad("Assets/MainTemp.png");
+		Illust.Texture = AEGfxTextureLoad("Assets/UI/Illust.png");
 		Illust.position = { 0.f, 0.f };
 		Illust.size = { w, h };
+
+		Title.Mesh = Utils::CreateMesh();
+		Title.Texture = AEGfxTextureLoad("Assets/UI/title2.png");
+		Title.size = { 600, 200 };
+		Title.position = { w/2.f - Title.size.x/1.5f, h/2.f - Title.size.y};
 
 		Black.Mesh = Utils::CreateMesh();
 		Black.Texture = AEGfxTextureLoad("Assets/Black.png");
@@ -72,7 +81,7 @@ namespace Manager
 		}
 		Buttons[0].Init();
 		Buttons[0].SetCallback([]() {
-			SFXManager.Play("button");
+			SFXManager.Play("start");
 			});
 
 		Buttons[1].Init();
@@ -83,9 +92,9 @@ namespace Manager
 
 		Buttons[2].Init();
 		Buttons[2].SetCallback([]() {
-			SFXManager.Play("button");
 			gm.shouldExit = true;
 			});
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 	}
 
 	void MainMenu::Update()
@@ -125,12 +134,18 @@ namespace Manager
 	void MainMenu::Draw()
 	{
 		Utils::DrawObject(Illust, false);
+		if (alpha != 0)
+			Utils::DrawObject(Black, false, alpha);
+		if (alpha > 0)
+			return;
+		Utils::DrawObject(Title, false);
 		for (int i = 0; i < 3; ++i)
 			Utils::DrawObject(Buttons[i], BbuttonTexture, buttonMesh, buttonAlpha);
-
 		bool hovered = false;
+		static bool played = false;
 		static Button* target = nullptr;
 		static Button* prevtarget = nullptr;
+		prevtarget = target;
 		for (auto& btn : Buttons) {
 			if (btn.IsHovered())
 			{ 
@@ -142,10 +157,16 @@ namespace Manager
 		static f32 animTime{ 0.f };
 		if (target != prevtarget)
 		{
+			played = false;
 			animTime = start = end = sspeed = espeed = 0.f;
 		}
 		if (target && target == prevtarget && target->IsHovered() && animTime < 1.f)
 		{
+			if (!played)
+			{
+				played = true;
+				SFXManager.Play("buttonover");
+			}
 			animTime += global::DeltaTime;
 			if(end < 0.5f)
 				espeed += global::DeltaTime/2.f;
@@ -173,23 +194,53 @@ namespace Manager
 		}
 		else if (!hovered)
 		{
+			played = false;
 			animTime = start = end = sspeed = espeed = 0.f;
 		}
-
-		if (alpha != 0)
-			Utils::DrawObject(Black, false, alpha);
-		prevtarget = target;
+		int idx = 0;
+		f32 lw, lh;
+		f32 halfW{ static_cast<f32>(global::ScreenWidth) / 2.f }, halfH{ static_cast<f32>(global::ScreenHeight) / 2.f };
+		for (auto& btn : Buttons)
+		{
+			switch (idx)
+			{
+			case 0:
+				AEGfxGetPrintSize(pFont, "Start", textDrawSize, &lw, &lh);
+				lw *= halfW;
+				lh *= halfH;
+				AEGfxPrint(pFont, "Start",(btn.position.x - lw/2.f)/halfW, (btn.position.y - lh/2.f)/halfH,textDrawSize,1,1,1,1);
+				break;
+			case 1:
+				AEGfxGetPrintSize(pFont, "Setting", textDrawSize, &lw, &lh);
+				lw *= halfW;
+				lh *= halfH;
+				AEGfxPrint(pFont, "Setting",(btn.position.x - lw/2.f)/halfW, (btn.position.y - lh/2.f)/halfH,textDrawSize,1,1,1,1);
+				break;
+			case 2:
+				AEGfxGetPrintSize(pFont, "Quit", textDrawSize, &lw, &lh);
+				lw *= halfW;
+				lh *= halfH;
+				AEGfxPrint(pFont, "Quit",(btn.position.x - lw/2.f)/halfW, (btn.position.y - lh/2.f)/halfH,textDrawSize,1,1,1,1);
+				break;
+			}
+			idx++;
+		}
 	}
 	void MainMenu::Destroy()
 	{
 		AEGfxMeshFree(Illust.Mesh);
 		AEGfxTextureUnload(Illust.Texture);
 
+		AEGfxMeshFree(Title.Mesh);
+		AEGfxTextureUnload(Title.Texture);
+
 		AEGfxMeshFree(Black.Mesh);
 		AEGfxTextureUnload(Black.Texture);
 
 		AEGfxMeshFree(buttonMesh);
 		AEGfxTextureUnload(BbuttonTexture);
+
+		AEGfxMeshFree(Wbutton.Mesh);
 		AEGfxTextureUnload(Wbutton.Texture);
 
 		SFXManager.Destroy();

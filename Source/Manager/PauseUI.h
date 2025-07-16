@@ -17,9 +17,14 @@ namespace Manager
 		void Draw();
 		void Destroy();
 	private:
-		Button resumeButton;
-		Button settingButton;
-		Button mainmenuButton;
+		//Button resumeButton;
+		//Button settingButton;
+		//Button mainmenuButton;
+		InGame::Actor Wbutton;
+		AEGfxVertexList* buttonMesh;
+		AEGfxTexture* BbuttonTexture;
+		std::array<Button, 3> Buttons;
+		f32 buttonAlpha{ 0.3f };
 		//pause screen black background image
 		InGame::Actor pauseDimmer;
 		InGame::Actor tagUI;

@@ -13,7 +13,7 @@ namespace Manager
 		f32 h = static_cast<f32>(global::ScreenHeight);
 		f32 space = 3.f;
 
-		pFont = AEGfxCreateFont("Assets/buggy-font.ttf", fontSize);
+		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 
 		xpBarBackground.Mesh = Utils::CreateMesh();
 		xpBarBackground.Texture = AEGfxTextureLoad("Assets/black.png");
