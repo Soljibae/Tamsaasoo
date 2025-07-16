@@ -5,6 +5,7 @@
 #include "GameState.h"
 #include "../InGame/Actor.h"
 #include "../InGame/SFX.h"
+#include "../Utils/Utils.h"
 namespace Manager
 {
 	class GameManager
@@ -24,6 +25,27 @@ namespace Manager
 		bool GamePaused{ false };
 		bool forceRestart{ false };
 		bool shouldExit{ false };
+
+		struct Cursor : public InGame::Actor
+		{
+			void Update() override
+			{
+				AEInputGetCursorPosition(&mouseX, &mouseY);
+				position.x = MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
+				position.y = MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
+			}
+			void Draw() override
+			{
+				Utils::DrawCursor(*this);
+			}
+			void Destroy() override
+			{
+				AEGfxMeshFree(Mesh);
+				AEGfxTextureUnload(Texture);
+			}
+			s32 mouseX, mouseY;
+			AEVec2 MP;
+		};
 	};
 	extern GameManager gm;
 	extern InGame::SFXManager SFXManager;

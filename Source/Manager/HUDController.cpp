@@ -402,6 +402,7 @@ namespace Manager
 			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
 
 			AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
+
 			if(!soundReduced)
 				SFXManager.Play("heart");
 			soundReduced = true;
@@ -464,6 +465,8 @@ namespace Manager
 			prevMoney = PC->PS->Money;
 		}
 
+		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f + 5.f) / (w / 2),
+			(Coin.position.y - Coin.size.y / 2.5f - 2.f) / (h / 2), isBigger ? 0.33f : 0.3f, 0, 0, 0, 1);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2),
 			(Coin.position.y - Coin.size.y / 2.5f) / (h / 2), isBigger ? 0.33f : 0.3f, 1, 1, 1, 1);
 		if (isBigger)

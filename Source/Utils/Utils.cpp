@@ -52,6 +52,7 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 	int i = 0;
 	for (auto p : Patches)
 	{
+		AEGfxFontSystemStart();
 		AEGfxTriAdd(
 			-p.x, -p.y, 0xFFFFFFFF, p.u0, p.v0,
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
@@ -509,7 +510,35 @@ void Utils::DrawItem(InGame::Item& item)
 		}
 	}
 }
+void Utils::DrawCursor(InGame::Actor cursor)
+{
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+	AEGfxSetTransparency(1.0f);
+
+	Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+
+	AEGfxTextureSet(cursor.Texture, 0, 0);
+	AEVec2 cursorOffset{ cursor.position.x + cursor.size.x / 2.f, cursor.position.y - cursor.size.y / 2.f };
+
+	AEMtx33 scale;
+	AEMtx33Scale(&scale, cursor.size.x, cursor.size.y);
+	AEMtx33 tran;
+	AEMtx33Trans(&tran, cursorOffset.x, cursorOffset.y);
+	AEMtx33 transform;
+
+	AEMtx33Concat(&transform, &tran, &scale);
+
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.f);
+
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
+	AEGfxSetTransform(transform.m);
+
+	AEGfxMeshDraw(cursor.Mesh, AE_GFX_MDM_TRIANGLES);
+}
 void Utils::DrawTest(f32 x, f32 y, f32 width, f32 height)
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
