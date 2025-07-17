@@ -114,6 +114,10 @@ namespace Manager
 	}
 	void Playing::Update()
 	{
+		if (global::KeyInput(AEVK_1))
+		{
+			PC->AddItemToInventory(ITDB->itemList[23]->Clone());
+		}
 		if (global::DeltaTime > 0.1)
 		{
 			std::cout << global::DeltaTime << std::endl;
@@ -185,36 +189,7 @@ namespace Manager
 				}
 				return;
 			}
-			if (global::KeyInput(AEVK_1))
-			{
-				PC->AddItemToInventory(ITDB->itemList[26]->Clone());
-			}
-			if (global::KeyInput(AEVK_2))
-			{
-				PC->AddItemToInventory(ITDB->itemList[35]->Clone());
-			}
-			if (global::KeyInput(AEVK_3))
-			{
-				PC->AddItemToInventory(ITDB->itemList[31]->Clone());
-			}
-			if (global::KeyInput(AEVK_4))
-			{
-				PC->AddItemToInventory(ITDB->itemList[9]->Clone());
-			}
-			if (global::KeyInput(AEVK_5))
-			{
-				PC->AddItemToInventory(ITDB->itemList[6]->Clone());
-			}
-			if (global::KeyInput(AEVK_6))
-			{
-				PC->AddItemToInventory(ITDB->itemList[6]->Clone());
-			}
-			if (global::KeyInput(AEVK_O))
-			{
-				PC->Stats->MaxHP += 2;
-				PC->Stats->HP += 2;
-			}
-			if (global::KeyInput(AEVK_9))
+			/*if (global::KeyInput(AEVK_9))
 			{
 				if (global::isTestMod)
 				{
@@ -232,7 +207,7 @@ namespace Manager
 						EC->bIsPandingKill = true;
 					}
 				}
-			}
+			}*/
 			//
 			if (!bIsBossFight)
 			{
