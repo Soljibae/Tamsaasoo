@@ -196,13 +196,13 @@ namespace InGame
 			PS->ExpCount -= PS->TargetExp;
 			PS->TargetExp *= 1.35f;
 			PS->Level++;
-			std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
+			//std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
 			Manager::pickPanel.Show();
 		}
 		for (auto it = afterImages.begin(); it != afterImages.end(); )
 		{
 			it->timer -= global::DeltaTime;
-			it->alpha -= global::DeltaTime / 0.3f; // Ÿ�̸� �������� ���� ����
+			it->alpha -= global::DeltaTime / 0.3f; 
 
 			if (it->timer <= 0 || it->alpha <= 0)
 			{
