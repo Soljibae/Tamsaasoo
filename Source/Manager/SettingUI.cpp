@@ -2,6 +2,7 @@
 #include "../Utils/Utils.h"
 #include "../InGame/SFX.h"
 #include "GameManager.h"
+#include <algorithm>
 
 namespace Manager
 {
@@ -72,6 +73,10 @@ namespace Manager
 		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::SFX], sfxBarFill.size.x / sfxBarBackground.size.x * SFXManager.SFXOriginVol);
 		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::BGM], bgmBarFill.size.x / bgmBarBackground.size.x * SFXManager.BGMOriginVol);
 		AEAudioSetGroupVolume(SFXManager.sound_group[InGame::UI], uiBarFill.size.x / uiBarBackground.size.x * SFXManager.UIOriginVol);
+
+		isButtonPressed[InGame::SFX] = false;
+		isButtonPressed[InGame::BGM] = false;
+		isButtonPressed[InGame::UI] = false;
 	}
 
 	void SettingUI::StaticInit()
@@ -95,48 +100,28 @@ namespace Manager
 			if (AEInputCheckTriggered(AEVK_ESCAPE))
 				SettingPanel.isSettingOn = false;
 
-			if (AEInputCheckCurr(AEVK_LBUTTON)) {
+			if (!AEInputCheckPrev(AEVK_LBUTTON) && AEInputCheckCurr(AEVK_LBUTTON)) {
 				if (Utils::IsMouseInSquare(sfxBarBackground.position.x, sfxBarBackground.position.y, sfxBarBackground.size.x, sfxBarBackground.size.y))
 				{
-					f32 startPos = sfxBarBackground.position.x - sfxBarBackground.size.x / 2.f;
-					s32 mx = 0;
-					s32 my = 0;
-
-					AEInputGetCursorPosition(&mx, &my);
-
-					f32 mouse_x = static_cast<f32>(mx) - AEGfxGetWindowWidth() / 2.0f;
-
-					sfxBarFill.position.x = (mouse_x + startPos) / 2.f;
-					sfxBarFill.size.x = mouse_x - startPos;
+					isButtonPressed[InGame::SFX] = true;
+					isButtonPressed[InGame::BGM] = false;
+					isButtonPressed[InGame::UI] = false;
 				}
 
 				if (Utils::IsMouseInSquare(bgmBarBackground.position.x, bgmBarBackground.position.y, bgmBarBackground.size.x, bgmBarBackground.size.y))
 				{
-					f32 startPos = bgmBarBackground.position.x - bgmBarBackground.size.x / 2.f;
-					s32 mx = 0;
-					s32 my = 0;
-
-					AEInputGetCursorPosition(&mx, &my);
-
-					f32 mouse_x = static_cast<f32>(mx) - AEGfxGetWindowWidth() / 2.0f;
-
-					bgmBarFill.position.x = (mouse_x + startPos) / 2.f;
-					bgmBarFill.size.x = mouse_x - startPos;
+					isButtonPressed[InGame::SFX] = false;
+					isButtonPressed[InGame::BGM] = true;
+					isButtonPressed[InGame::UI] = false;
 				}
 
 				if (Utils::IsMouseInSquare(uiBarBackground.position.x, uiBarBackground.position.y, uiBarBackground.size.x, uiBarBackground.size.y))
 				{
-					f32 startPos = uiBarBackground.position.x - uiBarBackground.size.x / 2.f;
-					s32 mx = 0;
-					s32 my = 0;
-
-					AEInputGetCursorPosition(&mx, &my);
-
-					f32 mouse_x = static_cast<f32>(mx) - AEGfxGetWindowWidth() / 2.0f;
-
-					uiBarFill.position.x = (mouse_x + startPos) / 2.f;
-					uiBarFill.size.x = mouse_x - startPos;
+					isButtonPressed[InGame::SFX] = false;
+					isButtonPressed[InGame::BGM] = false;
+					isButtonPressed[InGame::UI] = true;
 				}
+
 				if (!AEInputCheckPrev(AEVK_LBUTTON))
 				{
 					if (Utils::IsMouseInSquare(checkBox.position.x, checkBox.position.y, checkBox.size.x, checkBox.size.y))
@@ -149,6 +134,56 @@ namespace Manager
 				}
 				
 			}
+
+			if (isButtonPressed[InGame::SFX])
+			{
+				f32 startPos = sfxBarBackground.position.x - sfxBarBackground.size.x / 2.f;
+				f32 endPos = sfxBarBackground.position.x;
+				s32 mx = 0;
+				s32 my = 0;
+
+				AEInputGetCursorPosition(&mx, &my);
+
+				f32 mouse_x = static_cast<f32>(mx) - AEGfxGetWindowWidth() / 2.0f;
+
+				sfxBarFill.position.x = std::clamp((mouse_x + startPos) / 2.f, startPos, endPos);
+				sfxBarFill.size.x = std::clamp(mouse_x - startPos, 0.f, sfxBarBackground.size.x);
+			}
+			if (isButtonPressed[InGame::BGM])
+			{
+				f32 startPos = bgmBarBackground.position.x - bgmBarBackground.size.x / 2.f;
+				f32 endPos = bgmBarBackground.position.x;
+				s32 mx = 0;
+				s32 my = 0;
+
+				AEInputGetCursorPosition(&mx, &my);
+
+				f32 mouse_x = static_cast<f32>(mx) - AEGfxGetWindowWidth() / 2.0f;
+
+				bgmBarFill.position.x = std::clamp((mouse_x + startPos) / 2.f, startPos, endPos);
+				bgmBarFill.size.x = std::clamp(mouse_x - startPos, 0.f, bgmBarBackground.size.x);
+			}
+			if (isButtonPressed[InGame::UI])
+			{
+				f32 startPos = uiBarBackground.position.x - uiBarBackground.size.x / 2.f;
+				f32 endPos = uiBarBackground.position.x;
+				s32 mx = 0;
+				s32 my = 0;
+
+				AEInputGetCursorPosition(&mx, &my);
+
+				f32 mouse_x = static_cast<f32>(mx) - AEGfxGetWindowWidth() / 2.0f;
+
+				uiBarFill.position.x = std::clamp((mouse_x + startPos) / 2.f, startPos, endPos);
+				uiBarFill.size.x = std::clamp(mouse_x - startPos, 0.f, uiBarBackground.size.x);
+			}
+
+			if (AEInputCheckReleased(AEVK_LBUTTON)) {
+				isButtonPressed[InGame::SFX] = false;
+				isButtonPressed[InGame::BGM] = false;
+				isButtonPressed[InGame::UI] = false;
+			}
+
 		}
 		
 

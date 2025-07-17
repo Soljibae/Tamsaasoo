@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <memory>
+#include "../InGame//SFX.h"
 
 namespace Manager
 {
@@ -55,6 +56,8 @@ namespace Manager
 		InGame::Actor checkSign;
 
 		InGame::Actor border;
+
+		std::map<InGame::SFXType, bool> isButtonPressed;
 
 		bool isSettingOn = false;
 		bool isFullScreen = false;
