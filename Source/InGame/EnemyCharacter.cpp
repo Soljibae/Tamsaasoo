@@ -170,7 +170,7 @@ namespace InGame
 			{
 				BurnTimer = 0.f;
 				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage);
-				std::cout << -Stats->MaxHP * global::effectiveBurnDamage << std::endl;
+				//std::cout << -Stats->MaxHP * global::effectiveBurnDamage << std::endl;
 			}
 		}
 

@@ -43,7 +43,10 @@ namespace Manager
 		if (currState != nextState || forceRestart)
 		{
 			currStateREF->Destroy();
-			delete currStateREF;
+			if (currStateREF)
+			{
+				delete currStateREF;
+			}
 			currState = nextState;
 			switch (currState)
 			{

@@ -825,7 +825,6 @@ namespace Manager
 	}
 	void Playing::SpawnWave()
 	{
-		std::cout << "Spawn Wave" << std::endl;
 		WM.GetNextList();
 		if (ECPool.size() >= std::stoi(WM.CurrList.MinionNum) + std::stoi(WM.CurrList.ArcherNum) + std::stoi(WM.CurrList.DasherNum) + std::stoi(WM.CurrList.TankerNum) + std::stoi(WM.CurrList.BomberNum) + std::stoi(WM.CurrList.ZigZagNum))
 		{

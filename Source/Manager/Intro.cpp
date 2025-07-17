@@ -41,7 +41,15 @@ namespace Manager
 	}
 	void Intro::Destroy()
 	{
-		AEGfxMeshFree(Splash.Mesh);
-		AEGfxTextureUnload(Splash.Texture);
+		if (Splash.Mesh)
+		{
+			AEGfxMeshFree(Splash.Mesh);
+		}
+		Splash.Mesh = nullptr;
+		if (Splash.Texture)
+		{
+			AEGfxTextureUnload(Splash.Texture);
+		}
+		Splash.Texture = nullptr;
 	}
 }

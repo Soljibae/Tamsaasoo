@@ -184,8 +184,7 @@ namespace Manager
 		prevMaxHP = PC->Stats->MaxHP;
 		prevCurrentHP = PC->Stats->HP;
 
-
-		if (GUN->gunType != prevGunType)
+		if (PC->HoldingGun->gunType != prevGunType)
 		{
 			AEGfxTextureUnload(ammoType.Texture);
 			ammoType.Texture = nullptr;
@@ -196,111 +195,111 @@ namespace Manager
 			{
 			case InGame::GunType::M1911:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::CZ75:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::DESERTEGLE:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::MP5:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::MPX:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::VECTOR:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::BEOWOLF:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-pistol.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-pistol.png");
 				break;
 			case InGame::GunType::P90:
 				ammoType.size = { 7.f, 21.f }; // 1:3
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::MOSINNAGAT:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::M24:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::RAILGUN:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::NITRO700:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::FNFAL:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::M82BARRETT:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::AR15:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::M110:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::BREN:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::MICROGUN:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::M249:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::M2:
 				ammoType.size = { 7.f, 29.4f }; // 1:4.2
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-rifle.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-rifle.png");
 				break;
 			case InGame::GunType::SAWEDOFFSHOTGUN:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			case InGame::GunType::DOUBLEBARREL:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			case InGame::GunType::KS23:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			case InGame::GunType::M1897:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			case InGame::GunType::BENELLIM4:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			case InGame::GunType::SAIGA12:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			case InGame::GunType::AA12:
 				ammoType.size = { 8.f, 21 }; // 8:21
-				ammoType.Texture = AEGfxTextureLoad("Assets/ammo-shotgun.png");
+				ammoType.Texture = AEGfxTextureLoad("Assets/UI/ammo-shotgun.png");
 				break;
 			}
 		}
