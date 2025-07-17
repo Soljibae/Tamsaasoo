@@ -255,8 +255,6 @@ namespace Manager
 
 		ResetGotEpic();
 
-		std::shared_ptr<InGame::Item> option;
-
 		const Playing* game = static_cast<Playing*>(gm.currStateREF);
 
 		std::random_device rd;
@@ -284,8 +282,34 @@ namespace Manager
 		s8 previdx = currentOptions[thisbutton]->id;
 		do
 		{
-			idx = dis(gen);
+			std::unordered_set<int> used_indices;
+			std::vector<std::shared_ptr<InGame::Item>> options;
+			options.reserve(3);
+			ItemGrade currGrade;
+			f32 prob = Utils::GetRandomFloat(0.f, 1.f);
+			if (0.f <= prob && prob <= 1.f - probEpic - probRare)
+				currGrade = COMMON;
+			else if (1.f - probEpic - probRare < prob && prob <= 1.f - probEpic)
+				currGrade = RARE;
+			else if (1.f - probEpic < prob && prob <= 1.f)
+				currGrade = EPIC;
+
+
+			s8 min = 0;
+
+			size_t max = containerForGrade[currGrade].size() - 1;
+
+			std::uniform_int_distribution<> dis(min, max);
+
+			while (true)
+			{
+				idx = containerForGrade[currGrade][dis(gen)];
+				auto result = used_indices.insert(idx);
+				if (result.second)
+					break;
+			}
 		} while ((idx == currentOptions[one]->id) || (idx == currentOptions[two]->id) || (idx == previdx));
+
 		AEVec2 originPos = currentOptions[thisbutton]->iconPosition;
 		currentOptions[thisbutton] = game->ITDB->itemList[idx];
 		currentOptions[thisbutton]->iconPosition = originPos;
