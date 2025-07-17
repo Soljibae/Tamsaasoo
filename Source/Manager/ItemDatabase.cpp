@@ -5,7 +5,7 @@ namespace Manager
 {
     void ItemDatabase::Init() {
         ItemParser parser;
-        itemValueDatabase = parser.Parse("../../Assets/item_data.csv");
+        itemValueDatabase = parser.Parse("Assets/item_data.csv");
         
         auto item1_prototype = std::make_shared<InGame::Item_1>();
         item1_prototype->Init(itemValueDatabase[1]);
