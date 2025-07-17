@@ -13,7 +13,6 @@ namespace InGame
 
 	void InGame::EnemyCharacter::Init()
 	{
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Enemy/dasherAttack.wav", "dasherAttack");
 		row = 6;
 		column = 2;
 		FrameTime = 0.2f;
