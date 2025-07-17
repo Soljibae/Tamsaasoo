@@ -347,10 +347,10 @@ namespace Manager
 		/*--------Centered can fire UI--------*/
 
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		/*if (global::KeyInput(AEVK_M))
+		if (global::KeyInput(AEVK_M))
 		{
 			PC->PS->Money += 1000000000;
-		}*/
+		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{

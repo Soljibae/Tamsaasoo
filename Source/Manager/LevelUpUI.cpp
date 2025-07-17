@@ -250,6 +250,7 @@ namespace Manager
 		}
 		PC->PS->Money -= rerollCost[thisbutton];
 		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
+		std::cout << global::item23RerollCostRatio << std::endl;
 
 		SFXManager.Play("reroll");
 

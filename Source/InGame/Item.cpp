@@ -1266,6 +1266,8 @@ namespace InGame
 		}
 
 		global::item23RerollCostRatio += value2 * appliedStack;
+		std::cout << global::item23RerollCostRatio << std::endl;
+		std::cout << appliedStack << std::endl;
 	}
 	void Item_23::Update(PlayerCharacter* owner)
 	{

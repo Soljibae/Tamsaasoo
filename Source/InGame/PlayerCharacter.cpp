@@ -555,6 +555,8 @@ namespace InGame
 
 		global::additionalDamageToBossRatio = 1.f;
 		global::additionalDamageFromBossRatio = 1.f;
+
+		global::item23RerollCostRatio = 1.f;
 	}
 
 	void PlayerCharacter::UpdateStats()
