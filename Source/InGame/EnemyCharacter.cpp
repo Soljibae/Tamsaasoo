@@ -13,7 +13,6 @@ namespace InGame
 
 	void InGame::EnemyCharacter::Init()
 	{
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Enemy/dasherAttack.wav", "dasherAttack");
 		row = 6;
 		column = 2;
 		FrameTime = 0.2f;
@@ -170,7 +169,7 @@ namespace InGame
 			{
 				BurnTimer = 0.f;
 				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage);
-				std::cout << -Stats->MaxHP * global::effectiveBurnDamage << std::endl;
+				//std::cout << -Stats->MaxHP * global::effectiveBurnDamage << std::endl;
 			}
 		}
 

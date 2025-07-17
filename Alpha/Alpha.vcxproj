@@ -107,6 +107,7 @@
     <ProjectGuid>{8ab8c4cb-0059-4920-a584-370b68eed836}</ProjectGuid>
     <RootNamespace>Alpha</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>HeavenRiser</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

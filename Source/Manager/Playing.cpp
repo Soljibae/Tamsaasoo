@@ -29,8 +29,9 @@ namespace Manager
 		Fader.size = { static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight) };
 		Fader.Alpha = 1.f;
 		SFXManager.Init();
-		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.mp3", "doom");
+		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.wav", "doom");
 
+		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Attack/dasherAttack.wav", "dasherAttack");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/slime.wav", "slime");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/skeleton.wav", "skeleton");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/tanker.wav", "tanker");
@@ -825,7 +826,6 @@ namespace Manager
 	}
 	void Playing::SpawnWave()
 	{
-		std::cout << "Spawn Wave" << std::endl;
 		WM.GetNextList();
 		if (ECPool.size() >= std::stoi(WM.CurrList.MinionNum) + std::stoi(WM.CurrList.ArcherNum) + std::stoi(WM.CurrList.DasherNum) + std::stoi(WM.CurrList.TankerNum) + std::stoi(WM.CurrList.BomberNum) + std::stoi(WM.CurrList.ZigZagNum))
 		{
