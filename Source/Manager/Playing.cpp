@@ -114,10 +114,6 @@ namespace Manager
 	}
 	void Playing::Update()
 	{
-		if (global::KeyInput(AEVK_1))
-		{
-			PC->AddItemToInventory(ITDB->itemList[23]->Clone());
-		}
 		if (global::DeltaTime > 0.1)
 		{
 			std::cout << global::DeltaTime << std::endl;
@@ -133,14 +129,14 @@ namespace Manager
 			Fader.Alpha = 0.f;
 
 		ExpPanel.Update();
-		if (global::KeyInput(AEVK_G))
+		/*if (global::KeyInput(AEVK_G))
 		{
 			gunPickPanel.Show();
 		}
 		if (global::KeyInput(AEVK_H))
 		{
 			pickPanel.Show();
-		}
+		}*/
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 
 		static bool prevSettingPanelState = false;
