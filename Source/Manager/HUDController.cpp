@@ -135,7 +135,6 @@ namespace Manager
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
-		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()
@@ -414,8 +413,11 @@ namespace Manager
 
 			AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
 
-			if(!soundReduced)
+			if (!soundReduced)
+			{
+				SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/UI/HeartBeat.wav", "heart");
 				SFXManager.Play("heart");
+			}
 			soundReduced = true;
 		}
 		else
@@ -434,6 +436,7 @@ namespace Manager
 						break;
 					}
 				}
+				AEAudioUnloadAudio(SFXManager.SFXList.find("heart")->second.audio);
 				soundReduced = false;
 			}
 		}
