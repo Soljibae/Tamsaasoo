@@ -16,7 +16,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     int gGameRunning = 1;
 
     // Using custom window procedure
-    AESysInit(hInstance, nCmdShow, global::ScreenWidth, global::ScreenHeight, 0, 100, true, NULL);
+    AESysInit(hInstance, nCmdShow, global::ScreenWidth, global::ScreenHeight, 0, 60, true, NULL);
 	// Changing the window title
 	AESysSetWindowTitle("HeavenRiser");
 	global::font = AEGfxCreateFont("Assets/liberation-mono.ttf", 72);

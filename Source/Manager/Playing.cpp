@@ -1053,7 +1053,7 @@ namespace Manager
 		std::string timer{ std::to_string(min) + ":" + (sec<10 ? "0"+std::to_string(sec) : std::to_string(sec))};
 		f32 lw, lh;
 		AEGfxGetPrintSize(pFont, timer.c_str(), textDrawSize, &lw, &lh);
-		AEGfxPrint(pFont, timer.c_str(), (- lw / 2.f + 5.f/ halfW), (400.f-2.f) / halfH, textDrawSize, 0.f, 0.f, 0.f, 1.f);
-		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, 400.f / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
+		AEGfxPrint(pFont, timer.c_str(), (- lw / 2.f + 5.f/ halfW), (halfH - 100.f -2.f) / halfH, textDrawSize, 0.f, 0.f, 0.f, 1.f);
+		AEGfxPrint(pFont, timer.c_str(), -lw/2.f, (halfH-100.f) / halfH, textDrawSize, 1.f, 1.f, 1.f, 1.f);
 	}
 }
