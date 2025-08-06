@@ -60,7 +60,7 @@ namespace Manager
 		std::map<InGame::SFXType, bool> isButtonPressed;
 
 		bool isSettingOn = false;
-		bool isFullScreen = false;
+		bool isFullScreen = true;
 
 	private:
 	};
