@@ -29,7 +29,7 @@ namespace Manager
 		Fader.size = { static_cast<f32>(global::ScreenWidth), static_cast<f32>(global::ScreenHeight) };
 		Fader.Alpha = 1.f;
 		SFXManager.Init();
-		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/doom.wav", "doom");
+		SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/BGM/BGM.mp3", "doom");
 
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Attack/dasherAttack.wav", "dasherAttack");
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Enemy/Dead/slime.wav", "slime");
@@ -118,7 +118,6 @@ namespace Manager
 		if (global::DeltaTime > 0.1)
 		{
 			std::cout << global::DeltaTime << std::endl;
-			StageTimer += global::DeltaTime;
 			return;
 		}
 		if (Fader.Alpha > 0.f)
