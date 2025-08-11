@@ -6,9 +6,20 @@
 #include "../Manager/Playing.h"
 #include "../Manager/GameManager.h"
 
+AEGfxTexture* InGame::Projectile::PlayerTexture = nullptr;
+AEGfxTexture* InGame::Projectile::EnemyMobTexture = nullptr;
+AEGfxTexture* InGame::Projectile::Boss1Texture = nullptr;
+AEGfxTexture* InGame::Projectile::Boss2Texture = nullptr;
+AEGfxTexture* InGame::Projectile::Boss3Texture = nullptr;
+
 void InGame::Projectile::Init()
 {
 	Mesh = Utils::CreateMesh();
+
+}
+
+void InGame::Projectile::StaticInit()
+{
 	PlayerTexture = AEGfxTextureLoad("Assets/Bullet.png");
 	EnemyMobTexture = AEGfxTextureLoad("Assets/EnemyMobBullet.png");
 	Boss1Texture = AEGfxTextureLoad("Assets/Boss1Bullet.png");
@@ -145,6 +156,11 @@ void InGame::Projectile::Destroy()
 		Utils::DestroyMesh(Mesh);
 		Mesh = nullptr;
 	}
+	Texture = nullptr;
+}
+
+void InGame::Projectile::StaticDestroy()
+{
 	if (PlayerTexture)
 	{
 		AEGfxTextureUnload(PlayerTexture);
@@ -170,7 +186,6 @@ void InGame::Projectile::Destroy()
 		AEGfxTextureUnload(Boss3Texture);
 		Boss3Texture = nullptr;
 	}
-	Texture = nullptr;
 }
 
 void InGame::Projectile::IsOutOfWorld()

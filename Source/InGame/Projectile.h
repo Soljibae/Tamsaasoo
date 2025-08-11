@@ -11,12 +11,14 @@ namespace InGame
 	{
 	public:
 		void Init();
+		static void StaticInit();
 		void Spawn(AEVec2 Dir, AEVec2 Pos, class PlayerCharacter* object);
 		void Spawn(AEVec2 Dir, AEVec2 Pos, class EnemyCharacter* object);
 		void Spawn(AEVec2 Dir, AEVec2 Pos, f32 BulletSpeed, f32 Damage, s32 HitCount, bool isExplosive);
 		virtual void Update() override;
 		virtual void Draw() override;
 		virtual void Destroy() override;
+		static void StaticDestroy();
 		void IsOutOfWorld();
 		void OnHit();
 		void OnHit(class EnemyCharacter* target);
@@ -38,10 +40,10 @@ namespace InGame
 		s32 ExplosionAnimationCount = 0;
 		s32 ExplosionMaxAnimationCount = 9;
 		bool hasHit = false;
-		AEGfxTexture* PlayerTexture = nullptr;
-		AEGfxTexture* EnemyMobTexture = nullptr;
-		AEGfxTexture* Boss1Texture = nullptr;
-		AEGfxTexture* Boss2Texture = nullptr;
-		AEGfxTexture* Boss3Texture = nullptr;
+		static AEGfxTexture* PlayerTexture;
+		static AEGfxTexture* EnemyMobTexture;
+		static AEGfxTexture* Boss1Texture;
+		static AEGfxTexture* Boss2Texture;
+		static AEGfxTexture* Boss3Texture;
 	};
 }
