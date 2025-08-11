@@ -98,6 +98,7 @@ namespace Manager
 		}
 		WaveTimer = 0.;
 		InGame::EnemyCharacter::StaticInit();
+		InGame::Projectile::StaticInit();
 		pausePanel.Init(PC);
 		pickPanel.Init(PC);
 		ExpPanel.Init(PC);
@@ -811,6 +812,7 @@ namespace Manager
 		delete ITRM;
 		AEGfxDestroyFont(pFont);
 		InGame::EnemyCharacter::StaticDestroy();
+		InGame::Projectile::StaticDestroy();
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
