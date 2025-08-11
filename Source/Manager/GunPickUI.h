@@ -12,7 +12,7 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Show();
-		void Destory();
+		void Destroy();
 		bool IsActive() const;
 		std::array<InGame::GunType, 3> GenerateRandomGun();
 

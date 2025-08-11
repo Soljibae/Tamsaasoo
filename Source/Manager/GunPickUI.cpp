@@ -422,7 +422,7 @@ namespace Manager
 		}
 		gm.Pause();
 	}
-	void GunPickUI::Destory()
+	void GunPickUI::Destroy()
 	{
 		for (auto mesh : ButtonMesh)
 		{

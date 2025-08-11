@@ -263,7 +263,7 @@ namespace Manager
 		}
 	}
 
-	void SettingUI::StaticDestory()
+	void SettingUI::StaticDestroy()
 	{
 		
 		if (soundBarBackgroundMesh)

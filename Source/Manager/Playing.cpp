@@ -814,7 +814,7 @@ namespace Manager
 		ExpPanel.Destroy();
 		pausePanel.Destroy();
 		pickPanel.Destroy();
-		gunPickPanel.Destory();
+		gunPickPanel.Destroy();
 		Utils::TestDestroy();
 		WM.Destroy();
 		InGame::SoulOrb::StaticDestroy();

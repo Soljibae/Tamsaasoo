@@ -104,7 +104,7 @@ namespace Manager
 		}
 		cursor.Destroy();
 		SettingPanel.Destroy();
-		SettingUI::StaticDestory();
+		SettingUI::StaticDestroy();
 	}
 
 	void GameManager::SetNextGameState(EGameState state)

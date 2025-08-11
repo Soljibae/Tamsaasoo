@@ -20,7 +20,7 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
-		static void StaticDestory();
+		static void StaticDestroy();
 
 		s8 pFont;
 		f32 fontSize = 72.f;
