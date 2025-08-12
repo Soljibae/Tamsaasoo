@@ -1,4 +1,4 @@
-#include "PauseUI.h"
+﻿#include "PauseUI.h"
 #include "HUDController.h"
 #include "../Global/GlobalVariables.h"
 #include "GameManager.h"
@@ -65,12 +65,12 @@ namespace Manager
 
 		slotMesh = Utils::CreateMesh();
 		slotTexture = AEGfxTextureLoad("Assets/black.png");
-		const int columns = 4; // 한 줄에 몇 개
+		const int columns = 4; 
 		const float slotWidth = 100.0f;
 		const float slotHeight = 100.0f;
-		const float spacingX = 10.0f; // 가로 간격
-		const float spacingY = 10.0f; // 세로 간격
-		const float startX = -215.f; // 전체 위치 조정
+		const float spacingX = 10.0f;
+		const float spacingY = 10.0f;
+		const float startX = -215.f;
 		const float startY = -400.f + spacingY;
 
 		for (size_t i = 0; i < ItemSlot.size(); ++i)
