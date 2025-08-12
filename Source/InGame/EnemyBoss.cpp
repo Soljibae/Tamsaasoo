@@ -243,6 +243,17 @@ namespace InGame
 	void Stage2Boss::Update()
 	{
 		EnemyBoss::Update();
+		UpdateEffectTime();
+
+		if (Stats->StatusEffectTimer[BURN] > 0)
+		{
+			BurnTimer += global::DeltaTime;
+			if (BurnTimer >= global::effectiveBurnRate)
+			{
+				BurnTimer = 0.f;
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+			}
+		}
 		if (!bIsJumping)
 		{
 			if (!bIsCharging)
@@ -464,6 +475,17 @@ namespace InGame
 	void Stage3Boss::Update()
 	{
 		EnemyBoss::Update();
+		UpdateEffectTime();
+
+		if (Stats->StatusEffectTimer[BURN] > 0)
+		{
+			BurnTimer += global::DeltaTime;
+			if (BurnTimer >= global::effectiveBurnRate)
+			{
+				BurnTimer = 0.f;
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+			}
+		}
 
 		MoveTimer += global::DeltaTime;
 
