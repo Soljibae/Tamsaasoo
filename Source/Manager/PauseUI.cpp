@@ -38,7 +38,7 @@ namespace Manager
 		Wbutton.Texture = AEGfxTextureLoad("Assets/Buttons/WButton.png");
 
 		f32 bstartY = 200.f;
-		f32 bspace = 10.f;
+		f32 bspace = 20.f;
 		f32 bspacingY = BH + bspace;
 		for (auto& btn : Buttons)
 		{

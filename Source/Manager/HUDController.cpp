@@ -64,7 +64,7 @@ namespace Manager
 		Coin.Mesh = Utils::CreateMesh();
 		Coin.Texture = AEGfxTextureLoad("Assets/Coin.png");
 		Coin.position = { (w / 2.f) / 3 * 2, (h / 2.f) / 3 * 2.35f };
-		Coin.size = { 30.f, 30.f };
+		Coin.size = { 50.f, 50.f };
 		float startX = -(w / 2) + 200.f;
 		float Y = (h / 2) - 90.f;
 
@@ -477,9 +477,9 @@ namespace Manager
 		}
 
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f + 5.f) / (w / 2),
-			(Coin.position.y - Coin.size.y / 2.5f - 2.f) / (h / 2), isBigger ? 0.33f : 0.3f, 0, 0, 0, 1);
+			(Coin.position.y - Coin.size.y / 2.5f - 2.f) / (h / 2), isBigger ? 0.43f : 0.4f, 0, 0, 0, 1);
 		AEGfxPrint(pFont, pText.c_str(), (Coin.position.x + Coin.size.x / 1.5f) / (w / 2),
-			(Coin.position.y - Coin.size.y / 2.5f) / (h / 2), isBigger ? 0.33f : 0.3f, 1, 1, 1, 1);
+			(Coin.position.y - Coin.size.y / 2.5f) / (h / 2), isBigger ? 0.43f : 0.4f, 1, 1, 1, 1);
 		if (isBigger)
 		{
 			isBigger = false;

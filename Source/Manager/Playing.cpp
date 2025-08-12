@@ -120,6 +120,7 @@ namespace Manager
 			std::cout << global::DeltaTime << std::endl;
 			return;
 		}
+
 		if (Fader.Alpha > 0.f)
 		{
 			Fader.Alpha -= global::DeltaTime * 2.f;
@@ -731,7 +732,7 @@ namespace Manager
 			std::string pText = std::to_string(static_cast<s32>(PC->PS->Money));
 			f32 textW, textH;
 			AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
-			AEGfxPrint(pFont, pText.c_str(), (HUD.Coin.position.x + HUD.Coin.size.x / 1.5f) / (global::ScreenWidth / 2), (HUD.Coin.position.y - HUD.Coin.size.y / 2.5f) / (global::ScreenHeight / 2), 0.3f, 1, 1, 1, 1);
+			AEGfxPrint(pFont, pText.c_str(), (HUD.Coin.position.x + HUD.Coin.size.x / 1.5f) / (global::ScreenWidth / 2), (HUD.Coin.position.y - HUD.Coin.size.y / 2.5f) / (global::ScreenHeight / 2), 0.4f, 1, 1, 1, 1);
 
 		}
 		else if (gunPickPanel.IsActive())

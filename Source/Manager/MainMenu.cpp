@@ -70,8 +70,8 @@ namespace Manager
 		Wbutton.Mesh = Utils::CreateMesh();
 		Wbutton.Texture = AEGfxTextureLoad("Assets/Buttons/WButton.png");
 
-		f32 startY = 0.f;
-		f32 space = 10.f;
+		f32 startY = 100.f;
+		f32 space = 20.f;
 		f32 spacingY = buttonSize.y + space;
 		for (auto& btn : Buttons)
 		{

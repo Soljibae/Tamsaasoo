@@ -66,7 +66,7 @@ namespace Manager
 			rerollButton[i].SetCallback([this, i]() {Reroll(i); });
 
 			f32 baseX{ rerollButton[i].position.x }, baseY{ rerollButton[i].position.y };
-			rerollIcon[i].size = { rerollSizeY / 1.1f,rerollSizeY / 1.1f };
+			rerollIcon[i].size = { rerollSizeY / 1.5f,rerollSizeY / 1.5f };
 			rerollIcon[i].position.x = baseX + rerollButton[i].size.x/2.f - rerollIcon[i].size.x/2.f;
 			rerollIcon[i].position.y = baseY;
 
