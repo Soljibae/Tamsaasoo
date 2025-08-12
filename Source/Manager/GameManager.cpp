@@ -30,7 +30,7 @@ namespace Manager
 
 		if (SettingPanel.isFullScreen)
 		{
-			if(!AESysIsFullScreen())
+			if (!AESysIsFullScreen())
 				AESysSetFullScreen(true);
 		}
 		else
@@ -93,7 +93,7 @@ namespace Manager
 		cursor.Draw();
 		AESysFrameEnd();
 	}
-	
+
 	void GameManager::Destroy()
 	{
 		if (currStateREF)
