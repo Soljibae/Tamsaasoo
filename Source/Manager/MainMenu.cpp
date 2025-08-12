@@ -243,6 +243,8 @@ namespace Manager
 		AEGfxMeshFree(Wbutton.Mesh);
 		AEGfxTextureUnload(Wbutton.Texture);
 
+		AEGfxDestroyFont(pFont);
+
 		SFXManager.Destroy();
 	}
 }

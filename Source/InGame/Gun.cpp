@@ -14,7 +14,6 @@ namespace InGame
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/pistol.wav", "pistol");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/rifle.wav", "rifle");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/shotgun.wav", "shotgun");
-		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/shotgun+reload.wav", "shotgun+reload");
 
 		gunType = object->GunData->Type;
 		ProjectileSpawnCount = object->GunData->ProjectileSpawnCount;
@@ -47,7 +46,7 @@ namespace InGame
 			else if(gunType == BEOWOLF || gunType == MOSINNAGAT || gunType == M24 || gunType == RAILGUN || gunType == NITRO700 || gunType == FNFAL || gunType == M82BARRETT || gunType == AR15 || gunType == M110 || gunType == BREN || gunType == MICROGUN || gunType == M249 || gunType == M2)
 				Manager::SFXManager.Play("rifle");
 			else if(gunType == SAWEDOFFSHOTGUN || gunType == DOUBLEBARREL || gunType == KS23 || gunType == M1897 || gunType == BENELLIM4)
-				Manager::SFXManager.Play("shotgun+reload");
+				Manager::SFXManager.Play("shotgun");
 			else if(gunType == SAIGA12 || gunType == AA12)
 				Manager::SFXManager.Play("shotgun");
 
