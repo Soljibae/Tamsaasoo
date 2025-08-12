@@ -15,7 +15,7 @@ namespace Manager
 	static f32 buttonHeight = h / 5.f;
 	static f32 spacingY = 50.f;
 	static f32 totalHeight = 3 * buttonHeight + 2 * spacingY;
-	static f32 margin = 100.f;
+	static f32 margin = 60.f;
 	static f32 padding = 15.f;
 	static f32 startY = -(h / 2.f) + margin + (buttonHeight / 2.f);
 	static const s32 fontSize{72};
@@ -419,8 +419,6 @@ namespace Manager
 				GunDescriptions[i] = "BulletStorm";
 				break;
 			}
-			gunIcons[i].position.x = weaponOptionButtons[i].position.x - weaponOptionButtons[i].size.x / 2.f + gunIcons[i].size.x / 2.f;
-			gunIcons[i].position.y = weaponOptionButtons[i].position.y;
 		}
 		gm.Pause();
 	}

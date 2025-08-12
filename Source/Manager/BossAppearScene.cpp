@@ -94,16 +94,8 @@ namespace Manager
 	{
 		for (s8 i = 0; i < Letterboxs.size(); i++)
 		{
-			if (Letterboxs[i].Mesh)
-			{
-				AEGfxMeshFree(Letterboxs[i].Mesh);
-				Letterboxs[i].Mesh = nullptr;
-			}
-			if (Letterboxs[i].Texture)
-			{
-				AEGfxTextureUnload(Letterboxs[i].Texture);
-				Letterboxs[i].Texture = nullptr;
-			}
+			AEGfxMeshFree(Letterboxs[i].Mesh);
+			AEGfxTextureUnload(Letterboxs[i].Texture);
 		}
 	}
 }

@@ -111,6 +111,8 @@ namespace Manager
 		VFXManager.Init();
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		gm.GamePaused = false;
+
+		gunPickPanel.Show();
 	}
 	void Playing::Update()
 	{
@@ -125,14 +127,8 @@ namespace Manager
 			return;
 		}
 		else
-		{
 			Fader.Alpha = 0.f;
-			if (!startWeaponPicked)
-			{
-				startWeaponPicked = true;
-				gunPickPanel.Show();
-			}
-		}
+
 		ExpPanel.Update();
 		if (global::KeyInput(AEVK_F1))
 		{
@@ -183,11 +179,10 @@ namespace Manager
 			{
 				JumpAnimationTimer += global::DeltaTime;
 				Utils::UpdateOffset(*PC);
-				if (JumpAnimationTimer >= 2.f)
+				if (JumpAnimationTimer >= 4.f)
 				{
 					bIsJumping = false;
 					ChangeStage();
-					isChangingStage = true;
 				}
 				return;
 			}
@@ -629,17 +624,7 @@ namespace Manager
 		{
 			pickPanel.Update();
 		}
-		else if (isChangingStage)
-		{
-			static f32 stageChangeTimer{ 0.f };
-			stageChangeTimer += global::DeltaTime;
-			if (stageChangeTimer > 2.f)
-			{
-				isChangingStage = false;
-				stageChangeTimer = 0.f;
-			}
-		}
-		else if (gunPickPanel.IsActive() && !isChangingStage)
+		else if (gunPickPanel.IsActive())
 		{
 			gunPickPanel.Update();
 		}
