@@ -7,6 +7,7 @@ namespace Manager
 		TEMP,
 		INTRO,
 		MAINMENU,
+		KEYDESCRIPTION,
 		PLAYING,
 		GAMEOVER,
 	};
