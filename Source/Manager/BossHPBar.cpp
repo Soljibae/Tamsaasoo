@@ -15,7 +15,7 @@ namespace Manager
 		maxHP = Boss->Stats->MaxHP;
 		currHP = Boss->Stats->HP;
 		prevHP = currHP;
-		BG.position = { 0.f, 320.f };
+		BG.position = { 0.f, h/2.f-150.f };
 		BG.size = { w / 3.f, 40.f };
 		BG.Texture = AEGfxTextureLoad("Assets/ItemSlots/HPFrame.png");
 		BGMesh = Utils::CreateNinePatchMesh();
@@ -69,16 +69,32 @@ namespace Manager
 
 	void BossHPBar::Destroy()
 	{
-		AEGfxDestroyFont(pFont);
-		AEGfxMeshFree(HP.Mesh);
-		HP.Mesh = nullptr;
-		AEGfxTextureUnload(HP.Texture);
-		HP.Texture = nullptr;
-		for (auto mesh : BGMesh)
+		if (pFont)
 		{
-			AEGfxMeshFree(mesh);
-			mesh = nullptr;
+			AEGfxDestroyFont(pFont);
 		}
-		BG.Texture = nullptr;
+		if (HP.Mesh)
+		{
+			AEGfxMeshFree(HP.Mesh);
+			HP.Mesh = nullptr;
+		}
+		if (HP.Texture)
+		{
+			AEGfxTextureUnload(HP.Texture);
+			HP.Texture = nullptr;
+		}
+		for (auto& mesh : BGMesh)
+		{
+			if (mesh)
+			{
+				AEGfxMeshFree(mesh);
+				mesh = nullptr;
+			}
+		}
+		if (BG.Texture)
+		{
+			AEGfxTextureUnload(BG.Texture);
+			BG.Texture = nullptr;
+		}
 	}
 }

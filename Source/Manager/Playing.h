@@ -70,6 +70,7 @@ namespace Manager
 		BossHPBar bossHPBar;
 		InGame::Stage* CurrentStage = nullptr;
 		InGame::StageType CurrentStageType;
+		bool isChangingStage = false;
 		void InitStage();
 		AEVec2 GetSpawnLocation();
 
@@ -79,6 +80,8 @@ namespace Manager
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
 		
+		bool startWeaponPicked = false;
+
 		s8 pFont;
 	};
 	extern Utils::Camera* CAM;

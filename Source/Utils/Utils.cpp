@@ -51,13 +51,12 @@ std::array<AEGfxVertexList*, 9> Utils::CreateNinePatchMesh()
 	int i = 0;
 	for (auto p : Patches)
 	{
-		AEGfxFontSystemStart();
+		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-p.x, -p.y, 0xFFFFFFFF, p.u0, p.v0,
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
 			-p.x, p.y, 0xFFFFFFFF, p.u0, p.v1
 		);
-		AEGfxMeshStart();
 		AEGfxTriAdd(
 			p.x, -p.y, 0xFFFFFFFF, p.u1, p.v0,
 			p.x, p.y, 0xFFFFFFFF, p.u1, p.v1,

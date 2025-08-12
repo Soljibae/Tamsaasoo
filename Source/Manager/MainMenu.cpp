@@ -194,6 +194,7 @@ namespace Manager
 		}
 		else if (!hovered)
 		{
+			target = nullptr;
 			played = false;
 			animTime = start = end = sspeed = espeed = 0.f;
 		}
@@ -242,6 +243,8 @@ namespace Manager
 
 		AEGfxMeshFree(Wbutton.Mesh);
 		AEGfxTextureUnload(Wbutton.Texture);
+
+		AEGfxDestroyFont(pFont);
 
 		SFXManager.Destroy();
 	}

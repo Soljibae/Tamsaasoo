@@ -47,8 +47,16 @@ namespace Manager
 			}
 			void Destroy() override
 			{
-				AEGfxMeshFree(Mesh);
-				AEGfxTextureUnload(Texture);
+				if (Mesh)
+				{
+					AEGfxMeshFree(Mesh);
+					Mesh = nullptr;
+				}
+				if (Texture)
+				{
+					AEGfxTextureUnload(Texture);
+					Texture = nullptr;
+				}
 			}
 			s32 mouseX, mouseY;
 			AEVec2 MP;
