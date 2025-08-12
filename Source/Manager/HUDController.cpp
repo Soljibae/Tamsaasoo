@@ -436,7 +436,6 @@ namespace Manager
 						break;
 					}
 				}
-				AEAudioUnloadAudio(SFXManager.SFXList.find("heart")->second.audio);
 				SFXManager.SFXList.erase("heart");
 				soundReduced = false;
 			}

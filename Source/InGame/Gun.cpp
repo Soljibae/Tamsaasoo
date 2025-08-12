@@ -14,7 +14,7 @@ namespace InGame
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/pistol.wav", "pistol");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/rifle.wav", "rifle");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Shot/shotgun.wav", "shotgun");
-		
+
 		gunType = object->GunData->Type;
 		ProjectileSpawnCount = object->GunData->ProjectileSpawnCount;
 		Mesh = Utils::CreateMesh();
@@ -324,8 +324,8 @@ namespace InGame
 	{
 		Type = GunType::AR15;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 2.f;
-		ProjectileSpeed = 30.f;
+		GuntypeFireRateRatio = 2.4f;
+		ProjectileSpeed = 50.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 2;
 		ProjectileSpawnCount = 1;
@@ -334,9 +334,9 @@ namespace InGame
 	M110Struct::M110Struct()
 	{
 		Type = GunType::M110;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 1.f;
-		ProjectileSpeed = 30.f;
+		GuntypeDamageRatio = 1.6f;
+		GuntypeFireRateRatio = 1.6f;
+		ProjectileSpeed = 50.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 5;
 		ProjectileSpawnCount = 1;

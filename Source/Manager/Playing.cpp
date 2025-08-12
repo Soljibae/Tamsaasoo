@@ -136,11 +136,11 @@ namespace Manager
 		}
 
 		ExpPanel.Update();
+		
 		if (global::KeyInput(AEVK_F1))
 		{
 			WaveCount = maxWaveCount;
 		}
-
 		if (global::KeyInput(AEVK_F2))
 		{
 			PC->PS->ExpCount += 1300;

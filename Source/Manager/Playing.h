@@ -79,7 +79,6 @@ namespace Manager
 		bool bIsJumping = false;
 		float JumpAnimationTimer = 0.f;
 		InGame::VFXManager VFXManager;
-		
 		bool startWeaponPicked = false;
 
 		s8 pFont;

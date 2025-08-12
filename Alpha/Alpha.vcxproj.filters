@@ -132,6 +132,9 @@
     <ClCompile Include="..\Source\Utils\Utils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Manager\KeyDescription.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Global\GlobalVariables.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Utils\Utils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Manager\KeyDescription.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

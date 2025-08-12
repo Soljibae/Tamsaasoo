@@ -83,6 +83,20 @@ namespace Manager
 			AEGfxTextureUnload(HP.Texture);
 			HP.Texture = nullptr;
 		}
+		for (auto &mesh : BGMesh)
+		{
+			AEGfxDestroyFont(pFont);
+		}
+		if (HP.Mesh)
+		{
+			AEGfxMeshFree(HP.Mesh);
+			HP.Mesh = nullptr;
+		}
+		if (HP.Texture)
+		{
+			AEGfxTextureUnload(HP.Texture);
+			HP.Texture = nullptr;
+		}
 		for (auto& mesh : BGMesh)
 		{
 			if (mesh)
@@ -90,6 +104,11 @@ namespace Manager
 				AEGfxMeshFree(mesh);
 				mesh = nullptr;
 			}
+		}
+		if (BG.Texture)
+		{
+			AEGfxTextureUnload(BG.Texture);
+			BG.Texture = nullptr;
 		}
 		if (BG.Texture)
 		{

@@ -121,7 +121,7 @@ namespace Manager
 				startdelaytime += global::DeltaTime;
 				if (startdelaytime > delay)
 				{
-					gm.SetNextGameState(EGameState::PLAYING);
+					gm.SetNextGameState(EGameState::KEYDESCRIPTION);
 					startdelaytime = 0.f;
 					shouldstart = false;
 				}

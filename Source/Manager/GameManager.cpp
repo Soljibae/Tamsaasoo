@@ -2,6 +2,7 @@
 #include "Intro.h"
 #include "Playing.h"
 #include "MainMenu.h"
+#include "KeyDescription.h"
 #include "SettingUI.h"
 
 namespace Manager
@@ -30,7 +31,7 @@ namespace Manager
 
 		if (SettingPanel.isFullScreen)
 		{
-			if(!AESysIsFullScreen())
+			if (!AESysIsFullScreen())
 				AESysSetFullScreen(true);
 		}
 		else
@@ -56,6 +57,10 @@ namespace Manager
 				break;
 			case EGameState::MAINMENU:
 				currStateREF = new MainMenu;
+				currStateREF->Init();
+				break;
+			case EGameState::KEYDESCRIPTION:
+				currStateREF = new KeyDescription;
 				currStateREF->Init();
 				break;
 			case EGameState::PLAYING:
@@ -93,7 +98,7 @@ namespace Manager
 		cursor.Draw();
 		AESysFrameEnd();
 	}
-	
+
 	void GameManager::Destroy()
 	{
 		if (currStateREF)
