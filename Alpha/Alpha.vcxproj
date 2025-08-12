@@ -51,6 +51,7 @@
     <ClCompile Include="..\Source\Manager\ItemDatabase.cpp" />
     <ClCompile Include="..\Source\Manager\ItemParser.cpp" />
     <ClCompile Include="..\Source\Manager\ItemResourceManager.cpp" />
+    <ClCompile Include="..\Source\Manager\KeyDescription.cpp" />
     <ClCompile Include="..\Source\Manager\LevelUpUI.cpp" />
     <ClCompile Include="..\Source\Manager\MainMenu.cpp" />
     <ClCompile Include="..\Source\Manager\PauseUI.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\Source\Manager\ItemDatabase.h" />
     <ClInclude Include="..\Source\Manager\ItemParser.h" />
     <ClInclude Include="..\Source\Manager\ItemResourceManager.h" />
+    <ClInclude Include="..\Source\Manager\KeyDescription.h" />
     <ClInclude Include="..\Source\Manager\LevelUpUI.h" />
     <ClInclude Include="..\Source\Manager\MainMenu.h" />
     <ClInclude Include="..\Source\Manager\PauseUI.h" />
