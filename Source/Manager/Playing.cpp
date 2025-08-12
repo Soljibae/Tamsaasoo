@@ -130,14 +130,14 @@ namespace Manager
 			Fader.Alpha = 0.f;
 
 		ExpPanel.Update();
-		if (global::KeyInput(AEVK_F1))
+		/*if (global::KeyInput(AEVK_G))
 		{
-			WaveCount = maxWaveCount;
+			gunPickPanel.Show();
 		}
-		if (global::KeyInput(AEVK_F2))
+		if (global::KeyInput(AEVK_H))
 		{
-			PC->PS->ExpCount += 1300;
-		}
+			pickPanel.Show();
+		}*/
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 
 		static bool prevSettingPanelState = false;
