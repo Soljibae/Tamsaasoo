@@ -3,15 +3,17 @@
 #include "GameOver.h"
 #include <random>
 #include <unordered_set>
+#include <cstring>
+
 namespace Manager
 {
 	LevelUpUI pickPanel;
 	AEGfxTexture* LevelUpUI::windowTexture{ nullptr };
-	std::array<AEGfxVertexList*, 9> LevelUpUI::rerollButtonMesh{ nullptr };
+	//std::array<AEGfxVertexList*, 9> LevelUpUI::rerollButtonMesh{ nullptr };
 	AEGfxTexture* LevelUpUI::rerollButtonTexture{ nullptr };
 	AEGfxTexture* LevelUpUI::ItemSlotTexture{ nullptr };
 	const static f32 fontSize = 72.f;
-	static f32 textDrawSize = 0.2f;
+	const static f32 textDrawSize = 0.2f;
 	const static f32 windowWidth = 350.f;
 	const static f32 windowHeight = 550.f;
 	const static f32 spacingX = 150.f;
@@ -26,6 +28,7 @@ namespace Manager
 	}
 	void LevelUpUI::Init(InGame::PlayerCharacter* InPC)
 	{
+		isActive = false;
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/pick.wav", "pick");
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/reroll.wav", "reroll");
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/epic.wav", "epic");
@@ -35,7 +38,7 @@ namespace Manager
 		f32 totalWidth = 3 * windowWidth + 2 * spacingX;
 		f32 margin = (global::ScreenWidth - totalWidth) * 0.5f;
 		f32 startX = -global::ScreenWidth * 0.5f + margin + windowWidth * 0.5f;
-		f32 rerollSizeX = windowWidth * 0.7f;
+		f32 rerollSizeX = windowWidth * 0.5f;
 		f32 rerollSizeY = rerollSizeX * 0.4f;
 		for (s8 i = 0; i < ItemWindow.size(); ++i)
 		{
@@ -66,12 +69,12 @@ namespace Manager
 			rerollButton[i].SetCallback([this, i]() {Reroll(i); });
 
 			f32 baseX{ rerollButton[i].position.x }, baseY{ rerollButton[i].position.y };
-			rerollIcon[i].size = { rerollSizeY / 1.1f,rerollSizeY / 1.1f };
-			rerollIcon[i].position.x = baseX + rerollButton[i].size.x/2.f - rerollIcon[i].size.x/2.f;
-			rerollIcon[i].position.y = baseY;
+			rerollIcon[i].size = { rerollSizeY / 1.7f, rerollSizeY / 1.7f };
+			rerollIcon[i].position.x = baseX + rerollButton[i].size.x/2.f - rerollIcon[i].size.x/1.18f;
+			rerollIcon[i].position.y = baseY + 2.f;
 
-			rerollCostIcon[i].size = { rerollSizeY / 1.3f,rerollSizeY / 1.3f };
-			rerollCostIcon[i].position.x = baseX - rerollCostIcon[i].size.x;
+			rerollCostIcon[i].size = { rerollSizeY / 1.5f * 0.6f, rerollSizeY / 1.5f * 0.6f };
+			rerollCostIcon[i].position.x = baseX - rerollCostIcon[i].size.x * 2.f;
 			rerollCostIcon[i].position.y = baseY;
 			rerollButton[i].Init();
 			ItemWindow[i].Init();
@@ -84,7 +87,7 @@ namespace Manager
 		epicWhite.size = { w, h };
 		epicWhite.position = { 0.f, 0.f };
 
-		rerollButtonMesh = Utils::CreateNinePatchMesh();
+		//rerollButtonMesh = Utils::CreateNinePatchMesh();
 		rerollButtonTexture = AEGfxTextureLoad("Assets/UI/rerollButton.png");
 
 		rerollIconMesh = Utils::CreateMesh();
@@ -114,6 +117,7 @@ namespace Manager
 
 	void LevelUpUI::Update()
 	{
+		static bool iconScaled[]{ false };
 		if (!IsActive() || gameOverScreen.isGameOver)
 		{
 			return;
@@ -127,6 +131,25 @@ namespace Manager
 		for (s8 i = 0; i < ItemWindow.size(); i++)
 		{
 			rerollButton[i].Update();
+
+			if (rerollButton[i].IsHovered() && !iconScaled[i])
+			{
+				rerollIcon[i].size.x *= 1.04f;
+				rerollIcon[i].size.y *= 1.04f;
+				rerollCostIcon[i].size.x *= 1.04f;
+				rerollCostIcon[i].size.y *= 1.04f;
+				costTextDrawSize[i] *= 1.04f;
+				iconScaled[i] = true;
+			}
+			else if (!rerollButton[i].IsHovered() && iconScaled[i])
+			{
+				rerollIcon[i].size.x /= 1.04f;
+				rerollIcon[i].size.y /= 1.04f;
+				rerollCostIcon[i].size.x /= 1.04f;
+				rerollCostIcon[i].size.y /= 1.04f;
+				costTextDrawSize[i] /= 1.04f;
+				iconScaled[i] = false;
+			}
 			if (!rerollButton[i].IsHovered() || !rerollButton[i].IsSelected())
 				ItemWindow[i].Update();
 		}
@@ -176,13 +199,15 @@ namespace Manager
 	{
 		if (gameOverScreen.isGameOver)
 			return;
+
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
 		for (int i = 0; i < ItemWindow.size(); i++)
 		{
 			Utils::DrawNinePatchMesh(ItemWindow[i], ItemWindow[i].Texture, windowMesh, 50.f);
 			Utils::DrawNinePatchMesh(ItemSlot[i], ItemSlot[i].Texture, ItemSlotMesh, 20.f);
 			Utils::DrawItem(*currentOptions[i]);
-			Utils::DrawNinePatchMesh(rerollButton[i], rerollButtonTexture, rerollButtonMesh, 20.f);
+			//Utils::DrawNinePatchMesh(rerollButton[i], rerollButtonTexture, rerollButtonMesh, 20.f);
+			Utils::DrawObject(rerollButton[i], rerollButtonTexture, rerollCostMesh);
 			Utils::DrawObject(rerollIcon[i], rerollIconTexture, rerollIconMesh, 1.f);
 			Utils::DrawObject(rerollCostIcon[i], rerollCostTexture, rerollCostMesh, 1.f);
 
@@ -198,7 +223,7 @@ namespace Manager
 
 			f32 CbaseX = rerollCostIcon[i].position.x, CbaseY = rerollCostIcon[i].position.y;
 			f32 CpSizeX = rerollCostIcon[i].size.x;
-			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.5f) / halfW, CbaseY / halfH - lh, textDrawSize + 0.2f, 1.f, 1.f, 1.f, 1.f);
+			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
 			const char* tag;
 			f32 r{ 0.f }, g{ 0.f }, b{ 0.f };
 			switch (currentOptions[i]->tag)
@@ -287,7 +312,7 @@ namespace Manager
 		}
 		PC->PS->Money -= rerollCost[thisbutton];
 		rerollCost[thisbutton] = rerollCost[thisbutton] * global::item23RerollCostRatio * global::StageRerollCostRatio[global::CurrentStageNumber - 1];
-		std::cout << global::item23RerollCostRatio << std::endl;
+		rerollCost[thisbutton] = std::clamp(rerollCost[thisbutton], 0, 999);
 
 		SFXManager.Play("reroll");
 
@@ -445,11 +470,11 @@ namespace Manager
 		if (pauseDimmer.Texture)
 			AEGfxTextureUnload(pauseDimmer.Texture);
 
-		for (auto& mesh : rerollButtonMesh)
-		{
-			if (mesh)
-				AEGfxMeshFree(mesh);
-		}
+		//for (auto& mesh : rerollButtonMesh)
+		//{
+		//	if (mesh)
+		//		AEGfxMeshFree(mesh);
+		//}
 		if (rerollButtonTexture)
 			AEGfxTextureUnload(rerollButtonTexture);
 

@@ -47,10 +47,11 @@ namespace Manager
 		InGame::Actor pauseDimmer;
 
 		std::array<Button, 3> rerollButton;
-		static std::array<AEGfxVertexList*, 9> rerollButtonMesh;
+		//static std::array<AEGfxVertexList*, 9> rerollButtonMesh;
 		static AEGfxTexture* rerollButtonTexture;
 
 		std::array<InGame::Actor, 3> rerollIcon;
+		std::array<f32, 3> costTextDrawSize{ 0.3f, 0.3f, 0.3f };
 		AEGfxVertexList* rerollIconMesh;
 		AEGfxTexture* rerollIconTexture;
 

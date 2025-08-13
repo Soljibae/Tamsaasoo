@@ -47,10 +47,12 @@ namespace Manager
 
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Boss/siren.wav", "siren");
 		SFXManager.Play("doom");
+
 		if (CurrentStage == nullptr)
 		{
 			CurrentStage = new InGame::Stage1();
 		}
+
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
 		{
@@ -125,6 +127,7 @@ namespace Manager
 			std::cout << global::DeltaTime << std::endl;
 			return;
 		}
+
 		if (Fader.Alpha > 0.f)
 		{
 			Fader.Alpha -= global::DeltaTime * 2.f;
@@ -139,7 +142,14 @@ namespace Manager
 				gunPickPanel.Show();
 			}
 		}
-
+		if (!pausePanel.isActive && AEInputCheckCurr(AEVK_TAB))
+		{
+			pausePanel.tapPressed = true;
+		}
+		else
+		{
+			pausePanel.tapPressed = false;
+		}
 		ExpPanel.Update();
 		
 		if (global::KeyInput(AEVK_F1))
@@ -168,11 +178,15 @@ namespace Manager
 			if (!gm.GamePaused)
 			{
 				gm.Pause();
+				pausePanel.isActive = true;
 			}
 			else
 			{
-				if(!isDelayOn)
+				if (!isDelayOn)
+				{
 					gm.Resume();
+					pausePanel.isActive = false;
+				}
 			}
 		}
 		if (isDelayOn)
@@ -630,10 +644,9 @@ namespace Manager
 			{
 				gameOverScreen.isGameOver = true;
 			}
-			HUD.Update();
 			gameOverScreen.Update();
 		}
-		else if (pickPanel.IsActive())
+		else if (pickPanel.IsActive() && !pausePanel.tapPressed)
 		{
 			pickPanel.Update();
 		}
@@ -651,10 +664,11 @@ namespace Manager
 		{
 			gunPickPanel.Update();
 		}
-		else
+		if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Update();
 		}
+		HUD.Update();
 		VFXManager.Update();
 		SFXManager.Update();
 	}
@@ -729,21 +743,25 @@ namespace Manager
 		{
 			SO->Draw();
 		}
-		if (pickPanel.IsActive())
+		if (pausePanel.tapPressed)
+		{
+			pausePanel.Draw();
+		}
+		else if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
 			Utils::DrawObject(HUD.Coin, false);	
 			std::string pText = std::to_string(static_cast<s32>(PC->PS->Money));
 			f32 textW, textH;
 			AEGfxGetPrintSize(pFont, pText.c_str(), textDrawSize, &textW, &textH);
-			AEGfxPrint(pFont, pText.c_str(), (HUD.Coin.position.x + HUD.Coin.size.x / 1.5f) / (global::ScreenWidth / 2), (HUD.Coin.position.y - HUD.Coin.size.y / 2.5f) / (global::ScreenHeight / 2), 0.3f, 1, 1, 1, 1);
+			AEGfxPrint(pFont, pText.c_str(), (HUD.Coin.position.x + HUD.Coin.size.x / 1.5f) / (global::ScreenWidth / 2), (HUD.Coin.position.y - HUD.Coin.size.y / 2.5f) / (global::ScreenHeight / 2), 0.4f, 1, 1, 1, 1);
 
 		}
 		else if (gunPickPanel.IsActive())
 		{
 			gunPickPanel.Draw();
 		}
-		else if (gm.GamePaused)
+		else if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Draw();
 		}

@@ -18,6 +18,8 @@ namespace Manager
 
 	void PauseUI::Init(InGame::PlayerCharacter* InPC)
 	{
+		isActive = false;
+		tapPressed = false;
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/buttonover.wav", "buttonover");
 		f32 w = static_cast<f32>(global::ScreenWidth);
@@ -38,7 +40,7 @@ namespace Manager
 		Wbutton.Texture = AEGfxTextureLoad("Assets/Buttons/WButton.png");
 
 		f32 bstartY = 200.f;
-		f32 bspace = 10.f;
+		f32 bspace = 20.f;
 		f32 bspacingY = BH + bspace;
 		for (auto& btn : Buttons)
 		{
@@ -47,9 +49,10 @@ namespace Manager
 			bstartY -= bspacingY;
 		}
 		Buttons[0].Init();
-		Buttons[0].SetCallback([]() {
+		Buttons[0].SetCallback([this]() {
 			SFXManager.Play("button");
-			gm.Resume();
+				gm.Resume();
+				isActive = false;
 			});
 
 		Buttons[1].Init();
@@ -424,9 +427,11 @@ namespace Manager
 				}
 			}
 		}
-		for (auto& btn : Buttons)
+		for (s8 i = 0; i < 3; i++)
 		{
-			btn.Update();
+			if (!isActive&&tapPressed)
+				break;
+			Buttons[i].Update();
 		}
 
 		for (size_t i = 0; i < PC->inventory.size(); i++)
@@ -501,93 +506,99 @@ namespace Manager
 			}	
 		}
 		for (int i = 0; i < 3; ++i)
+		{
+			if (!isActive&&tapPressed)
+				break;
 			Utils::DrawObject(Buttons[i], BbuttonTexture, buttonMesh, buttonAlpha);
-
-		bool hovered = false;
-		static bool played = false;
-		static Button* target = nullptr;
-		static Button* prevtarget = nullptr;
-		prevtarget = target;
-		for (auto& btn : Buttons) {
-			if (btn.IsHovered())
-			{
-				hovered = true; target = &btn; break;
-			}
 		}
 
-		static f32 start{ 0.f }, end{ 0.f }, sspeed{ 0.f }, espeed{ 0.f };
-		static f32 animTime{ 0.f };
-		if (target != prevtarget)
+		if (isActive&&!tapPressed)
 		{
-			played = false;
-			animTime = start = end = sspeed = espeed = 0.f;
-		}
-		if (target && target == prevtarget && target->IsHovered() && animTime < 1.f)
-		{
-			if (!played)
-			{
-				played = true;
-				SFXManager.Play("buttonover");
+			bool hovered = false;
+			static bool played = false;
+			static Button* target = nullptr;
+			static Button* prevtarget = nullptr;
+			prevtarget = target;
+			for (auto& btn : Buttons) {
+				if (btn.IsHovered())
+				{
+					hovered = true; target = &btn; break;
+				}
 			}
-			animTime += global::DeltaTime;
-			if (end < 0.5f)
-				espeed += global::DeltaTime / 2.f;
-			else
-				espeed -= global::DeltaTime / 2.f;
-			if (animTime > .06f)
+
+			static f32 start{ 0.f }, end{ 0.f }, sspeed{ 0.f }, espeed{ 0.f };
+			static f32 animTime{ 0.f };
+			if (target != prevtarget)
 			{
-				if (start < 0.5f)
-					sspeed += global::DeltaTime / 2.f;
+				played = false;
+				animTime = start = end = sspeed = espeed = 0.f;
+			}
+			if (target && target == prevtarget && target->IsHovered() && animTime < 1.f)
+			{
+				if (!played)
+				{
+					played = true;
+					SFXManager.Play("buttonover");
+				}
+				animTime += global::DeltaTime;
+				if (end < 0.5f)
+					espeed += global::DeltaTime / 2.f;
 				else
-					sspeed -= global::DeltaTime / 2.f;
-			}
-			sspeed = std::clamp(sspeed, 0.01f, 1.f);
-			espeed = std::clamp(espeed, 0.01f, 1.f);
-			start += sspeed;
-			end += espeed;
-			start = std::clamp(start, 0.f, 1.f);
-			end = std::clamp(end, 0.f, 1.f);
-			AEGfxMeshFree(Wbutton.Mesh);
-			Wbutton.Mesh = Hekirekiissen(start, end);
+					espeed -= global::DeltaTime / 2.f;
+				if (animTime > .06f)
+				{
+					if (start < 0.5f)
+						sspeed += global::DeltaTime / 2.f;
+					else
+						sspeed -= global::DeltaTime / 2.f;
+				}
+				sspeed = std::clamp(sspeed, 0.01f, 1.f);
+				espeed = std::clamp(espeed, 0.01f, 1.f);
+				start += sspeed;
+				end += espeed;
+				start = std::clamp(start, 0.f, 1.f);
+				end = std::clamp(end, 0.f, 1.f);
+				AEGfxMeshFree(Wbutton.Mesh);
+				Wbutton.Mesh = Hekirekiissen(start, end);
 
-			Wbutton.position = target->position;
-			Wbutton.size = target->size;
-			Utils::DrawObject(Wbutton, Wbutton.Texture, Wbutton.Mesh, 0.5f);
-		}
-		else if (!hovered)
-		{
-			played = false;
-			animTime = start = end = sspeed = espeed = 0.f;
-		}
-		int idx = 0;
-		f32 lw, lh;
-		f32 halfW{ static_cast<f32>(global::ScreenWidth) / 2.f }, halfH{ static_cast<f32>(global::ScreenHeight) / 2.f };
-		for (auto& btn : Buttons)
-		{
-			switch (idx)
+				Wbutton.position = target->position;
+				Wbutton.size = target->size;
+				Utils::DrawObject(Wbutton, Wbutton.Texture, Wbutton.Mesh, 0.5f);
+			}
+			else if (!hovered)
 			{
-			case 0:
-				AEGfxGetPrintSize(pFont, "Resume", textDrawSize, &lw, &lh);
-				lw *= halfW;
-				lh *= halfH;
-				AEGfxPrint(pFont, "Resume", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
-				break;
-			case 1:
-				AEGfxGetPrintSize(pFont, "Setting", textDrawSize, &lw, &lh);
-				lw *= halfW;
-				lh *= halfH;
-				AEGfxPrint(pFont, "Setting", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
-				break;
-			case 2:
-				AEGfxGetPrintSize(pFont, "Mainmenu", textDrawSize, &lw, &lh);
-				lw *= halfW;
-				lh *= halfH;
-				AEGfxPrint(pFont, "Mainmenu", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
-				break;
+				played = false;
+				animTime = start = end = sspeed = espeed = 0.f;
 			}
-			idx++;
+			int idx = 0;
+			f32 lw, lh;
+			f32 halfW{ static_cast<f32>(global::ScreenWidth) / 2.f }, halfH{ static_cast<f32>(global::ScreenHeight) / 2.f };
+			for (auto& btn : Buttons)
+			{
+				switch (idx)
+				{
+				case 0:
+					AEGfxGetPrintSize(pFont, "Resume", textDrawSize, &lw, &lh);
+					lw *= halfW;
+					lh *= halfH;
+					AEGfxPrint(pFont, "Resume", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
+					break;
+				case 1:
+					AEGfxGetPrintSize(pFont, "Setting", textDrawSize, &lw, &lh);
+					lw *= halfW;
+					lh *= halfH;
+					AEGfxPrint(pFont, "Setting", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
+					break;
+				case 2:
+					AEGfxGetPrintSize(pFont, "Mainmenu", textDrawSize, &lw, &lh);
+					lw *= halfW;
+					lh *= halfH;
+					AEGfxPrint(pFont, "Mainmenu", (btn.position.x - lw / 2.f) / halfW, (btn.position.y - lh / 2.f) / halfH, textDrawSize, 1, 1, 1, 1);
+					break;
+				}
+				idx++;
+			}
 		}
-
 		for (int i = 0; i < PC->inventory.size(); i++)
 		{
 			if (ItemSlot[i].IsHovered())
