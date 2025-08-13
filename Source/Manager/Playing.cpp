@@ -45,10 +45,12 @@ namespace Manager
 
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Boss/siren.wav", "siren");
 		SFXManager.Play("doom");
+
 		if (CurrentStage == nullptr)
 		{
 			CurrentStage = new InGame::Stage1();
 		}
+
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
 		{
@@ -135,7 +137,14 @@ namespace Manager
 				gunPickPanel.Show();
 			}
 		}
-
+		if (!pausePanel.isActive && AEInputCheckCurr(AEVK_TAB))
+		{
+			pausePanel.tapPressed = true;
+		}
+		else
+		{
+			pausePanel.tapPressed = false;
+		}
 		ExpPanel.Update();
 		
 		if (global::KeyInput(AEVK_F1))
@@ -164,11 +173,15 @@ namespace Manager
 			if (!gm.GamePaused)
 			{
 				gm.Pause();
+				pausePanel.isActive = true;
 			}
 			else
 			{
-				if(!isDelayOn)
+				if (!isDelayOn)
+				{
 					gm.Resume();
+					pausePanel.isActive = false;
+				}
 			}
 		}
 		if (isDelayOn)
@@ -626,23 +639,10 @@ namespace Manager
 			{
 				gameOverScreen.isGameOver = true;
 			}
-			HUD.Update();
 			gameOverScreen.Update();
 		}
-		else if (pausePanel.wasPickingItem)
+		else if (pickPanel.IsActive() && !pausePanel.tapPressed)
 		{
-			if (global::KeyInput(AEVK_ESCAPE))
-			{
-				pausePanel.wasPickingItem = false;
-			}
-			pausePanel.Update();
-		}
-		else if (pickPanel.IsActive())
-		{
-			if (!pausePanel.wasPickingItem && global::KeyInput(AEVK_ESCAPE))
-			{
-				pausePanel.wasPickingItem = true;
-			}
 			pickPanel.Update();
 		}
 		else if (isChangingStage)
@@ -659,10 +659,11 @@ namespace Manager
 		{
 			gunPickPanel.Update();
 		}
-		else
+		if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Update();
 		}
+		HUD.Update();
 		VFXManager.Update();
 		SFXManager.Update();
 	}
@@ -737,7 +738,7 @@ namespace Manager
 		{
 			SO->Draw();
 		}
-		if (pausePanel.wasPickingItem)
+		if (pausePanel.tapPressed)
 		{
 			pausePanel.Draw();
 		}
@@ -755,7 +756,7 @@ namespace Manager
 		{
 			gunPickPanel.Draw();
 		}
-		else if (gm.GamePaused)
+		else if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Draw();
 		}

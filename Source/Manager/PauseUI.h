@@ -16,7 +16,8 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
-		bool wasPickingItem{ false };
+		bool isActive{ false };
+		bool tapPressed{ false };
 	private:
 		//Button resumeButton;
 		//Button settingButton;

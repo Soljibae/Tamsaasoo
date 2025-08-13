@@ -130,6 +130,7 @@ namespace Manager
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
+		tooltip.WindowMesh = Utils::CreateNinePatchMesh();
 		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltipBorder.png");
 		Vignetting.position = { 0,0 };
 		Vignetting.size = { w,h };

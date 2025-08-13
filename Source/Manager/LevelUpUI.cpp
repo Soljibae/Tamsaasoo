@@ -199,6 +199,7 @@ namespace Manager
 	{
 		if (gameOverScreen.isGameOver)
 			return;
+
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
 		for (int i = 0; i < ItemWindow.size(); i++)
 		{
