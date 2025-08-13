@@ -629,8 +629,20 @@ namespace Manager
 			HUD.Update();
 			gameOverScreen.Update();
 		}
+		else if (pausePanel.wasPickingItem)
+		{
+			if (global::KeyInput(AEVK_ESCAPE))
+			{
+				pausePanel.wasPickingItem = false;
+			}
+			pausePanel.Update();
+		}
 		else if (pickPanel.IsActive())
 		{
+			if (!pausePanel.wasPickingItem && global::KeyInput(AEVK_ESCAPE))
+			{
+				pausePanel.wasPickingItem = true;
+			}
 			pickPanel.Update();
 		}
 		else if (isChangingStage)
@@ -725,7 +737,11 @@ namespace Manager
 		{
 			SO->Draw();
 		}
-		if (pickPanel.IsActive())
+		if (pausePanel.wasPickingItem)
+		{
+			pausePanel.Draw();
+		}
+		else if (pickPanel.IsActive())
 		{
 			pickPanel.Draw();
 			Utils::DrawObject(HUD.Coin, false);	

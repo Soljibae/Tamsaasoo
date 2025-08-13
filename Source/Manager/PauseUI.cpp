@@ -18,6 +18,7 @@ namespace Manager
 
 	void PauseUI::Init(InGame::PlayerCharacter* InPC)
 	{
+		wasPickingItem = false;
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/buttonover.wav", "buttonover");
 		f32 w = static_cast<f32>(global::ScreenWidth);
@@ -424,9 +425,11 @@ namespace Manager
 				}
 			}
 		}
-		for (auto& btn : Buttons)
+		for (s8 i = 0; i < 3; i++)
 		{
-			btn.Update();
+			if (i == 0 && wasPickingItem)
+				continue;
+			Buttons[i].Update();
 		}
 
 		for (size_t i = 0; i < PC->inventory.size(); i++)
