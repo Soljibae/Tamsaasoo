@@ -190,9 +190,12 @@ namespace Manager
 			f32 baseX{ currentOptions[i]->iconPosition.x }, baseY{ currentOptions[i]->iconPosition.y };
 			f32 pSizeX{ currentOptions[i]->size.x }, pSizeY{ currentOptions[i]->size.y };//p=parents
 			f32 halfW{ global::ScreenWidth / 2.f }, halfH{ global::ScreenHeight / 2.f };
+			f32 downForName = 5.f;
 			AEGfxGetPrintSize(pFont, currentOptions[i]->name.c_str(), textDrawSize, &lw, &lh);
+			//AEGfxPrint(pFont, currentOptions[i]->name.c_str(), (baseX + pSizeX) / halfW, baseY / halfH + (lh / 1.5f), textDrawSize, 1.f, 1.f, 1.f, 1.f);
+			
+			Manager::Atlas.RenderTextUTF8(currentOptions[i]->name.c_str(), (baseX + pSizeX), baseY + Manager::Atlas.GetPrintMetricsUTF8(currentOptions[i]->name.c_str(), 1.f).height * 1.5f - downForName, 1.f, 0xFFFFFFFF);
 
-			AEGfxPrint(pFont, currentOptions[i]->name.c_str(), (baseX + pSizeX) / halfW, baseY / halfH + (lh / 1.5f), textDrawSize, 1.f, 1.f, 1.f, 1.f);
 			f32 CbaseX = rerollCostIcon[i].position.x, CbaseY = rerollCostIcon[i].position.y;
 			f32 CpSizeX = rerollCostIcon[i].size.x;
 			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.5f) / halfW, CbaseY / halfH - lh, textDrawSize + 0.2f, 1.f, 1.f, 1.f, 1.f);
@@ -215,7 +218,8 @@ namespace Manager
 				break;
 			case InGame::ItemTag::LUST:
 				tag = "LUST";
-				b = 0.5f;
+				r = 0.05f;
+				b = 0.65f;
 				break;
 			case InGame::ItemTag::SLOTH:
 				tag = "SLOTH";
@@ -233,19 +237,42 @@ namespace Manager
 				break;
 			default:
 				tag = "NONE";
+				r = 0.3f;
+				g = 0.3f;
+				b = 0.3f;
 				break;
 			}
-			AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
-			std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth);
-			AEVec2 windowPos{ ItemWindow[i].position };
+			AEMtx33 I; AEMtx33Identity(&I);
+			AEGfxSetTransform(I.m);
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetTransparency(1.0f);
+			AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+			AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
 
-			for (int j = 0; j < ItemDesc.size(); j++)
+			AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
+			//std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth);
+
+			f32 paddingForKR = -10.f;
+			f32 upForKR = 30.f;
+			std::vector<std::string> ItemDesc =
+				HUD.SplitTextIntoLines_UTF8_KR(currentOptions[i]->description, windowWidth - paddingForKR * 2.f, 1.f);
+
+			auto mBase = Manager::Atlas.GetPrintMetricsUTF8(u8"한", 1.f); // 아무 글자나 OK
+			float lineH = mBase.lineHeight;     // 줄 간격(px)
+			float asc = mBase.ascender;       // 베이스라인 위 여유(px)
+
+			AEVec2 windowPos{ ItemWindow[i].position };
+			float xLeft = windowPos.x - windowWidth * 0.5f + paddingForKR;       // 왼쪽 여백
+			float yTop = currentOptions[i]->iconPosition.y - currentOptions[i]->size.y * 2.f + upForKR;
+
+			float baseYFirst = yTop - asc;
+
+			for (size_t j = 0; j < ItemDesc.size(); ++j)
 			{
-				f32 xStart{ windowPos.x - windowWidth / 2.f - padding };
-				f32 yStart{ currentOptions[i]->iconPosition.y - currentOptions[i]->size.y * 2.f };
-				f32 lx = (xStart + padding) / halfW;
-				f32 ly = (yStart - (lh * global::ScreenHeight) * j) / halfH;
-				AEGfxPrint(pFont, ItemDesc[j].c_str(), lx, ly, textDrawSize, 1.f, 1.f, 1.f, 1.f);
+				float lx = xLeft;
+				float ly = baseYFirst - lineH * static_cast<float>(j); // worldYAxisUp=true면 아래로 갈수록 y 감소
+				Manager::Atlas.RenderTextUTF8(ItemDesc[j], lx, ly, 1.f, 0xFFFFFFFF);
 			}
 		}
 		if (gotEpic)

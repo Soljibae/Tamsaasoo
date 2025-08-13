@@ -1,359 +1,359 @@
 1
 //1 - 현재 체력 / 최대 체력이 value1 이하면 비어있는 체력 한칸당 additionalDamageRatio value2 증가
-Scepter of Pride
+긍지의 셉터
 0
-Your attack power is increased by an amount proportional to your missing health when you are below half health.
+체력이 절반 이하일 때, 잃은 체력에 비례하여 대미지 배율이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.5, 0.03, -1, -1, -1, -1, -1
 
 2
 //2 - duration초 이상 가만히 있을 경우 cooldown초마다 additionalFireRate value1 증가, 최대 10번 까지 중첩
-Vanity's Diadem
+허영의 왕관
 0
-After standing still for 3 seconds, your fire rate increases every second. This effect stacks up to 10 times.
+3초 동안 가만히 서 있으면 매초 공격 속도가 증가합니다. 이 효과는 최대 10번 중첩됩니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.05, -1, -1, 1, 3, -1, -1
 
 3
 //3 - 스테이지에 존재하는 적 하나당 additionalDamage value1 증가
-Regal Hubris
+장엄한 오만
 2
-Increases damage for each enemy alive.
+생존해 있는 적 하나당 대미지가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.04, -1, -1, -1, -1, -1, -1
 
 4
 //4 - 획득 시 최대 체력 value1칸 감소. 사망 시 1회 부활
-Lofty Mantle
+고귀한 망토
 1
-Reduces Max HP by 2. Grants one revive on death.
+최대 체력이 2 감소합니다. 사망 시 1회 부활합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 2.0, -1, -1, -1, -1, -1, -1
 
 5
 //5 - 보스에게 가하는 피해 additionalDamageToBossRatio value1 증가, 보스에게 받는 데미지 additionalDamageFromBossRatio value2 증가
-Arrogance Band
+오만의 밴드
 0
-Increases damage dealt to bosses by 50%, but you take 100% more damage from them.
+보스에게 가하는 피해가 50% 증가하지만, 보스에게 받는 피해도 100% 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.5, 1.0, -1, -1, -1, -1, -1
 
 6
 //6 - 플레이어가 적 타격 시, procchance 확률로 duration초간 화상 상태 부여
-Ember of Wrath
+분노의 불씨
 0
-Your attacks have a 30% chance to set the enemy on fire for 3 seconds.
+공격 시 일정 확률로 적에게 3초간 화상을 입힙니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 -1, -1, -1, -1, 3.0, 0.2, -1
 
 7
 //7 - additionalBurnDamage value1 증가 (적이 화상으로 입는 체력 비례 데미지가 증가)
-Fury's Cinder
+격노의 잿더미
 1
-Increases the damage your Burn deals based on the enemy's Max Health.
+화상 피해가 적의 최대 체력에 비례하여 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.05, -1, -1, -1, -1, -1, -1
 
 8
 //8 - global::additionalBurnRate value1 증가 (화상 데미지의 주기가 value1 초 감소)
-Ragebrand
+분노의 낙인
 0
-Increases the frequency of your Burn damage ticks.
+화상 피해의 주기(틱 속도)가 빨라집니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.2, -1, -1, -1, -1, -1, -1
 
 9
 //9 - cooldown초마다 피격 시 플레이어 주변으로 range 크기의 불꽃을 일으킴, 불꽃에 닿으면 최대 체력의 value1 % 만큼 데미지를 주고 duration초 동안 화상 상태 부여
-Angerflare
+분노의 불꽃
 0
-Every 2 seconds, taking damage unleashes a fiery nova, burning nearby enemies for 30% of their max HP and applying Burn.
+2초마다 피격 시 주변에 불꽃을 일으켜, 근처의 적에게 최대 체력의 30%만큼 피해를 주고 화상을 입힙니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, -1, -1, 2, 5, -1, 400.0
 
 10
 //10 - 데미지 배율이 화상 데미지 * value1만큼 증가함. (effectiveBurnDamage만큼 additionalDamageRatio가 증가)
-Pyre of Rage
+격노의 장작더미
 2
-Your damage multiplier increases based on the amount of Burn damage you inflict.
+당신이 입히는 화상 대미지에 따라 대미지 배율이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, -1, -1, -1, -1, -1, -1
 
 11
 //11 - cooldown 초마다 주변 적에게 duration 초간 둔화를 부여함, 기본 범위 range, 기본 연사/현재 연사 * value1 만큼 해당 효과의 범위가 증가(연사가 낮을수록 범위 증가)
-Hourglass
+모래시계
 0
-Periodically slows nearby enemies. The area of effect is larger the lower your rate of fire is.
+주기적으로 주변 적을 느리게 만듭니다. 이 효과의 범위는 연사가 낮을수록 넓어집니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, -1, -1, 4.0, 3.0, -1, 700.0
 
 12
 //12 - 공격한 적의 현재 체력 / 최대 체력이 value1 이상이라면 최종 데미지가 value2 증가함.
-Languor Cloak
+나태의 망토
 0
-Deal 50% more damage to enemies above 80% health.
+체력이 80% 이상인 적에게 50%의 추가 피해를 입힙니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.8, 1.5, -1, -1, -1, -1, -1
 
 13
 //13 -획득 시 연사 value1 감소, cooldown초마다 적 처치 시 폭발하며 주변 적에게 플레이어의 현재 데미지 * value2만큼의 피해를 준다. 기본 범위 range, 연사가 기본 연사보다 낮을수록 해당 효과의 범위가 증가 (additionalFireRate value1 감소)
-Chains of Rest
+안식의 사슬
 2
-Reduces fire rate. A defeated enemy will explode, damaging nearby foes. This effect can only occur once every 4 seconds. The explosion's radius increases as your fire rate decreases
+연사가 감소합니다. 4초에 한 번, 적을 처치하면 폭발하여 주변 적에게 피해를 줍니다. 연사가 낮을수록 폭발 반경이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.2, 1.0, -1, 4.0, -1, -1, 400.0
 
 14
 //14 - 획득 시 이동 속도 감소, 공격력 증가 (MovementSpeed -= value1, additionalDamage value2 증가)
-Slumber Ring
+무기력의 반지
 0
-Increases your attack damage but reduces your movement speed.
+대미지가 증가하지만 이동 속도가 감소합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 30.0, 0.5, -1, -1, -1, -1, -1
 
 15
 //15 - 획득 시 연사 감소, 기본 연사/현재 연사 * value2 만큼 공격력 배율 증가 (additionalFireRateRatio value1 감소)
-Apathy Band
+무감정의 밴드
 1
-Reduces fire. The damage bonus scales inversely with your fire rate.
+연사가 감소합니다. 대미지 배율이 연사에 반비례하여 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.1, 1.0, -1, -1, -1, -1, -1
 
 16
 //16 - 획득 시, 이동 속도 value1 감소, 체력 value2 칸 증가 (MovementSpeed -= value1, MaxHP value2, HP value2 증가)
-Feast Chalice
+향연의 성배
 1
-Grants +2 Max Health. Decreases Movement Speed.
+최대 체력이 2 증가하고, 이동 속도가 감소합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 30.0, 2.0, -1, -1, -1, -1, -1
 
 17
 //17 - 적을 value1 마리 처치 할때마다 체력 value2 칸 회복
-Maw of Feasting
+포식의 아귀
 0
-Restores 1 Health per 70 enemies slain.
+적 70마리를 처치할 때마다 체력을 1 회복합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 70.0, 1.0, -1, -1, -1, -1, -1
 
 18
 //18 - 채워진 체력 한칸당 공격력 증가, 이동속도 감소 (한칸당 additionalDamage value1 증가, additionalMovementSpeed value2 감소)
-Insatiate Cup
+채워지지 않는 잔
 2
-Increases Attack Power and decreases Movement Speed based on your Health.
+현재 체력에 비례하여 대미지가 증가하고 이동 속도가 감소합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.08, 8.0, -1, -1, -1, -1, -1
 
 19
 //19 - 피격 시 duration초간 연사, 공격력, 이동속도 증가 (additionalFireRate value1 증가, additionalDamage value2 증가, additionalMovementSpeed value3 증가)
-Bellyband
+복대
 0
-On taking damage, gain increased Rate of Fire, Attack Power, and Movement Speed for 5 seconds.
+피격 시 5초간 연사, 대미지, 이동 속도가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, 1.0, 50.0, -1, 5.0, -1, -1
 
 20
 //20 - cooldown초에 한번 랜덤한 장소에 포션 생성, 포션 게이지 회복
-Glut's Girdle
+폭식의 허리띠
 0
-Every 50 seconds, a potion spawns in a random location. Picking it up restores potion gauge.
+50초마다 무작위 위치에 포션이 생성됩니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 -1, -1, -1, 50.0, -1, -1, -1
 
 21
 //21 - value 3만큼 additionalDamage 증가, 보스 공격시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 보스 체력의 value2 만큼 데미지
-Avarice Gauntlet
+탐욕의 건틀릿
 2
-Increases your attack damage, Attacks against bosses spend gold to deal damage equal to a percentage of their health.
+대미지가 증가합니다. 보스 공격 시, 골드를 소모하여 보스 체력의 일정 비율만큼 피해를 줍니다.
 //value1, value2, value3, cooldown, duration, procchance, range
-50.0, 0.01, 1.2, -1, -1, -1, -1
+50.0, 0.01, 2.4, -1, -1, -1, -1
 
 22
 //22 - value2만큼 additionalFireRate 증가, 피격 시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 데미지 방지 및 무적 부여
-Covet Crown
+갈망의 왕관
 1
-Gain increased Rate of Fire. When hit, automatically consume gold to negate all incoming damage.
+연사가 증가합니다. 피격 시, 골드를 소모하여 피해를 무효화합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 400.0, 0.3, -1, -1, -1, -1, -1
 
 23
 //23 - 즉시 현재 돈의 value1 만큼 얻고 이후 아이템 리롤의 가격이 value2 만큼 올라감
-Hoard Ring
+축재의 반지
 0
-Grants an immediate cash infusion based on your current wealth, but permanently inflates the price of all future rerolls.
+즉시 현재 가진 돈에 비례하여 돈을 얻지만, 이후 모든 아이템 리롤 가격이 영구적으로 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.4, 0.3, -1, -1, -1, -1, -1
 
 24
 //24 - 포션 사용 시 체력이 회복되지 않는 대신에 돈을 value1만큼 얻음
-Coin Scar
+황금의 대가
 0
-Potions no longer restore health. Instead, they grant a large amount of gold.
+포션이 더 이상 체력을 회복시키지 않고, 대신 많은 양의 골드를 제공합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
-150.0, -1, -1, -1, -1, -1, -1
+200.0, -1, -1, -1, -1, -1, -1
 
 25
 //25 - 골드 획득량이 value1 만큼 증가하지만, 피격 시 가진 돈의 value2 만큼 잃는다.
-Greed's Grip
+탐욕의 손아귀
 0
-Dramatically increases all Gold Gain. However, you lose a percentage of your current gold whenever you take damage.
+골드 획득량이 증가하지만, 피격 시 현재 가진 돈의 일부를 잃습니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, 0.05, -1, -1, -1, -1, -1
 
 26
 //26 - 적 공격 시 procchance 확률로 duration초간 스턴
-Temptation Veil 
+유혹의 장막
 2
-Your attacks have a chance to stun enemies.
+공격 시 일정 확률로 적을 기절시킵니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 -1, -1, -1, -1, 3.0, 0.15, -1
 
 27
 //27 - 적 처치 시 procchance 확률로 duration초간 range 범위 내 적들 공포
-Kiss of Lust
+욕망의 입맞춤
 0
-On kill, there is a chance to fear nearby enemies.
+적 처치 시, 일정 확률로 주변 적들에게 공포를 겁니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 -1, -1, -1, -1, 4.0, 0.3, 500.0
 
 28
 //28 - 적 공격 시 procchance 확률로 duration초간 취약
-Desire Shroud
+갈망의 수의
 1
-Your attacks have a chance to make an enemy Vulnerable.
+공격 시 일정 확률로 적을 취약 상태로 만듭니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 -1, -1, -1, -1, 3, 0.2, -1
 
 29
 //29 - 연사 증가, 상태이상의 발동 확률이 증가(additionalProcChanceRatio value1 증가, additionalFireRate valuse2 증가)
-Passion Orb
+열정의 보주
 0
-Gain increased Rate of Fire. Increases the activation chance of all status effects.
+연사가 증가하고, 모든 상태 이상 효과의 발동 확률이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, 0.2, -1, -1, -1, -1, -1
 
 30
 //30 - 적 공격 후 적의 현재 체력 / 최대 체력이 value1 이하 일시 즉사
-Seduce Band
+유혹의 밴드
 0
-Attacks execute enemies that are below 10% of their maximum health.
+공격 후 최대 체력의 10% 이하인 적을 즉시 처형합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.1, -1, -1, -1, -1, -1, -1
 
 31
 //31 - 플레이어가 보는 방향으로 총알을 발사하는 소환수 2개 소환 (기본 데미지 value1, 연사 value2, 관통력 value3)
-Echoing Shots
+메아리치는 총탄
 0
-Summons two minions that fire bullets in the direction you are aiming.
+플레이어가 조준하는 방향으로 총알을 발사하는 미니언 두 마리를 소환합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.5, 1.5, 1.0, -1, -1, -1, -1
 
 32
 //32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 폭발 반경 range (기본 데미지 value1, 연사 value2)
-Apocalyptic Roar
+종말의 포효
 2
-Summons a minion that lobs grenades at the nearest enemy.
+가장 가까운 적에게 유탄을 발사하는 미니언을 소환합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, 0.3, -1, -1, -1, -1, 300.0
 
 33
 //33 - 플레이어 주변을 회전하며 탄환을 막아주고, 충돌 데미지를 주는 소환수 1개 소환 (기본 데미지 value1, 기본 각속도 value2)
-Orbiting Hate
+증오의 궤도
 1
-Summons a guardian that orbits you, blocking enemy projectiles and dealing contact damage.
+주위를 돌면서 적의 투사체를 막고 충돌 피해를 주는 가디언을 소환합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.5, 150.0, -1, -1, -1, -1, -1
 
 34
 //34 - 소환수의 데미지와 관통수 증가 (additionalMinionDamageRatio value1 증가, additionalMinionHitCount value2 증가)
-Covetous Eye
+탐욕스러운 눈
 0
-Your minions deal more damage and their attacks pierce through more enemies.
+미니언의 대미지와 관통 횟수가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.5, 1.0, -1, -1, -1, -1, -1
 
 35
 //35 - 소환수의 연사 증가 (additionalMinionFireRate value1 증가)
-Emerald Gaze
+에메랄드 시선
 0
-Increases the attack speed of your minions.
+미니언의 연사가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.5, -1, -1, -1, -1, -1, -1
 
 36
 //36 - value1 만큼 공격력 증가 (additionalDamageRatio value1 증가)
-Destroyer's Mark
+파괴자의 징표
 2
-Increases attack damage ratio.
+대미지 배율이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, -1, -1, -1, -1, -1, -1
 
 37
 //37 - value1 만큼 연사 증가 (additionalFireRateRatio value1 증가)
-Symbol of Barrage
+집중 포화
 2
-Increases fire rate ratio.
+연사 속도 비율이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.2, -1, -1, -1, -1, -1, -1
 
 38
 //38 - value1 만큼 연사 증가 value2 만큼 이속 증가 (additionalFireRate value1 증가, additionalMovementSpeed value2 증가 )
-Vigilance Talisman
+경계의 부적
 1
-Increases fire rate and movement speed.
+연사와 이동 속도가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.2, 30, -1, -1, -1, -1, -1
 
 39
 //39 - 공격력 공속 이속 증가 (additionalDamage value1 증가, additionalFireRate value2 증가, additionalMovementSpeed value3 증가)
-Trinity Emblem
+삼위일체
 1
-Increases attack damage, fire rate and movement speed.
+대미지, 연사, 이동 속도가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.2, 0.1, 15, -1, -1, -1, -1
 
 40
 //40 - 관통수 증가 (additionalHitCount value1 증가)
-Piercing Crystal
+관통의 수정
 2
-Increases hit count.
+관통 횟수(관통력)가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, -1, -1, -1, -1, -1, -1
 
 41
 //41 - 경험치 획득량 증가 (additionalExpGainedRatio value1 증가)
-Scroll of Wisdom
+지혜의 두루마리
 1
-Increases Exp gained.
+경험치 획득량이 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.3, -1, -1, -1, -1, -1, -1
 
 42
 //42 - 공격력 증가 (additionalDamage value1 증가)
-Conqueror's Blade
+정복자의 검
 0
-Increases attack damage.
+대미지가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.15, -1, -1, -1, -1, -1, -1
 
 43
 //43 - 이동속도 증가 (additionalMovementSpeed value1 증가)
-Stalker's Stride
+추적자의 걸음
 0
-Increases movement speed.
+이동 속도가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 25, -1, -1, -1, -1, -1, -1
 
 44
 //44 - 최대체력 value1 증가
-Well of Vitality
+활력의 샘
 0
-Grants +1 Max Health.
+최대 체력이 1 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 1.0, -1, -1, -1, -1, -1, -1
 
 45
 //45 - 적 처치 또는 보스 타격 시 procchance 확률로 즉시 재장전
-Unceasing Fury
+끊임없는 분노
 0
-Upon defeating an enemy or hitting a boss, there is a chance to instantly reload your weapon.
+적을 처치하거나 보스를 타격 시, 일정 확률로 즉시 재장전합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, 0.1, -1
+-1, -1, -1, -1, -1, 0.12, -1

@@ -14,6 +14,7 @@ namespace Manager
 		void ShowTooltip(InGame::Item& item);
 		void Destroy();
 		std::vector<std::string> SplitTextIntoLines(const std::string& text, f32 maxWidth);
+		std::vector<std::string> SplitTextIntoLines_UTF8_KR(const std::string& textUTF8, float maxWidthPx, float scale, bool useKerning = true);
 		InGame::Actor Coin;
 		InGame::Actor* GetPotion();
 		f32 PotionFillPercent = 0.f;

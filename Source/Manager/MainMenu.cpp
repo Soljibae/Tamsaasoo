@@ -4,6 +4,7 @@
 #include "../InGame/SFX.h"
 #include <algorithm>
 #include "SettingUI.h"
+
 namespace Manager
 {
 	f32 MainMenu::alpha = 1.f;
@@ -95,6 +96,7 @@ namespace Manager
 			gm.shouldExit = true;
 			});
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
+
 	}
 
 	void MainMenu::Update()
@@ -201,6 +203,8 @@ namespace Manager
 		int idx = 0;
 		f32 lw, lh;
 		f32 halfW{ static_cast<f32>(global::ScreenWidth) / 2.f }, halfH{ static_cast<f32>(global::ScreenHeight) / 2.f };
+		
+
 		for (auto& btn : Buttons)
 		{
 			switch (idx)

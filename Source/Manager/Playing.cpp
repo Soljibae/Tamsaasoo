@@ -14,6 +14,8 @@
 #include <random>
 #include "SettingUI.h"
 
+FontAtlasAE Manager::Atlas;
+
 namespace Manager
 {
 	Utils::Camera* CAM = nullptr;
@@ -111,6 +113,9 @@ namespace Manager
 		VFXManager.Init();
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		gm.GamePaused = false;
+		Atlas.Init("Assets/Fonts/neodgm_code.ttf", 16);
+		Atlas.SetYStretch(1.5f);
+		Atlas.SetUVFlipV(false);
 	}
 
 	void Playing::Update()
@@ -842,6 +847,7 @@ namespace Manager
 		delete PC;
 		PC = nullptr;
 		SFXManager.Destroy();
+		Atlas.Shutdown();
 	}
 	void Playing::SpawnWave()
 	{

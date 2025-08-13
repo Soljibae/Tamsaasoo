@@ -1,4 +1,4 @@
-#include "HUDController.h"
+﻿#include "HUDController.h"
 #include "../InGame/Gun.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
@@ -486,6 +486,102 @@ namespace Manager
 		}
 	}
 
+	static std::vector<std::string>
+		BreakWordUTF8ByWidth(const std::string& utf8,
+			float maxWidthPx,
+			float scale,
+			bool useKerning)
+	{
+		std::vector<std::string> out;
+		if (utf8.empty()) return out;
+
+		auto cps = DecodeUTF8(utf8);
+		std::string cur;
+		float curW = 0.0f;
+
+		auto widthOf = [&](const std::string& s)->float {
+			return Atlas.GetPrintMetricsUTF8(s, scale, useKerning).width;
+			};
+
+		// 간단한 금칙 기호(다음 줄 시작 금지) 처리용 헬퍼
+		auto isDisallowedLineStart = [](uint32_t cp)->bool {
+			// 닫힘/종지류: )]},.!?:;…‧·、，。？！：
+			switch (cp) {
+			case U')': case U']': case U'}':
+			case U'.': case U',': case U'!': case U'?': case U':': case U';':
+			case 0x2026/*…*/: case 0x00B7/*·*/:
+			case 0x3001/*、*/: case 0xFF0C/*，*/: case 0x3002/*。*/:
+			case 0xFF01/*！*/: case 0xFF1F/*？*/: case 0xFF1A/*：*/:
+				return true;
+			default: return false;
+			}
+			};
+
+		std::string pending; // 다음 줄 첫 글자 후보(금칙 처리용)
+
+		for (size_t i = 0; i < cps.size(); ++i) {
+			// cp를 UTF-8로 다시 쌓기
+			uint32_t cp = cps[i];
+			std::string ch;
+			if (cp <= 0x7F) {
+				ch.push_back(char(cp));
+			}
+			else if (cp <= 0x7FF) {
+				ch.push_back(char(0xC0 | ((cp >> 6) & 0x1F)));
+				ch.push_back(char(0x80 | (cp & 0x3F)));
+			}
+			else if (cp <= 0xFFFF) {
+				ch.push_back(char(0xE0 | ((cp >> 12) & 0x0F)));
+				ch.push_back(char(0x80 | ((cp >> 6) & 0x3F)));
+				ch.push_back(char(0x80 | (cp & 0x3F)));
+			}
+			else {
+				ch.push_back(char(0xF0 | ((cp >> 18) & 0x07)));
+				ch.push_back(char(0x80 | ((cp >> 12) & 0x3F)));
+				ch.push_back(char(0x80 | ((cp >> 6) & 0x3F)));
+				ch.push_back(char(0x80 | (cp & 0x3F)));
+			}
+
+			float wCh = widthOf(ch);
+
+			if (cur.empty()) {
+				// 현재 줄이 비었으면 바로 넣되, 다음 줄 시작 금지 문자면 보류
+				if (isDisallowedLineStart(cp) && !out.empty()) {
+					// 이전 줄 끝으로 붙여야 자연스럽지만, 여기서는 최소 보수:
+					// 이전 라인에 합칠 수 없으면(비어있다면) 그냥 시작
+					pending = ch; // 다음에 합치기
+					continue;
+				}
+			}
+
+			if (curW + wCh <= maxWidthPx) {
+				cur += pending;  // 금칙 문자 대기분 먼저 붙이기
+				cur += ch;
+				curW += widthOf(pending) + wCh;
+				pending.clear();
+			}
+			else {
+				// 줄바꿈
+				if (!cur.empty()) out.push_back(cur);
+				cur = ch;
+				curW = wCh;
+			}
+		}
+
+		if (!pending.empty()) {
+			// 마지막에 금칙 문자가 남아있다면 현재 줄에 붙인다
+			if (curW + Atlas.GetPrintMetricsUTF8(pending, scale, useKerning).width <= maxWidthPx) {
+				cur += pending;
+			}
+			else {
+				if (!cur.empty()) out.push_back(cur);
+				cur = pending;
+			}
+		}
+		if (!cur.empty()) out.push_back(cur);
+		return out;
+	}
+
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
 	{
 		std::vector<std::string> lines;
@@ -531,6 +627,77 @@ namespace Manager
 		return lines;
 	}
 
+	std::vector<std::string>
+		HUDController::SplitTextIntoLines_UTF8_KR(const std::string& textUTF8,
+			float maxWidthPx,
+			float scale,
+			bool useKerning)
+	{
+		std::vector<std::string> lines;
+		std::istringstream paraStream(textUTF8);
+		std::string paragraph;
+
+		auto widthOf = [&](const std::string& s)->float {
+			return Atlas.GetPrintMetricsUTF8(s, scale, useKerning).width;
+			};
+
+		const float spaceW = widthOf(" ");
+
+		while (std::getline(paraStream, paragraph)) {
+			std::istringstream wordStream(paragraph);
+			std::string word, curLine;
+			float curW = 0.0f;
+
+			while (wordStream >> word) {
+				// 1) 이 단어만 렌더했을 때 폭
+				float wWord = widthOf(word);
+
+				// 2) 현재 줄에 붙였을 때의 "전체" 후보 문자열과 그 폭
+				std::string candidate = curLine.empty() ? word : (curLine + " " + word);
+				float candW = widthOf(candidate);
+
+				// 부동소수점 오차 완화용 작은 여유 (픽셀 단위)
+				const float EPS = 0.5f;
+
+				if (candW <= maxWidthPx + EPS) {
+					// 그대로 붙이는 편이 최적: 실제 렌더 폭 기준으로 갱신
+					curLine.swap(candidate);
+					curW = candW;
+					continue;
+				}
+
+				// ---- 여기서부터는 "붙이면 넘침"인 경우 ----
+
+				// (A) 현재 줄이 비어있지 않으면 일단 현재 줄 확정
+				if (!curLine.empty()) {
+					lines.push_back(curLine);
+					curLine.clear();
+					curW = 0.0f;
+				}
+
+				// (B) 단어 자체가 maxWidth를 넘는 매우 긴 토큰이면 문자 단위로 쪼갠다
+				if (wWord > maxWidthPx + EPS) {
+					auto chunks = BreakWordUTF8ByWidth(word, maxWidthPx, scale, useKerning);
+					for (size_t i = 0; i + 1 < chunks.size(); ++i)
+						lines.push_back(chunks[i]);       // 꽉 찬 조각들 확정
+					if (!chunks.empty()) {
+						curLine = chunks.back();          // 마지막 조각은 다음 단어와 이어질 수 있으니 보류
+						curW = widthOf(curLine);
+					}
+				}
+				else {
+					// (C) 단어는 한 줄에 들어가는 크기 → 새 줄의 시작으로 둔다
+					curLine = word;
+					curW = wWord;
+				}
+			}
+
+			if (!curLine.empty())
+				lines.push_back(curLine);
+		}
+		return lines;
+	}
+
 	InGame::Actor* HUDController::GetPotion()
 	{
 		return &Potion;
@@ -538,103 +705,144 @@ namespace Manager
 
 	void HUDController::TooltipUpdate(InGame::Item& item)
 	{
-		itemDesc = SplitTextIntoLines(item.description, maxTextW);
-		switch (item.tag)
-		{
-		case InGame::ItemTag::ENVY:
-			itemDesc.insert(itemDesc.begin(), "ENVY");
-			break;
-		case InGame::ItemTag::GLUTTONY:
-			itemDesc.insert(itemDesc.begin(), "GLUTTONY");
-			break;
-		case InGame::ItemTag::GREED:
-			itemDesc.insert(itemDesc.begin(), "GREED");
-			break;
-		case InGame::ItemTag::LUST:
-			itemDesc.insert(itemDesc.begin(), "LUST");
-			break;
-		case InGame::ItemTag::SLOTH:
-			itemDesc.insert(itemDesc.begin(), "SLOTH");
-			break;
-		case InGame::ItemTag::WRATH:
-			itemDesc.insert(itemDesc.begin(), "WRATH");
-			break;
-		case InGame::ItemTag::PRIDE:
-			itemDesc.insert(itemDesc.begin(), "PRIDE");
-			break;
-		default:
-			itemDesc.insert(itemDesc.begin(), "NONE");
-			break;
+		// 1) 라인 구성 (이미 너가 쓰는 방식 유지)
+		itemDesc = SplitTextIntoLines_UTF8_KR(item.description, maxTextW, 1.f);
+
+		// 2) 태그/이름을 앞에 삽입 (기존 코드 그대로)
+		const char* tagStr = "NONE";
+		switch (item.tag) {
+		case InGame::ItemTag::ENVY:     tagStr = "ENVY";     break;
+		case InGame::ItemTag::GLUTTONY: tagStr = "GLUTTONY"; break;
+		case InGame::ItemTag::GREED:    tagStr = "GREED";    break;
+		case InGame::ItemTag::LUST:     tagStr = "LUST";     break;
+		case InGame::ItemTag::SLOTH:    tagStr = "SLOTH";    break;
+		case InGame::ItemTag::WRATH:    tagStr = "WRATH";    break;
+		case InGame::ItemTag::PRIDE:    tagStr = "PRIDE";    break;
+		default:                         tagStr = "NONE";     break;
 		}
+		itemDesc.insert(itemDesc.begin(), tagStr);
 		itemDesc.insert(itemDesc.begin(), item.name);
-		s32 mouseX, mouseY;
-		AEInputGetCursorPosition(&mouseX, &mouseY);
+
+		// 3) Atlas 메트릭(픽셀)로 줄간격/asc/desc
+		const float s = 1.f;
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(u8"한", s);
+		float lineH = m.lineHeight;
+		float asc = m.ascender;
+		float desc = m.descender;
+
+		// 4) 모든 라인의 "실제 폭"을 재서 최대폭 계산  (std::min/max 없이)
+		float wMax = 0.f;
+		for (size_t i = 0; i < itemDesc.size(); ++i) {
+			float w = Manager::Atlas.GetPrintMetricsUTF8(itemDesc[i], s, true).width;
+			if (w > wMax) wMax = w;
+		}
+
+		// 5) 내부 여백/프레임
+		const float frame = padding;  // DrawNinePatchMesh에 주는 값과 동일
+		const float textPad = 8.f;
+
+		// 6) 창 너비/높이 갱신  ★ 핵심
+		float contentW = wMax;
+		float contentH = asc + ((int)itemDesc.size() - 1) * lineH + desc;
+
+		tooltip.Window.size.x = 2.f * (frame + textPad) + contentW;
+		tooltip.Window.size.y = 2.f * (frame + textPad) + contentH;
+
+		// 7) 마우스 기준 위치는 "업데이트된 사이즈"로 다시 잡기
+		s32 mouseX, mouseY; AEInputGetCursorPosition(&mouseX, &mouseY);
 		AEVec2 MP;
-		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
-		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
+		MP.x = (float)mouseX - AEGfxGetWindowWidth() * 0.5f;
+		MP.y = AEGfxGetWindowHeight() * 0.5f - (float)mouseY;
 
-		f32 lw, lh;
-		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &lw, &lh);
-		lh *= global::ScreenHeight;
+		tooltip.Window.position = {
+			MP.x + tooltip.Window.size.x * 0.5f + frame,
+			MP.y + tooltip.Window.size.y * 0.5f + frame
+		};
 
-		tooltip.Window.position = { MP.x + (tooltip.Window.size.x / 2.f) + padding, MP.y + (tooltip.Window.size.y / 2.f) + padding };
-		tooltip.Window.size.y = lh * itemDesc.size();
-
-		if (prevItem != &item)
-		{
+		// 8) (메시 리프레시 기존 로직 유지)
+		if (prevItem != &item) {
 			prevItem = &item;
-			s8 i = 0;
-			for (int i = 0; i < tooltip.WindowMesh.size(); i++)
-			{
-				if (tooltip.WindowMesh[i])
-				{
-					AEGfxMeshFree(tooltip.WindowMesh[i]);
-					tooltip.WindowMesh[i] = nullptr;
-				}
+			for (int i = 0; i < tooltip.WindowMesh.size(); i++) {
+				if (tooltip.WindowMesh[i]) { AEGfxMeshFree(tooltip.WindowMesh[i]); tooltip.WindowMesh[i] = nullptr; }
 			}
 			tooltip.WindowMesh = Utils::CreateNinePatchMesh();
 		}
 	}
 
+	static inline u32 RGBA8(float r, float g, float b, float a = 1.f) {
+		auto c = [](float v)->u32 { v = v < 0 ? 0 : (v > 1 ? 1 : v); return (u32)(v * 255.f + 0.5f); };
+		return (c(a) << 24) | (c(r) << 16) | (c(g) << 8) | c(b);
+	}
+
 	void HUDController::ShowTooltip(InGame::Item& item)
 	{
-		
-		if (SettingPanel.isSettingOn)
-			return;
+		if (SettingPanel.isSettingOn) return;
 
+		// 패널 먼저
 		Utils::DrawNinePatchMesh(tooltip.Window, tooltip.Window.Texture, tooltip.WindowMesh, padding);
-		f32 tmp, lh;
-		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &tmp, &lh);
-		lh *= global::ScreenHeight;
-		f32 px = tooltip.Window.position.x - tooltip.Window.size.x / 2.f;
-		f32 py = tooltip.Window.position.y - tooltip.Window.size.y / 2.f;
-		f32 boxW = tooltip.Window.size.x;
-		f32 boxH = tooltip.Window.size.y;
-		f32 halfW = AEGfxGetWindowWidth() * 0.5f;
-		f32 halfH = AEGfxGetWindowHeight() * 0.5f;
-		f32 baseX = px;
-		f32 baseY = py + boxH - lh / 1.5f;
-		s32 mouseX, mouseY;
-		AEInputGetCursorPosition(&mouseX, &mouseY);
-		AEVec2 MP;
-		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
-		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
-		f32 r{ 1.f }, g{ 1.f }, b{ 1.f };
-		for (int i = 0; i < itemDesc.size(); i++)
-		{
-			f32 xPix = baseX;
-			f32 yPix = baseY - lh * i;
-			f32 xN = xPix / halfW;
-			f32 yN = yPix / halfH;
+
+		// 패널 사각형
+		float px = tooltip.Window.position.x - tooltip.Window.size.x * 0.5f;
+		float py = tooltip.Window.position.y - tooltip.Window.size.y * 0.5f;
+		float boxW = tooltip.Window.size.x;
+		float boxH = tooltip.Window.size.y;
+
+		// 내용 여백
+		const float frame = padding;
+		const float textPad = 8.f;
+		float xLeft = px + frame + textPad;
+		float yTop = py + boxH - frame - textPad;
+
+		// Atlas 메트릭
+		const float s = 1.f;
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(u8"한", s);
+		float lineH = m.lineHeight;
+		float asc = m.ascender;
+
+		// 첫 줄 베이스라인
+		float curY = yTop - asc;
+
+		// 라인 출력 (아이템 이름/태그 + 설명 = itemDesc)
+		for (size_t i = 0; i < itemDesc.size(); ++i) {
+			u32 col = 0xFFFFFFFF;
 			if (i == 1)
 			{
-				r = 0.5f, g = 0.5f, b = 0.5f;
+				if (itemDesc[1] == "ENVY")
+				{
+					col = 0x800080FF;
+				}
+				else if (itemDesc[1] == "GLUTTONY")
+				{
+					col = 0x008000FF;
+				}
+				else if (itemDesc[1] == "GREED")
+				{
+					col = 0x0000FFFF;
+				}
+				else if (itemDesc[1] == "LUST")
+				{
+					col = 0x0D00A6FF;
+				}
+				else if (itemDesc[1] == "SLOTH")
+				{
+					col = 0xFFFF00FF;
+				}
+				else if (itemDesc[1] == "WRATH")
+				{
+					col = 0xFF8000FF;
+				}
+				else if (itemDesc[1] == "PRIDE")
+				{
+					col = 0xFF0000FF;
+				}
+				else if (itemDesc[1] == "NONE")
+				{
+					col = 0x555555FF;
+				}
+
 			}
-			else
-			{
-				r = 1.f, g = 1.f, b = 1.f;
-			}
-			AEGfxPrint(pFont, itemDesc[i].c_str(), xN, yN, textDrawSize, r, g, b, 1.f);
+			Manager::Atlas.RenderTextUTF8(itemDesc[i], xLeft, curY, s, col);
+			curY -= lineH;
 		}
 	}
 

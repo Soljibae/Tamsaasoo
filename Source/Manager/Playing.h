@@ -19,6 +19,7 @@
 #include "../InGame/VFX.h"
 #include "../InGame/SoulOrb.h"
 #include "BossHPBar.h"
+#include "../Utils/TextRender.h"
 
 namespace Manager
 {
@@ -84,5 +85,5 @@ namespace Manager
 		s8 pFont;
 	};
 	extern Utils::Camera* CAM;
-	
+	extern FontAtlasAE Atlas;
 }
