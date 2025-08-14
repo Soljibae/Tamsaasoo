@@ -12,6 +12,8 @@ namespace Manager
 		void Draw();
 		void TooltipUpdate(InGame::Item& item);
 		void ShowTooltip(InGame::Item& item);
+		void ShowStageUpdate();
+		void ShowStageDraw();
 		void Destroy();
 		std::vector<std::string> SplitTextIntoLines(const std::string& text, f32 maxWidth);
 		std::vector<std::string> SplitTextIntoLines_UTF8_KR(const std::string& textUTF8, float maxWidthPx, float scale, bool useKerning = true);
@@ -47,6 +49,14 @@ namespace Manager
 		s8 pFont;
 		std::vector<std::string> itemDesc;
 
+		InGame::Actor stageBG;
+		InGame::Actor stageMAP;
+		InGame::Actor stageArrow;
+		std::array<AEGfxVertexList*, 9> bgMesh;
+		AEGfxVertexList* m_Mesh;
+		AEGfxTexture* stageBGTexture;
+		AEGfxTexture* stageMAPTexture;
+		
 		InGame::Actor Vignetting;
 	};
 

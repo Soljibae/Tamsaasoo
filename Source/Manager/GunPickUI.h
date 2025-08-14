@@ -15,7 +15,7 @@ namespace Manager
 		void Destroy();
 		bool IsActive() const;
 		std::array<InGame::GunType, 3> GenerateRandomGun();
-
+		bool shouldShowStage = false;
 	private:
 		InGame::PlayerCharacter* PC;
 		std::array<Button, 3> weaponOptionButtons;

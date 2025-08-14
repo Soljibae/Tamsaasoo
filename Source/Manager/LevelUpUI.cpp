@@ -283,12 +283,12 @@ namespace Manager
 			std::vector<std::string> ItemDesc =
 				HUD.SplitTextIntoLines_UTF8_KR(currentOptions[i]->description, windowWidth - paddingForKR * 2.f, 1.f);
 
-			auto mBase = Manager::Atlas.GetPrintMetricsUTF8(u8"ÇÑ", 1.f); // ¾Æ¹« ±ÛÀÚ³ª OK
-			float lineH = mBase.lineHeight;     // ÁÙ °£°Ý(px)
-			float asc = mBase.ascender;       // º£ÀÌ½º¶óÀÎ À§ ¿©À¯(px)
+			auto mBase = Manager::Atlas.GetPrintMetricsUTF8(u8"ï¿½ï¿½", 1.f); // ï¿½Æ¹ï¿½ ï¿½ï¿½ï¿½Ú³ï¿½ OK
+			float lineH = mBase.lineHeight;     // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(px)
+			float asc = mBase.ascender;       // ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(px)
 
 			AEVec2 windowPos{ ItemWindow[i].position };
-			float xLeft = windowPos.x - windowWidth * 0.5f + paddingForKR;       // ¿ÞÂÊ ¿©¹é
+			float xLeft = windowPos.x - windowWidth * 0.5f + paddingForKR;       // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			float yTop = currentOptions[i]->iconPosition.y - currentOptions[i]->size.y * 2.f + upForKR;
 
 			float baseYFirst = yTop - asc;
@@ -296,7 +296,7 @@ namespace Manager
 			for (size_t j = 0; j < ItemDesc.size(); ++j)
 			{
 				float lx = xLeft;
-				float ly = baseYFirst - lineH * static_cast<float>(j); // worldYAxisUp=true¸é ¾Æ·¡·Î °¥¼ö·Ï y °¨¼Ò
+				float ly = baseYFirst - lineH * static_cast<float>(j); // worldYAxisUp=trueï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ y ï¿½ï¿½ï¿½ï¿½
 				Manager::Atlas.RenderTextUTF8(ItemDesc[j], lx, ly, 1.f, 0xFFFFFFFF);
 			}
 		}

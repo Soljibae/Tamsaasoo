@@ -216,6 +216,7 @@ namespace Manager
 					}
 					stageIdx++;
 					isActive = false;
+					shouldShowStage = true;
 					gm.Resume();
 				}
 				});
