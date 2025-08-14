@@ -104,6 +104,7 @@ namespace InGame
 
 						Projectile* PP = GS->PPPool.back();
 						GS->PPPool.pop_back();
+						GetProjectileSize();
 						PP->Spawn(pelletDir, Pos, Source);
 						GS->PPs.push_back(PP);
 					}
@@ -146,7 +147,7 @@ namespace InGame
 	SAWEDOFFSHOTGUNStruct::SAWEDOFFSHOTGUNStruct()
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;
-		GuntypeDamageRatio = 1.1f;
+		GuntypeDamageRatio = 1.18f;
 		GuntypeFireRateRatio = 0.7f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 20.f;
@@ -158,62 +159,62 @@ namespace InGame
 	{
 		Type = GunType::DOUBLEBARREL;
 		GuntypeDamageRatio = 2.f;
-		GuntypeFireRateRatio = 1.0f;
+		GuntypeFireRateRatio = 1.2f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
-		ProjectileSpawnCount = 5;
+		ProjectileSpawnCount = 3;
 		TextureAddress = "Assets/Guns/Character_DOUBLEBARREL.png";
 	}
 	KS23Struct::KS23Struct()
 	{
 		Type = GunType::KS23;
-		GuntypeDamageRatio = 5.f;
-		GuntypeFireRateRatio = 0.2f;
+		GuntypeDamageRatio = 11.f;
+		GuntypeFireRateRatio = 0.35f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 40.f;
 		ProjectileHitCount = 3;
-		ProjectileSpawnCount = 5;
+		ProjectileSpawnCount = 3;
 		TextureAddress = "Assets/Guns/Character_KS23.png";
 	}
 	M1897Struct::M1897Struct()
 	{
 		Type = GunType::M1897;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 2.0f;
+		GuntypeDamageRatio = 1.2f;
+		GuntypeFireRateRatio = 1.5f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
-		ProjectileSpawnCount = 5;
+		ProjectileSpawnCount = 4;
 		TextureAddress = "Assets/Guns/Character_M1897.png";
 	}
 	BENELLIM4Struct::BENELLIM4Struct()
 	{
 		Type = GunType::BENELLIM4;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 3.f;
+		GuntypeDamageRatio = 1.5f;
+		GuntypeFireRateRatio = 2.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
-		ProjectileSpawnCount = 5;
+		ProjectileSpawnCount = 4;
 		TextureAddress = "Assets/Guns/Character_BENELLIM4.png";
 	}
 	SAIGA12Struct::SAIGA12Struct()
 	{
 		Type = GunType::SAIGA12;
-		GuntypeDamageRatio = 1.f;
+		GuntypeDamageRatio = 0.9f;
 		GuntypeFireRateRatio = 2.0f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
-		ProjectileSpawnCount = 5;
+		ProjectileSpawnCount = 4;
 		TextureAddress = "Assets/Guns/Character_SAIGA12.png";
 	}
 	AA12Struct::AA12Struct()
 	{
 		Type = GunType::AA12;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 3.5f;
+		GuntypeDamageRatio = 0.8f;
+		GuntypeFireRateRatio = 3.f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -223,7 +224,7 @@ namespace InGame
 	M1911Struct::M1911Struct()
 	{
 		Type = GunType::M1911;
-		GuntypeDamageRatio = 1.2f;
+		GuntypeDamageRatio = 1.35f;
 		GuntypeFireRateRatio = 1.3f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
@@ -234,8 +235,8 @@ namespace InGame
 	MOSINNAGATStruct::MOSINNAGATStruct()
 	{
 		Type = GunType::MOSINNAGAT;
-		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 1.0f;
+		GuntypeDamageRatio = 4.4f;
+		GuntypeFireRateRatio = 0.72f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 5;
@@ -245,8 +246,8 @@ namespace InGame
 	M24Struct::M24Struct()
 	{
 		Type = GunType::M24;
-		GuntypeDamageRatio = 5.f;
-		GuntypeFireRateRatio = 2.f;
+		GuntypeDamageRatio = 3.05f;
+		GuntypeFireRateRatio = 1.95f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 10;
@@ -256,11 +257,11 @@ namespace InGame
 	RAILGUNStruct::RAILGUNStruct()
 	{
 		Type = GunType::RAILGUN;
-		GuntypeDamageRatio = 10.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeDamageRatio = 5.05f;
+		GuntypeFireRateRatio = 1.2f;
 		ProjectileSpeed = 40.f;
 		ProjectileCollisionSize = 10.f;
-		ProjectileHitCount = 20;
+		ProjectileHitCount = 15;
 		ProjectileSpawnCount = 1;
 		TextureAddress = "Assets/Guns/Character_RAILGUN.png";
 	}
@@ -268,7 +269,7 @@ namespace InGame
 	{
 		Type = GunType::DESERTEGLE;
 		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeFireRateRatio = 1.2f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 3;
@@ -278,8 +279,8 @@ namespace InGame
 	BEOWOLFStruct::BEOWOLFStruct()
 	{
 		Type = GunType::BEOWOLF;
-		GuntypeDamageRatio = 5.f;
-		GuntypeFireRateRatio = 2.f;
+		GuntypeDamageRatio = 3.3f;
+		GuntypeFireRateRatio = 1.8f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 5;
@@ -289,30 +290,30 @@ namespace InGame
 	NITRO700Struct::NITRO700Struct()
 	{
 		Type = GunType::NITRO700;
-		GuntypeDamageRatio = 20.f;
-		GuntypeFireRateRatio = 0.5f;
+		GuntypeDamageRatio = 7.5f;
+		GuntypeFireRateRatio = 0.8f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 50.f;
-		ProjectileHitCount = 40;
+		ProjectileHitCount = 20;
 		ProjectileSpawnCount = 1;
 		TextureAddress = "Assets/Guns/Character_NITRO700.png";
 	}
 	FNFALStruct::FNFALStruct()
 	{
 		Type = GunType::FNFAL;
-		GuntypeDamageRatio = 3.f;
-		GuntypeFireRateRatio = 1.0f;
+		GuntypeDamageRatio = 3.1f;
+		GuntypeFireRateRatio = 1.05f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 10.f;
-		ProjectileHitCount = 1;
+		ProjectileHitCount = 4;
 		ProjectileSpawnCount = 1;
 		TextureAddress = "Assets/Guns/Character_FNFAL.png";
 	}
 	M82BARRETTStruct::M82BARRETTStruct()
 	{
 		Type = GunType::M82BARRETT;
-		GuntypeDamageRatio = 10.f;
-		GuntypeFireRateRatio = 0.5f;
+		GuntypeDamageRatio = 5.5f;
+		GuntypeFireRateRatio = 1.1f;
 		ProjectileSpeed = 40.f;
 		ProjectileCollisionSize = 30.f;
 		ProjectileHitCount = 10;
@@ -333,8 +334,8 @@ namespace InGame
 	AR15Struct::AR15Struct()
 	{
 		Type = GunType::AR15;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 2.4f;
+		GuntypeDamageRatio = 0.8f;
+		GuntypeFireRateRatio = 3.5f;
 		ProjectileSpeed = 50.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 2;
@@ -344,11 +345,11 @@ namespace InGame
 	M110Struct::M110Struct()
 	{
 		Type = GunType::M110;
-		GuntypeDamageRatio = 1.6f;
-		GuntypeFireRateRatio = 1.6f;
+		GuntypeDamageRatio = 1.55f;
+		GuntypeFireRateRatio = 3.75f;
 		ProjectileSpeed = 50.f;
 		ProjectileCollisionSize = 10.f;
-		ProjectileHitCount = 5;
+		ProjectileHitCount = 4;
 		ProjectileSpawnCount = 1;
 		TextureAddress = "Assets/Guns/Character_M110.png";
 	}
@@ -356,7 +357,7 @@ namespace InGame
 	{
 		Type = GunType::MP5;
 		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 3.0f;
+		GuntypeFireRateRatio = 3.2f;
 		ProjectileSpeed = 20.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -377,8 +378,8 @@ namespace InGame
 	VECTORStruct::VECTORStruct()
 	{
 		Type = GunType::VECTOR;
-		GuntypeDamageRatio = 0.5f;
-		GuntypeFireRateRatio = 10.f;
+		GuntypeDamageRatio = 0.75f;
+		GuntypeFireRateRatio = 8.1f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 1;
@@ -388,8 +389,8 @@ namespace InGame
 	P90Struct::P90Struct()
 	{
 		Type = GunType::P90;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 5.f;
+		GuntypeDamageRatio = 1.15f;
+		GuntypeFireRateRatio = 5.3f;
 		ProjectileSpeed = 25.f;
 		ProjectileCollisionSize = 10.f;
 		ProjectileHitCount = 3;
@@ -399,7 +400,7 @@ namespace InGame
 	BRENStruct::BRENStruct()
 	{
 		Type = GunType::BREN;
-		GuntypeDamageRatio = 1.f;
+		GuntypeDamageRatio = 1.3f;
 		GuntypeFireRateRatio = 2.f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
@@ -410,8 +411,8 @@ namespace InGame
 	MICROGUNStruct::MICROGUNStruct()
 	{
 		Type = GunType::MICROGUN;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 10.f;
+		GuntypeDamageRatio = 1.0f;
+		GuntypeFireRateRatio = 6.2f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
@@ -421,8 +422,8 @@ namespace InGame
 	M249Struct::M249Struct()
 	{
 		Type = GunType::M249;
-		GuntypeDamageRatio = 1.f;
-		GuntypeFireRateRatio = 3.f;
+		GuntypeDamageRatio = 1.15f;
+		GuntypeFireRateRatio = 5.2f;
 		ProjectileSpeed = 30.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 2;
@@ -432,8 +433,8 @@ namespace InGame
 	M2Struct::M2Struct()
 	{
 		Type = GunType::M2;
-		GuntypeDamageRatio = 10.f;
-		GuntypeFireRateRatio = 1.f;
+		GuntypeDamageRatio = 1.35f;
+		GuntypeFireRateRatio = 4.25f;
 		ProjectileSpeed = 40.f;
 		ProjectileCollisionSize = 30.f;
 		ProjectileHitCount = 5;

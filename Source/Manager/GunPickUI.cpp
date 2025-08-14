@@ -444,7 +444,7 @@ namespace Manager
 				break;
 			case InGame::GunType::DESERTEGLE:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/DESERTEGLE.png");
-				GunNames[i] = "DESERT EGLE";
+				GunNames[i] = "DESERT EAGLE";
 				break;
 			case InGame::GunType::MP5:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MP5.png");
@@ -468,7 +468,7 @@ namespace Manager
 				break;
 			case InGame::GunType::MOSINNAGAT:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MOSINNAGAT.png");
-				GunNames[i] = "MOSINNAGAT";
+				GunNames[i] = "MOSINNAGANT";
 				break;
 			case InGame::GunType::M24:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M24.png");
