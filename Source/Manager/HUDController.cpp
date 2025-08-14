@@ -504,9 +504,7 @@ namespace Manager
 			return Atlas.GetPrintMetricsUTF8(s, scale, useKerning).width;
 			};
 
-		// 간단한 금칙 기호(다음 줄 시작 금지) 처리용 헬퍼
 		auto isDisallowedLineStart = [](uint32_t cp)->bool {
-			// 닫힘/종지류: )]},.!?:;…‧·、，。？！：
 			switch (cp) {
 			case U')': case U']': case U'}':
 			case U'.': case U',': case U'!': case U'?': case U':': case U';':
@@ -518,10 +516,9 @@ namespace Manager
 			}
 			};
 
-		std::string pending; // 다음 줄 첫 글자 후보(금칙 처리용)
+		std::string pending;
 
 		for (size_t i = 0; i < cps.size(); ++i) {
-			// cp를 UTF-8로 다시 쌓기
 			uint32_t cp = cps[i];
 			std::string ch;
 			if (cp <= 0x7F) {
@@ -546,23 +543,19 @@ namespace Manager
 			float wCh = widthOf(ch);
 
 			if (cur.empty()) {
-				// 현재 줄이 비었으면 바로 넣되, 다음 줄 시작 금지 문자면 보류
 				if (isDisallowedLineStart(cp) && !out.empty()) {
-					// 이전 줄 끝으로 붙여야 자연스럽지만, 여기서는 최소 보수:
-					// 이전 라인에 합칠 수 없으면(비어있다면) 그냥 시작
-					pending = ch; // 다음에 합치기
+					pending = ch;
 					continue;
 				}
 			}
 
 			if (curW + wCh <= maxWidthPx) {
-				cur += pending;  // 금칙 문자 대기분 먼저 붙이기
+				cur += pending;
 				cur += ch;
 				curW += widthOf(pending) + wCh;
 				pending.clear();
 			}
 			else {
-				// 줄바꿈
 				if (!cur.empty()) out.push_back(cur);
 				cur = ch;
 				curW = wCh;
@@ -570,7 +563,6 @@ namespace Manager
 		}
 
 		if (!pending.empty()) {
-			// 마지막에 금칙 문자가 남아있다면 현재 줄에 붙인다
 			if (curW + Atlas.GetPrintMetricsUTF8(pending, scale, useKerning).width <= maxWidthPx) {
 				cur += pending;
 			}
@@ -650,44 +642,35 @@ namespace Manager
 			float curW = 0.0f;
 
 			while (wordStream >> word) {
-				// 1) 이 단어만 렌더했을 때 폭
 				float wWord = widthOf(word);
 
-				// 2) 현재 줄에 붙였을 때의 "전체" 후보 문자열과 그 폭
 				std::string candidate = curLine.empty() ? word : (curLine + " " + word);
 				float candW = widthOf(candidate);
 
-				// 부동소수점 오차 완화용 작은 여유 (픽셀 단위)
 				const float EPS = 0.5f;
 
 				if (candW <= maxWidthPx + EPS) {
-					// 그대로 붙이는 편이 최적: 실제 렌더 폭 기준으로 갱신
 					curLine.swap(candidate);
 					curW = candW;
 					continue;
 				}
 
-				// ---- 여기서부터는 "붙이면 넘침"인 경우 ----
-
-				// (A) 현재 줄이 비어있지 않으면 일단 현재 줄 확정
 				if (!curLine.empty()) {
 					lines.push_back(curLine);
 					curLine.clear();
 					curW = 0.0f;
 				}
 
-				// (B) 단어 자체가 maxWidth를 넘는 매우 긴 토큰이면 문자 단위로 쪼갠다
 				if (wWord > maxWidthPx + EPS) {
 					auto chunks = BreakWordUTF8ByWidth(word, maxWidthPx, scale, useKerning);
 					for (size_t i = 0; i + 1 < chunks.size(); ++i)
-						lines.push_back(chunks[i]);       // 꽉 찬 조각들 확정
+						lines.push_back(chunks[i]);
 					if (!chunks.empty()) {
-						curLine = chunks.back();          // 마지막 조각은 다음 단어와 이어질 수 있으니 보류
+						curLine = chunks.back();
 						curW = widthOf(curLine);
 					}
 				}
 				else {
-					// (C) 단어는 한 줄에 들어가는 크기 → 새 줄의 시작으로 둔다
 					curLine = word;
 					curW = wWord;
 				}
@@ -706,10 +689,8 @@ namespace Manager
 
 	void HUDController::TooltipUpdate(InGame::Item& item)
 	{
-		// 1) 라인 구성 (이미 너가 쓰는 방식 유지)
 		itemDesc = SplitTextIntoLines_UTF8_KR(item.description, maxTextW, 1.f);
 
-		// 2) 태그/이름을 앞에 삽입 (기존 코드 그대로)
 		const char* tagStr = "NONE";
 		switch (item.tag) {
 		case InGame::ItemTag::ENVY:     tagStr = "ENVY";     break;
@@ -724,32 +705,27 @@ namespace Manager
 		itemDesc.insert(itemDesc.begin(), tagStr);
 		itemDesc.insert(itemDesc.begin(), item.name);
 
-		// 3) Atlas 메트릭(픽셀)로 줄간격/asc/desc
 		const float s = 1.f;
-		auto m = Manager::Atlas.GetPrintMetricsUTF8(u8"한", s);
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(global::stringForKRGap, s);
 		float lineH = m.lineHeight;
 		float asc = m.ascender;
 		float desc = m.descender;
 
-		// 4) 모든 라인의 "실제 폭"을 재서 최대폭 계산  (std::min/max 없이)
 		float wMax = 0.f;
 		for (size_t i = 0; i < itemDesc.size(); ++i) {
 			float w = Manager::Atlas.GetPrintMetricsUTF8(itemDesc[i], s, true).width;
 			if (w > wMax) wMax = w;
 		}
 
-		// 5) 내부 여백/프레임
-		const float frame = padding;  // DrawNinePatchMesh에 주는 값과 동일
+		const float frame = padding;
 		const float textPad = 8.f;
 
-		// 6) 창 너비/높이 갱신  ★ 핵심
 		float contentW = wMax;
 		float contentH = asc + ((int)itemDesc.size() - 1) * lineH + desc;
 
 		tooltip.Window.size.x = 2.f * (frame + textPad) + contentW;
 		tooltip.Window.size.y = 2.f * (frame + textPad) + contentH;
 
-		// 7) 마우스 기준 위치는 "업데이트된 사이즈"로 다시 잡기
 		s32 mouseX, mouseY; AEInputGetCursorPosition(&mouseX, &mouseY);
 		AEVec2 MP;
 		MP.x = (float)mouseX - AEGfxGetWindowWidth() * 0.5f;
@@ -760,7 +736,6 @@ namespace Manager
 			MP.y + tooltip.Window.size.y * 0.5f + frame
 		};
 
-		// 8) (메시 리프레시 기존 로직 유지)
 		if (prevItem != &item) {
 			prevItem = &item;
 			for (int i = 0; i < tooltip.WindowMesh.size(); i++) {
@@ -779,64 +754,58 @@ namespace Manager
 	{
 		if (SettingPanel.isSettingOn) return;
 
-		// 패널 먼저
 		Utils::DrawNinePatchMesh(tooltip.Window, tooltip.Window.Texture, tooltip.WindowMesh, padding);
 
-		// 패널 사각형
 		float px = tooltip.Window.position.x - tooltip.Window.size.x * 0.5f;
 		float py = tooltip.Window.position.y - tooltip.Window.size.y * 0.5f;
 		float boxW = tooltip.Window.size.x;
 		float boxH = tooltip.Window.size.y;
 
-		// 내용 여백
 		const float frame = padding;
 		const float textPad = 8.f;
 		float xLeft = px + frame + textPad;
 		float yTop = py + boxH - frame - textPad;
 
-		// Atlas 메트릭
 		const float s = 1.f;
-		auto m = Manager::Atlas.GetPrintMetricsUTF8(u8"한", s);
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(global::stringForKRGap, s);
 		float lineH = m.lineHeight;
 		float asc = m.ascender;
 
-		// 첫 줄 베이스라인
 		float curY = yTop - asc;
 
-		// 라인 출력 (아이템 이름/태그 + 설명 = itemDesc)
 		for (size_t i = 0; i < itemDesc.size(); ++i) {
 			u32 col = 0xFFFFFFFF;
 			if (i == 1)
 			{
-				if (itemDesc[1] == "ENVY")
+				if (itemDesc[1] == u8"ENVY")
 				{
-					col = 0x800080FF;
+					col = 0x4B0082FF;
 				}
-				else if (itemDesc[1] == "GLUTTONY")
+				else if (itemDesc[1] == u8"GLUTTONY")
 				{
 					col = 0x008000FF;
 				}
-				else if (itemDesc[1] == "GREED")
+				else if (itemDesc[1] == u8"GREED")
 				{
 					col = 0x0000FFFF;
 				}
-				else if (itemDesc[1] == "LUST")
+				else if (itemDesc[1] == u8"LUST")
 				{
 					col = 0x0D00A6FF;
 				}
-				else if (itemDesc[1] == "SLOTH")
+				else if (itemDesc[1] == u8"SLOTH")
 				{
 					col = 0xFFFF00FF;
 				}
-				else if (itemDesc[1] == "WRATH")
+				else if (itemDesc[1] == u8"WRATH")
 				{
 					col = 0xFF8000FF;
 				}
-				else if (itemDesc[1] == "PRIDE")
+				else if (itemDesc[1] == u8"PRIDE")
 				{
 					col = 0xFF0000FF;
 				}
-				else if (itemDesc[1] == "NONE")
+				else if (itemDesc[1] == u8"NONE")
 				{
 					col = 0x555555FF;
 				}

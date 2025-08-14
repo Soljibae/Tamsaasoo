@@ -117,7 +117,7 @@ namespace Manager
 
 	void LevelUpUI::Update()
 	{
-		static bool iconScaled[]{ false };
+		static  std::array<bool, 3> iconScaled{};
 		if (!IsActive() || gameOverScreen.isGameOver)
 		{
 			return;
@@ -225,70 +225,62 @@ namespace Manager
 			f32 CpSizeX = rerollCostIcon[i].size.x;
 			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
 			const char* tag;
-			f32 r{ 0.f }, g{ 0.f }, b{ 0.f };
+			u32 col = 0xFFFFFFFF;
 			switch (currentOptions[i]->tag)
 			{
 			case InGame::ItemTag::ENVY:
 				tag = "ENVY";
-				r = 0.5f;
-				b = 0.5f;
+				col = 0x800080FF;
 				break;
 			case InGame::ItemTag::GLUTTONY:
 				tag = "GLUTTONY";
-				g = 0.5f;
+				col = 0x008000FF;
 				break;
 			case InGame::ItemTag::GREED:
 				tag = "GREED";
-				b = 1.f;
+				col = 0x0000FFFF;
 				break;
 			case InGame::ItemTag::LUST:
 				tag = "LUST";
-				r = 0.05f;
-				b = 0.65f;
+				col = 0x0D00A6FF;
 				break;
 			case InGame::ItemTag::SLOTH:
 				tag = "SLOTH";
-				r = 1.f;
-				g = 1.f;
+				col = 0xFFFF00FF;
 				break;
 			case InGame::ItemTag::WRATH:
 				tag = "WRATH";
-				r = 1.f;
-				g = 0.5f;
+				col = 0xFF8000FF;
 				break;
 			case InGame::ItemTag::PRIDE:
 				tag = "PRIDE";
-				r = 1.f;
+				col = 0xFF0000FF;
 				break;
 			default:
 				tag = "NONE";
-				r = 0.3f;
-				g = 0.3f;
-				b = 0.3f;
+				col = 0x555555FF;
 				break;
 			}
 			AEMtx33 I; AEMtx33Identity(&I);
 			AEGfxSetTransform(I.m);
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetTransparency(1.0f);
-			AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
-			AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
 
-			AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
+			//AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
 			//std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth);
+			Manager::Atlas.RenderTextUTF8(tag, (baseX + pSizeX), baseY, 1.f, col);
 
 			f32 paddingForKR = -10.f;
 			f32 upForKR = 30.f;
 			std::vector<std::string> ItemDesc =
 				HUD.SplitTextIntoLines_UTF8_KR(currentOptions[i]->description, windowWidth - paddingForKR * 2.f, 1.f);
 
-			auto mBase = Manager::Atlas.GetPrintMetricsUTF8(u8"한", 1.f); // 아무 글자나 OK
-			float lineH = mBase.lineHeight;     // 줄 간격(px)
-			float asc = mBase.ascender;       // 베이스라인 위 여유(px)
+			auto mBase = Manager::Atlas.GetPrintMetricsUTF8(global::stringForKRGap, 1.f);
+			float lineH = mBase.lineHeight;
+			float asc = mBase.ascender;
 
 			AEVec2 windowPos{ ItemWindow[i].position };
-			float xLeft = windowPos.x - windowWidth * 0.5f + paddingForKR;       // 왼쪽 여백
+			float xLeft = windowPos.x - windowWidth * 0.5f + paddingForKR;
 			float yTop = currentOptions[i]->iconPosition.y - currentOptions[i]->size.y * 2.f + upForKR;
 
 			float baseYFirst = yTop - asc;
@@ -296,7 +288,7 @@ namespace Manager
 			for (size_t j = 0; j < ItemDesc.size(); ++j)
 			{
 				float lx = xLeft;
-				float ly = baseYFirst - lineH * static_cast<float>(j); // worldYAxisUp=true면 아래로 갈수록 y 감소
+				float ly = baseYFirst - lineH * static_cast<float>(j);
 				Manager::Atlas.RenderTextUTF8(ItemDesc[j], lx, ly, 1.f, 0xFFFFFFFF);
 			}
 		}

@@ -13,6 +13,8 @@
 #include <cmath>
 #include <random>
 #include "SettingUI.h"
+#include <fstream>
+#include <string>
 
 FontAtlasAE Manager::Atlas;
 
@@ -118,6 +120,21 @@ namespace Manager
 		Atlas.Init("Assets/Fonts/neodgm_code.ttf", 16);
 		Atlas.SetYStretch(1.5f);
 		Atlas.SetUVFlipV(false);
+
+		std::ifstream file("Assets/gap.txt", std::ios::binary);
+		if (!file) {
+			std::cerr << "Failed to open file.\n";
+			return;
+		}
+
+		std::string content((std::istreambuf_iterator<char>(file)),
+			std::istreambuf_iterator<char>());
+
+		if (!content.empty() && (content.back() == '\n' || content.back() == '\r')) {
+			content.erase(content.find_last_not_of("\r\n") + 1);
+		}
+
+		global::stringForKRGap = content;
 	}
 
 	void Playing::Update()

@@ -1,6 +1,7 @@
 #pragma once
 #include "AEEngine.h"
 #include <array>
+#include <string>
 namespace global
 {
 	static s32 ScreenWidth = 1920;
@@ -62,5 +63,7 @@ namespace global
 	extern std::array<f32, 3> StageExpGainedRatio;
 	extern std::array<f32, 3> StageGoldGainedRatio;
 	extern std::array<f32, 3> StageRerollCostRatio;
+
+	extern std::string stringForKRGap;
 	//==================================
 }
