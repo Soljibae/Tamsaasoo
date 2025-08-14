@@ -164,7 +164,7 @@
 2
 데미지가 증가합니다. 보스 공격 시, 골드를 소모하여 보스 체력의 일정 비율만큼 피해를 줍니다.
 //value1, value2, value3, cooldown, duration, procchance, range
-50.0, 0.01, 0.3, -1, -1, -1, -1
+100.0, 0.01, 0.3, -1, -1, -1, -1
 
 22
 //22 - value2만큼 additionalFireRate 증가, 피격 시 돈이 value1 이상 있을 경우 value1만큼의 돈을 사용해 데미지 방지 및 무적 부여

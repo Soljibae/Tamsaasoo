@@ -154,33 +154,33 @@ namespace Manager
 	void PauseUI::InitGunStats()
 	{
 		gunStats[InGame::GunType::NOGUN] = { 1.f, 1.f, 1, 0 };
-		gunStats[InGame::GunType::SAWEDOFFSHOTGUN] = { 1.1f, 0.7f, 1, 3 };
-		gunStats[InGame::GunType::DOUBLEBARREL] = { 2.f, 1.0f, 1, 5 };
-		gunStats[InGame::GunType::KS23] = { 5.f, 0.2f, 3, 5 };
-		gunStats[InGame::GunType::M1897] = { 1.f, 2.0f, 1, 5 };
-		gunStats[InGame::GunType::BENELLIM4] = { 1.f, 3.f, 1, 5 };
-		gunStats[InGame::GunType::SAIGA12] = { 1.f, 2.0f, 1, 5 };
-		gunStats[InGame::GunType::AA12] = { 1.f, 3.5f, 1, 5 };
-		gunStats[InGame::GunType::M1911] = { 1.2f, 1.3f, 2, 1 };
-		gunStats[InGame::GunType::MOSINNAGAT] = { 3.f, 1.0f, 5, 1 };
-		gunStats[InGame::GunType::M24] = { 5.f, 2.f, 10, 1 };
-		gunStats[InGame::GunType::RAILGUN] = { 10.f, 1.f, 20, 1 };
-		gunStats[InGame::GunType::DESERTEGLE] = { 3.f, 1.f, 3, 1 };
-		gunStats[InGame::GunType::BEOWOLF] = { 5.f, 2.f, 5, 1 };
-		gunStats[InGame::GunType::NITRO700] = { 20.f, 0.5f, 40, 1 };
-		gunStats[InGame::GunType::FNFAL] = { 3.f, 1.0f, 1, 1 };
-		gunStats[InGame::GunType::M82BARRETT] = { 10.f, 0.5f, 10, 1 };
+		gunStats[InGame::GunType::SAWEDOFFSHOTGUN] = { 1.18f, 0.7f, 1, 3 };
+		gunStats[InGame::GunType::DOUBLEBARREL] = { 2.f, 1.2f, 1, 3 };
+		gunStats[InGame::GunType::KS23] = { 11.f, 0.35f, 3, 3 };
+		gunStats[InGame::GunType::M1897] = { 1.2f, 1.5f, 1, 4 };
+		gunStats[InGame::GunType::BENELLIM4] = { 1.5f, 2.f, 1, 4 };
+		gunStats[InGame::GunType::SAIGA12] = { 0.9f, 2.0f, 1, 4 };
+		gunStats[InGame::GunType::AA12] = { 0.8f, 3.f, 1, 5 };
+		gunStats[InGame::GunType::M1911] = { 1.35f, 1.3f, 2, 1 };
+		gunStats[InGame::GunType::MOSINNAGAT] = { 4.4f, 0.72f, 5, 1 };
+		gunStats[InGame::GunType::M24] = { 3.05f, 1.95f, 10, 1 };
+		gunStats[InGame::GunType::RAILGUN] = { 5.05f, 1.2f, 15, 1 };
+		gunStats[InGame::GunType::DESERTEGLE] = { 3.f, 1.2f, 3, 1 };
+		gunStats[InGame::GunType::BEOWOLF] = { 3.3f, 1.8f, 5, 1 };
+		gunStats[InGame::GunType::NITRO700] = { 7.5f, 0.8f, 20, 1 };
+		gunStats[InGame::GunType::FNFAL] = { 3.1f, 1.05f, 4, 1 };
+		gunStats[InGame::GunType::M82BARRETT] = { 5.5f, 1.1f, 10, 1 };
 		gunStats[InGame::GunType::CZ75] = { 0.75f, 2.5f, 1, 1 };
-		gunStats[InGame::GunType::AR15] = { 1.f, 2.4f, 2, 1 };
-		gunStats[InGame::GunType::M110] = { 1.6f, 1.6f, 5, 1 };
-		gunStats[InGame::GunType::MP5] = { 1.f, 3.0f, 1, 1 };
+		gunStats[InGame::GunType::AR15] = { 0.8f, 3.5f, 2, 1 };
+		gunStats[InGame::GunType::M110] = { 1.55f, 3.75f, 4, 1 };
+		gunStats[InGame::GunType::MP5] = { 1.f, 3.2f, 1, 1 };
 		gunStats[InGame::GunType::MPX] = { 1.f, 3.0f, 2, 1 };
-		gunStats[InGame::GunType::VECTOR] = { 0.5f, 10.f, 1, 1 };
-		gunStats[InGame::GunType::P90] = { 1.f, 5.f, 3, 1 };
-		gunStats[InGame::GunType::BREN] = { 1.f, 2.f, 3, 1 };
-		gunStats[InGame::GunType::MICROGUN] = { 1.f, 10.f, 1, 1 };
-		gunStats[InGame::GunType::M249] = { 1.f, 3.f, 2, 1 };
-		gunStats[InGame::GunType::M2] = { 10.f, 1.f, 5, 1 };
+		gunStats[InGame::GunType::VECTOR] = { 0.75f, 8.1f, 1, 1 };
+		gunStats[InGame::GunType::P90] = { 1.15f, 5.3f, 3, 1 };
+		gunStats[InGame::GunType::BREN] = { 1.3f, 2.f, 3, 1 };
+		gunStats[InGame::GunType::MICROGUN] = { 1.0f, 6.2f, 1, 1 };
+		gunStats[InGame::GunType::M249] = { 1.15f, 5.2f, 2, 1 };
+		gunStats[InGame::GunType::M2] = { 1.35f, 4.25f, 5, 1 };
 	}
 	void PauseUI::Update()
 	{
