@@ -28,5 +28,5 @@ namespace Manager
 		std::array<Button, 3> Buttons;
 		s8 pFont;
 	};
-	AEGfxVertexList* Hekirekiissen(f32 start, f32 end);
+	AEGfxVertexList* ButtonGlossing(f32 start, f32 end);
 }

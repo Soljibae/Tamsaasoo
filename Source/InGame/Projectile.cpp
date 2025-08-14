@@ -214,13 +214,30 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 	{
 		return;
 	}
-
+	for (Actor* HitTarget : HitTargets)
+	{
+		if (HitTarget == target)
+		{
+			return;
+		}
+	}
 	HitCount--;
+	if (Manager::gm.currStateREF)
+	{
+		Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+		if (GS)
+		{
+			AEVec2 DrawSize;
+			AEVec2Set(&DrawSize, size.x + 10.f, size.y + 10.f);
+			GS->VFXManager.AddNewVFX(VFXType::HitMark, target->position, DrawSize, 0.3f);
+		}
+	}
 	if (isExplosive)
 	{
 		Explode(target);
 		BulletSpeed = 0.f;
-		CollisionRadius = 0.f; // �浹 �ݰ��� 0���� ����� �߰� �浹�� �����ϴ�.
+		CollisionRadius = 0.f;
+		HitTargets.push_back(target);
 	}
 }
 

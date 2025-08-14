@@ -104,6 +104,7 @@ namespace InGame
 
 						Projectile* PP = GS->PPPool.back();
 						GS->PPPool.pop_back();
+						GetProjectileSize();
 						PP->Spawn(pelletDir, Pos, Source);
 						GS->PPs.push_back(PP);
 					}
@@ -114,6 +115,7 @@ namespace InGame
 					{
 						Projectile* PP = GS->PPPool.back();
 						GS->PPPool.pop_back();
+						GetProjectileSize();
 						PP->Spawn(Dir, Pos, Source);
 						GS->PPs.push_back(PP);
 					}
@@ -121,6 +123,15 @@ namespace InGame
 			}
 		}
 		//std::cout << "ProjectileFired" << std::endl;
+	}
+
+	void Gun::GetProjectileSize()
+	{
+		float Normalized = (Source->PS->effectiveDamage - 0.5f) / (50.f - 0.5f);
+		float Mapped = 15.f + Normalized * (40.f - 15.f);
+
+		Source->Stats->ProjectileSize.x = Mapped;
+		Source->Stats->ProjectileSize.y = Mapped;
 	}
 	
 	NOGUNStruct::NOGUNStruct()
