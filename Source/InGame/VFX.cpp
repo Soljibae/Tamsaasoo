@@ -45,7 +45,7 @@ namespace InGame
 	{
 		Actor::Init();
 		Texture = AEGfxTextureLoad("Assets/VFX.png");
-		Mesh = Utils::CreateMesh(7,9);
+		Mesh = Utils::CreateMesh(8,9);
 		MaxAnimationCount[WarningCircle] = 9;
 		MaxAnimationCount[WarningSquare] = 9;
 		MaxAnimationCount[Explosion] = 9;
@@ -53,6 +53,7 @@ namespace InGame
 		MaxAnimationCount[Laser] = 9;
 		MaxAnimationCount[BlackHole] = 9;
 		MaxAnimationCount[HitMark] = 4;
+		MaxAnimationCount[KillSmoke] = 8;
 	}
 	void VFXManager::Update()
 	{
@@ -88,7 +89,7 @@ namespace InGame
 				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
 				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
 				offset.x = DataItem->Animationoffset;
-				offset.y = DataItem->Type / 7.f;
+				offset.y = DataItem->Type / 8.f;
 				direction = DataItem->Direction;
 				Utils::DrawObjectWithDirection(*this, 1.f);
 			}
@@ -97,7 +98,7 @@ namespace InGame
 				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
 				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
 				offset.x = DataItem->Animationoffset;
-				offset.y = DataItem->Type / 7.f;
+				offset.y = DataItem->Type / 8.f;
 				Utils::DrawObject(*this);
 			}
 		}
@@ -148,6 +149,13 @@ namespace InGame
 				break;
 			}
 			case VFXType::HitMark:
+			{
+				NewData->MaxTimer = Duration;
+				AEVec2Set(&NewData->size, InSize.x, InSize.y);
+				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
+				break;
+			}
+			case VFXType::KillSmoke:
 			{
 				NewData->MaxTimer = Duration;
 				AEVec2Set(&NewData->size, InSize.x, InSize.y);

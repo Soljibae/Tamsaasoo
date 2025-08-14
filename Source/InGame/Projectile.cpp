@@ -222,16 +222,27 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 		}
 	}
 	HitCount--;
-	if (Manager::gm.currStateREF)
-	{
-		Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-		if (GS)
+	
+		if (Manager::gm.currStateREF)
 		{
-			AEVec2 DrawSize;
-			AEVec2Set(&DrawSize, size.x + 10.f, size.y + 10.f);
-			GS->VFXManager.AddNewVFX(VFXType::HitMark, target->position, DrawSize, 0.3f);
+			Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+			if (GS)
+			{
+				AEVec2 DrawSize;
+				
+				if (target->bIsPandingKill)
+				{
+					AEVec2Set(&DrawSize, target->size.x + 10.f, target->size.y + 10.f);
+					GS->VFXManager.AddNewVFX(VFXType::KillSmoke, target->position, DrawSize, 0.5f);
+				}
+				else
+				{
+					AEVec2Set(&DrawSize, size.x + 10.f, size.y + 10.f);
+					GS->VFXManager.AddNewVFX(VFXType::HitMark, target->position, DrawSize, 0.3f);
+				}
+			}
 		}
-	}
+	
 	if (isExplosive)
 	{
 		Explode(target);
