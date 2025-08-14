@@ -137,7 +137,7 @@ namespace InGame
 	{
 		Type = GunType::SAWEDOFFSHOTGUN;
 		GuntypeDamageRatio = 1.1f;
-		GuntypeFireRateRatio = 0.9f;
+		GuntypeFireRateRatio = 0.7f;
 		ProjectileSpeed = 10.f;
 		ProjectileCollisionSize = 20.f;
 		ProjectileHitCount = 1;
