@@ -218,6 +218,21 @@ namespace Manager
 
 		if (!gm.GamePaused)
 		{
+			// Todo: create logic
+			if (gunPickPanel.shouldShowStage)
+			{
+				static f32 minimapTimer{ 0.f };
+				minimapTimer += global::DeltaTime;
+				if (minimapTimer < 7.f)
+				{
+					HUD.ShowStageUpdate();
+				}
+				else
+				{
+					minimapTimer = 0.f;
+					gunPickPanel.shouldShowStage = false;
+				}
+			}
 			if (bIsJumping)
 			{
 				JumpAnimationTimer += global::DeltaTime;
@@ -671,7 +686,7 @@ namespace Manager
 		{
 			static f32 stageChangeTimer{ 0.f };
 			stageChangeTimer += global::DeltaTime;
-			if (stageChangeTimer > 2.f)
+			if (stageChangeTimer > 1.5f)
 			{
 				isChangingStage = false;
 				stageChangeTimer = 0.f;
@@ -756,6 +771,11 @@ namespace Manager
 			HUD.Draw();
 			ExpPanel.Draw();
 		}
+		if (gunPickPanel.shouldShowStage && !gm.GamePaused)
+		{
+			// Todo: show stage
+			HUD.ShowStageDraw();
+		}
 		for (InGame::SoulOrb* SO : SOs)
 		{
 			SO->Draw();
@@ -782,10 +802,16 @@ namespace Manager
 		{
 			pausePanel.Draw();
 		}
+
 		gameOverScreen.Draw();
+
 		if(Boss && Boss->bossApearing)
 			bossAppearScene.Draw();
-		Utils::DrawObject(Fader, false, Fader.Alpha);
+
+		if (Fader.Alpha > 0.1f)
+		{
+			Utils::DrawObject(Fader, false, Fader.Alpha);
+		}
 	}
 	void Playing::Destroy()
 	{

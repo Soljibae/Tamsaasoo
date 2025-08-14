@@ -136,6 +136,30 @@ namespace Manager
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
+		
+		stageBG.size = { 240.f, 300.f };
+		stageBG.position = { w / 2.f - stageBG.size.x / 1.2f , -h / 2.f + stageBG.size.y / 1.2f };
+		bgMesh = Utils::CreateNinePatchMesh();
+		stageBGTexture = AEGfxTextureLoad("Assets/UI/stageBG.png");
+
+		stageMAP.position = stageBG.position;
+		stageMAP.size = { stageBG.size.x * 1.2f, stageBG.size.y * 1.2f };
+		m_Mesh = Utils::CreateMesh();
+		stageMAPTexture = AEGfxTextureLoad("Assets/UI/stageMAP.png");
+		//flag
+		stageArrow.offset = { 0,0 };
+		stageArrow.Texture = AEGfxTextureLoad("Assets/UI/RedArrow.png");
+		stageArrow.position = stageBG.position;
+		stageArrow.size = { 50.f, 100.f };
+		stageArrow.TimeAcc = 0.f;
+		stageArrow.FrameTime = 1.f / 59.f;
+		stageArrow.MaxAnimationCount[InGame::IDLE] = 59;
+		stageArrow.AnimationCount = 0;
+		stageArrow.column = 59;
+		stageArrow.row = 1;
+		stageArrow.Mesh = Utils::CreateMesh(stageArrow.row, stageArrow.column);
+
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()
@@ -346,10 +370,11 @@ namespace Manager
 		/*--------Centered can fire UI--------*/
 
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		/*if (global::KeyInput(AEVK_M))
+		if (global::KeyInput(AEVK_M))
 		{
-			PC->PS->Money += 1000000000;
-		}*/
+			PC->PS->Money += 10;
+			PC->PS->Potion += 100;
+		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{
@@ -364,9 +389,8 @@ namespace Manager
 			}
 			else if (prevPotion < PC->PS->Potion)
 			{
-				prevPotion++;
+				prevPotion += 2;
 			}
-
 		}
 	}
 	void HUDController::Draw()
@@ -416,10 +440,9 @@ namespace Manager
 
 			if (!soundReduced)
 			{
-				SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/UI/HeartBeat.wav", "heart");
 				SFXManager.Play("heart");
+				soundReduced = true;
 			}
-			soundReduced = true;
 		}
 		else
 		{
@@ -437,7 +460,6 @@ namespace Manager
 						break;
 					}
 				}
-				SFXManager.SFXList.erase("heart");
 				soundReduced = false;
 			}
 		}
@@ -816,35 +838,135 @@ namespace Manager
 		}
 	}
 
+	void HUDController::ShowStageUpdate()
+	{
+		std::vector<AEVec2> stagePosition = {
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 2.f},
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 3.2f},
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 4.4f}
+		};
+		switch (global::CurrentStageNumber)
+		{
+		case 1:
+			stageArrow.position = stagePosition[0];
+			break;
+		case 2:
+			stageArrow.position = stagePosition[1];
+			break;
+		case 3:
+			stageArrow.position = stagePosition[2];
+			break;
+		}
+		//flag
+		Utils::UpdateOffset(stageArrow);
+	}
+
+	void HUDController::ShowStageDraw()
+	{
+		Utils::DrawNinePatchMesh(stageBG, stageBGTexture, bgMesh, 50.f);
+		Utils::DrawObject(stageMAP, stageMAPTexture, m_Mesh, 1.f);
+		//Utils::DrawObject(stageArrow.position, stageArrow.offset, stageArrow.size, stageArrow.Texture, stageArrow.Mesh, 1.f, false);
+		Utils::DrawObject(stageArrow, false);
+		//flag
+	}
+
 	void HUDController::Destroy()
 	{
-		AEGfxMeshFree(HPMesh);
-		AEGfxTextureUnload(HPTex);
-		AEGfxTextureUnload(HPBGTex);
+		if (HPMesh)
+		{
+			AEGfxMeshFree(HPMesh);
+			HPMesh = nullptr;
+		}
+		if (HPTex)
+		{
+			AEGfxTextureUnload(HPTex);
+			HPTex = nullptr;
+		}
+		if (HPBGTex)
+		{
+			AEGfxTextureUnload(HPBGTex);
+			HPBGTex = nullptr;
+		}
 
 		HPBG.clear();
 		HP.clear();
 
-		AEGfxMeshFree(ChamberTimeBar.Mesh);
-		AEGfxTextureUnload(ChamberTimeBar.Texture);
+		if (ChamberTimeBar.Mesh)
+		{
+			AEGfxMeshFree(ChamberTimeBar.Mesh);
+			ChamberTimeBar.Mesh = nullptr;
+		}
+		if (ChamberTimeBar.Texture)
+		{
+			AEGfxTextureUnload(ChamberTimeBar.Texture);
+			ChamberTimeBar.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(fireTimeBar.Mesh);
-		AEGfxTextureUnload(fireTimeBar.Texture);
+		if (fireTimeBar.Mesh)
+		{
+			AEGfxMeshFree(fireTimeBar.Mesh);
+			fireTimeBar.Mesh = nullptr;
+		}
+		if (fireTimeBar.Texture)
+		{
+			AEGfxTextureUnload(fireTimeBar.Texture);
+			fireTimeBar.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(ammoType.Mesh);
-		AEGfxTextureUnload(ammoType.Texture);
+		if (ammoType.Mesh)
+		{
+			AEGfxMeshFree(ammoType.Mesh);
+			ammoType.Mesh = nullptr;
+		}
+		if (ammoType.Texture)
+		{
+			AEGfxTextureUnload(ammoType.Texture);
+			ammoType.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(Coin.Mesh);
-		AEGfxTextureUnload(Coin.Texture);
+		if (Coin.Mesh)
+		{
+			AEGfxMeshFree(Coin.Mesh);
+			Coin.Mesh = nullptr;
+		}
+		if (Coin.Texture)
+		{
+			AEGfxTextureUnload(Coin.Texture);
+			Coin.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(Potion.Mesh);
-		AEGfxTextureUnload(Potion.Texture);
+		if (Potion.Mesh)
+		{
+			AEGfxMeshFree(Potion.Mesh);
+			Potion.Mesh = nullptr;
+		}
+		if (Potion.Texture)
+		{
+			AEGfxTextureUnload(Potion.Texture);
+			Potion.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(PotionBG.Mesh);
-		AEGfxTextureUnload(PotionBG.Texture);
+		if (PotionBG.Mesh)
+		{
+			AEGfxMeshFree(PotionBG.Mesh);
+			PotionBG.Mesh = nullptr;
+		}
+		if (PotionBG.Texture)
+		{
+			AEGfxTextureUnload(PotionBG.Texture);
+			PotionBG.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(PotionFull.Mesh);
-		AEGfxTextureUnload(PotionFull.Texture);
+		if (PotionFull.Mesh)
+		{
+			AEGfxMeshFree(PotionFull.Mesh);
+			PotionFull.Mesh = nullptr;
+		}
+		if (PotionFull.Texture)
+		{
+			AEGfxTextureUnload(PotionFull.Texture);
+			PotionFull.Texture = nullptr;
+		}
 
 		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 		{
@@ -856,10 +978,54 @@ namespace Manager
 		}
 		AEGfxTextureUnload(tooltip.Window.Texture);
 
+		for (auto&mesh : bgMesh)
+		{
+			if (mesh)
+			{
+				AEGfxMeshFree(mesh);
+				mesh = nullptr;
+			}
+		}
+		if (stageBGTexture)
+		{
+			AEGfxTextureUnload(stageBGTexture);
+			stageBGTexture = nullptr;
+		}
+
+		if (m_Mesh)
+		{
+			AEGfxMeshFree(m_Mesh);
+			m_Mesh = nullptr;
+		}
+		if (stageMAPTexture)
+		{
+			AEGfxTextureUnload(stageMAPTexture);
+			stageMAPTexture = nullptr;
+		}
+
+		if (stageArrow.Mesh)
+		{
+			AEGfxMeshFree(stageArrow.Mesh);
+		}
+		if (stageArrow.Texture)
+		{
+			AEGfxTextureUnload(stageArrow.Texture);
+			stageArrow.Texture = nullptr;
+		}
+
 		AEGfxDestroyFont(pFont);
 
-		AEGfxMeshFree(Vignetting.Mesh);
-		AEGfxTextureUnload(Vignetting.Texture);
+		if (Vignetting.Mesh)
+		{
+			AEGfxMeshFree(Vignetting.Mesh);
+			Vignetting.Mesh = nullptr;
+		}
+		
+		if (Vignetting.Texture)
+		{
+			AEGfxTextureUnload(Vignetting.Texture);
+			Vignetting.Texture = nullptr;
+		}
 	}
 
 }
