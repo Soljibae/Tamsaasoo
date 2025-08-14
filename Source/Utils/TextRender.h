@@ -284,38 +284,32 @@ public:
         atlasDirty = false;
     }
 
-    void RenderTextUTF8(const std::string& utf8, float x, float y, float scale = 1.0f, u32 color = 0xFFFFFFFF)
+    void RenderTextUTF8(const std::string& utf8, float x, float y, float scale = 1.0f, u32 color = 0x00000000)
     {
         AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-        AEGfxSetTransparency(1.0f);
-
-        AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
-        AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
-
         AEGfxTextureSet(texture, 0.f, 0.f);
+
+        unsigned char r = (color >> 24) & 0xFF;
+        unsigned char g = (color >> 16) & 0xFF;
+        unsigned char b = (color >> 8) & 0xFF;
+        unsigned char a = color & 0xFF;
+
+        AEGfxSetColorToMultiply(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+
+        AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
 
         AEMtx33 I; AEMtx33Identity(&I);
         AEGfxSetTransform(I.m);
 
-        // 1) 먼저 모든 글리프를 보장(베이크)
         std::vector<uint32_t> cps = DecodeUTF8(utf8);
         for (uint32_t cp : cps)
         {
             if (cp == '\n') continue;
-            EnsureGlyph(cp); // 이 과정에서 atlasDirty = true 가능
+            EnsureGlyph(cp);
         }
 
-        // 2) 글리프 추가가 있었다면 업로드
         UploadIfDirty();
-
-        // 3) 렌더 상태
-        AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-        AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-        AEGfxTextureSet(texture, 0.0f, 0.0f);
-        AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
-        AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
-        // 필요시: AEGfxSetTransparency(1.0f);
 
         const int lineAdvance =
             (face->size && face->size->metrics.height)
@@ -324,7 +318,7 @@ public:
 
         float penX = x;
         float penY = y;
-        const float sy = scale * yStretch; // ★ 세로 스케일 반영
+        const float sy = scale * yStretch; 
 
         AEGfxMeshStart();
 
@@ -421,37 +415,3 @@ private:
 
     bool atlasDirty = false;
 };
-
-// ------------------- usage example -------------------
-/*
-FontAtlasAE atlas;
-
-bool Load()
-{
-    if (!atlas.Init("C:/Windows/Fonts/malgun.ttf", 48))
-        return false;
-
-    // 화면 Y가 아래로 증가한다면:
-    // atlas.SetWorldYAxisUp(false);
-
-    // 텍스처가 거꾸로 보이면(세로 반전) 토글:
-    // atlas.SetUVFlipV(true);
-
-    // 세로가 눌려 보이면:
-    // atlas.SetYStretch(1.2f); // 20% 늘리기
-
-    return true;
-}
-
-void Draw()
-{
-    // 반드시 AEGfxStart() ~ AEGfxEnd() 사이에서 호출
-    atlas.RenderTextUTF8(u8"안녕하세요, AlphaEngine!\n한글 테스트: 가각간@123",
-                         -300.0f, 200.0f, 1.0f, 0xFFFFFFFF);
-}
-
-void Unload()
-{
-    atlas.Shutdown();
-}
-*/
