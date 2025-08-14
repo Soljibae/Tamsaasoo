@@ -15,6 +15,7 @@
 #include "SettingUI.h"
 #include <fstream>
 #include <string>
+#include "SettingUI.h"
 
 FontAtlasAE Manager::Atlas;
 
@@ -139,6 +140,15 @@ namespace Manager
 
 	void Playing::Update()
 	{
+		if (SettingPanel.isFullScreen)
+		{
+			Atlas.SetYStretch(1.5f);
+		}
+		else
+		{
+			Atlas.SetYStretch(1.1f);
+		}
+
 		if (global::DeltaTime > 0.1)
 		{
 			std::cout << global::DeltaTime << std::endl;
@@ -467,6 +477,7 @@ namespace Manager
 				{
 					PPPool.push_back(PP);
 					PP->bIsPandingKill = false;
+					PP->HitTargets.empty();
 					PPs[i] = PPs.back();
 					PPs.pop_back();
 				}
@@ -1016,7 +1027,6 @@ namespace Manager
 	}
 	void Playing::FinishBossFight()
 	{
-		//TODO : Play Jump Animation
 		for (size_t i = 0; i < EPs.size(); i++)
 		{
 			InGame::Projectile*& EP = EPs[i];
@@ -1063,7 +1073,7 @@ namespace Manager
 			CurrentStage = new InGame::Stage3();
 			break;
 		case InGame::StageType::HEAVEN:
-			Manager::gm.nextState = EGameState::MAINMENU;
+			Manager::gm.nextState = EGameState::ENDING;
 			break;
 		}
 		WaveCount = 0;

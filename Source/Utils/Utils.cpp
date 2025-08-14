@@ -723,7 +723,7 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::E
 					
 				
 				if (!Projectile.isExplosive)
-					Projectile.OnHit();
+					Projectile.OnHit(result);
 			}
 		}
 		else
@@ -845,11 +845,7 @@ void Utils::ClampActorPosition(InGame::Actor* InActor, AEVec2 NewPos)
 					{
 						InActor->position.x = global::worldMax.x;
 					}
-					else
-					{
-						InActor->position.x = NewPos.x;
-					}
-					if (InActor->position.x < global::worldMin.x)
+					else if (NewPos.x < global::worldMin.x)
 					{
 						InActor->position.x = global::worldMin.x;
 					}
@@ -861,11 +857,7 @@ void Utils::ClampActorPosition(InGame::Actor* InActor, AEVec2 NewPos)
 					{
 						InActor->position.y = global::worldMax.y;
 					}
-					else
-					{
-						InActor->position.y = NewPos.y;
-					}
-					if (InActor->position.y < global::worldMin.y)
+					else if (NewPos.y < global::worldMin.y)
 					{
 						InActor->position.y = global::worldMin.y;
 					}

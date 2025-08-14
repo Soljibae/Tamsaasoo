@@ -9,6 +9,7 @@ namespace Manager
 		MAINMENU,
 		KEYDESCRIPTION,
 		PLAYING,
+		ENDING,
 		GAMEOVER,
 	};
 

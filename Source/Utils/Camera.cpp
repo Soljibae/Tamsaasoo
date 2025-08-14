@@ -17,7 +17,7 @@ namespace Utils
 						{ 0.f, 0.f, 1.f }
 			}};
 
-		AEVec2Set(&deadzone_size, static_cast<f32>(global::ScreenWidth) * 2.f - 200.f, static_cast<f32>(global::ScreenHeight) * 2.f - 200.f); //to do �ӽð�
+		AEVec2Set(&deadzone_size, static_cast<f32>(global::ScreenWidth) * 2.f - 200.f, static_cast<f32>(global::ScreenHeight) * 2.f - 200.f);
 	}
 
 	void Camera::Update(InGame::Character& player)

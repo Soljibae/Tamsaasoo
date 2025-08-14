@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor.h"
+#include <vector>
 namespace InGame
 {
 	enum ProjectileType
@@ -40,6 +41,7 @@ namespace InGame
 		s32 ExplosionAnimationCount = 0;
 		s32 ExplosionMaxAnimationCount = 9;
 		bool hasHit = false;
+		std::vector<Actor*> HitTargets;
 		static AEGfxTexture* PlayerTexture;
 		static AEGfxTexture* EnemyMobTexture;
 		static AEGfxTexture* Boss1Texture;

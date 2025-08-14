@@ -3,12 +3,24 @@
 #include "../InGame/Actor.h"
 #include "../InGame/PlayerCharacter.h"
 #include <array>
+#include <vector>
+#include "PauseUI.h"
+
 namespace Manager
 {
+	struct GunStat
+	{
+		f32 damage;
+		f32 fireRate;
+		s32 hitCount;
+		s32 projectileCount;
+	};
+
 	class GunPickUI
 	{
 	public:
 		void Init(InGame::PlayerCharacter* InPC);
+		void InitGunStats();
 		void Update();
 		void Draw();
 		void Show();
@@ -47,6 +59,8 @@ namespace Manager
 		std::map<InGame::GunType, std::string> gunDescriptions;
 
 		std::vector<AEVec2> stagePosition;
+		std::map<InGame::GunType, GunStat> gunStats;
+		std::map<StatsForUI, std::string> statsNameKR;
 	};
 	extern GunPickUI gunPickPanel;
 }
