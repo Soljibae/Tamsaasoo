@@ -386,7 +386,7 @@ namespace Manager
 				break;
 			case InGame::GunType::SAWEDOFFSHOTGUN:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/SAWEDOFFSHOTGUN.png");
-				GunNames[i] = "SAWEDOFFSHOTGUN";
+				GunNames[i] = "SHORTY";
 				GunDescriptions[i] = "Shot Gun, Slow rate of fire";
 				break;
 			case InGame::GunType::DOUBLEBARREL:
