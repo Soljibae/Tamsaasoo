@@ -128,6 +128,7 @@ namespace InGame
 		s32 ProjectileSpawnCount;
 		AEVec2 ArmOffset;
 		class PlayerCharacter* Source;
+		void GetProjectileSize();
 	};
 
 	struct GunStruct

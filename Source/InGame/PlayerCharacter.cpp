@@ -440,7 +440,7 @@ namespace InGame
 			img.position = position;
 			img.size = size;
 			img.alpha = 0.5f;
-			img.timer = 0.3f; // �ܻ��� �����Ǵ� �ð�
+			img.timer = 0.3f;
 
 			afterImages.push_back(img);
 			afterImageTimer = 0.f;

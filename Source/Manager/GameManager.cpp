@@ -3,6 +3,7 @@
 #include "Playing.h"
 #include "MainMenu.h"
 #include "KeyDescription.h"
+#include "EndingCredits.h"
 #include "SettingUI.h"
 
 namespace Manager
@@ -65,6 +66,10 @@ namespace Manager
 				break;
 			case EGameState::PLAYING:
 				currStateREF = new Playing;
+				currStateREF->Init();
+				break;
+			case EGameState::ENDING:
+				currStateREF = new EndingCredits;
 				currStateREF->Init();
 				break;
 			}

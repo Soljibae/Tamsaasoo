@@ -1029,7 +1029,6 @@ namespace Manager
 	}
 	void Playing::FinishBossFight()
 	{
-		//TODO : Play Jump Animation
 		for (size_t i = 0; i < EPs.size(); i++)
 		{
 			InGame::Projectile*& EP = EPs[i];
@@ -1076,7 +1075,7 @@ namespace Manager
 			CurrentStage = new InGame::Stage3();
 			break;
 		case InGame::StageType::HEAVEN:
-			Manager::gm.nextState = EGameState::MAINMENU;
+			Manager::gm.nextState = EGameState::ENDING;
 			break;
 		}
 		WaveCount = 0;

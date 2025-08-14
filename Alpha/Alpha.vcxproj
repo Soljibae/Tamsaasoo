@@ -41,6 +41,7 @@
     <ClCompile Include="..\Source\Manager\BossAppearScene.cpp" />
     <ClCompile Include="..\Source\Manager\BossHPBar.cpp" />
     <ClCompile Include="..\Source\Manager\Button.cpp" />
+    <ClCompile Include="..\Source\Manager\EndingCredits.cpp" />
     <ClCompile Include="..\Source\Manager\ExpUI.cpp" />
     <ClCompile Include="..\Source\Manager\GameManager.cpp" />
     <ClCompile Include="..\Source\Manager\GameOver.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="..\Source\Manager\BossAppearScene.h" />
     <ClInclude Include="..\Source\Manager\BossHPBar.h" />
     <ClInclude Include="..\Source\Manager\Button.h" />
+    <ClInclude Include="..\Source\Manager\EndingCredits.h" />
     <ClInclude Include="..\Source\Manager\ExpUI.h" />
     <ClInclude Include="..\Source\Manager\GameManager.h" />
     <ClInclude Include="..\Source\Manager\GameOver.h" />
