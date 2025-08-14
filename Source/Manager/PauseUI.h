@@ -8,6 +8,20 @@
 #include <unordered_map>
 namespace Manager
 {
+	enum StatsForUI {
+		DAMAGE,
+		FIRE_RATE,
+		MOVEMENT_SPEED,
+		HIT_COUNT,
+		BURN_DAMAGE,
+		BURN_RATE,
+		EXP_GAINED,
+		GOLD_GAINED,
+		PROC_CHANCE,
+		MINION_DAMAGE,
+		HP,
+		STAT_LAST
+	};
 	// Pause menu
 	class PauseUI : public InGame::Actor
 	{
@@ -16,7 +30,8 @@ namespace Manager
 		void Update();
 		void Draw();
 		void Destroy();
-		bool wasPickingItem{ false };
+		bool isActive{ false };
+		bool tapPressed{ false };
 	private:
 		//Button resumeButton;
 		//Button settingButton;
@@ -31,8 +46,10 @@ namespace Manager
 		InGame::Actor tagUI;
 		InGame::Actor statsUI;
 		std::vector<std::string> statsString;
+		std::map<StatsForUI, std::string> statsNameKR;
 		std::vector<std::string> baseStatsString;
 		std::unordered_map<InGame::ItemTag, std::string> tagString;
+		std::unordered_map<InGame::ItemTag, std::string> tagStringColorPart;
 		//pointer to PC in playing
 		InGame::PlayerCharacter* PC;
 		std::array<Button, 32> ItemSlot;
@@ -41,6 +58,13 @@ namespace Manager
 		//white image to rendered at mouse over on itemslot
 		InGame::Actor slotWhite;
 		s8 pFont;
+		void UpdateGun();
+		void DrawGunName();
+		std::string m_gunName;
+		InGame::Actor m_gunIcon;
+		Button m_gunSlot;
+		bool shouldShowGunName;
+		InGame::GunType prevGunType;
 	};
 	extern PauseUI pausePanel;
 }

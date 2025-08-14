@@ -15,7 +15,6 @@ namespace Manager
         PressAnyKeyImage->Texture = AEGfxTextureLoad("Assets/AnyKeyToStart.png");
         PressAnyKeyImage->size.x = 425.f;
         PressAnyKeyImage->size.y = 46.f;
-
 	}
 	void KeyDescription::Update()
 	{
@@ -259,8 +258,8 @@ namespace Manager
 	}
 	void KeyDescription::Draw()
 	{
-        Utils::DrawObject(*DescriptionImage, false,1.f);
-        Utils::DrawObject(*PressAnyKeyImage, false, PressAnyKeyImage->Alpha);
+       Utils::DrawObject(*DescriptionImage, false,1.f);
+       Utils::DrawObject(*PressAnyKeyImage, false, PressAnyKeyImage->Alpha);
 	}
 	void KeyDescription::Destroy()
 	{

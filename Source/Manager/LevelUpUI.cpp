@@ -57,7 +57,7 @@ namespace Manager
 					for (auto& cost : rerollCost)
 					{
 						cost = 20;
-					}
+					}// to do
 					delayTime = 0.f;
 					ResetGotEpic();
 					gm.Resume();
@@ -117,7 +117,7 @@ namespace Manager
 
 	void LevelUpUI::Update()
 	{
-		static bool iconScaled[]{ false };
+		static  std::array<bool, 3> iconScaled{};
 		if (!IsActive() || gameOverScreen.isGameOver)
 		{
 			return;
@@ -199,6 +199,7 @@ namespace Manager
 	{
 		if (gameOverScreen.isGameOver)
 			return;
+
 		Utils::DrawObject(pauseDimmer, false, 0.5f);
 		for (int i = 0; i < ItemWindow.size(); i++)
 		{
@@ -210,66 +211,82 @@ namespace Manager
 			Utils::DrawObject(rerollIcon[i], rerollIconTexture, rerollIconMesh, 1.f);
 			Utils::DrawObject(rerollCostIcon[i], rerollCostTexture, rerollCostMesh, 1.f);
 
-			f32 lw, lh;
+			f32 lh;
 			f32 baseX{ currentOptions[i]->iconPosition.x }, baseY{ currentOptions[i]->iconPosition.y };
 			f32 pSizeX{ currentOptions[i]->size.x }, pSizeY{ currentOptions[i]->size.y };//p=parents
 			f32 halfW{ global::ScreenWidth / 2.f }, halfH{ global::ScreenHeight / 2.f };
-			AEGfxGetPrintSize(pFont, currentOptions[i]->name.c_str(), textDrawSize, &lw, &lh);
+			f32 downForName = 5.f;
 
-			AEGfxPrint(pFont, currentOptions[i]->name.c_str(), (baseX + pSizeX) / halfW, baseY / halfH + (lh / 1.5f), textDrawSize, 1.f, 1.f, 1.f, 1.f);
+			Manager::Atlas.RenderTextUTF8(currentOptions[i]->name.c_str(), (baseX + pSizeX), baseY + Manager::Atlas.GetPrintMetricsUTF8(currentOptions[i]->name.c_str(), 1.f).height * 1.5f - downForName, 1.f, 0xFFFFFFFF);
+
 			f32 CbaseX = rerollCostIcon[i].position.x, CbaseY = rerollCostIcon[i].position.y;
 			f32 CpSizeX = rerollCostIcon[i].size.x;
-			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
+			auto m = Manager::Atlas.GetPrintMetricsUTF8(std::to_string(rerollCost[i]), 2.5f);
+			lh = m.height;
+			//AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
+			Manager::Atlas.RenderTextUTF8(std::to_string(rerollCost[i]), CbaseX + CpSizeX * 0.75f, CbaseY - lh * 0.3f, 2.5f);
 			const char* tag;
-			f32 r{ 0.f }, g{ 0.f }, b{ 0.f };
+			u32 col = 0xFFFFFFFF;
 			switch (currentOptions[i]->tag)
 			{
 			case InGame::ItemTag::ENVY:
 				tag = "ENVY";
-				r = 0.5f;
-				b = 0.5f;
+				col = 0x800080FF;
 				break;
 			case InGame::ItemTag::GLUTTONY:
 				tag = "GLUTTONY";
-				g = 0.5f;
+				col = 0x008000FF;
 				break;
 			case InGame::ItemTag::GREED:
 				tag = "GREED";
-				b = 1.f;
+				col = 0x0000FFFF;
 				break;
 			case InGame::ItemTag::LUST:
 				tag = "LUST";
-				b = 0.5f;
+				col = 0x0D00A6FF;
 				break;
 			case InGame::ItemTag::SLOTH:
 				tag = "SLOTH";
-				r = 1.f;
-				g = 1.f;
+				col = 0xFFFF00FF;
 				break;
 			case InGame::ItemTag::WRATH:
 				tag = "WRATH";
-				r = 1.f;
-				g = 0.5f;
+				col = 0xFF8000FF;
 				break;
 			case InGame::ItemTag::PRIDE:
 				tag = "PRIDE";
-				r = 1.f;
+				col = 0xFF0000FF;
 				break;
 			default:
 				tag = "NONE";
+				col = 0x555555FF;
 				break;
 			}
-			AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
-			std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth);
-			AEVec2 windowPos{ ItemWindow[i].position };
 
-			for (int j = 0; j < ItemDesc.size(); j++)
+			//AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
+			//std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth);
+			Manager::Atlas.RenderTextUTF8(tag, (baseX + pSizeX), baseY, 1.f, col);
+
+			f32 paddingForKR = -10.f;
+			f32 upForKR = 30.f;
+			std::vector<std::string> ItemDesc =
+				HUD.SplitTextIntoLines_UTF8_KR(currentOptions[i]->description, windowWidth - paddingForKR * 2.f, 1.f);
+
+			auto mBase = Manager::Atlas.GetPrintMetricsUTF8(global::stringForKRGap, 1.f);
+			float lineH = mBase.lineHeight;
+			float asc = mBase.ascender;
+
+			AEVec2 windowPos{ ItemWindow[i].position };
+			float xLeft = windowPos.x - windowWidth * 0.5f + paddingForKR;
+			float yTop = currentOptions[i]->iconPosition.y - currentOptions[i]->size.y * 2.f + upForKR;
+
+			float baseYFirst = yTop - asc;
+
+			for (size_t j = 0; j < ItemDesc.size(); ++j)
 			{
-				f32 xStart{ windowPos.x - windowWidth / 2.f - padding };
-				f32 yStart{ currentOptions[i]->iconPosition.y - currentOptions[i]->size.y * 2.f };
-				f32 lx = (xStart + padding) / halfW;
-				f32 ly = (yStart - (lh * global::ScreenHeight) * j) / halfH;
-				AEGfxPrint(pFont, ItemDesc[j].c_str(), lx, ly, textDrawSize, 1.f, 1.f, 1.f, 1.f);
+				float lx = xLeft;
+				float ly = baseYFirst - lineH * static_cast<float>(j);
+				Manager::Atlas.RenderTextUTF8(ItemDesc[j], lx, ly, 1.f, 0xFFFFFFFF);
 			}
 		}
 		if (gotEpic)

@@ -260,5 +260,8 @@
     <ClInclude Include="..\Source\Manager\KeyDescription.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Utils\TextRender.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

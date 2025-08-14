@@ -1,4 +1,4 @@
-#include "HUDController.h"
+﻿#include "HUDController.h"
 #include "../InGame/Gun.h"
 #include "../Utils/Utils.h"
 #include "../Global/GlobalVariables.h"
@@ -130,11 +130,36 @@ namespace Manager
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
+		tooltip.WindowMesh = Utils::CreateNinePatchMesh();
 		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltipBorder.png");
 		Vignetting.position = { 0,0 };
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
+		
+		stageBG.size = { 240.f, 300.f };
+		stageBG.position = { w / 2.f - stageBG.size.x / 1.2f , -h / 2.f + stageBG.size.y / 1.2f };
+		bgMesh = Utils::CreateNinePatchMesh();
+		stageBGTexture = AEGfxTextureLoad("Assets/UI/stageBG.png");
+
+		stageMAP.position = stageBG.position;
+		stageMAP.size = { stageBG.size.x * 1.2f, stageBG.size.y * 1.2f };
+		m_Mesh = Utils::CreateMesh();
+		stageMAPTexture = AEGfxTextureLoad("Assets/UI/stageMAP.png");
+		//flag
+		stageArrow.offset = { 0,0 };
+		stageArrow.Texture = AEGfxTextureLoad("Assets/UI/RedArrow.png");
+		stageArrow.position = stageBG.position;
+		stageArrow.size = { 50.f, 100.f };
+		stageArrow.TimeAcc = 0.f;
+		stageArrow.FrameTime = 1.f / 59.f;
+		stageArrow.MaxAnimationCount[InGame::IDLE] = 59;
+		stageArrow.AnimationCount = 0;
+		stageArrow.column = 59;
+		stageArrow.row = 1;
+		stageArrow.Mesh = Utils::CreateMesh(stageArrow.row, stageArrow.column);
+
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()
@@ -345,10 +370,11 @@ namespace Manager
 		/*--------Centered can fire UI--------*/
 
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		/*if (global::KeyInput(AEVK_M))
+		if (global::KeyInput(AEVK_M))
 		{
-			PC->PS->Money += 1000000000;
-		}*/
+			PC->PS->Money += 10;
+			PC->PS->Potion += 100;
+		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{
@@ -363,9 +389,8 @@ namespace Manager
 			}
 			else if (prevPotion < PC->PS->Potion)
 			{
-				prevPotion++;
+				prevPotion += 2;
 			}
-
 		}
 	}
 	void HUDController::Draw()
@@ -415,10 +440,9 @@ namespace Manager
 
 			if (!soundReduced)
 			{
-				SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/UI/HeartBeat.wav", "heart");
 				SFXManager.Play("heart");
+				soundReduced = true;
 			}
-			soundReduced = true;
 		}
 		else
 		{
@@ -436,7 +460,6 @@ namespace Manager
 						break;
 					}
 				}
-				SFXManager.SFXList.erase("heart");
 				soundReduced = false;
 			}
 		}
@@ -486,6 +509,94 @@ namespace Manager
 		}
 	}
 
+	static std::vector<std::string>
+		BreakWordUTF8ByWidth(const std::string& utf8,
+			float maxWidthPx,
+			float scale,
+			bool useKerning)
+	{
+		std::vector<std::string> out;
+		if (utf8.empty()) return out;
+
+		auto cps = DecodeUTF8(utf8);
+		std::string cur;
+		float curW = 0.0f;
+
+		auto widthOf = [&](const std::string& s)->float {
+			return Atlas.GetPrintMetricsUTF8(s, scale, useKerning).width;
+			};
+
+		auto isDisallowedLineStart = [](uint32_t cp)->bool {
+			switch (cp) {
+			case U')': case U']': case U'}':
+			case U'.': case U',': case U'!': case U'?': case U':': case U';':
+			case 0x2026/*…*/: case 0x00B7/*·*/:
+			case 0x3001/*、*/: case 0xFF0C/*，*/: case 0x3002/*。*/:
+			case 0xFF01/*！*/: case 0xFF1F/*？*/: case 0xFF1A/*：*/:
+				return true;
+			default: return false;
+			}
+			};
+
+		std::string pending;
+
+		for (size_t i = 0; i < cps.size(); ++i) {
+			uint32_t cp = cps[i];
+			std::string ch;
+			if (cp <= 0x7F) {
+				ch.push_back(char(cp));
+			}
+			else if (cp <= 0x7FF) {
+				ch.push_back(char(0xC0 | ((cp >> 6) & 0x1F)));
+				ch.push_back(char(0x80 | (cp & 0x3F)));
+			}
+			else if (cp <= 0xFFFF) {
+				ch.push_back(char(0xE0 | ((cp >> 12) & 0x0F)));
+				ch.push_back(char(0x80 | ((cp >> 6) & 0x3F)));
+				ch.push_back(char(0x80 | (cp & 0x3F)));
+			}
+			else {
+				ch.push_back(char(0xF0 | ((cp >> 18) & 0x07)));
+				ch.push_back(char(0x80 | ((cp >> 12) & 0x3F)));
+				ch.push_back(char(0x80 | ((cp >> 6) & 0x3F)));
+				ch.push_back(char(0x80 | (cp & 0x3F)));
+			}
+
+			float wCh = widthOf(ch);
+
+			if (cur.empty()) {
+				if (isDisallowedLineStart(cp) && !out.empty()) {
+					pending = ch;
+					continue;
+				}
+			}
+
+			if (curW + wCh <= maxWidthPx) {
+				cur += pending;
+				cur += ch;
+				curW += widthOf(pending) + wCh;
+				pending.clear();
+			}
+			else {
+				if (!cur.empty()) out.push_back(cur);
+				cur = ch;
+				curW = wCh;
+			}
+		}
+
+		if (!pending.empty()) {
+			if (curW + Atlas.GetPrintMetricsUTF8(pending, scale, useKerning).width <= maxWidthPx) {
+				cur += pending;
+			}
+			else {
+				if (!cur.empty()) out.push_back(cur);
+				cur = pending;
+			}
+		}
+		if (!cur.empty()) out.push_back(cur);
+		return out;
+	}
+
 	std::vector<std::string> HUDController::SplitTextIntoLines(const std::string& text, f32 maxWidth)
 	{
 		std::vector<std::string> lines;
@@ -531,6 +642,68 @@ namespace Manager
 		return lines;
 	}
 
+	std::vector<std::string>
+		HUDController::SplitTextIntoLines_UTF8_KR(const std::string& textUTF8,
+			float maxWidthPx,
+			float scale,
+			bool useKerning)
+	{
+		std::vector<std::string> lines;
+		std::istringstream paraStream(textUTF8);
+		std::string paragraph;
+
+		auto widthOf = [&](const std::string& s)->float {
+			return Atlas.GetPrintMetricsUTF8(s, scale, useKerning).width;
+			};
+
+		const float spaceW = widthOf(" ");
+
+		while (std::getline(paraStream, paragraph)) {
+			std::istringstream wordStream(paragraph);
+			std::string word, curLine;
+			float curW = 0.0f;
+
+			while (wordStream >> word) {
+				float wWord = widthOf(word);
+
+				std::string candidate = curLine.empty() ? word : (curLine + " " + word);
+				float candW = widthOf(candidate);
+
+				const float EPS = 0.5f;
+
+				if (candW <= maxWidthPx + EPS) {
+					curLine.swap(candidate);
+					curW = candW;
+					continue;
+				}
+
+				if (!curLine.empty()) {
+					lines.push_back(curLine);
+					curLine.clear();
+					curW = 0.0f;
+				}
+
+				if (wWord > maxWidthPx + EPS) {
+					auto chunks = BreakWordUTF8ByWidth(word, maxWidthPx, scale, useKerning);
+					for (size_t i = 0; i + 1 < chunks.size(); ++i)
+						lines.push_back(chunks[i]);
+					if (!chunks.empty()) {
+						curLine = chunks.back();
+						curW = widthOf(curLine);
+					}
+				}
+				else {
+					curLine = word;
+					curW = wWord;
+				}
+			}
+
+			if (!curLine.empty())
+				lines.push_back(curLine);
+		}
+		return lines;
+	}
+
 	InGame::Actor* HUDController::GetPotion()
 	{
 		return &Potion;
@@ -538,135 +711,262 @@ namespace Manager
 
 	void HUDController::TooltipUpdate(InGame::Item& item)
 	{
-		itemDesc = SplitTextIntoLines(item.description, maxTextW);
-		switch (item.tag)
-		{
-		case InGame::ItemTag::ENVY:
-			itemDesc.insert(itemDesc.begin(), "ENVY");
-			break;
-		case InGame::ItemTag::GLUTTONY:
-			itemDesc.insert(itemDesc.begin(), "GLUTTONY");
-			break;
-		case InGame::ItemTag::GREED:
-			itemDesc.insert(itemDesc.begin(), "GREED");
-			break;
-		case InGame::ItemTag::LUST:
-			itemDesc.insert(itemDesc.begin(), "LUST");
-			break;
-		case InGame::ItemTag::SLOTH:
-			itemDesc.insert(itemDesc.begin(), "SLOTH");
-			break;
-		case InGame::ItemTag::WRATH:
-			itemDesc.insert(itemDesc.begin(), "WRATH");
-			break;
-		case InGame::ItemTag::PRIDE:
-			itemDesc.insert(itemDesc.begin(), "PRIDE");
-			break;
-		default:
-			itemDesc.insert(itemDesc.begin(), "NONE");
-			break;
+		itemDesc = SplitTextIntoLines_UTF8_KR(item.description, maxTextW, 1.f);
+
+		const char* tagStr = "NONE";
+		switch (item.tag) {
+		case InGame::ItemTag::ENVY:     tagStr = "ENVY";     break;
+		case InGame::ItemTag::GLUTTONY: tagStr = "GLUTTONY"; break;
+		case InGame::ItemTag::GREED:    tagStr = "GREED";    break;
+		case InGame::ItemTag::LUST:     tagStr = "LUST";     break;
+		case InGame::ItemTag::SLOTH:    tagStr = "SLOTH";    break;
+		case InGame::ItemTag::WRATH:    tagStr = "WRATH";    break;
+		case InGame::ItemTag::PRIDE:    tagStr = "PRIDE";    break;
+		default:                         tagStr = "NONE";     break;
 		}
+		itemDesc.insert(itemDesc.begin(), tagStr);
 		itemDesc.insert(itemDesc.begin(), item.name);
-		s32 mouseX, mouseY;
-		AEInputGetCursorPosition(&mouseX, &mouseY);
+
+		const float s = 1.f;
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(global::stringForKRGap, s);
+		float lineH = m.lineHeight;
+		float asc = m.ascender;
+		float desc = m.descender;
+
+		float wMax = 0.f;
+		for (size_t i = 0; i < itemDesc.size(); ++i) {
+			float w = Manager::Atlas.GetPrintMetricsUTF8(itemDesc[i], s, true).width;
+			if (w > wMax) wMax = w;
+		}
+
+		const float frame = padding;
+		const float textPad = 8.f;
+
+		float contentW = wMax;
+		float contentH = asc + ((int)itemDesc.size() - 1) * lineH + desc;
+
+		tooltip.Window.size.x = 2.f * (frame + textPad) + contentW;
+		tooltip.Window.size.y = 2.f * (frame + textPad) + contentH;
+
+		s32 mouseX, mouseY; AEInputGetCursorPosition(&mouseX, &mouseY);
 		AEVec2 MP;
-		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
-		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
+		MP.x = (float)mouseX - AEGfxGetWindowWidth() * 0.5f;
+		MP.y = AEGfxGetWindowHeight() * 0.5f - (float)mouseY;
 
-		f32 lw, lh;
-		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &lw, &lh);
-		lh *= global::ScreenHeight;
+		tooltip.Window.position = {
+			MP.x + tooltip.Window.size.x * 0.5f + frame,
+			MP.y + tooltip.Window.size.y * 0.5f + frame
+		};
 
-		tooltip.Window.position = { MP.x + (tooltip.Window.size.x / 2.f) + padding, MP.y + (tooltip.Window.size.y / 2.f) + padding };
-		tooltip.Window.size.y = lh * itemDesc.size();
-
-		if (prevItem != &item)
-		{
+		if (prevItem != &item) {
 			prevItem = &item;
-			s8 i = 0;
-			for (int i = 0; i < tooltip.WindowMesh.size(); i++)
-			{
-				if (tooltip.WindowMesh[i])
-				{
-					AEGfxMeshFree(tooltip.WindowMesh[i]);
-					tooltip.WindowMesh[i] = nullptr;
-				}
+			for (int i = 0; i < tooltip.WindowMesh.size(); i++) {
+				if (tooltip.WindowMesh[i]) { AEGfxMeshFree(tooltip.WindowMesh[i]); tooltip.WindowMesh[i] = nullptr; }
 			}
 			tooltip.WindowMesh = Utils::CreateNinePatchMesh();
 		}
 	}
 
+	static inline u32 RGBA8(float r, float g, float b, float a = 1.f) {
+		auto c = [](float v)->u32 { v = v < 0 ? 0 : (v > 1 ? 1 : v); return (u32)(v * 255.f + 0.5f); };
+		return (c(a) << 24) | (c(r) << 16) | (c(g) << 8) | c(b);
+	}
+
 	void HUDController::ShowTooltip(InGame::Item& item)
 	{
-		
-		if (SettingPanel.isSettingOn)
-			return;
+		if (SettingPanel.isSettingOn) return;
 
 		Utils::DrawNinePatchMesh(tooltip.Window, tooltip.Window.Texture, tooltip.WindowMesh, padding);
-		f32 tmp, lh;
-		AEGfxGetPrintSize(pFont, item.description.c_str(), textDrawSize, &tmp, &lh);
-		lh *= global::ScreenHeight;
-		f32 px = tooltip.Window.position.x - tooltip.Window.size.x / 2.f;
-		f32 py = tooltip.Window.position.y - tooltip.Window.size.y / 2.f;
-		f32 boxW = tooltip.Window.size.x;
-		f32 boxH = tooltip.Window.size.y;
-		f32 halfW = AEGfxGetWindowWidth() * 0.5f;
-		f32 halfH = AEGfxGetWindowHeight() * 0.5f;
-		f32 baseX = px;
-		f32 baseY = py + boxH - lh / 1.5f;
-		s32 mouseX, mouseY;
-		AEInputGetCursorPosition(&mouseX, &mouseY);
-		AEVec2 MP;
-		MP.x = static_cast<f32>(mouseX) - AEGfxGetWindowWidth() / 2.0f;
-		MP.y = AEGfxGetWindowHeight() / 2.0f - static_cast<float>(mouseY);
-		f32 r{ 1.f }, g{ 1.f }, b{ 1.f };
-		for (int i = 0; i < itemDesc.size(); i++)
-		{
-			f32 xPix = baseX;
-			f32 yPix = baseY - lh * i;
-			f32 xN = xPix / halfW;
-			f32 yN = yPix / halfH;
+
+		float px = tooltip.Window.position.x - tooltip.Window.size.x * 0.5f;
+		float py = tooltip.Window.position.y - tooltip.Window.size.y * 0.5f;
+		float boxW = tooltip.Window.size.x;
+		float boxH = tooltip.Window.size.y;
+
+		const float frame = padding;
+		const float textPad = 8.f;
+		float xLeft = px + frame + textPad;
+		float yTop = py + boxH - frame - textPad;
+
+		const float s = 1.f;
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(global::stringForKRGap, s);
+		float lineH = m.lineHeight;
+		float asc = m.ascender;
+
+		float curY = yTop - asc;
+
+		for (size_t i = 0; i < itemDesc.size(); ++i) {
+			u32 col = 0xFFFFFFFF;
 			if (i == 1)
 			{
-				r = 0.5f, g = 0.5f, b = 0.5f;
+				if (itemDesc[1] == u8"ENVY")
+				{
+					col = 0x4B0082FF;
+				}
+				else if (itemDesc[1] == u8"GLUTTONY")
+				{
+					col = 0x008000FF;
+				}
+				else if (itemDesc[1] == u8"GREED")
+				{
+					col = 0x0000FFFF;
+				}
+				else if (itemDesc[1] == u8"LUST")
+				{
+					col = 0x0D00A6FF;
+				}
+				else if (itemDesc[1] == u8"SLOTH")
+				{
+					col = 0xFFFF00FF;
+				}
+				else if (itemDesc[1] == u8"WRATH")
+				{
+					col = 0xFF8000FF;
+				}
+				else if (itemDesc[1] == u8"PRIDE")
+				{
+					col = 0xFF0000FF;
+				}
+				else if (itemDesc[1] == u8"NONE")
+				{
+					col = 0x555555FF;
+				}
+
 			}
-			else
-			{
-				r = 1.f, g = 1.f, b = 1.f;
-			}
-			AEGfxPrint(pFont, itemDesc[i].c_str(), xN, yN, textDrawSize, r, g, b, 1.f);
+			Manager::Atlas.RenderTextUTF8(itemDesc[i], xLeft, curY, s, col);
+			curY -= lineH;
 		}
+	}
+
+	void HUDController::ShowStageUpdate()
+	{
+		std::vector<AEVec2> stagePosition = {
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 2.f},
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 3.2f},
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 4.4f}
+		};
+		switch (global::CurrentStageNumber)
+		{
+		case 1:
+			stageArrow.position = stagePosition[0];
+			break;
+		case 2:
+			stageArrow.position = stagePosition[1];
+			break;
+		case 3:
+			stageArrow.position = stagePosition[2];
+			break;
+		}
+		//flag
+		Utils::UpdateOffset(stageArrow);
+	}
+
+	void HUDController::ShowStageDraw()
+	{
+		Utils::DrawNinePatchMesh(stageBG, stageBGTexture, bgMesh, 50.f);
+		Utils::DrawObject(stageMAP, stageMAPTexture, m_Mesh, 1.f);
+		//Utils::DrawObject(stageArrow.position, stageArrow.offset, stageArrow.size, stageArrow.Texture, stageArrow.Mesh, 1.f, false);
+		Utils::DrawObject(stageArrow, false);
+		//flag
 	}
 
 	void HUDController::Destroy()
 	{
-		AEGfxMeshFree(HPMesh);
-		AEGfxTextureUnload(HPTex);
-		AEGfxTextureUnload(HPBGTex);
+		if (HPMesh)
+		{
+			AEGfxMeshFree(HPMesh);
+			HPMesh = nullptr;
+		}
+		if (HPTex)
+		{
+			AEGfxTextureUnload(HPTex);
+			HPTex = nullptr;
+		}
+		if (HPBGTex)
+		{
+			AEGfxTextureUnload(HPBGTex);
+			HPBGTex = nullptr;
+		}
 
 		HPBG.clear();
 		HP.clear();
 
-		AEGfxMeshFree(ChamberTimeBar.Mesh);
-		AEGfxTextureUnload(ChamberTimeBar.Texture);
+		if (ChamberTimeBar.Mesh)
+		{
+			AEGfxMeshFree(ChamberTimeBar.Mesh);
+			ChamberTimeBar.Mesh = nullptr;
+		}
+		if (ChamberTimeBar.Texture)
+		{
+			AEGfxTextureUnload(ChamberTimeBar.Texture);
+			ChamberTimeBar.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(fireTimeBar.Mesh);
-		AEGfxTextureUnload(fireTimeBar.Texture);
+		if (fireTimeBar.Mesh)
+		{
+			AEGfxMeshFree(fireTimeBar.Mesh);
+			fireTimeBar.Mesh = nullptr;
+		}
+		if (fireTimeBar.Texture)
+		{
+			AEGfxTextureUnload(fireTimeBar.Texture);
+			fireTimeBar.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(ammoType.Mesh);
-		AEGfxTextureUnload(ammoType.Texture);
+		if (ammoType.Mesh)
+		{
+			AEGfxMeshFree(ammoType.Mesh);
+			ammoType.Mesh = nullptr;
+		}
+		if (ammoType.Texture)
+		{
+			AEGfxTextureUnload(ammoType.Texture);
+			ammoType.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(Coin.Mesh);
-		AEGfxTextureUnload(Coin.Texture);
+		if (Coin.Mesh)
+		{
+			AEGfxMeshFree(Coin.Mesh);
+			Coin.Mesh = nullptr;
+		}
+		if (Coin.Texture)
+		{
+			AEGfxTextureUnload(Coin.Texture);
+			Coin.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(Potion.Mesh);
-		AEGfxTextureUnload(Potion.Texture);
+		if (Potion.Mesh)
+		{
+			AEGfxMeshFree(Potion.Mesh);
+			Potion.Mesh = nullptr;
+		}
+		if (Potion.Texture)
+		{
+			AEGfxTextureUnload(Potion.Texture);
+			Potion.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(PotionBG.Mesh);
-		AEGfxTextureUnload(PotionBG.Texture);
+		if (PotionBG.Mesh)
+		{
+			AEGfxMeshFree(PotionBG.Mesh);
+			PotionBG.Mesh = nullptr;
+		}
+		if (PotionBG.Texture)
+		{
+			AEGfxTextureUnload(PotionBG.Texture);
+			PotionBG.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(PotionFull.Mesh);
-		AEGfxTextureUnload(PotionFull.Texture);
+		if (PotionFull.Mesh)
+		{
+			AEGfxMeshFree(PotionFull.Mesh);
+			PotionFull.Mesh = nullptr;
+		}
+		if (PotionFull.Texture)
+		{
+			AEGfxTextureUnload(PotionFull.Texture);
+			PotionFull.Texture = nullptr;
+		}
 
 		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 		{
@@ -678,10 +978,54 @@ namespace Manager
 		}
 		AEGfxTextureUnload(tooltip.Window.Texture);
 
+		for (auto&mesh : bgMesh)
+		{
+			if (mesh)
+			{
+				AEGfxMeshFree(mesh);
+				mesh = nullptr;
+			}
+		}
+		if (stageBGTexture)
+		{
+			AEGfxTextureUnload(stageBGTexture);
+			stageBGTexture = nullptr;
+		}
+
+		if (m_Mesh)
+		{
+			AEGfxMeshFree(m_Mesh);
+			m_Mesh = nullptr;
+		}
+		if (stageMAPTexture)
+		{
+			AEGfxTextureUnload(stageMAPTexture);
+			stageMAPTexture = nullptr;
+		}
+
+		if (stageArrow.Mesh)
+		{
+			AEGfxMeshFree(stageArrow.Mesh);
+		}
+		if (stageArrow.Texture)
+		{
+			AEGfxTextureUnload(stageArrow.Texture);
+			stageArrow.Texture = nullptr;
+		}
+
 		AEGfxDestroyFont(pFont);
 
-		AEGfxMeshFree(Vignetting.Mesh);
-		AEGfxTextureUnload(Vignetting.Texture);
+		if (Vignetting.Mesh)
+		{
+			AEGfxMeshFree(Vignetting.Mesh);
+			Vignetting.Mesh = nullptr;
+		}
+		
+		if (Vignetting.Texture)
+		{
+			AEGfxTextureUnload(Vignetting.Texture);
+			Vignetting.Texture = nullptr;
+		}
 	}
 
 }

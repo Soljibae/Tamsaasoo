@@ -15,7 +15,7 @@ namespace Manager
 		void Destroy();
 		bool IsActive() const;
 		std::array<InGame::GunType, 3> GenerateRandomGun();
-
+		bool shouldShowStage = false;
 	private:
 		InGame::PlayerCharacter* PC;
 		std::array<Button, 3> weaponOptionButtons;
@@ -24,7 +24,6 @@ namespace Manager
 		AEGfxTexture* ButtonTexture;
 		std::array<InGame::Actor, 3> gunIcons;
 		std::array<std::string, 3> GunNames;
-		std::array<std::string, 3> GunDescriptions;
 		AEGfxVertexList* iconMesh;
 		bool isActive{ false };
 		s32 stageIdx;
@@ -34,6 +33,7 @@ namespace Manager
 			f32 r, g, b;
 		};
 		std::array<Colors, 4> colors;
+		std::map<InGame::GunType, std::string> gunDescriptions;
 	};
 	extern GunPickUI gunPickPanel;
 }

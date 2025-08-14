@@ -13,6 +13,10 @@
 #include <cmath>
 #include <random>
 #include "SettingUI.h"
+#include <fstream>
+#include <string>
+
+FontAtlasAE Manager::Atlas;
 
 namespace Manager
 {
@@ -45,10 +49,12 @@ namespace Manager
 
 		SFXManager.AddNewSFX(InGame::SFX, "Assets/SFX/Boss/siren.wav", "siren");
 		SFXManager.Play("doom");
+
 		if (CurrentStage == nullptr)
 		{
 			CurrentStage = new InGame::Stage1();
 		}
+
 		CurrentStageType = CurrentStage->Type;
 		if (PC == nullptr)
 		{
@@ -111,6 +117,24 @@ namespace Manager
 		VFXManager.Init();
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		gm.GamePaused = false;
+		Atlas.Init("Assets/Fonts/neodgm_code.ttf", 16);
+		Atlas.SetYStretch(1.5f);
+		Atlas.SetUVFlipV(false);
+
+		std::ifstream file("Assets/gap.txt", std::ios::binary);
+		if (!file) {
+			std::cerr << "Failed to open file.\n";
+			return;
+		}
+
+		std::string content((std::istreambuf_iterator<char>(file)),
+			std::istreambuf_iterator<char>());
+
+		if (!content.empty() && (content.back() == '\n' || content.back() == '\r')) {
+			content.erase(content.find_last_not_of("\r\n") + 1);
+		}
+
+		global::stringForKRGap = content;
 	}
 
 	void Playing::Update()
@@ -135,7 +159,14 @@ namespace Manager
 				gunPickPanel.Show();
 			}
 		}
-
+		if (!pausePanel.isActive && AEInputCheckCurr(AEVK_TAB))
+		{
+			pausePanel.tapPressed = true;
+		}
+		else
+		{
+			pausePanel.tapPressed = false;
+		}
 		ExpPanel.Update();
 		
 		if (global::KeyInput(AEVK_F1))
@@ -164,11 +195,15 @@ namespace Manager
 			if (!gm.GamePaused)
 			{
 				gm.Pause();
+				pausePanel.isActive = true;
 			}
 			else
 			{
-				if(!isDelayOn)
+				if (!isDelayOn)
+				{
 					gm.Resume();
+					pausePanel.isActive = false;
+				}
 			}
 		}
 		if (isDelayOn)
@@ -183,6 +218,21 @@ namespace Manager
 
 		if (!gm.GamePaused)
 		{
+			// Todo: create logic
+			if (gunPickPanel.shouldShowStage)
+			{
+				static f32 minimapTimer{ 0.f };
+				minimapTimer += global::DeltaTime;
+				if (minimapTimer < 7.f)
+				{
+					HUD.ShowStageUpdate();
+				}
+				else
+				{
+					minimapTimer = 0.f;
+					gunPickPanel.shouldShowStage = false;
+				}
+			}
 			if (bIsJumping)
 			{
 				JumpAnimationTimer += global::DeltaTime;
@@ -359,6 +409,10 @@ namespace Manager
 						}
 					}
 				}*/
+			}
+			if (global::KeyInput(AEVK_G))
+			{
+				gunPickPanel.Show();
 			}
 			for (InGame::SoulOrb*& SO : SOs)
 			{
@@ -626,30 +680,17 @@ namespace Manager
 			{
 				gameOverScreen.isGameOver = true;
 			}
-			HUD.Update();
 			gameOverScreen.Update();
 		}
-		else if (pausePanel.wasPickingItem)
+		else if (pickPanel.IsActive() && !pausePanel.tapPressed)
 		{
-			if (global::KeyInput(AEVK_ESCAPE))
-			{
-				pausePanel.wasPickingItem = false;
-			}
-			pausePanel.Update();
-		}
-		else if (pickPanel.IsActive())
-		{
-			if (!pausePanel.wasPickingItem && global::KeyInput(AEVK_ESCAPE))
-			{
-				pausePanel.wasPickingItem = true;
-			}
 			pickPanel.Update();
 		}
 		else if (isChangingStage)
 		{
 			static f32 stageChangeTimer{ 0.f };
 			stageChangeTimer += global::DeltaTime;
-			if (stageChangeTimer > 2.f)
+			if (stageChangeTimer > 1.5f)
 			{
 				isChangingStage = false;
 				stageChangeTimer = 0.f;
@@ -659,10 +700,11 @@ namespace Manager
 		{
 			gunPickPanel.Update();
 		}
-		else
+		if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Update();
 		}
+		HUD.Update();
 		VFXManager.Update();
 		SFXManager.Update();
 	}
@@ -733,11 +775,16 @@ namespace Manager
 			HUD.Draw();
 			ExpPanel.Draw();
 		}
+		if (gunPickPanel.shouldShowStage && !gm.GamePaused)
+		{
+			// Todo: show stage
+			HUD.ShowStageDraw();
+		}
 		for (InGame::SoulOrb* SO : SOs)
 		{
 			SO->Draw();
 		}
-		if (pausePanel.wasPickingItem)
+		if (pausePanel.tapPressed)
 		{
 			pausePanel.Draw();
 		}
@@ -755,14 +802,20 @@ namespace Manager
 		{
 			gunPickPanel.Draw();
 		}
-		else if (gm.GamePaused)
+		else if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Draw();
 		}
+
 		gameOverScreen.Draw();
+
 		if(Boss && Boss->bossApearing)
 			bossAppearScene.Draw();
-		Utils::DrawObject(Fader, false, Fader.Alpha);
+
+		if (Fader.Alpha > 0.1f)
+		{
+			Utils::DrawObject(Fader, false, Fader.Alpha);
+		}
 	}
 	void Playing::Destroy()
 	{
@@ -859,6 +912,7 @@ namespace Manager
 		delete PC;
 		PC = nullptr;
 		SFXManager.Destroy();
+		Atlas.Shutdown();
 	}
 	void Playing::SpawnWave()
 	{

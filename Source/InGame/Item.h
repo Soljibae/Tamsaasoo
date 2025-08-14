@@ -13,13 +13,13 @@ namespace InGame
 	enum ItemTag
 	{
 		EMPTY,
-		ENVY,
+		PRIDE,
+		WRATH,
+		SLOTH,
 		GLUTTONY,
 		GREED,
 		LUST,
-		SLOTH,
-		WRATH,
-		PRIDE,
+		ENVY
 	};
 	class Item
 	{
