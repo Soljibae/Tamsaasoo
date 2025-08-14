@@ -914,6 +914,34 @@ namespace Manager
 		auto m = Manager::Atlas.GetPrintMetricsUTF8(m_gunName, 1.7f);
 		Manager::Atlas.RenderTextUTF8(m_gunName, m_gunIcon.position.x - m_gunIcon.size.x / 2.f + padding, (m_gunIcon.position.y + m_gunSlot.size.y / 2.f - m.height / 2.f - padding * 1.8f), 1.7f, col);
 		
+		std::stringstream ss;
+		std::string inputString;
+
+		m = Manager::Atlas.GetPrintMetricsUTF8(m_gunName, 1.f);
+		f32 smallGap = m.height;
+
+		ss << "-" << statsNameKR[StatsForUI::DAMAGE_RATIO] << ": " << gunStats[prevGunType].damage;
+		inputString = ss.str();
+		Manager::Atlas.RenderTextUTF8(inputString, m_gunIcon.position.x - m_gunIcon.size.x / 2.f + padding, (m_gunIcon.position.y + m_gunSlot.size.y / 2.f - m.height / 2.f - padding * 1.8f) - smallGap * 1.5f, 1.f);
+		ss.str("");
+
+		ss << "-" << statsNameKR[StatsForUI::FIRE_RATE_RATIO] << ": " << gunStats[prevGunType].fireRate;
+		inputString = ss.str();
+		Manager::Atlas.RenderTextUTF8(inputString, m_gunIcon.position.x - m_gunIcon.size.x / 2.f + padding, (m_gunIcon.position.y + m_gunSlot.size.y / 2.f - m.height / 2.f - padding * 1.8f) - smallGap * 2.5f, 1.f);
+		ss.str("");
+
+		s32 hitCount = gunStats[prevGunType].hitCount - 1;
+		ss << "-" << statsNameKR[StatsForUI::HIT_COUNT] << ": " << hitCount;
+		inputString = ss.str();
+		Manager::Atlas.RenderTextUTF8(inputString, m_gunIcon.position.x - m_gunIcon.size.x / 2.f + padding, (m_gunIcon.position.y + m_gunSlot.size.y / 2.f - m.height / 2.f - padding * 1.8f) - smallGap * 3.5f, 1.f);
+		ss.str("");
+
+		ss << "-" << statsNameKR[StatsForUI::PROJECTILE_COUNT] << ": " << gunStats[prevGunType].projectileCount;
+		inputString = ss.str();
+		Manager::Atlas.RenderTextUTF8(inputString, m_gunIcon.position.x - m_gunIcon.size.x / 2.f + padding, (m_gunIcon.position.y + m_gunSlot.size.y / 2.f - m.height / 2.f - padding * 1.8f) - smallGap * 4.5f, 1.f);
+		ss.str("");
+
+		ss.clear();
 	}
 
 	void PauseUI::Destroy()
