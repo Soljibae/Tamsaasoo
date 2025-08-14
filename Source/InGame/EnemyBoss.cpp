@@ -92,7 +92,7 @@ namespace InGame
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 15);
 			}
 		}
 
@@ -251,7 +251,7 @@ namespace InGame
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 15);
 			}
 		}
 		if (!bIsJumping)
@@ -483,7 +483,7 @@ namespace InGame
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 15);
 			}
 		}
 

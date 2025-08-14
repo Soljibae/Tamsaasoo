@@ -1662,7 +1662,8 @@ namespace InGame
 			{
 				if (GS->ITRM)
 				{
-					Utils::DrawObject(effect->position, effect->offset, effect->size, GS->ITRM->item30Texture, GS->ITRM->item30Mesh);
+					AEVec2 position = { effect->position.x , effect->position.y + effect->size.y / 5.f };
+					Utils::DrawObject(position, effect->offset, effect->size, GS->ITRM->item30Texture, GS->ITRM->item30Mesh);
 				}
 			}
 		}

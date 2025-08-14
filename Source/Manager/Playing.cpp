@@ -53,7 +53,7 @@ namespace Manager
 
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage3();
+			CurrentStage = new InGame::Stage1();
 		}
 
 		CurrentStageType = CurrentStage->Type;
@@ -179,6 +179,11 @@ namespace Manager
 		}
 		ExpPanel.Update();
 		
+		if (global::KeyInput(AEVK_1))
+		{
+			PC->AddItemToInventory(ITDB->itemList[30]->Clone());
+		}
+
 		if (global::KeyInput(AEVK_F1))
 		{
 			WaveCount = maxWaveCount;
