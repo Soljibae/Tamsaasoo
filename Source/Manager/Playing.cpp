@@ -53,7 +53,7 @@ namespace Manager
 
 		if (CurrentStage == nullptr)
 		{
-			CurrentStage = new InGame::Stage1();
+			CurrentStage = new InGame::Stage3();
 		}
 
 		CurrentStageType = CurrentStage->Type;
