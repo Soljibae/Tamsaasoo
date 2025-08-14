@@ -544,7 +544,7 @@ namespace Manager
 				break;
 			default:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/Empty.png");
-				GunNames[i] = "아무것도 없네요...";
+				GunNames[i] = "EMPTY";
 				break;
 			}
 			gunIcons[i].position.x = weaponOptionButtons[i].position.x - weaponOptionButtons[i].size.x / 2.f + gunIcons[i].size.x / 2.f;

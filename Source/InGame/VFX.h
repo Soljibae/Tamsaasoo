@@ -14,7 +14,8 @@ namespace InGame
 		Laser = 4,
 		BlackHole = 5,
 		HitMark = 6,
-		SoulOrbVfx = 7,//SoulOrbVFX must be last
+		KillSmoke = 7,
+		SoulOrbVfx = 8,//SoulOrbVFX must be last
 	};
 	struct VFXData
 	{
