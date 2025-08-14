@@ -822,6 +822,9 @@ namespace InGame
 		Item_45() = default;
 		Item_45(const Item_45& other);
 
+		bool isReady;
+		f32 triggerTimer;
+
 		virtual void Init(const Manager::ItemData& data) override;
 		virtual void Use(class PlayerCharacter* owner) override;
 		virtual void Update(class PlayerCharacter* owner) override;

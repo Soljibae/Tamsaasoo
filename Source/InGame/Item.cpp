@@ -2409,7 +2409,7 @@ namespace InGame
 	}
 	//============================================= ID_45
 	Item_45::Item_45(const Item_45& other)
-		: Item(other)
+		: Item(other), isReady(other.isReady), triggerTimer(other.triggerTimer)
 	{
 	}
 	void Item_45::Init(const Manager::ItemData& data)
@@ -2421,6 +2421,9 @@ namespace InGame
 		tag = EMPTY;
 		grade = data.grade;
 		procChance = data.procChance;
+		CoolDown = data.cooldown;
+		isReady = false;
+		triggerTimer = 0.f;
 
 		iconOffset.x = (1.f / static_cast<f32>(column)) * static_cast<f32>((id - 1) % column);
 		iconOffset.y = (1.f / static_cast<f32>(row)) * static_cast<f32>((id - 1) / column);
@@ -2430,19 +2433,29 @@ namespace InGame
 	{
 		if (global::IsEnemyRecentlyDied)
 		{
-			for (s32 i = 0; i < global::RecentlyDeadEnemyCount;i++)
+			if (isReady)
 			{
-				if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + ((Utils::GetItemCount(id) - 1) * procChance / 10.f)) * global::additionalProcChanceRatio))
+				for (s32 i = 0; i < global::RecentlyDeadEnemyCount;i++)
 				{
-					Manager::SFXManager.Play("reload");
-					owner->HoldingGun->FireTimer = 1.f / owner->HoldingGun->RoundPerSec;
-					break;
+					if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + ((Utils::GetItemCount(id) - 1) * procChance / 10.f)) * global::additionalProcChanceRatio))
+					{
+						Manager::SFXManager.Play("reload");
+						owner->HoldingGun->FireTimer = 1.f / owner->HoldingGun->RoundPerSec;
+						isReady = false;
+						break;
+					}
 				}
 			}
 		}
 	}
 	void Item_45::Update(PlayerCharacter* owner)
 	{
+		triggerTimer += global::DeltaTime;
+		if (triggerTimer >= CoolDown)
+		{
+			isReady = true;
+			triggerTimer = 0.f;
+		}
 	}
 	void Item_45::Draw()
 	{
@@ -2455,18 +2468,22 @@ namespace InGame
 	{
 		if (isTargetBoss)
 		{
-			if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + ((Utils::GetItemCount(id) - 1) * procChance / 10.f)) * global::additionalProcChanceRatio) * 1.5f)
+			if (isReady)
 			{
-
-				if (Manager::gm.currStateREF)
+				if (Utils::GetRandomFloat(0.f, 1.f) <= ((procChance + ((Utils::GetItemCount(id) - 1) * procChance / 10.f)) * global::additionalProcChanceRatio) * 1.5f)
 				{
-					Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
-					if (GS)
+
+					if (Manager::gm.currStateREF)
 					{
-						if (GS->PC)
+						Manager::Playing* GS = static_cast<Manager::Playing*>(Manager::gm.currStateREF);
+						if (GS)
 						{
-							Manager::SFXManager.Play("reload");
-							GS->PC->HoldingGun->FireTimer = 1.f / GS->PC->HoldingGun->RoundPerSec;
+							if (GS->PC)
+							{
+								Manager::SFXManager.Play("reload");
+								GS->PC->HoldingGun->FireTimer = 1.f / GS->PC->HoldingGun->RoundPerSec;
+								isReady = false;
+							}
 						}
 					}
 				}
