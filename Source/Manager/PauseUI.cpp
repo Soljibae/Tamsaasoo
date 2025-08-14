@@ -745,7 +745,7 @@ namespace Manager
 					break;
 				case InGame::GunType::SAWEDOFFSHOTGUN:
 					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/SAWEDOFFSHOTGUN.png");
-					m_gunName = "SAWEDOFFSHOTGUN";
+					m_gunName = "SHORTY";
 					break;
 				case InGame::GunType::DOUBLEBARREL:
 					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/DOUBLEBARREL.png");
@@ -796,7 +796,7 @@ namespace Manager
 			break;
 		case 2:
 			r = 0.7f, g = 0.7f, b = 1.f;
-			break;
+			break;	
 		case 3:
 			r = 1.0f, g = 0.5f, b = 1.0f;
 			break;
@@ -804,7 +804,7 @@ namespace Manager
 			r = 1.f, g = 1.f, b = 1.f;
 			break;
 		}
-		AEGfxPrint(pFont, m_gunName.c_str(), m_gunIcon.position.x / (global::ScreenWidth / 2.f) - lw/2.f, m_gunIcon.position.y / (global::ScreenHeight / 2.f)-lh/2.f, textDrawSize, r, g, b, 1);
+		AEGfxPrint(pFont, m_gunName.c_str(), m_gunIcon.position.x / (global::ScreenWidth / 2.f) - lw/2.f, (m_gunIcon.position.y-m_gunSlot.size.y/2.f + 5.f) / (global::ScreenHeight / 2.f), textDrawSize, r, g, b, 1);
 	}
 
 	void PauseUI::Destroy()

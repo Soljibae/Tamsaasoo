@@ -410,6 +410,10 @@ namespace Manager
 					}
 				}*/
 			}
+			if (global::KeyInput(AEVK_G))
+			{
+				gunPickPanel.Show();
+			}
 			for (InGame::SoulOrb*& SO : SOs)
 			{
 				SO->Update();
