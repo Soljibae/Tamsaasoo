@@ -58,5 +58,6 @@ namespace InGame
 		
 
 	private:
+		s16 healthUpByTagCount;
 	};
 }

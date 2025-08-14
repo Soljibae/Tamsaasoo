@@ -6,6 +6,11 @@
 #include "../InGame/Gun.h"
 #include <random>
 #include <unordered_set>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include "../Manager/Playing.h"
 namespace Manager
 {
 	GunPickUI gunPickPanel;
@@ -230,6 +235,27 @@ namespace Manager
 		colors[0] = { 1.0f, 1.0f, 1.0f }, colors[1] = { 0.7f, 0.7f, 1.0f }, colors[2] = { 1.0f, 0.5f, 1.0f }, colors[3] = { 0, 0, 0 };
 		stageIdx = 0;
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
+
+		std::ifstream file("Assets/gunDescription.txt", std::ios::binary);
+
+		if (!file.is_open()) {
+			std::cerr << "Error: Could not open description file: " << std::endl;
+			return;
+		}
+
+		std::string line;
+
+		for (int i = 1; i <= static_cast<int>(InGame::GunType::LAST); i++)
+		{
+			std::getline(file, line);
+			if (!line.empty() && line.back() == '\r')
+			{
+				line.pop_back();
+			}
+			gunDescriptions[static_cast<InGame::GunType>(i)] = line;
+		}
+
+		file.close();
 	}
 	void GunPickUI::Update()
 	{
@@ -257,16 +283,18 @@ namespace Manager
 				lw *= w, lh *= h;
 
 				Utils::DrawObject(gunIcons[i], gunIcons[i].Texture, iconMesh);
-				AEGfxPrint(pFont, GunNames[i].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), nameDrawSize,
+				/*AEGfxPrint(pFont, GunNames[i].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), nameDrawSize,
 					colors[stageIdx].r,
 					colors[stageIdx].g,
 					colors[stageIdx].b,
 					1.f
-				);
-				AEGfxGetPrintSize(pFont, GunDescriptions[i].c_str(), descDrawSize, &lw, &lh);
-				lh *= 2.f;
-				AEGfxPrint(pFont, GunDescriptions[i].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), descDrawSize,
-					1.f, 1.f, 1.f, 1.f);
+				);*/
+				Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 5.f, 3.f);
+				/*AEGfxGetPrintSize(pFont, gunDescriptions[weaponOptions[i]].c_str(), descDrawSize, &lw, &lh);
+				lh *= 2.f;*/
+				/*AEGfxPrint(pFont, gunDescriptions[weaponOptions[i]].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), descDrawSize,
+					1.f, 1.f, 1.f, 1.f);*/
+				Manager::Atlas.RenderTextUTF8(gunDescriptions[weaponOptions[i]], startX, Y - padding, 1.f);
 			}
 		}
 	}
@@ -286,137 +314,110 @@ namespace Manager
 			case InGame::GunType::M1911:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M1911.png");
 				GunNames[i] = "M1911";
-				GunDescriptions[i] = "HighPowerPistol";
 				break;
 			case InGame::GunType::CZ75:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/CZ75.png");
 				GunNames[i] = "CZ75";
-				GunDescriptions[i] = "AutoMaticPistol";
 				break;
 			case InGame::GunType::DESERTEGLE:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/DESERTEGLE.png");
 				GunNames[i] = "DESERT EGLE";
-				GunDescriptions[i] = "High Power Pistol";
 				break;
 			case InGame::GunType::MP5:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MP5.png");
 				GunNames[i] = "MP5";
-				GunDescriptions[i] = "Pistol caliber high rate of fire SMG";
 				break;
 			case InGame::GunType::MPX:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MPX.png");
 				GunNames[i] = "MPX";
-				GunDescriptions[i] = "Additional Penetration";
 				break;
 			case InGame::GunType::VECTOR:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/VECTOR.png");
 				GunNames[i] = "VECTOR";
-				GunDescriptions[i] = "High rate of fire";
 				break;
 			case InGame::GunType::BEOWOLF:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/BEOWOLF.png");
 				GunNames[i] = "BEOWOLF";
-				GunDescriptions[i] = "High power rifle";
 				break;
 			case InGame::GunType::P90:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/P90.png");
 				GunNames[i] = "P90";
-				GunDescriptions[i] = "More Penetration";
 				break;
 			case InGame::GunType::MOSINNAGAT:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MOSINNAGAT.png");
 				GunNames[i] = "MOSINNAGAT";
-				GunDescriptions[i] = "Slow Rate of fire Sniper rifle";
 				break;
 			case InGame::GunType::M24:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M24.png");
 				GunNames[i] = "M24";
-				GunDescriptions[i] = "Better Rate of fire Sniper rifle";
 				break;
 			case InGame::GunType::RAILGUN:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/RAILGUN.png");
 				GunNames[i] = "RAILGUN";
-				GunDescriptions[i] = "Low Rate of fire, high Damage Sniper rifle";
 				break;
 			case InGame::GunType::NITRO700:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/NITRO700.png");
 				GunNames[i] = "NITRO700";
-				GunDescriptions[i] = "Extream Power";
 				break;
 			case InGame::GunType::FNFAL:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/FNFAL.png");
 				GunNames[i] = "FNFAL";
-				GunDescriptions[i] = "High Damage High penetration Battle Rifle";
 				break;
 			case InGame::GunType::M82BARRETT:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M82BARRETT.png");
 				GunNames[i] = "M82BARRETT";
-				GunDescriptions[i] = "High Damage, High penetration";
 				break;
 			case InGame::GunType::AR15:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/AR15.png");
 				GunNames[i] = "AR15";
-				GunDescriptions[i] = "Small Damage, High rate of fire";
 				break;
 			case InGame::GunType::M110:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M110.png");
 				GunNames[i] = "M110";
-				GunDescriptions[i] = "High Damage, Medium rate of fire";
 				break;
 			case InGame::GunType::BREN:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/BREN.png");
 				GunNames[i] = "BREN";
-				GunDescriptions[i] = "High Damage, Medium rate of fire";
 				break;
 			case InGame::GunType::MICROGUN:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MICROGUN.png");
 				GunNames[i] = "MICROGUN";
-				GunDescriptions[i] = "Low Damage, Extream rate of fire";
 				break;
 			case InGame::GunType::M249:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M249.png");
 				GunNames[i] = "M249";
-				GunDescriptions[i] = "Medium Damage, High rate of fire";
 				break;
 			case InGame::GunType::M2:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M2.png");
 				GunNames[i] = "M2";
-				GunDescriptions[i] = "High Damage, High penetration, Slow rate of fire";
 				break;
 			case InGame::GunType::SAWEDOFFSHOTGUN:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/SAWEDOFFSHOTGUN.png");
 				GunNames[i] = "SAWEDOFFSHOTGUN";
-				GunDescriptions[i] = "Shot Gun, Slow rate of fire";
 				break;
 			case InGame::GunType::DOUBLEBARREL:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/DOUBLEBARREL.png");
 				GunNames[i] = "DOUBLEBARREL";
-				GunDescriptions[i] = "Higher Damage";
 				break;
 			case InGame::GunType::KS23:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/KS23.png");
 				GunNames[i] = "KS23";
-				GunDescriptions[i] = "Extream Damage, Low rate of fire";
 				break;
 			case InGame::GunType::M1897:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M1897.png");
 				GunNames[i] = "M1897";
-				GunDescriptions[i] = "Medium Damage, Medium rate of fire";
 				break;
 			case InGame::GunType::BENELLIM4:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/BENELLIM4.png");
 				GunNames[i] = "BENELLIM4";
-				GunDescriptions[i] = "Well Balenced";
 				break;
 			case InGame::GunType::SAIGA12:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/SAIGA12.png");
 				GunNames[i] = "SAIGA12";
-				GunDescriptions[i] = "LowDamage, High rate of fire";
 				break;
 			case InGame::GunType::AA12:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/AA12.png");
 				GunNames[i] = "AA12";
-				GunDescriptions[i] = "BulletStorm";
 				break;
 			}
 			gunIcons[i].position.x = weaponOptionButtons[i].position.x - weaponOptionButtons[i].size.x / 2.f + gunIcons[i].size.x / 2.f;

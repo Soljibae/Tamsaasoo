@@ -61,6 +61,8 @@ namespace InGame
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Player/dead.mp3", "dead");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Player/gethit.mp3", "gethit");
 		Manager::SFXManager.AddNewSFX(SFX, "Assets/SFX/Player/potion.wav", "potion");
+
+		healthUpByTagCount = 0;
 	}
 	void PlayerCharacter::Update()
 	{
@@ -194,7 +196,7 @@ namespace InGame
 		if (PS->ExpCount >= PS->TargetExp)
 		{
 			PS->ExpCount -= PS->TargetExp;
-			PS->TargetExp *= 1.35f;
+			PS->TargetExp *= 1.3f;
 			PS->Level++;
 			//std::cout << "Level Up : " << PS->Level << " Next : Target Exp : " << PS->TargetExp << std::endl;
 			Manager::pickPanel.Show();
@@ -611,8 +613,6 @@ namespace InGame
 		{
 			global::additionalHitCount += 1;
 		}
-
-		static s16 healthUpByTagCount = 0;
 
 		if (itemTagCount[GLUTTONY] >= 3 && healthUpByTagCount == 0)
 		{

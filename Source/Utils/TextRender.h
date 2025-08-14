@@ -284,7 +284,7 @@ public:
         atlasDirty = false;
     }
 
-    void RenderTextUTF8(const std::string& utf8, float x, float y, float scale = 1.0f, u32 color = 0x00000000)
+    void RenderTextUTF8(const std::string& utf8, float x, float y, float scale = 1.0f, u32 color = 0xFFFFFFFF)
     {
         AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
         AEGfxSetBlendMode(AE_GFX_BM_BLEND);

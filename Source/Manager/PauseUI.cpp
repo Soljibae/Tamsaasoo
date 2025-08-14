@@ -8,6 +8,8 @@
 #include "SettingUI.h"
 #include <algorithm>
 #include "MainMenu.h"
+#include <fstream>
+
 namespace Manager
 {
 	PauseUI pausePanel;
@@ -109,6 +111,27 @@ namespace Manager
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 
 		PC = InPC;
+
+		std::ifstream file("Assets/statKR.txt", std::ios::binary);
+
+		if (!file.is_open()) {
+			std::cerr << "Error: Could not open description file: " << std::endl;
+			return;
+		}
+
+		std::string line;
+
+		for (int i = 0; i <= static_cast<int>(StatsForUI::STAT_LAST); i++)
+		{
+			std::getline(file, line);
+			if (!line.empty() && line.back() == '\r')
+			{
+				line.pop_back();
+			}
+			statsNameKR[static_cast<StatsForUI>(i)] = line;
+		}
+
+		file.close();
 	}
 
 	void PauseUI::Update()
@@ -121,7 +144,7 @@ namespace Manager
 		statsString.clear();
 		baseStatsString.clear();
 
-		ss << "Damage: " << std::fixed << std::setprecision(2) << PC->PS->effectiveDamage;
+		ss << statsNameKR[StatsForUI::DAMAGE] << ": " << std::fixed << std::setprecision(2) << PC->PS->effectiveDamage;
 		statsString.push_back(ss.str());
 		ss.str("");
 
@@ -129,7 +152,7 @@ namespace Manager
 		baseStatsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Fire Rate: " << PC->PS->effectiveFireRate;
+		ss << statsNameKR[StatsForUI::FIRE_RATE] << ": " << PC->PS->effectiveFireRate;
 		statsString.push_back(ss.str());
 		ss.str("");
 
@@ -137,39 +160,40 @@ namespace Manager
 		baseStatsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Movement Speed: " << static_cast<s32>(PC->PS->effectiveMovementSpeed);
+		ss << statsNameKR[StatsForUI::MOVEMENT_SPEED] << ": " << static_cast<s32>(PC->PS->effectiveMovementSpeed);
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Hit Count: " << static_cast<s32>(PC->PS->effectiveHitCount);
+		ss << statsNameKR[StatsForUI::HIT_COUNT] << ": " << static_cast<s32>(PC->PS->effectiveHitCount);
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Burn Damage: " << std::fixed << std::setprecision(2) << global::effectiveBurnDamage;
+		ss << statsNameKR[StatsForUI::BURN_DAMAGE] << ": " << std::fixed << std::setprecision(2) << global::effectiveBurnDamage;
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Burn Rate: " << global::effectiveBurnRate;
+		ss << statsNameKR[StatsForUI::BURN_RATE] << ": " << global::effectiveBurnRate;
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Exp Gained: " << global::additionalExpGainedRatio * global::StageExpGainedRatio[global::CurrentStageNumber -1];
+		ss << statsNameKR[StatsForUI::EXP_GAINED] << ": " << global::additionalExpGainedRatio * global::StageExpGainedRatio[global::CurrentStageNumber -1];
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Gold Gained: " << global::additionalGoldGainedRatio * global::StageGoldGainedRatio[global::CurrentStageNumber - 1];
+		ss << statsNameKR[StatsForUI::GOLD_GAINED] << ": " << global::additionalGoldGainedRatio * global::StageGoldGainedRatio[global::CurrentStageNumber - 1];
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << "Additional ProcChance: " << global::additionalProcChanceRatio;
+		ss << statsNameKR[StatsForUI::PROC_CHANCE] << ": " << global::additionalProcChanceRatio;
 		statsString.push_back(ss.str());
 		ss.str("");
 
 		std::map<InGame::ItemTag, s32> itemTagCount;
 		tagString.clear();
+		tagStringColorPart.clear();
 
 
-		for (int i = static_cast<int>(InGame::ENVY); i <= static_cast<int>(InGame::PRIDE); ++i)
+		for (int i = 1; i <= static_cast<int>(InGame::ENVY); ++i)
 		{
 			itemTagCount[static_cast<InGame::ItemTag>(i)] = 0;
 		}
@@ -177,16 +201,16 @@ namespace Manager
 		{
 			itemTagCount[item_ptr.first->tag] += item_ptr.second;
 		}
-		for (int i = static_cast<int>(InGame::ENVY); i <= static_cast<int>(InGame::PRIDE); ++i)
+		for (int i = 1; i <= static_cast<int>(InGame::ENVY); ++i)
 		{
 			if (itemTagCount[static_cast<InGame::ItemTag>(i)] > 0)
 			{
 				s32 count = itemTagCount[static_cast<InGame::ItemTag>(i)];
-				switch (i) {
-				case 1:
+				switch (static_cast<InGame::ItemTag>(i)) {
+				case InGame::ENVY:
 					if (count >= 3)
 					{
-						ss << "ENVY+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -199,7 +223,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "Minion Damage + ";
+						ss << " (" << statsNameKR[StatsForUI::MINION_DAMAGE] << " + ";
 						if (count >= 7)
 						{
 							ss << "1.2";
@@ -213,15 +237,16 @@ namespace Manager
 							ss << "0.5";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "ENVY";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
 
 					break;
-				case 2:
+				case InGame::GLUTTONY:
 					if (count >= 3)
 					{
-						ss << "GLUTTONY+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -234,7 +259,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "HP + ";
+						ss << " (" << statsNameKR[StatsForUI::HP] << " + ";
 						if (count >= 7)
 						{
 							ss << "3";
@@ -248,14 +273,15 @@ namespace Manager
 							ss << "1";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "GLUTTONY";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
 					break;
-				case 3:
+				case InGame::GREED:
 					if (count >= 3)
 					{
-						ss << "GREED+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -268,7 +294,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "Gold Gained + ";
+						ss << " (" << statsNameKR[StatsForUI::GOLD_GAINED] << " + ";
 						if (count >= 7)
 						{
 							ss << "0.4";
@@ -282,14 +308,15 @@ namespace Manager
 							ss << "0.1";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "GREED";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
 					break;
-				case 4:
+				case InGame::LUST:
 					if (count >= 3)
 					{
-						ss << "LUST+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -302,7 +329,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "ProcChance + ";
+						ss << " (" << statsNameKR[StatsForUI::PROC_CHANCE] << " + ";
 						if (count >= 7)
 						{
 							ss << "20%";
@@ -316,14 +343,15 @@ namespace Manager
 							ss << "7%";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "LUST";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
 					break;
-				case 5:
+				case InGame::SLOTH:
 					if (count >= 3)
 					{
-						ss << "SLOTH+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -336,7 +364,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "Hit Count + ";
+						ss << " (" << statsNameKR[StatsForUI::HIT_COUNT] << " + ";
 						if (count >= 7)
 						{
 							ss << "3";
@@ -350,14 +378,15 @@ namespace Manager
 							ss << "1";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "SLOTH";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
 					break;
-				case 6:
+				case InGame::WRATH:
 					if (count >= 3)
 					{
-						ss << "WRATH+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -370,7 +399,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "Burn Damage + ";
+						ss << " (" << statsNameKR[StatsForUI::BURN_DAMAGE] << " + ";
 						if (count >= 7)
 						{
 							ss << "0.08";
@@ -384,14 +413,15 @@ namespace Manager
 							ss << "0.02";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "WRATH";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
 					break;
-				case 7:
+				case InGame::PRIDE:
 					if (count >= 3)
 					{
-						ss << "PRIDE+";
+						ss << "+";
 						if (count >= 7)
 						{
 							ss << "7";
@@ -404,7 +434,7 @@ namespace Manager
 						{
 							ss << "3";
 						}
-						ss << " (" << "Fire Rate + ";
+						ss << " (" << statsNameKR[StatsForUI::FIRE_RATE] << " + ";
 						if (count >= 7)
 						{
 							ss << "0.8";
@@ -418,6 +448,7 @@ namespace Manager
 							ss << "0.2";
 						}
 						ss << ")";
+						tagStringColorPart[static_cast<InGame::ItemTag>(i)] = "PRIDE";
 						tagString[static_cast<InGame::ItemTag>(i)] = ss.str();
 						ss.str("");
 					}
@@ -482,27 +513,67 @@ namespace Manager
 		{
 			f32 spaceX = 10.f;
 			f32 spaceY = 20.f;
-			f32 textW, textH;
-			AEGfxGetPrintSize(pFont, statsString[i].c_str(), 0.2f, &textW, &textH);
-			AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY  * i) / (h / 2.f)) - textH * (i + 1)), 0.2f, 1, 1, 1, 1);
+			auto m = Manager::Atlas.GetPrintMetricsUTF8(statsString[i]);
+			f32 textW = m.width;
+			f32 textH = m.height;
+			//AEGfxGetPrintSize(pFont, statsString[i].c_str(), 0.2f, &textW, &textH);
+			Manager::Atlas.RenderTextUTF8(statsString[i], (statsUI.position.x - statsUI.size.x / 2.f + spaceX), (statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY * i) - (textH * (i + 1)) / 2.f, 1.f);
+			//AEGfxPrint(pFont, statsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f)), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY  * i) / (h / 2.f)) - textH * (i + 1)), 0.2f, 1, 1, 1, 1);
 
 			if (i <= 1)
 			{
-				AEGfxPrint(pFont, baseStatsString[i].c_str(), ((statsUI.position.x - statsUI.size.x / 2.f + spaceX) / (w / 2.f) + textW), (((statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY * i) / (h / 2.f)) - textH * (i + 1)), 0.2f, 0.5f, 0.5f, 0.5f, 1);
+				Manager::Atlas.RenderTextUTF8(baseStatsString[i], (statsUI.position.x - statsUI.size.x / 2.f + spaceX + textW), (statsUI.position.y + statsUI.size.y / 2.f - spaceX - spaceY * i) - (textH * (i + 1)) / 2.f, 1.f, 0x808080FF);
 			}
 		}
 
 		s32 count = 0;
 
-		for (int i = static_cast<int>(InGame::ENVY); i <= static_cast<int>(InGame::PRIDE); ++i)
+		for (int i = 1; i <= static_cast<int>(InGame::ENVY); i++)
 		{
 			if (tagString[static_cast<InGame::ItemTag>(i)] != "")
 			{
-				f32 space = 15.f;
-				f32 textW, textH;
-				AEGfxGetPrintSize(pFont, tagString[static_cast<InGame::ItemTag>(i)].c_str(), 0.2f, &textW, &textH);
-				AEGfxPrint(pFont, tagString[static_cast<InGame::ItemTag>(i)].c_str(), ((tagUI.position.x - tagUI.size.x / 2.f + space) / (w / 2.f)), (((tagUI.position.y + tagUI.size.y / 2.f - space * (count + 1)) / (h / 2.f)) - textH * (count + 1)), 0.2f, 1, 1, 1, 1);
-				count++;
+				u32 col = 0xFFFFFFFF;
+				switch (static_cast<InGame::ItemTag>(i))
+				{
+				case InGame::ItemTag::ENVY:
+					col = 0x800080FF;
+					break;
+				case InGame::ItemTag::GLUTTONY:
+					col = 0x008000FF;
+					break;
+				case InGame::ItemTag::GREED:
+					col = 0x0000FFFF;
+					break;
+				case InGame::ItemTag::LUST:;
+					col = 0x0D00A6FF;
+					break;
+				case InGame::ItemTag::SLOTH:
+					col = 0xFFFF00FF;
+					break;
+				case InGame::ItemTag::WRATH:
+					col = 0xFF8000FF;
+					break;
+				case InGame::ItemTag::PRIDE:
+					col = 0xFF0000FF;
+					break;
+				default:
+					break;
+				}
+
+				f32 spaceX = 10.f;
+				f32 spaceY = 20.f;
+
+				auto m = Manager::Atlas.GetPrintMetricsUTF8(tagStringColorPart[static_cast<InGame::ItemTag>(i)].c_str());
+				f32 textW = m.width;
+				f32 textH = m.height;
+
+				float yPos = (tagUI.position.y + tagUI.size.y / 2.f - spaceX - spaceY * count) - (textH * (count + 1)) / 2.f;
+
+				Manager::Atlas.RenderTextUTF8(tagStringColorPart[static_cast<InGame::ItemTag>(i)], (tagUI.position.x - tagUI.size.x / 2.f + spaceX), yPos, 1.f, col);
+				Manager::Atlas.RenderTextUTF8(tagString[static_cast<InGame::ItemTag>(i)], (tagUI.position.x - tagUI.size.x / 2.f + spaceX) + textW, yPos, 1.f);
+
+				if(tagString[static_cast<InGame::ItemTag>(i)] != "")
+					count++;
 			}	
 		}
 		for (int i = 0; i < 3; ++i)

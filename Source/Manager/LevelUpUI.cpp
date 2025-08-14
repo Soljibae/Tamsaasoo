@@ -57,7 +57,7 @@ namespace Manager
 					for (auto& cost : rerollCost)
 					{
 						cost = 20;
-					}
+					}// to do
 					delayTime = 0.f;
 					ResetGotEpic();
 					gm.Resume();
