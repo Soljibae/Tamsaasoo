@@ -818,7 +818,7 @@ namespace Manager
 					break;
 				case InGame::GunType::SAWEDOFFSHOTGUN:
 					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/SAWEDOFFSHOTGUN.png");
-					m_gunName = "SAWEDOFFSHOTGUN";
+					m_gunName = "SHORTY";
 					break;
 				case InGame::GunType::DOUBLEBARREL:
 					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/DOUBLEBARREL.png");
@@ -857,27 +857,27 @@ namespace Manager
 	{
 		f32 lw, lh;
 		AEGfxGetPrintSize(pFont, m_gunName.c_str(), textDrawSize, &lw, &lh);
-		/*colors[0] = { 1.0f, 1.0f, 1.0f }
-		colors[1] = { 0.7f, 0.7f, 1.0f }
-		colors[2] = { 1.0f, 0.5f, 1.0f }
-		colors[3] = { 0, 0, 0 }*/
-		f32 r{ 1.f }, g{ 1.f }, b{ 1.f };
+		lw *= (global::ScreenWidth / 2.f);
+		lh *= (global::ScreenHeight / 2.f);
+		u32 col = 0xFFFFFFFF;
 		switch (global::CurrentStageNumber)
 		{
 		case 1:
-			r = 1.f, g = 1.f, b = 1.f;
+			col = 0xFFFFFFFF;
 			break;
 		case 2:
-			r = 0.7f, g = 0.7f, b = 1.f;
-			break;
+			col = 0xB2B2FFFF;
+			break;	
 		case 3:
-			r = 1.0f, g = 0.5f, b = 1.0f;
+			col = 0xFF7FFFFF;
 			break;
 		default:
-			r = 1.f, g = 1.f, b = 1.f;
+			col = 0xFFFFFFFF;
 			break;
 		}
-		AEGfxPrint(pFont, m_gunName.c_str(), m_gunIcon.position.x / (global::ScreenWidth / 2.f) - lw/2.f, m_gunIcon.position.y / (global::ScreenHeight / 2.f)-lh/2.f, textDrawSize, r, g, b, 1);
+		auto m = Manager::Atlas.GetPrintMetricsUTF8(m_gunName, 1.7f);
+		Manager::Atlas.RenderTextUTF8(m_gunName, m_gunIcon.position.x - m.width/2.f, (m_gunIcon.position.y - m_gunSlot.size.y / 2.f + 5.f), 1.7f, col);
+		//AEGfxPrint(pFont, m_gunName.c_str(), m_gunIcon.position.x / (global::ScreenWidth / 2.f) - lw/2.f, (m_gunIcon.position.y-m_gunSlot.size.y/2.f + 5.f) / (global::ScreenHeight / 2.f), textDrawSize, r, g, b, 1);
 	}
 
 	void PauseUI::Destroy()
