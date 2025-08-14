@@ -18,7 +18,7 @@
 //3 - 스테이지에 존재하는 적 하나당 additionalDamage value1 증가
 장엄한 오만
 2
-생존해 있는 적 하나당 데미지가증가합니다.
+생존해 있는 적 하나당 데미지가 증가합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
 0.04, -1, -1, -1, -1, -1, -1
 
@@ -244,7 +244,7 @@
 0
 플레이어가 조준하는 방향으로 총알을 발사하는 소환수 두 마리를 소환합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
-0.5, 1.5, 1.0, -1, -1, -1, -1
+0.4, 2.0, 1.0, -1, -1, -1, -1
 
 32
 //32 - 가장 가까운 적에게 유탄을 발사하는 소환수 1개 소환 폭발 반경 range (기본 데미지 value1, 연사 value2)

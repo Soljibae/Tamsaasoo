@@ -211,19 +211,20 @@ namespace Manager
 			Utils::DrawObject(rerollIcon[i], rerollIconTexture, rerollIconMesh, 1.f);
 			Utils::DrawObject(rerollCostIcon[i], rerollCostTexture, rerollCostMesh, 1.f);
 
-			f32 lw, lh;
+			f32 lh;
 			f32 baseX{ currentOptions[i]->iconPosition.x }, baseY{ currentOptions[i]->iconPosition.y };
 			f32 pSizeX{ currentOptions[i]->size.x }, pSizeY{ currentOptions[i]->size.y };//p=parents
 			f32 halfW{ global::ScreenWidth / 2.f }, halfH{ global::ScreenHeight / 2.f };
 			f32 downForName = 5.f;
-			AEGfxGetPrintSize(pFont, currentOptions[i]->name.c_str(), textDrawSize, &lw, &lh);
-			//AEGfxPrint(pFont, currentOptions[i]->name.c_str(), (baseX + pSizeX) / halfW, baseY / halfH + (lh / 1.5f), textDrawSize, 1.f, 1.f, 1.f, 1.f);
 
 			Manager::Atlas.RenderTextUTF8(currentOptions[i]->name.c_str(), (baseX + pSizeX), baseY + Manager::Atlas.GetPrintMetricsUTF8(currentOptions[i]->name.c_str(), 1.f).height * 1.5f - downForName, 1.f, 0xFFFFFFFF);
 
 			f32 CbaseX = rerollCostIcon[i].position.x, CbaseY = rerollCostIcon[i].position.y;
 			f32 CpSizeX = rerollCostIcon[i].size.x;
-			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
+			auto m = Manager::Atlas.GetPrintMetricsUTF8(std::to_string(rerollCost[i]), 2.5f);
+			lh = m.height;
+			//AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
+			Manager::Atlas.RenderTextUTF8(std::to_string(rerollCost[i]), CbaseX + CpSizeX * 0.75f, CbaseY - lh * 0.3f, 2.5f);
 			const char* tag;
 			u32 col = 0xFFFFFFFF;
 			switch (currentOptions[i]->tag)
@@ -261,10 +262,6 @@ namespace Manager
 				col = 0x555555FF;
 				break;
 			}
-			AEMtx33 I; AEMtx33Identity(&I);
-			AEGfxSetTransform(I.m);
-			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 
 			//AEGfxPrint(pFont, tag, (baseX + pSizeX) / halfW, baseY / halfH - (lh * 1.5f), textDrawSize, r, g, b, 1.f);
 			//std::vector<std::string> ItemDesc = HUD.SplitTextIntoLines(currentOptions[i]->description, windowWidth);
