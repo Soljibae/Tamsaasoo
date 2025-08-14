@@ -15,6 +15,7 @@
 #include "SettingUI.h"
 #include <fstream>
 #include <string>
+#include "SettingUI.h"
 
 FontAtlasAE Manager::Atlas;
 
@@ -139,6 +140,15 @@ namespace Manager
 
 	void Playing::Update()
 	{
+		if (SettingPanel.isFullScreen)
+		{
+			Atlas.SetYStretch(1.5f);
+		}
+		else
+		{
+			Atlas.SetYStretch(1.1f);
+		}
+
 		if (global::DeltaTime > 0.1)
 		{
 			std::cout << global::DeltaTime << std::endl;

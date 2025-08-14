@@ -223,8 +223,8 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats->HP = 900;
-		Stats->MaxHP = 900;
+		Stats->HP = 1800;
+		Stats->MaxHP = 1800;
 		Stats->Damage = 1;
 
 		dashTimer = 0.f;
@@ -448,8 +448,8 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats->HP = 1600;
-		Stats->MaxHP = 1600;
+		Stats->HP = 6000;
+		Stats->MaxHP = 6000;
 		Stats->Damage = 1;
 		Stats->MovementSpeed = 100.f;
 		AnimationState = IDLE;

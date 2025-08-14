@@ -88,7 +88,7 @@ namespace InGame
 		UpdateStats();
 
 		Stats->HP = std::clamp(Stats->HP, 0.f, Stats->MaxHP);
-		PS->effectiveMovementSpeed = std::clamp(PS->effectiveMovementSpeed, 30.f, 600.f); // to do
+		PS->effectiveMovementSpeed = std::clamp(PS->effectiveMovementSpeed, 30.f, 600.f);
 
 		for (const auto& item_ptr : inventory)
 		{
@@ -282,7 +282,7 @@ namespace InGame
 				if (IsRevivable())
 				{
 					bIsInvincible = true;
-					Stats->HP = Stats->MaxHP; // to do
+					Stats->HP = Stats->MaxHP;
 				}
 				else
 				{

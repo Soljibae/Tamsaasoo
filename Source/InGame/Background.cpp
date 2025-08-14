@@ -13,7 +13,6 @@ namespace InGame
 
 	void Background::Update()
 	{
-		//to do Update texture when switching stages.
 	}
 
 	void Background::Draw()
