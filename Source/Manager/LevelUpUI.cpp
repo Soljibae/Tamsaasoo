@@ -223,6 +223,7 @@ namespace Manager
 
 			f32 CbaseX = rerollCostIcon[i].position.x, CbaseY = rerollCostIcon[i].position.y;
 			f32 CpSizeX = rerollCostIcon[i].size.x;
+			AEGfxGetPrintSize(pFont, std::to_string(rerollCost[i]).c_str(), textDrawSize, &lw, &lh);
 			AEGfxPrint(pFont, std::to_string(rerollCost[i]).c_str(), (CbaseX + CpSizeX * 0.7f) / halfW, CbaseY / halfH - lh, costTextDrawSize[i], 1.f, 1.f, 1.f, 1.f);
 			const char* tag;
 			f32 r{ 0.f }, g{ 0.f }, b{ 0.f };

@@ -13,8 +13,8 @@ namespace Manager
 	static f32 overFontSize = 120.f;
 	static f32 overTextDrawSize = 1.f;
 	static f32 fontSize = 72.f;
-	static f32 textDrawSize = 0.3f;
-	static AEVec2 buttonSize = { 500,100 };
+	static f32 textDrawSize = 0.25f;
+	static AEVec2 buttonSize = { 400,100 };
 	void GameOver::Init()
 	{
 		BG.size = { w, h };
@@ -31,9 +31,9 @@ namespace Manager
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/buttonover.wav", "buttonover");
 
-		f32 startX = -w/2.f+w/3.f;
+		f32 startX = -200.f;
 		f32 startY = -100.f;
-		f32 spacingX = w/3.f;
+		f32 spacingX = 500.f;
 		for (auto& btn : Buttons)
 		{
 			btn.size = buttonSize;

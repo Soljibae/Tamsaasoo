@@ -223,7 +223,7 @@ namespace Manager
 			{
 				static f32 minimapTimer{ 0.f };
 				minimapTimer += global::DeltaTime;
-				if (minimapTimer < 5.f)
+				if (minimapTimer < 7.f)
 				{
 					HUD.ShowStageUpdate();
 				}
@@ -802,10 +802,16 @@ namespace Manager
 		{
 			pausePanel.Draw();
 		}
+
 		gameOverScreen.Draw();
+
 		if(Boss && Boss->bossApearing)
 			bossAppearScene.Draw();
-		Utils::DrawObject(Fader, false, Fader.Alpha);
+
+		if (Fader.Alpha > 0.1f)
+		{
+			Utils::DrawObject(Fader, false, Fader.Alpha);
+		}
 	}
 	void Playing::Destroy()
 	{

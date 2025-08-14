@@ -18,6 +18,8 @@ namespace Manager
 
 	void PauseUI::Init(InGame::PlayerCharacter* InPC)
 	{
+		PC = InPC;
+
 		isActive = false;
 		tapPressed = false;
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/button.wav", "button");
@@ -108,7 +110,18 @@ namespace Manager
 
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 
-		PC = InPC;
+		m_gunSlot.Mesh = slotMesh;
+		m_gunSlot.Texture = slotTexture;
+		m_gunSlot.size = { 300.f,150.f };
+		m_gunSlot.position = { -w / 2.f + m_gunSlot.size.x/1.2f, -h/2.f + m_gunSlot.size.y/1.2f};
+
+		m_gunIcon.Mesh = slotMesh;
+		m_gunIcon.Texture = AEGfxTextureLoad("Assets/test.png");
+		m_gunIcon.size = m_gunSlot.size;
+		m_gunIcon.position = m_gunSlot.position;
+
+		shouldShowGunName = false;
+		prevGunType = PC->HoldingGun->gunType;
 	}
 
 	void PauseUI::Update()
@@ -434,11 +447,33 @@ namespace Manager
 			Buttons[i].Update();
 		}
 
+		for (size_t i = 0; i < ItemSlot.size(); i++)
+		{
+			if (ItemSlot[i].IsHovered())
+			{
+				slotWhite.size = ItemSlot[i].size;
+				slotWhite.position = ItemSlot[i].position;
+			}
+		}
 		for (size_t i = 0; i < PC->inventory.size(); i++)
 		{
 			if (ItemSlot[i].IsHovered())
+			{
 				HUD.TooltipUpdate(*PC->inventory[i].first);
+			}
 		}
+
+		if (m_gunSlot.IsHovered())
+		{
+			slotWhite.size = m_gunSlot.size;
+			slotWhite.position = m_gunSlot.position;
+			shouldShowGunName = true;
+		}
+		else
+		{
+			shouldShowGunName = false;
+		}
+		UpdateGun();
 	}
 
 	void PauseUI::Draw()
@@ -459,7 +494,6 @@ namespace Manager
 
 			if (ItemSlot[i].IsHovered())
 			{
-				slotWhite.position = ItemSlot[i].position;
 				Utils::DrawObject(slotWhite, false, 0.2f);
 			}
 		}
@@ -474,8 +508,6 @@ namespace Manager
 			f32 textW, textH;
 			AEGfxGetPrintSize(pFont, pText.c_str(), 1.f, &textW, &textH);
 			AEGfxPrint(pFont, pText.c_str(),(ItemSlot[i].position.x / (w/2)),(ItemSlot[i].position.y / (h/2))-textH/1.8f, 0.2f, 1, 1, 1, 1);
-
-
 		}
 
 		for (size_t i = 0; i < statsString.size(); i++)
@@ -606,30 +638,259 @@ namespace Manager
 				HUD.ShowTooltip(*PC->inventory[i].first);
 			}
 		}
+		Utils::DrawObject(m_gunSlot, false, 0.5f);
+		Utils::DrawObject(m_gunIcon,false);
+		if (shouldShowGunName)
+		{
+			Utils::DrawObject(slotWhite, false, 0.2f);
+			DrawGunName();
+			shouldShowGunName = false;
+		}
+	}
+
+	void PauseUI::UpdateGun()
+	{
+		if (PC->HoldingGun)
+		{
+			if (prevGunType != PC->HoldingGun->gunType)
+			{
+				prevGunType = PC->HoldingGun->gunType;
+
+				if (m_gunIcon.Texture)
+				{
+					AEGfxTextureUnload(m_gunIcon.Texture);
+					m_gunIcon.Texture = nullptr;
+				}
+				switch (PC->HoldingGun->gunType)
+				{
+				case InGame::GunType::M1911:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M1911.png");
+					m_gunName = "M1911";
+					break;
+				case InGame::GunType::CZ75:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/CZ75.png");
+					m_gunName = "CZ75";
+					break;
+				case InGame::GunType::DESERTEGLE:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/DESERTEGLE.png");
+					m_gunName = "DESERT EGLE";
+					break;
+				case InGame::GunType::MP5:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/MP5.png");
+					m_gunName = "MP5";
+					break;
+				case InGame::GunType::MPX:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/MPX.png");
+					m_gunName = "MPX";
+					break;
+				case InGame::GunType::VECTOR:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/VECTOR.png");
+					m_gunName = "VECTOR";
+					break;
+				case InGame::GunType::BEOWOLF:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/BEOWOLF.png");
+					m_gunName = "BEOWOLF";
+					break;
+				case InGame::GunType::P90:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/P90.png");
+					m_gunName = "P90";
+					break;
+				case InGame::GunType::MOSINNAGAT:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/MOSINNAGAT.png");
+					m_gunName = "MOSINNAGAT";
+					break;
+				case InGame::GunType::M24:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M24.png");
+					m_gunName = "M24";
+					break;
+				case InGame::GunType::RAILGUN:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/RAILGUN.png");
+					m_gunName = "RAILGUN";
+					break;
+				case InGame::GunType::NITRO700:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/NITRO700.png");
+					m_gunName = "NITRO700";
+					break;
+				case InGame::GunType::FNFAL:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/FNFAL.png");
+					m_gunName = "FNFAL";
+					break;
+				case InGame::GunType::M82BARRETT:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M82BARRETT.png");
+					m_gunName = "M82BARRETT";
+					break;
+				case InGame::GunType::AR15:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/AR15.png");
+					m_gunName = "AR15";
+					break;
+				case InGame::GunType::M110:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M110.png");
+					m_gunName = "M110";
+					break;
+				case InGame::GunType::BREN:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/BREN.png");
+					m_gunName = "BREN";
+					break;
+				case InGame::GunType::MICROGUN:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/MICROGUN.png");
+					m_gunName = "MICROGUN";
+					break;
+				case InGame::GunType::M249:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M249.png");
+					m_gunName = "M249";
+					break;
+				case InGame::GunType::M2:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M2.png");
+					m_gunName = "M2";
+					break;
+				case InGame::GunType::SAWEDOFFSHOTGUN:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/SAWEDOFFSHOTGUN.png");
+					m_gunName = "SAWEDOFFSHOTGUN";
+					break;
+				case InGame::GunType::DOUBLEBARREL:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/DOUBLEBARREL.png");
+					m_gunName = "DOUBLEBARREL";
+					break;
+				case InGame::GunType::KS23:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/KS23.png");
+					m_gunName = "KS23";
+					break;
+				case InGame::GunType::M1897:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/M1897.png");
+					m_gunName = "M1897";
+					break;
+				case InGame::GunType::BENELLIM4:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/BENELLIM4.png");
+					m_gunName = "BENELLIM4";
+					break;
+				case InGame::GunType::SAIGA12:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/SAIGA12.png");
+					m_gunName = "SAIGA12";
+					break;
+				case InGame::GunType::AA12:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/Guns/AA12.png");
+					m_gunName = "AA12";
+					break;
+				default:
+					m_gunIcon.Texture = AEGfxTextureLoad("Assets/test.png");
+					m_gunName = "Gun Name Not Found!!";
+					break;
+				}
+			}
+		}
+	}
+
+	void PauseUI::DrawGunName()
+	{
+		f32 lw, lh;
+		AEGfxGetPrintSize(pFont, m_gunName.c_str(), textDrawSize, &lw, &lh);
+		/*colors[0] = { 1.0f, 1.0f, 1.0f }
+		colors[1] = { 0.7f, 0.7f, 1.0f }
+		colors[2] = { 1.0f, 0.5f, 1.0f }
+		colors[3] = { 0, 0, 0 }*/
+		f32 r{ 1.f }, g{ 1.f }, b{ 1.f };
+		switch (global::CurrentStageNumber)
+		{
+		case 1:
+			r = 1.f, g = 1.f, b = 1.f;
+			break;
+		case 2:
+			r = 0.7f, g = 0.7f, b = 1.f;
+			break;
+		case 3:
+			r = 1.0f, g = 0.5f, b = 1.0f;
+			break;
+		default:
+			r = 1.f, g = 1.f, b = 1.f;
+			break;
+		}
+		AEGfxPrint(pFont, m_gunName.c_str(), m_gunIcon.position.x / (global::ScreenWidth / 2.f) - lw/2.f, m_gunIcon.position.y / (global::ScreenHeight / 2.f)-lh/2.f, textDrawSize, r, g, b, 1);
 	}
 
 	void PauseUI::Destroy()
 	{
-		AEGfxMeshFree(buttonMesh);
-		AEGfxTextureUnload(BbuttonTexture);
+		if (buttonMesh)
+		{
+			AEGfxMeshFree(buttonMesh);
+			buttonMesh = nullptr;
+		}
+		if (BbuttonTexture)
+		{
+			AEGfxTextureUnload(BbuttonTexture);
+			BbuttonTexture = nullptr;
+		}
 
-		AEGfxMeshFree(Wbutton.Mesh);
-		AEGfxTextureUnload(Wbutton.Texture);
+		if (Wbutton.Mesh)
+		{
+			AEGfxMeshFree(Wbutton.Mesh);
+			Wbutton.Mesh = nullptr;
+		}
+		if (Wbutton.Texture)
+		{
+			AEGfxTextureUnload(Wbutton.Texture);
+			Wbutton.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(pauseDimmer.Mesh);
-		AEGfxTextureUnload(pauseDimmer.Texture);
+		if (pauseDimmer.Mesh)
+		{
+			AEGfxMeshFree(pauseDimmer.Mesh);
+			pauseDimmer.Mesh = nullptr;
+		}
+		if (pauseDimmer.Texture)
+		{
+			AEGfxTextureUnload(pauseDimmer.Texture);
+			pauseDimmer.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(statsUI.Mesh);
-		AEGfxTextureUnload(statsUI.Texture);
+		if (statsUI.Mesh)
+		{
+			AEGfxMeshFree(statsUI.Mesh);
+			statsUI.Mesh = nullptr;
+		}
+		if (statsUI.Texture)
+		{
+			AEGfxTextureUnload(statsUI.Texture);
+			statsUI.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(tagUI.Mesh);
-		AEGfxTextureUnload(tagUI.Texture);
+		if (tagUI.Mesh)
+		{
+			AEGfxMeshFree(tagUI.Mesh);
+			tagUI.Mesh = nullptr;
+		}
+		if (tagUI.Texture)
+		{
+			AEGfxTextureUnload(tagUI.Texture);
+			tagUI.Texture = nullptr;
+		}
 
-		AEGfxMeshFree(slotMesh);
-		AEGfxTextureUnload(slotTexture);
+		if (slotMesh)
+		{
+			AEGfxMeshFree(slotMesh);
+			slotMesh = nullptr;
+		}
+		if (slotTexture)
+		{
+			AEGfxTextureUnload(slotTexture);
+			slotTexture = nullptr;
+		}
 
-		AEGfxMeshFree(slotWhite.Mesh);
-		AEGfxTextureUnload(slotWhite.Texture);
+		if (slotWhite.Mesh)
+		{
+			AEGfxMeshFree(slotWhite.Mesh);
+			slotWhite.Mesh = nullptr;
+		}
+		if (slotWhite.Texture)
+		{
+			AEGfxTextureUnload(slotWhite.Texture);
+			slotWhite.Texture = nullptr;
+		}
+
+		if (m_gunIcon.Texture)
+		{
+			AEGfxTextureUnload(m_gunIcon.Texture);
+			m_gunIcon.Texture = nullptr;
+		}		
 
 		AEGfxDestroyFont(pFont);
 		statsString.clear();

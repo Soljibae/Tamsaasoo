@@ -42,6 +42,13 @@ namespace Manager
 		//white image to rendered at mouse over on itemslot
 		InGame::Actor slotWhite;
 		s8 pFont;
+		void UpdateGun();
+		void DrawGunName();
+		std::string m_gunName;
+		InGame::Actor m_gunIcon;
+		Button m_gunSlot;
+		bool shouldShowGunName;
+		InGame::GunType prevGunType;
 	};
 	extern PauseUI pausePanel;
 }

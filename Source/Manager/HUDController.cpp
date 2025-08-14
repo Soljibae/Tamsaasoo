@@ -137,8 +137,8 @@ namespace Manager
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
 		
-		stageBG.position = {0.f, h/2.f - 400.f};
 		stageBG.size = { 240.f, 300.f };
+		stageBG.position = { w / 2.f - stageBG.size.x / 1.2f , -h / 2.f + stageBG.size.y / 1.2f };
 		bgMesh = Utils::CreateNinePatchMesh();
 		stageBGTexture = AEGfxTextureLoad("Assets/UI/stageBG.png");
 
@@ -150,7 +150,7 @@ namespace Manager
 		stageArrow.offset = { 0,0 };
 		stageArrow.Texture = AEGfxTextureLoad("Assets/UI/RedArrow.png");
 		stageArrow.position = stageBG.position;
-		stageArrow.size = { 100.f, 100.f };
+		stageArrow.size = { 50.f, 100.f };
 		stageArrow.TimeAcc = 0.f;
 		stageArrow.FrameTime = 1.f / 59.f;
 		stageArrow.MaxAnimationCount[InGame::IDLE] = 59;
@@ -158,6 +158,8 @@ namespace Manager
 		stageArrow.column = 59;
 		stageArrow.row = 1;
 		stageArrow.Mesh = Utils::CreateMesh(stageArrow.row, stageArrow.column);
+
+		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/HeartBeat.wav", "heart");
 	}
 
 	void HUDController::Update()
@@ -368,10 +370,11 @@ namespace Manager
 		/*--------Centered can fire UI--------*/
 
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		/*if (global::KeyInput(AEVK_M))
+		if (global::KeyInput(AEVK_M))
 		{
-			PC->PS->Money += 1000000000;
-		}*/
+			PC->PS->Money += 10;
+			PC->PS->Potion += 100;
+		}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{
@@ -386,9 +389,8 @@ namespace Manager
 			}
 			else if (prevPotion < PC->PS->Potion)
 			{
-				prevPotion++;
+				prevPotion += 2;
 			}
-
 		}
 	}
 	void HUDController::Draw()
@@ -438,10 +440,9 @@ namespace Manager
 
 			if (!soundReduced)
 			{
-				SFXManager.AddNewSFX(InGame::BGM, "Assets/SFX/UI/HeartBeat.wav", "heart");
 				SFXManager.Play("heart");
+				soundReduced = true;
 			}
-			soundReduced = true;
 		}
 		else
 		{
@@ -459,7 +460,6 @@ namespace Manager
 						break;
 					}
 				}
-				SFXManager.SFXList.erase("heart");
 				soundReduced = false;
 			}
 		}
@@ -842,8 +842,8 @@ namespace Manager
 	{
 		std::vector<AEVec2> stagePosition = {
 			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 2.f},
-			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 3.f},
-			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 4.f}
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 3.2f},
+			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 4.4f}
 		};
 		switch (global::CurrentStageNumber)
 		{
