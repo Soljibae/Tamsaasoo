@@ -356,4 +356,4 @@
 0
 적을 처치하거나 보스를 타격 시, 일정 확률로 즉시 재장전합니다.
 //value1, value2, value3, cooldown, duration, procchance, range
--1, -1, -1, -1, -1, 0.12, -1
+-1, -1, -1, 1.0, -1, 0.08, -1

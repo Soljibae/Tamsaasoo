@@ -119,7 +119,7 @@ namespace Manager
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
 		gm.GamePaused = false;
 		Atlas.Init("Assets/Fonts/neodgm_code.ttf", 16);
-		Atlas.SetYStretch(1.5f);
+		Atlas.SetYStretch(1.3f);
 		Atlas.SetUVFlipV(false);
 
 		std::ifstream file("Assets/gap.txt", std::ios::binary);
@@ -142,7 +142,7 @@ namespace Manager
 	{
 		if (SettingPanel.isFullScreen)
 		{
-			Atlas.SetYStretch(1.5f);
+			Atlas.SetYStretch(1.3f);
 		}
 		else
 		{
@@ -179,6 +179,11 @@ namespace Manager
 		}
 		ExpPanel.Update();
 		
+		if (global::KeyInput(AEVK_1))
+		{
+			PC->AddItemToInventory(ITDB->itemList[30]->Clone());
+		}
+
 		if (global::KeyInput(AEVK_F1))
 		{
 			WaveCount = maxWaveCount;

@@ -240,10 +240,10 @@ namespace Manager
 		stageBG.size = { 240.f, 300.f };
 		stageBG.position = { -w / 2.f + stageBG.size.x / 1.2f , 0 }; //-h / 2.f + stageBG.size.y / 1.2f };
 		bgMesh = Utils::CreateNinePatchMesh();
-		stageBGTexture = AEGfxTextureLoad("Assets/UI/stageBG.png");
+		stageBGTexture = AEGfxTextureLoad("Assets/SelectItem_LevelUp.png");
 
 		stageMAP.position = stageBG.position;
-		stageMAP.size = { stageBG.size.x * 1.2f, stageBG.size.y * 1.2f };
+		stageMAP.size = { stageBG.size.x, stageBG.size.y };
 		m_Mesh = Utils::CreateMesh();
 		stageMAPTexture = AEGfxTextureLoad("Assets/UI/stageMAP.png");
 		//flag
@@ -351,15 +351,10 @@ namespace Manager
 	{
 		if (!isActive || gameOverScreen.isGameOver)
 			return;
+
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
 			Utils::DrawNinePatchMesh(weaponOptionButtons[i], ButtonTexture, ButtonMesh, padding);
-			//if (weaponOptions[i] = InGame::GunType::NOGUN)
-			//{
-			//	Manager::Atlas.RenderTextUTF8("Empty", weaponOptionButtons[i].position.x, weaponOptionButtons[i].position.y);
-			//}
-			if (weaponOptions[i] != InGame::GunType::NOGUN)
-			{
 				f32 sizeX = gunIcons[i].size.x, sizeY = gunIcons[i].size.y;
 				f32 startX = gunIcons[i].position.x + sizeX/1.7f, Y = gunIcons[i].position.y + sizeY/2.f;
 
@@ -380,13 +375,22 @@ namespace Manager
 					col = 0xFFFFFFFF;
 					break;
 				}
-				Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 2.f, 3.f, col);
 				Manager::Atlas.RenderTextUTF8(gunDescriptions[weaponOptions[i]], startX, Y + padding * 1.5f , 1.f);
 
+				if (weaponOptions[i] == InGame::GunType::NOGUN)
+				{
+					Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 2.f, 2.5f, col);
+					continue;
+				}
+				else
+				{
+					Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 2.f, 3.f, col);
+				}
 				auto m = Manager::Atlas.GetPrintMetricsUTF8(GunNames[i], 3.f);
 				f32 bigGap = m.height;
 				m = Manager::Atlas.GetPrintMetricsUTF8(gunDescriptions[weaponOptions[i]], 1.f);
 				f32 smallGap = m.height;
+
 
 				std::stringstream ss;
 				std::string inputString;
@@ -413,9 +417,9 @@ namespace Manager
 				ss.str("");
 
 				ss.clear();
-			}
 		}
 	}
+
 	void GunPickUI::Show()
 	{
 		isActive = true;
@@ -440,7 +444,7 @@ namespace Manager
 				break;
 			case InGame::GunType::DESERTEGLE:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/DESERTEGLE.png");
-				GunNames[i] = "DESERT EGLE";
+				GunNames[i] = "DESERT EAGLE";
 				break;
 			case InGame::GunType::MP5:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MP5.png");
@@ -464,7 +468,7 @@ namespace Manager
 				break;
 			case InGame::GunType::MOSINNAGAT:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/MOSINNAGAT.png");
-				GunNames[i] = "MOSINNAGAT";
+				GunNames[i] = "MOSINNAGANT";
 				break;
 			case InGame::GunType::M24:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/M24.png");
@@ -538,6 +542,10 @@ namespace Manager
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/AA12.png");
 				GunNames[i] = "AA12";
 				break;
+			default:
+				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/Empty.png");
+				GunNames[i] = "EMPTY";
+				break;
 			}
 			gunIcons[i].position.x = weaponOptionButtons[i].position.x - weaponOptionButtons[i].size.x / 2.f + gunIcons[i].size.x / 2.f;
 			gunIcons[i].position.y = weaponOptionButtons[i].position.y;
@@ -576,11 +584,12 @@ namespace Manager
 
 	void GunPickUI::ShowStageDraw()
 	{
-		Utils::DrawNinePatchMesh(stageBG, stageBGTexture, bgMesh, 50.f);
+		Utils::DrawNinePatchMesh(stageBG, stageBGTexture, bgMesh, 20.f, 1.f);
 		Utils::DrawObject(stageMAP, stageMAPTexture, m_Mesh, 1.f);
 		//Utils::DrawObject(stageArrow.position, stageArrow.offset, stageArrow.size, stageArrow.Texture, stageArrow.Mesh, 1.f, false);
 		Utils::DrawObject(stageArrow, false);
 	}
+
 	void GunPickUI::Destroy()
 	{
 		for (auto mesh : ButtonMesh)

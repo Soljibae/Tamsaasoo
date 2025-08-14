@@ -92,7 +92,7 @@ namespace InGame
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 15);
 			}
 		}
 
@@ -251,7 +251,7 @@ namespace InGame
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 15);
 			}
 		}
 		if (!bIsJumping)
@@ -448,8 +448,8 @@ namespace InGame
 		position = { 0.f, 0.f };
 		CollisionRadius = 150.f;
 
-		Stats->HP = 6000;
-		Stats->MaxHP = 6000;
+		Stats->HP = 12000;
+		Stats->MaxHP = 12000;
 		Stats->Damage = 1;
 		Stats->MovementSpeed = 100.f;
 		AnimationState = IDLE;
@@ -483,7 +483,7 @@ namespace InGame
 			if (BurnTimer >= global::effectiveBurnRate)
 			{
 				BurnTimer = 0.f;
-				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 5);
+				adjustHealth(-Stats->MaxHP * global::effectiveBurnDamage / 15);
 			}
 		}
 
