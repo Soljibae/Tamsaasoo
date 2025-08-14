@@ -119,45 +119,33 @@ namespace Manager
 		PotionBG.size = { PotionSize.x * PotionBGAsset.x, PotionSize.y * PotionBGAsset.y };
 		PotionBG.Mesh = Utils::CreateMesh();
 		PotionBG.Texture = AEGfxTextureLoad("Assets/HP/PotionBG.png");
-		PotionFull.position.x = PotionBG.position.x;
-		PotionFull.position.y = PotionBG.position.y+10.f;
-		PotionFull.size = PotionBG.size;
+
+		PotionFull.size = { 40.f,40.f };
+		PotionFull.position = Potion.position;
+		//PotionFull.position.x = PotionBG.position.x;
+		//PotionFull.position.y = PotionBG.position.y - PotionBG.size.y / 2.f - PotionFull.size.y;
 		PotionFull.Mesh = Utils::CreateMesh();
-		PotionFull.Texture = AEGfxTextureLoad("Assets/HP/PotionFull.png");
-		
+		PotionFull.Texture = AEGfxTextureLoad("Assets/HP/Q.png");
+
+		plzUsePotion.size.x = PotionBG.size.x * 1.1f;
+		plzUsePotion.size.y = PotionBG.size.y * 1.1f;
+		plzUsePotion.position = PotionBG.position;
+		plzUsePotion.Mesh = PotionBG.Mesh;
+		plzUsePotion.Texture = AEGfxTextureLoad("Assets/HP/PotionBG.png");
+
 		prevPotion = PC->PS->Potion;
 		prevFireRate = GUN->RoundPerSec;
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
+
 		tooltip.Window.size = { maxTextW ,200 };
 		tooltip.Window.position = { 0, 0 };
 		tooltip.WindowMesh = Utils::CreateNinePatchMesh();
 		tooltip.Window.Texture = AEGfxTextureLoad("Assets/tooltipBorder.png");
+
 		Vignetting.position = { 0,0 };
 		Vignetting.size = { w,h };
 		Vignetting.Mesh = Utils::CreateMesh();
 		Vignetting.Texture = AEGfxTextureLoad("Assets/Vignetting.png");
-		
-		stageBG.size = { 240.f, 300.f };
-		stageBG.position = { w / 2.f - stageBG.size.x / 1.2f , -h / 2.f + stageBG.size.y / 1.2f };
-		bgMesh = Utils::CreateNinePatchMesh();
-		stageBGTexture = AEGfxTextureLoad("Assets/UI/stageBG.png");
-
-		stageMAP.position = stageBG.position;
-		stageMAP.size = { stageBG.size.x * 1.2f, stageBG.size.y * 1.2f };
-		m_Mesh = Utils::CreateMesh();
-		stageMAPTexture = AEGfxTextureLoad("Assets/UI/stageMAP.png");
-		//flag
-		stageArrow.offset = { 0,0 };
-		stageArrow.Texture = AEGfxTextureLoad("Assets/UI/RedArrow.png");
-		stageArrow.position = stageBG.position;
-		stageArrow.size = { 50.f, 100.f };
-		stageArrow.TimeAcc = 0.f;
-		stageArrow.FrameTime = 1.f / 59.f;
-		stageArrow.MaxAnimationCount[InGame::IDLE] = 59;
-		stageArrow.AnimationCount = 0;
-		stageArrow.column = 59;
-		stageArrow.row = 1;
-		stageArrow.Mesh = Utils::CreateMesh(stageArrow.row, stageArrow.column);
 
 		SFXManager.AddNewSFX(InGame::UI, "Assets/SFX/UI/HeartBeat.wav", "heart");
 	}
@@ -474,11 +462,77 @@ namespace Manager
 			Utils::DrawObject(HPBG[i], false);
 		for (int i = 0; i < HP.size(); i++)
 			Utils::DrawObject(HP[i], false);
-		Utils::DrawObject(PotionBG, false);
-		Utils::DrawObject(Potion, false);
+
 		if (PC->PS->Potion >= global::MaxPotionGauge)
 		{
-			Utils::DrawObject(PotionFull, false);
+			static f32 g{ 0.f };
+			static f32 timer{ 0.f };
+			static f32 timerQ{ 0.f };
+			static s8 colorDir{ 1 };
+			timer += global::DeltaTime;
+			timerQ += global::DeltaTime;
+			g += global::DeltaTime * 2.f * colorDir;
+			g = std::clamp(g, 0.f, 1.f);
+
+			if (timer > 0.5f)
+			{
+				if (colorDir > 0.0f)
+				{
+					colorDir = -1;
+				}
+				else
+				{
+					colorDir = 1;
+				}
+				timer = 0.f;
+			}
+
+			//if (timerQ > 0.2f)
+			//{
+			//	if (PotionFull.Alpha > 0.5f)
+			//	{
+			//		PotionFull.Alpha = 0.f;
+			//	}
+			//	else
+			//	{
+			//		PotionFull.Alpha = 1.f;
+			//	}
+			//	timerQ = 0.f;
+			//}
+
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+
+			AEGfxSetTransparency(1.0f);
+
+			AEMtx33 scale;
+			AEMtx33Scale(&scale, plzUsePotion.size.x, plzUsePotion.size.y);
+			AEMtx33 tran;
+			AEMtx33Trans(&tran, plzUsePotion.position.x, plzUsePotion.position.y);
+			AEMtx33 transform;
+
+			AEGfxTextureSet(plzUsePotion.Texture, 0.f, 0.f);
+
+			AEMtx33Concat(&transform, &tran, &scale);
+			AEGfxSetTransform(transform.m);
+
+			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
+			AEGfxSetColorToAdd(1.f, g, 0.f, 1.f);
+
+			AEGfxMeshDraw(plzUsePotion.Mesh, AE_GFX_MDM_TRIANGLES);
+
+			AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.f);
+			AEGfxSetColorToAdd(1.f, 1.f, 1.f, 1.f);
+
+		}
+
+		Utils::DrawObject(Potion, false);
+		Utils::DrawObject(PotionBG, false);
+
+		if (PC->PS->Potion >= global::MaxPotionGauge)
+		{
+			Utils::DrawObject(PotionFull, false);//, PotionFull.Alpha);
 		}
 
 		if (GUN->FireTimer < 1.f / GUN->RoundPerSec)
@@ -838,38 +892,6 @@ namespace Manager
 		}
 	}
 
-	void HUDController::ShowStageUpdate()
-	{
-		std::vector<AEVec2> stagePosition = {
-			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 2.f},
-			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 3.2f},
-			{stageBG.position.x,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 4.f) * 4.4f}
-		};
-		switch (global::CurrentStageNumber)
-		{
-		case 1:
-			stageArrow.position = stagePosition[0];
-			break;
-		case 2:
-			stageArrow.position = stagePosition[1];
-			break;
-		case 3:
-			stageArrow.position = stagePosition[2];
-			break;
-		}
-		//flag
-		Utils::UpdateOffset(stageArrow);
-	}
-
-	void HUDController::ShowStageDraw()
-	{
-		Utils::DrawNinePatchMesh(stageBG, stageBGTexture, bgMesh, 50.f);
-		Utils::DrawObject(stageMAP, stageMAPTexture, m_Mesh, 1.f);
-		//Utils::DrawObject(stageArrow.position, stageArrow.offset, stageArrow.size, stageArrow.Texture, stageArrow.Mesh, 1.f, false);
-		Utils::DrawObject(stageArrow, false);
-		//flag
-	}
-
 	void HUDController::Destroy()
 	{
 		if (HPMesh)
@@ -968,6 +990,12 @@ namespace Manager
 			PotionFull.Texture = nullptr;
 		}
 
+		if (plzUsePotion.Texture)
+		{
+			AEGfxTextureUnload(plzUsePotion.Texture);
+			plzUsePotion.Texture = nullptr;
+		}
+
 		for (int i = 0; i < tooltip.WindowMesh.size(); i++)
 		{
 			if (tooltip.WindowMesh[i])
@@ -977,41 +1005,6 @@ namespace Manager
 			}
 		}
 		AEGfxTextureUnload(tooltip.Window.Texture);
-
-		for (auto&mesh : bgMesh)
-		{
-			if (mesh)
-			{
-				AEGfxMeshFree(mesh);
-				mesh = nullptr;
-			}
-		}
-		if (stageBGTexture)
-		{
-			AEGfxTextureUnload(stageBGTexture);
-			stageBGTexture = nullptr;
-		}
-
-		if (m_Mesh)
-		{
-			AEGfxMeshFree(m_Mesh);
-			m_Mesh = nullptr;
-		}
-		if (stageMAPTexture)
-		{
-			AEGfxTextureUnload(stageMAPTexture);
-			stageMAPTexture = nullptr;
-		}
-
-		if (stageArrow.Mesh)
-		{
-			AEGfxMeshFree(stageArrow.Mesh);
-		}
-		if (stageArrow.Texture)
-		{
-			AEGfxTextureUnload(stageArrow.Texture);
-			stageArrow.Texture = nullptr;
-		}
 
 		AEGfxDestroyFont(pFont);
 

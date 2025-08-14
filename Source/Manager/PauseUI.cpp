@@ -699,7 +699,7 @@ namespace Manager
 				start = std::clamp(start, 0.f, 1.f);
 				end = std::clamp(end, 0.f, 1.f);
 				AEGfxMeshFree(Wbutton.Mesh);
-				Wbutton.Mesh = Hekirekiissen(start, end);
+				Wbutton.Mesh = ButtonGlossing(start, end);
 
 				Wbutton.position = target->position;
 				Wbutton.size = target->size;
