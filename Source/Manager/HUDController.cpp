@@ -358,11 +358,11 @@ namespace Manager
 		/*--------Centered can fire UI--------*/
 
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
-		if (global::KeyInput(AEVK_M))
-		{
-			PC->PS->Money += 10;
-			PC->PS->Potion += 100;
-		}
+		//if (global::KeyInput(AEVK_M))
+		//{
+		//	PC->PS->Money += 10;
+		//	PC->PS->Potion += 100;
+		//}
 		/*-----*DEBUG* show me the money *DEBUG*-----*/
 		if (PC->PS->Potion != prevPotion)
 		{

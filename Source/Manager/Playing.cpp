@@ -179,19 +179,19 @@ namespace Manager
 		}
 		ExpPanel.Update();
 		
-		if (global::KeyInput(AEVK_1))
-		{
-			PC->AddItemToInventory(ITDB->itemList[30]->Clone());
-		}
+		//if (global::KeyInput(AEVK_1))
+		//{
+		//	PC->AddItemToInventory(ITDB->itemList[30]->Clone());
+		//}
 
-		if (global::KeyInput(AEVK_F1))
-		{
-			WaveCount = maxWaveCount;
-		}
-		if (global::KeyInput(AEVK_F2))
-		{
-			PC->PS->ExpCount += 1300;
-		}
+		//if (global::KeyInput(AEVK_F1))
+		//{
+		//	WaveCount = maxWaveCount;
+		//}
+		//if (global::KeyInput(AEVK_F2))
+		//{
+		//	PC->PS->ExpCount += 1300;
+		//}
 		global::CurrentStageNumber = static_cast<s32>(CurrentStageType) + 1;
 
 		static bool prevSettingPanelState = false;
@@ -410,10 +410,10 @@ namespace Manager
 					}
 				}*/
 			}
-			if (global::KeyInput(AEVK_G))
-			{
-				gunPickPanel.Show();
-			}
+			//if (global::KeyInput(AEVK_G))
+			//{
+			//	gunPickPanel.Show();
+			//}
 			for (InGame::SoulOrb*& SO : SOs)
 			{
 				SO->Update();

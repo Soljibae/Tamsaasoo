@@ -39,7 +39,12 @@ namespace InGame
 		direction = Dir;
 		
 		FireTimer += global::DeltaTime;
-		if (FireTimer > 1.f / RoundPerSec && AEInputCheckCurr(AEVK_LBUTTON))
+		if (FireTimer > 1.f / RoundPerSec && AEInputCheckCurr(
+			
+			
+			
+			
+			_LBUTTON))
 		{
 			if(gunType == M1911 || gunType == CZ75 || gunType == DESERTEGLE || gunType == MP5 || gunType == MPX || gunType == VECTOR || gunType == P90)
 				Manager::SFXManager.Play("pistol");

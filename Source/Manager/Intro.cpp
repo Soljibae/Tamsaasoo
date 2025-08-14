@@ -30,7 +30,10 @@ namespace Manager
 		{
 			alpha -= global::DeltaTime;
 		}
-		if (sceneTime >= sceneDuration || global::KeyInput(AEVK_SPACE) || global::KeyInput(AEVK_LBUTTON) || global::KeyInput(AEVK_ESCAPE))
+		if (sceneTime >= sceneDuration || global::KeyInput(
+			
+			
+			_SPACE) || global::KeyInput(AEVK_LBUTTON) || global::KeyInput(AEVK_ESCAPE))
 		{
 			gm.SetNextGameState(EGameState::MAINMENU);
 		}
