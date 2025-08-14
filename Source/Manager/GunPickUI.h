@@ -14,6 +14,8 @@ namespace Manager
 		void Show();
 		void Destroy();
 		bool IsActive() const;
+		void ShowStageUpdate();
+		void ShowStageDraw();
 		std::array<InGame::GunType, 3> GenerateRandomGun();
 		bool shouldShowStage = false;
 	private:
@@ -27,6 +29,15 @@ namespace Manager
 		AEGfxVertexList* iconMesh;
 		bool isActive{ false };
 		s32 stageIdx;
+
+		InGame::Actor stageBG;
+		InGame::Actor stageMAP;
+		InGame::Actor stageArrow;
+		std::array<AEGfxVertexList*, 9> bgMesh;
+		AEGfxVertexList* m_Mesh;
+		AEGfxTexture* stageBGTexture;
+		AEGfxTexture* stageMAPTexture;
+
 		s8 pFont;
 		struct Colors
 		{
@@ -34,6 +45,8 @@ namespace Manager
 		};
 		std::array<Colors, 4> colors;
 		std::map<InGame::GunType, std::string> gunDescriptions;
+
+		std::vector<AEVec2> stagePosition;
 	};
 	extern GunPickUI gunPickPanel;
 }

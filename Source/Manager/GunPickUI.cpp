@@ -220,11 +220,12 @@ namespace Manager
 						break;
 					}
 					stageIdx++;
+					u8 idx = std::clamp(global::CurrentStageNumber, 0, 2);
+					stageArrow.position = stagePosition[idx];
 					isActive = false;
-					shouldShowStage = true;
 					gm.Resume();
 				}
-				});
+			});
 			gunIcons[i].size = { buttonWidth / 5.f, buttonHeight };
 			gunIcons[i].position.x = weaponOptionButtons[i].position.x-weaponOptionButtons[i].size.x/2.f+gunIcons[i].size.x/2.f;
 			gunIcons[i].position.y = weaponOptionButtons[i].position.y;
@@ -236,7 +237,32 @@ namespace Manager
 		colors[0] = { 1.0f, 1.0f, 1.0f }, colors[1] = { 0.7f, 0.7f, 1.0f }, colors[2] = { 1.0f, 0.5f, 1.0f }, colors[3] = { 0, 0, 0 };
 		stageIdx = 0;
 		pFont = AEGfxCreateFont("Assets/Fonts/buggy-font.ttf", fontSize);
+		stageBG.size = { 240.f, 300.f };
+		stageBG.position = { -w / 2.f + stageBG.size.x / 1.2f , 0 }; //-h / 2.f + stageBG.size.y / 1.2f };
+		bgMesh = Utils::CreateNinePatchMesh();
+		stageBGTexture = AEGfxTextureLoad("Assets/UI/stageBG.png");
 
+		stageMAP.position = stageBG.position;
+		stageMAP.size = { stageBG.size.x * 1.2f, stageBG.size.y * 1.2f };
+		m_Mesh = Utils::CreateMesh();
+		stageMAPTexture = AEGfxTextureLoad("Assets/UI/stageMAP.png");
+		//flag
+		stageArrow.offset = { 0,0 };
+		stageArrow.Texture = AEGfxTextureLoad("Assets/UI/RedArrow.png");
+		stageArrow.position = { stageBG.position.x -stageBG.size.x/2.f + 20.f,(stageBG.position.y - stageBG.size.y / 2.f)};
+		stageArrow.size = { 40.f, 30.f };
+		stageArrow.TimeAcc = 0.f;
+		stageArrow.FrameTime = 1.f / 59.f;
+		stageArrow.MaxAnimationCount[InGame::IDLE] = 59;
+		stageArrow.AnimationCount = 0;
+		stageArrow.column = 59;
+		stageArrow.row = 1;
+		stageArrow.Mesh = Utils::CreateMesh(stageArrow.row, stageArrow.column);
+		stagePosition = {
+			{stageBG.position.x - stageBG.size.x / 2.f + 20.f,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 55.f) * 19.f},
+			{stageBG.position.x - stageBG.size.x / 2.f + 20.f,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 55.f) * 35.f},
+			{stageBG.position.x - stageBG.size.x / 2.f + 20.f,(stageBG.position.y - stageBG.size.y / 2.f) + (stageBG.size.y / 55.f) * 50.f}
+		};
 		std::ifstream file("Assets/gunDescription.txt", std::ios::binary);
 
 		if (!file.is_open()) {
@@ -275,6 +301,10 @@ namespace Manager
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
 			Utils::DrawNinePatchMesh(weaponOptionButtons[i], ButtonTexture, ButtonMesh, padding);
+			//if (weaponOptions[i] = InGame::GunType::NOGUN)
+			//{
+			//	Manager::Atlas.RenderTextUTF8("Empty", weaponOptionButtons[i].position.x, weaponOptionButtons[i].position.y);
+			//}
 			if (weaponOptions[i] != InGame::GunType::NOGUN)
 			{
 				f32 sizeX = gunIcons[i].size.x, sizeY = gunIcons[i].size.y;
@@ -290,7 +320,23 @@ namespace Manager
 					colors[stageIdx].b,
 					1.f
 				);*/
-				Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 5.f, 3.f);
+				u32 col = 0xFFFFFFFF;
+				switch (global::CurrentStageNumber)
+				{
+				case 1:
+					col = 0xFFFFFFFF;
+					break;
+				case 2:
+					col = 0xB2B2FFFF;
+					break;
+				case 3:
+					col = 0xFF7FFFFF;
+					break;
+				default:
+					col = 0xFFFFFFFF;
+					break;
+				}
+				Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 5.f, 3.f, col);
 				/*AEGfxGetPrintSize(pFont, gunDescriptions[weaponOptions[i]].c_str(), descDrawSize, &lw, &lh);
 				lh *= 2.f;*/
 				/*AEGfxPrint(pFont, gunDescriptions[weaponOptions[i]].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), descDrawSize,
@@ -302,6 +348,7 @@ namespace Manager
 	void GunPickUI::Show()
 	{
 		isActive = true;
+		shouldShowStage = true;
 		InGame::GetNextType(PC->HoldingGun->gunType, weaponOptions[0], weaponOptions[1], weaponOptions[2]);
 		for (int i = 0; i < weaponOptions.size(); i++)
 		{
@@ -426,6 +473,43 @@ namespace Manager
 		}
 		gm.Pause();
 	}
+
+	void GunPickUI::ShowStageUpdate()
+	{
+		f32 bottomY{ (stageBG.position.y - stageBG.size.y / 2.f) };
+		f32 destinationY{ 0.f };
+
+		switch (global::CurrentStageNumber)
+		{
+		case 1:
+			destinationY = stagePosition[0].y;
+			break;
+		case 2:
+			destinationY = stagePosition[1].y;
+			break;
+		case 3:
+			destinationY = stagePosition[2].y;
+			break;
+		}
+
+		if (stageArrow.position.y < destinationY)
+		{
+			stageArrow.position.y += global::DeltaTime*50;
+		}
+		else if (stageArrow.position.y > destinationY)
+		{
+			stageArrow.position.y = destinationY;
+		}
+		Utils::UpdateOffset(stageArrow);
+	}
+
+	void GunPickUI::ShowStageDraw()
+	{
+		Utils::DrawNinePatchMesh(stageBG, stageBGTexture, bgMesh, 50.f);
+		Utils::DrawObject(stageMAP, stageMAPTexture, m_Mesh, 1.f);
+		//Utils::DrawObject(stageArrow.position, stageArrow.offset, stageArrow.size, stageArrow.Texture, stageArrow.Mesh, 1.f, false);
+		Utils::DrawObject(stageArrow, false);
+	}
 	void GunPickUI::Destroy()
 	{
 		for (auto mesh : ButtonMesh)
@@ -433,13 +517,50 @@ namespace Manager
 			if(mesh)
 				AEGfxMeshFree(mesh);
 		}
+		AEGfxTextureUnload(ButtonTexture);
+
 		AEGfxMeshFree(iconMesh);
 		for (int i = 0; i < gunIcons.size(); i++)
 		{
 			if(gunIcons[i].Texture)
 				AEGfxTextureUnload(gunIcons[i].Texture);
 		}
-		AEGfxTextureUnload(ButtonTexture);
+
+		for (auto& mesh : bgMesh)
+		{
+			if (mesh)
+			{
+				AEGfxMeshFree(mesh);
+				mesh = nullptr;
+			}
+		}
+		if (stageBGTexture)
+		{
+			AEGfxTextureUnload(stageBGTexture);
+			stageBGTexture = nullptr;
+		}
+
+		if (m_Mesh)
+		{
+			AEGfxMeshFree(m_Mesh);
+			m_Mesh = nullptr;
+		}
+		if (stageMAPTexture)
+		{
+			AEGfxTextureUnload(stageMAPTexture);
+			stageMAPTexture = nullptr;
+		}
+
+		if (stageArrow.Mesh)
+		{
+			AEGfxMeshFree(stageArrow.Mesh);
+		}
+		if (stageArrow.Texture)
+		{
+			AEGfxTextureUnload(stageArrow.Texture);
+			stageArrow.Texture = nullptr;
+		}
+
 		AEGfxDestroyFont(pFont);
 	}
 	bool GunPickUI::IsActive() const

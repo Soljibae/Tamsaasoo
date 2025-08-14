@@ -20,7 +20,7 @@ namespace Manager
 		QUIT = 2,
 		LASTBUTTON = QUIT
 	};
-	AEGfxVertexList* Hekirekiissen(f32 start, f32 end)
+	AEGfxVertexList* ButtonGlossing(f32 start, f32 end)
 	{
 		s32 c = 0xFFFFFFFF;
 		f32 tstart = std::clamp(start + 0.25f, 0.25f, 1.0f);
@@ -188,7 +188,7 @@ namespace Manager
 			start = std::clamp(start, 0.f, 1.f);
 			end = std::clamp(end, 0.f, 1.f);
 			AEGfxMeshFree(Wbutton.Mesh);
-			Wbutton.Mesh = Hekirekiissen(start, end);
+			Wbutton.Mesh = ButtonGlossing(start, end);
 
 			Wbutton.position = target->position;
 			Wbutton.size = target->size;

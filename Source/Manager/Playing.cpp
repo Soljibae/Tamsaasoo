@@ -218,21 +218,6 @@ namespace Manager
 
 		if (!gm.GamePaused)
 		{
-			// Todo: create logic
-			if (gunPickPanel.shouldShowStage)
-			{
-				static f32 minimapTimer{ 0.f };
-				minimapTimer += global::DeltaTime;
-				if (minimapTimer < 7.f)
-				{
-					HUD.ShowStageUpdate();
-				}
-				else
-				{
-					minimapTimer = 0.f;
-					gunPickPanel.shouldShowStage = false;
-				}
-			}
 			if (bIsJumping)
 			{
 				JumpAnimationTimer += global::DeltaTime;
@@ -699,7 +684,13 @@ namespace Manager
 		else if (gunPickPanel.IsActive() && !isChangingStage)
 		{
 			gunPickPanel.Update();
+			gunPickPanel.ShowStageUpdate();
 		}
+		else if (gunPickPanel.IsActive() && isChangingStage)
+		{
+			gunPickPanel.ShowStageUpdate();
+		}
+
 		if (pausePanel.isActive || pausePanel.tapPressed)
 		{
 			pausePanel.Update();
@@ -775,11 +766,6 @@ namespace Manager
 			HUD.Draw();
 			ExpPanel.Draw();
 		}
-		if (gunPickPanel.shouldShowStage && !gm.GamePaused)
-		{
-			// Todo: show stage
-			HUD.ShowStageDraw();
-		}
 		for (InGame::SoulOrb* SO : SOs)
 		{
 			SO->Draw();
@@ -801,6 +787,7 @@ namespace Manager
 		else if (gunPickPanel.IsActive())
 		{
 			gunPickPanel.Draw();
+			gunPickPanel.ShowStageDraw();
 		}
 		else if (pausePanel.isActive || pausePanel.tapPressed)
 		{
