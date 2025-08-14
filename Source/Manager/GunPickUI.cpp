@@ -257,6 +257,59 @@ namespace Manager
 		}
 
 		file.close();
+
+		std::ifstream fileStat("Assets/statKR.txt", std::ios::binary);
+
+		if (!fileStat.is_open()) {
+			std::cerr << "Error: Could not open description file: " << std::endl;
+			return;
+		}
+
+		for (int i = 0; i <= static_cast<int>(StatsForUI::STAT_LAST); i++)
+		{
+			std::getline(fileStat, line);
+			if (!line.empty() && line.back() == '\r')
+			{
+				line.pop_back();
+			}
+			statsNameKR[static_cast<StatsForUI>(i)] = line;
+		}
+
+		fileStat.close();
+
+		InitGunStats();
+
+	}
+	void GunPickUI::InitGunStats()
+	{
+		gunStats[InGame::GunType::NOGUN] = { 1.f, 1.f, 1, 0 };
+		gunStats[InGame::GunType::SAWEDOFFSHOTGUN] = { 1.1f, 0.7f, 1, 3 };
+		gunStats[InGame::GunType::DOUBLEBARREL] = { 2.f, 1.0f, 1, 5 };
+		gunStats[InGame::GunType::KS23] = { 5.f, 0.2f, 3, 5 };
+		gunStats[InGame::GunType::M1897] = { 1.f, 2.0f, 1, 5 };
+		gunStats[InGame::GunType::BENELLIM4] = { 1.f, 3.f, 1, 5 };
+		gunStats[InGame::GunType::SAIGA12] = { 1.f, 2.0f, 1, 5 };
+		gunStats[InGame::GunType::AA12] = { 1.f, 3.5f, 1, 5 };
+		gunStats[InGame::GunType::M1911] = { 1.2f, 1.3f, 2, 1 };
+		gunStats[InGame::GunType::MOSINNAGAT] = { 3.f, 1.0f, 5, 1 };
+		gunStats[InGame::GunType::M24] = { 5.f, 2.f, 10, 1 };
+		gunStats[InGame::GunType::RAILGUN] = { 10.f, 1.f, 20, 1 };
+		gunStats[InGame::GunType::DESERTEGLE] = { 3.f, 1.f, 3, 1 };
+		gunStats[InGame::GunType::BEOWOLF] = { 5.f, 2.f, 5, 1 };
+		gunStats[InGame::GunType::NITRO700] = { 20.f, 0.5f, 40, 1 };
+		gunStats[InGame::GunType::FNFAL] = { 3.f, 1.0f, 1, 1 };
+		gunStats[InGame::GunType::M82BARRETT] = { 10.f, 0.5f, 10, 1 };
+		gunStats[InGame::GunType::CZ75] = { 0.75f, 2.5f, 1, 1 };
+		gunStats[InGame::GunType::AR15] = { 1.f, 2.4f, 2, 1 };
+		gunStats[InGame::GunType::M110] = { 1.6f, 1.6f, 5, 1 };
+		gunStats[InGame::GunType::MP5] = { 1.f, 3.0f, 1, 1 };
+		gunStats[InGame::GunType::MPX] = { 1.f, 3.0f, 2, 1 };
+		gunStats[InGame::GunType::VECTOR] = { 0.5f, 10.f, 1, 1 };
+		gunStats[InGame::GunType::P90] = { 1.f, 5.f, 3, 1 };
+		gunStats[InGame::GunType::BREN] = { 1.f, 2.f, 3, 1 };
+		gunStats[InGame::GunType::MICROGUN] = { 1.f, 10.f, 1, 1 };
+		gunStats[InGame::GunType::M249] = { 1.f, 3.f, 2, 1 };
+		gunStats[InGame::GunType::M2] = { 10.f, 1.f, 5, 1 };
 	}
 	void GunPickUI::Update()
 	{
@@ -279,23 +332,41 @@ namespace Manager
 			{
 				f32 sizeX = gunIcons[i].size.x, sizeY = gunIcons[i].size.y;
 				f32 startX = gunIcons[i].position.x + sizeX/1.7f, Y = gunIcons[i].position.y + sizeY/2.f;
-				f32 lw, lh;
-				AEGfxGetPrintSize(pFont, GunNames[i].c_str(), nameDrawSize, &lw, &lh);
-				lw *= w, lh *= h;
 
 				Utils::DrawObject(gunIcons[i], gunIcons[i].Texture, iconMesh);
-				/*AEGfxPrint(pFont, GunNames[i].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), nameDrawSize,
-					colors[stageIdx].r,
-					colors[stageIdx].g,
-					colors[stageIdx].b,
-					1.f
-				);*/
-				Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 5.f, 3.f);
-				/*AEGfxGetPrintSize(pFont, gunDescriptions[weaponOptions[i]].c_str(), descDrawSize, &lw, &lh);
-				lh *= 2.f;*/
-				/*AEGfxPrint(pFont, gunDescriptions[weaponOptions[i]].c_str(), startX/(w/2.f), (Y-lh-padding)/(h/2.f), descDrawSize,
-					1.f, 1.f, 1.f, 1.f);*/
-				Manager::Atlas.RenderTextUTF8(gunDescriptions[weaponOptions[i]], startX, Y - padding, 1.f);
+				Manager::Atlas.RenderTextUTF8(GunNames[i], startX, Y - padding * 2.f, 3.f);
+				Manager::Atlas.RenderTextUTF8(gunDescriptions[weaponOptions[i]], startX, Y + padding * 1.5f , 1.f);
+
+				auto m = Manager::Atlas.GetPrintMetricsUTF8(GunNames[i], 3.f);
+				f32 bigGap = m.height;
+				m = Manager::Atlas.GetPrintMetricsUTF8(gunDescriptions[weaponOptions[i]], 1.f);
+				f32 smallGap = m.height;
+
+				std::stringstream ss;
+				std::string inputString;
+
+				ss << "-" << statsNameKR[StatsForUI::DAMAGE_RATIO] << ": " << gunStats[weaponOptions[i]].damage;
+				inputString = ss.str();
+				Manager::Atlas.RenderTextUTF8(inputString, startX, Y - padding * 2.f - smallGap * 1.5f, 1.f);
+				ss.str("");
+
+				ss << "-" << statsNameKR[StatsForUI::FIRE_RATE_RATIO] << ": " << gunStats[weaponOptions[i]].fireRate;
+				inputString = ss.str();
+				Manager::Atlas.RenderTextUTF8(inputString, startX, Y - padding * 2.f - smallGap * 2.5f, 1.f);
+				ss.str("");
+
+				s32 hitCount = gunStats[weaponOptions[i]].hitCount - 1;
+				ss << "-" << statsNameKR[StatsForUI::HIT_COUNT] << ": " << hitCount;
+				inputString = ss.str();
+				Manager::Atlas.RenderTextUTF8(inputString, startX, Y - padding * 2.f - smallGap * 3.5f, 1.f);
+				ss.str("");
+
+				ss << "-" << statsNameKR[StatsForUI::PROJECTILE_COUNT] << ": " << gunStats[weaponOptions[i]].projectileCount;
+				inputString = ss.str();
+				Manager::Atlas.RenderTextUTF8(inputString, startX, Y - padding * 2.f - smallGap * 4.5f, 1.f);
+				ss.str("");
+
+				ss.clear();
 			}
 		}
 	}
@@ -395,7 +466,6 @@ namespace Manager
 			case InGame::GunType::SAWEDOFFSHOTGUN:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/SAWEDOFFSHOTGUN.png");
 				GunNames[i] = "SHORTY";
-				GunDescriptions[i] = "Shot Gun, Slow rate of fire";
 				break;
 			case InGame::GunType::DOUBLEBARREL:
 				gunIcons[i].Texture = AEGfxTextureLoad("Assets/Guns/DOUBLEBARREL.png");

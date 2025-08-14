@@ -9,6 +9,7 @@
 #include <algorithm>
 #include "MainMenu.h"
 #include <fstream>
+#include "GunPickUI.h"
 
 namespace Manager
 {
@@ -147,8 +148,40 @@ namespace Manager
 
 		shouldShowGunName = false;
 		prevGunType = PC->HoldingGun->gunType;
-	}
 
+		InitGunStats();
+	}
+	void PauseUI::InitGunStats()
+	{
+		gunStats[InGame::GunType::NOGUN] = { 1.f, 1.f, 1, 0 };
+		gunStats[InGame::GunType::SAWEDOFFSHOTGUN] = { 1.1f, 0.7f, 1, 3 };
+		gunStats[InGame::GunType::DOUBLEBARREL] = { 2.f, 1.0f, 1, 5 };
+		gunStats[InGame::GunType::KS23] = { 5.f, 0.2f, 3, 5 };
+		gunStats[InGame::GunType::M1897] = { 1.f, 2.0f, 1, 5 };
+		gunStats[InGame::GunType::BENELLIM4] = { 1.f, 3.f, 1, 5 };
+		gunStats[InGame::GunType::SAIGA12] = { 1.f, 2.0f, 1, 5 };
+		gunStats[InGame::GunType::AA12] = { 1.f, 3.5f, 1, 5 };
+		gunStats[InGame::GunType::M1911] = { 1.2f, 1.3f, 2, 1 };
+		gunStats[InGame::GunType::MOSINNAGAT] = { 3.f, 1.0f, 5, 1 };
+		gunStats[InGame::GunType::M24] = { 5.f, 2.f, 10, 1 };
+		gunStats[InGame::GunType::RAILGUN] = { 10.f, 1.f, 20, 1 };
+		gunStats[InGame::GunType::DESERTEGLE] = { 3.f, 1.f, 3, 1 };
+		gunStats[InGame::GunType::BEOWOLF] = { 5.f, 2.f, 5, 1 };
+		gunStats[InGame::GunType::NITRO700] = { 20.f, 0.5f, 40, 1 };
+		gunStats[InGame::GunType::FNFAL] = { 3.f, 1.0f, 1, 1 };
+		gunStats[InGame::GunType::M82BARRETT] = { 10.f, 0.5f, 10, 1 };
+		gunStats[InGame::GunType::CZ75] = { 0.75f, 2.5f, 1, 1 };
+		gunStats[InGame::GunType::AR15] = { 1.f, 2.4f, 2, 1 };
+		gunStats[InGame::GunType::M110] = { 1.6f, 1.6f, 5, 1 };
+		gunStats[InGame::GunType::MP5] = { 1.f, 3.0f, 1, 1 };
+		gunStats[InGame::GunType::MPX] = { 1.f, 3.0f, 2, 1 };
+		gunStats[InGame::GunType::VECTOR] = { 0.5f, 10.f, 1, 1 };
+		gunStats[InGame::GunType::P90] = { 1.f, 5.f, 3, 1 };
+		gunStats[InGame::GunType::BREN] = { 1.f, 2.f, 3, 1 };
+		gunStats[InGame::GunType::MICROGUN] = { 1.f, 10.f, 1, 1 };
+		gunStats[InGame::GunType::M249] = { 1.f, 3.f, 2, 1 };
+		gunStats[InGame::GunType::M2] = { 10.f, 1.f, 5, 1 };
+	}
 	void PauseUI::Update()
 	{
 		if (gameOverScreen.isGameOver)
@@ -179,7 +212,9 @@ namespace Manager
 		statsString.push_back(ss.str());
 		ss.str("");
 
-		ss << statsNameKR[StatsForUI::HIT_COUNT] << ": " << static_cast<s32>(PC->PS->effectiveHitCount);
+		s32 hitcount = static_cast<s32>(PC->PS->effectiveHitCount) - 1;
+
+		ss << statsNameKR[StatsForUI::HIT_COUNT] << ": " << hitcount;
 		statsString.push_back(ss.str());
 		ss.str("");
 
@@ -875,9 +910,10 @@ namespace Manager
 			col = 0xFFFFFFFF;
 			break;
 		}
+		f32 padding = 8.f;
 		auto m = Manager::Atlas.GetPrintMetricsUTF8(m_gunName, 1.7f);
-		Manager::Atlas.RenderTextUTF8(m_gunName, m_gunIcon.position.x - m.width/2.f, (m_gunIcon.position.y - m_gunSlot.size.y / 2.f + 5.f), 1.7f, col);
-		//AEGfxPrint(pFont, m_gunName.c_str(), m_gunIcon.position.x / (global::ScreenWidth / 2.f) - lw/2.f, (m_gunIcon.position.y-m_gunSlot.size.y/2.f + 5.f) / (global::ScreenHeight / 2.f), textDrawSize, r, g, b, 1);
+		Manager::Atlas.RenderTextUTF8(m_gunName, m_gunIcon.position.x - m_gunIcon.size.x / 2.f + padding, (m_gunIcon.position.y + m_gunSlot.size.y / 2.f - m.height / 2.f - padding * 1.8f), 1.7f, col);
+		
 	}
 
 	void PauseUI::Destroy()

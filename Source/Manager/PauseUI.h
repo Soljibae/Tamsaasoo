@@ -6,8 +6,11 @@
 #include "../InGame/PlayerCharacter.h"
 #include <array>
 #include <unordered_map>
+
 namespace Manager
 {
+	struct GunStat;
+
 	enum StatsForUI {
 		DAMAGE,
 		FIRE_RATE,
@@ -20,6 +23,9 @@ namespace Manager
 		PROC_CHANCE,
 		MINION_DAMAGE,
 		HP,
+		DAMAGE_RATIO,
+		FIRE_RATE_RATIO,
+		PROJECTILE_COUNT,
 		STAT_LAST
 	};
 	// Pause menu
@@ -27,6 +33,7 @@ namespace Manager
 	{
 	public:
 		void Init(InGame::PlayerCharacter* InPC);
+		void InitGunStats();
 		void Update();
 		void Draw();
 		void Destroy();
@@ -65,6 +72,7 @@ namespace Manager
 		Button m_gunSlot;
 		bool shouldShowGunName;
 		InGame::GunType prevGunType;
+		std::map<InGame::GunType, GunStat> gunStats;
 	};
 	extern PauseUI pausePanel;
 }
