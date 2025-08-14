@@ -722,7 +722,7 @@ namespace InGame
 		if (WaveAttackSpawnTimer > WaveAttackChamberTimer)
 		{
 			bIsWaving = true;
-			if (WaveAttackSpawnTimer > WaveAttackChamberTimer * 2)
+			if (WaveAttackSpawnTimer > WaveAttackChamberTimer * 1.5)
 			{
 				bIsWaving = false;
 				WaveAttackSpawnTimer = 0;
@@ -752,8 +752,8 @@ namespace InGame
 		}
 		if (bIsWaving)
 		{
-			const int bulletsPerWave = 40;
-			const float angleRangeDeg = 30.0f;
+			const int bulletsPerWave = 30;
+			const float angleRangeDeg = 20.0f;
 			const float angleRangeRad = angleRangeDeg * (3.1415926f / 180.0f);
 			const float frequency = 10.0f;
 			const float intervalTime = 0.03f;
