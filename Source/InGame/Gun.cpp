@@ -104,6 +104,7 @@ namespace InGame
 
 						Projectile* PP = GS->PPPool.back();
 						GS->PPPool.pop_back();
+						GetProjectileSize();
 						PP->Spawn(pelletDir, Pos, Source);
 						GS->PPs.push_back(PP);
 					}

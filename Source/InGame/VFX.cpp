@@ -45,13 +45,14 @@ namespace InGame
 	{
 		Actor::Init();
 		Texture = AEGfxTextureLoad("Assets/VFX.png");
-		Mesh = Utils::CreateMesh(6,9);
+		Mesh = Utils::CreateMesh(7,9);
 		MaxAnimationCount[WarningCircle] = 9;
 		MaxAnimationCount[WarningSquare] = 9;
 		MaxAnimationCount[Explosion] = 9;
 		MaxAnimationCount[Burn] = 9;
 		MaxAnimationCount[Laser] = 9;
 		MaxAnimationCount[BlackHole] = 9;
+		MaxAnimationCount[HitMark] = 4;
 	}
 	void VFXManager::Update()
 	{
@@ -87,7 +88,7 @@ namespace InGame
 				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
 				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
 				offset.x = DataItem->Animationoffset;
-				offset.y = DataItem->Type/6.f;
+				offset.y = DataItem->Type / 7.f;
 				direction = DataItem->Direction;
 				Utils::DrawObjectWithDirection(*this, 1.f);
 			}
@@ -96,10 +97,9 @@ namespace InGame
 				AEVec2Set(&position, DataItem->position.x, DataItem->position.y);
 				AEVec2Set(&size, DataItem->size.x, DataItem->size.y);
 				offset.x = DataItem->Animationoffset;
-				offset.y = DataItem->Type / 6.f;
+				offset.y = DataItem->Type / 7.f;
 				Utils::DrawObject(*this);
 			}
-			
 		}
 	}
 	void VFXManager::Destroy()
@@ -147,7 +147,13 @@ namespace InGame
 				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
 				break;
 			}
-
+			case VFXType::HitMark:
+			{
+				NewData->MaxTimer = Duration;
+				AEVec2Set(&NewData->size, InSize.x, InSize.y);
+				AEVec2Set(&NewData->position, InPosition.x, InPosition.y);
+				break;
+			}
 		}
 		DrawItemList.push_back(NewData);
 	}
