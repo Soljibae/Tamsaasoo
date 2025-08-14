@@ -723,7 +723,7 @@ void Utils::CheckCollision(InGame::Projectile& Projectile, std::vector<InGame::E
 					
 				
 				if (!Projectile.isExplosive)
-					Projectile.OnHit();
+					Projectile.OnHit(result);
 			}
 		}
 		else

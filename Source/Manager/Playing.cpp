@@ -492,6 +492,7 @@ namespace Manager
 				{
 					PPPool.push_back(PP);
 					PP->bIsPandingKill = false;
+					PP->HitTargets.empty();
 					PPs[i] = PPs.back();
 					PPs.pop_back();
 				}

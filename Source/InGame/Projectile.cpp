@@ -214,13 +214,20 @@ void InGame::Projectile::OnHit(EnemyCharacter* target)
 	{
 		return;
 	}
-
+	for (Actor* HitTarget : HitTargets)
+	{
+		if (HitTarget == target)
+		{
+			return;
+		}
+	}
 	HitCount--;
 	if (isExplosive)
 	{
 		Explode(target);
 		BulletSpeed = 0.f;
-		CollisionRadius = 0.f; // �浹 �ݰ��� 0���� ����� �߰� �浹�� �����ϴ�.
+		CollisionRadius = 0.f;
+		HitTargets.push_back(target);
 	}
 }
 
