@@ -126,8 +126,8 @@ namespace InGame
 
 	void Gun::GetProjectileSize()
 	{
-		float Normalized = (Source->PS->effectiveDamage - 0.5f) / (100.f - 0.5f);
-		float Mapped = 10.f + Normalized * (35.f - 10.f);
+		float Normalized = (Source->PS->effectiveDamage - 0.5f) / (50.f - 0.5f);
+		float Mapped = 15.f + Normalized * (40.f - 15.f);
 
 		Source->Stats->ProjectileSize.x = Mapped;
 		Source->Stats->ProjectileSize.y = Mapped;

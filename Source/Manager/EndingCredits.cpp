@@ -9,10 +9,10 @@ namespace Manager
 	{
         EndingImage = new InGame::Actor;
         EndingImage->Mesh = Utils::CreateMesh(1, 1);
-        EndingImage->Texture = AEGfxTextureLoad("Assets/KeyDescription.png");
+        EndingImage->Texture = AEGfxTextureLoad("Assets/EndingCreadit.png");
         PressAnyKeyImage = new InGame::Actor;
         PressAnyKeyImage->Mesh = Utils::CreateMesh(1, 1);
-        PressAnyKeyImage->Texture = AEGfxTextureLoad("Assets/AnyKeyToStart.png");
+        PressAnyKeyImage->Texture = AEGfxTextureLoad("Assets/AnyKeyToEnd.png");
         PressAnyKeyImage->size.x = 425.f;
         PressAnyKeyImage->size.y = 46.f;
 	}
