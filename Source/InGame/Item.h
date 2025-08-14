@@ -75,7 +75,7 @@ namespace InGame
 		s32 effectRow, effectColumn;
 	};
 	//============================================= ID_1
-	class Item_1 : public Item // to do change class name
+	class Item_1 : public Item 
 	{
 	public:
 		Item_1() = default;
@@ -90,7 +90,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_2
-	class Item_2 : public Item // to do change class name
+	class Item_2 : public Item 
 	{
 	public:
 		Item_2() = default;
@@ -111,7 +111,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_3
-	class Item_3 : public Item // to do change class name
+	class Item_3 : public Item 
 	{
 	public:
 		Item_3() = default;
@@ -126,7 +126,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_4
-	class Item_4 : public SkillEffectItem // to do change class name
+	class Item_4 : public SkillEffectItem 
 	{
 	public:
 		Item_4() = default;
@@ -143,7 +143,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_5
-	class Item_5 : public Item // to do change class name
+	class Item_5 : public Item 
 	{
 	public:
 		Item_5() = default;
@@ -158,7 +158,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_6
-	class Item_6 : public Item // to do change class name
+	class Item_6 : public Item 
 	{
 	public:
 		Item_6() = default;
@@ -173,7 +173,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_7
-	class Item_7 : public Item // to do change class name
+	class Item_7 : public Item 
 	{
 	public:
 		Item_7() = default;
@@ -188,7 +188,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_8
-	class Item_8 : public Item // to do change class name
+	class Item_8 : public Item 
 	{
 	public:
 		Item_8() = default;
@@ -203,7 +203,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_9
-	class Item_9 : public SkillEffectItem // to do change class name
+	class Item_9 : public SkillEffectItem 
 	{
 	public:
 		Item_9() = default;
@@ -222,7 +222,7 @@ namespace InGame
 		virtual void OnDamaged();
 	};
 	//============================================= ID_10
-	class Item_10 : public Item // to do change class name
+	class Item_10 : public Item 
 	{
 	public:
 		Item_10() = default;
@@ -237,7 +237,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_11
-	class Item_11 : public SkillEffectItem // to do change class name
+	class Item_11 : public SkillEffectItem 
 	{
 	public:
 		Item_11() = default;
@@ -258,7 +258,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_12
-	class Item_12 : public Item // to do change class name
+	class Item_12 : public Item 
 	{
 	public:
 		Item_12() = default;
@@ -273,7 +273,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_13
-	class Item_13 : public SkillEffectItem // to do change class name
+	class Item_13 : public SkillEffectItem 
 	{
 	public:
 		Item_13() = default;
@@ -293,7 +293,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_14
-	class Item_14 : public Item // to do change class name
+	class Item_14 : public Item 
 	{
 	public:
 		Item_14() = default;
@@ -310,7 +310,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_15
-	class Item_15 : public Item // to do change class name
+	class Item_15 : public Item 
 	{
 	public:
 		Item_15() = default;
@@ -325,7 +325,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_16
-	class Item_16 : public Item // to do change class name
+	class Item_16 : public Item 
 	{
 	public:
 		Item_16() = default;
@@ -342,7 +342,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_17
-	class Item_17 : public Item // to do change class name
+	class Item_17 : public Item 
 	{
 	public:
 		Item_17() = default;
@@ -360,7 +360,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_18
-	class Item_18 : public Item // to do change class name
+	class Item_18 : public Item 
 	{
 	public:
 		Item_18() = default;
@@ -375,7 +375,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_19
-	class Item_19 : public Item // to do change class name
+	class Item_19 : public Item 
 	{
 	public:
 		Item_19() = default;
@@ -393,7 +393,7 @@ namespace InGame
 		virtual void OnDamaged();
 	};
 	//============================================= ID_20
-	class Item_20 : public SkillEffectItem // to do change class name
+	class Item_20 : public SkillEffectItem 
 	{
 	public:
 		Item_20() = default;
@@ -410,7 +410,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_21
-	class Item_21 : public Item // to do change class name
+	class Item_21 : public Item 
 	{
 	public:
 		Item_21() = default;
@@ -425,7 +425,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_22
-	class Item_22 : public Item // to do change class name
+	class Item_22 : public Item 
 	{
 	public:
 		Item_22() = default;
@@ -440,7 +440,7 @@ namespace InGame
 		virtual void OnDamaged();
 	};
 	//============================================= ID_23
-	class Item_23 : public Item // to do change class name
+	class Item_23 : public Item 
 	{
 	public:
 		Item_23() = default;
@@ -457,7 +457,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_24
-	class Item_24 : public Item // to do change class name
+	class Item_24 : public Item 
 	{
 	public:
 		Item_24() = default;
@@ -472,7 +472,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_25
-	class Item_25 : public Item // to do change class name
+	class Item_25 : public Item 
 	{
 	public:
 		Item_25() = default;
@@ -487,7 +487,7 @@ namespace InGame
 		virtual void OnDamaged();
 	};
 	//============================================= ID_26
-	class Item_26 : public Item // to do change class name
+	class Item_26 : public Item 
 	{
 	public:
 		Item_26() = default;
@@ -502,7 +502,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_27
-	class Item_27 : public SkillEffectItem // to do change class name
+	class Item_27 : public SkillEffectItem 
 	{
 	public:
 		Item_27() = default;
@@ -521,7 +521,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_28
-	class Item_28 : public Item // to do change class name
+	class Item_28 : public Item 
 	{
 	public:
 		Item_28() = default;
@@ -536,7 +536,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_29
-	class Item_29 : public Item // to do change class name
+	class Item_29 : public Item 
 	{
 	public:
 		Item_29() = default;
@@ -551,7 +551,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_30
-	class Item_30 : public SkillEffectItem // to do change class name
+	class Item_30 : public SkillEffectItem 
 	{
 	public:
 		Item_30() = default;
@@ -568,7 +568,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_31
-	class Item_31 : public SkillEffectItem // to do change class name
+	class Item_31 : public SkillEffectItem 
 	{
 	public:
 		Item_31() = default;
@@ -595,7 +595,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_32
-	class Item_32 : public SkillEffectItem // to do change class name
+	class Item_32 : public SkillEffectItem 
 	{
 	public:
 		Item_32() = default;
@@ -625,7 +625,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_33
-	class Item_33 : public SkillEffectItem // to do change class name
+	class Item_33 : public SkillEffectItem 
 	{
 	public:
 		Item_33() = default;
@@ -650,7 +650,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_34
-	class Item_34 : public Item // to do change class name
+	class Item_34 : public Item 
 	{
 	public:
 		Item_34() = default;
@@ -665,7 +665,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_35
-	class Item_35 : public Item // to do change class name
+	class Item_35 : public Item 
 	{
 	public:
 		Item_35() = default;
@@ -680,7 +680,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_36
-	class Item_36 : public Item // to do change class name
+	class Item_36 : public Item 
 	{
 	public:
 		Item_36() = default;
@@ -695,7 +695,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_37
-	class Item_37 : public Item // to do change class name
+	class Item_37 : public Item 
 	{
 	public:
 		Item_37() = default;
@@ -710,7 +710,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_38
-	class Item_38 : public Item // to do change class name
+	class Item_38 : public Item 
 	{
 	public:
 		Item_38() = default;
@@ -725,7 +725,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_39
-	class Item_39 : public Item // to do change class name
+	class Item_39 : public Item 
 	{
 	public:
 		Item_39() = default;
@@ -740,7 +740,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_40
-	class Item_40 : public Item // to do change class name
+	class Item_40 : public Item 
 	{
 	public:
 		Item_40() = default;
@@ -755,7 +755,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_41
-	class Item_41 : public Item // to do change class name
+	class Item_41 : public Item 
 	{
 	public:
 		Item_41() = default;
@@ -770,7 +770,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_42
-	class Item_42 : public Item // to do change class name
+	class Item_42 : public Item 
 	{
 	public:
 		Item_42() = default;
@@ -785,7 +785,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_43
-	class Item_43 : public Item // to do change class name
+	class Item_43 : public Item 
 	{
 	public:
 		Item_43() = default;
@@ -800,7 +800,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_44
-	class Item_44 : public Item // to do change class name
+	class Item_44 : public Item 
 	{
 	public:
 		Item_44() = default;
@@ -816,7 +816,7 @@ namespace InGame
 		virtual void OnDamaged() {}
 	};
 	//============================================= ID_45
-	class Item_45 : public Item // to do change class name
+	class Item_45 : public Item 
 	{
 	public:
 		Item_45() = default;
