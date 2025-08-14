@@ -9,7 +9,7 @@ namespace Manager
 	{
         EndingImage = new InGame::Actor;
         EndingImage->Mesh = Utils::CreateMesh(1, 1);
-        EndingImage->Texture = AEGfxTextureLoad("Assets/EndingCreadit.png");
+        EndingImage->Texture = AEGfxTextureLoad("Assets/EndingCredit.png");
         PressAnyKeyImage = new InGame::Actor;
         PressAnyKeyImage->Mesh = Utils::CreateMesh(1, 1);
         PressAnyKeyImage->Texture = AEGfxTextureLoad("Assets/AnyKeyToEnd.png");
@@ -26,7 +26,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_MBUTTON))
             bIsPressedAnyKey = true;
 
-        // ±â´É Å°
+        // ï¿½ï¿½ï¿½ Å°
         else if (AEInputCheckTriggered(AEVK_BACK))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_TAB))
@@ -56,7 +56,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_ESCAPE))
             bIsPressedAnyKey = true;
 
-        // ¹æÇâÅ°, ½ºÆäÀÌ½º, Å½»öÅ°
+        // ï¿½ï¿½ï¿½ï¿½Å°, ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½, Å½ï¿½ï¿½Å°
         else if (AEInputCheckTriggered(AEVK_SPACE))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_PAGEUP))
@@ -80,7 +80,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_DELETE))
             bIsPressedAnyKey = true;
 
-        // ¼ýÀÚÅ°
+        // ï¿½ï¿½ï¿½ï¿½Å°
         else if (AEInputCheckTriggered(AEVK_0))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_1))
@@ -102,7 +102,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_9))
             bIsPressedAnyKey = true;
 
-        // ¾ËÆÄºªÅ°
+        // ï¿½ï¿½ï¿½Äºï¿½Å°
         else if (AEInputCheckTriggered(AEVK_A))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_B))
@@ -156,7 +156,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_Z))
             bIsPressedAnyKey = true;
 
-        // ³ÑÆÐµå
+        // ï¿½ï¿½ï¿½Ðµï¿½
         else if (AEInputCheckTriggered(AEVK_NUMPAD0))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_NUMPAD1))
@@ -178,7 +178,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_NUMPAD9))
             bIsPressedAnyKey = true;
 
-        // ³ÑÆÐµå ¿¬»ê Å°
+        // ï¿½ï¿½ï¿½Ðµï¿½ ï¿½ï¿½ï¿½ï¿½ Å°
         else if (AEInputCheckTriggered(AEVK_NUM_MULTIPLY))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_NUM_PLUS))
@@ -218,7 +218,7 @@ namespace Manager
         else if (AEInputCheckTriggered(AEVK_F12))
             bIsPressedAnyKey = true;
 
-        // Æ¯¼ö¹®ÀÚ
+        // Æ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         else if (AEInputCheckTriggered(AEVK_SEMICOLON))
             bIsPressedAnyKey = true;
         else if (AEInputCheckTriggered(AEVK_SLASH))
